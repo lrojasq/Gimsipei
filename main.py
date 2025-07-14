@@ -1,42 +1,28 @@
-from flask import Flask, jsonify, render_template
-from flask_cors import CORS
-from flask_jwt_extended import JWTManager
-from dotenv import load_dotenv
-import os
-
-from src.routes import register_blueprints
-from src.database.database import engine, Base
+from flask import Flask, render_template, redirect, url_for
+from flask_mysqldb import MySQL, MySQLdb
 
 # Load environment variables
 load_dotenv()
 
 # Initialize Flask app
-app = Flask(__name__, template_folder="src/templates", static_folder="src/static")
+app = Flask(__name__, 
+    template_folder='src/templates',
+    static_folder='src/static'
+)
 
 # Configure app
-app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
-app.config["SQLALCHEMY_DATABASE_URI"] = (
-    f"mysql+pymysql://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}"
-)
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-
-# File upload configuration
-app.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024  # 16MB max size
-app.config["UPLOAD_EXTENSIONS"] = [".epub", ".jpg", ".jpeg", ".png", ".webp"]
-# Important configuration for correct file handling
-app.config["PRESERVE_CONTEXT_ON_EXCEPTION"] = False
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+pymysql://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}"
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # JWT Configuration
-app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
-app.config["JWT_TOKEN_LOCATION"] = ["headers"]
-app.config["JWT_COOKIE_SECURE"] = False  # Set to True in production
-app.config["JWT_COOKIE_CSRF_PROTECT"] = True
-app.config["JWT_ACCESS_COOKIE_PATH"] = "/"
-app.config["JWT_REFRESH_COOKIE_PATH"] = "/auth/refresh"
-app.config["JWT_COOKIE_SAMESITE"] = "Lax"
-# JWT expiration configuration (in seconds)
-app.config["JWT_ACCESS_TOKEN_EXPIRES"] = 2 * 60 * 60  # 2 hours
-app.config["JWT_REFRESH_TOKEN_EXPIRES"] = 5 * 24 * 60 * 60  # 5 days
+app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
+app.config['JWT_TOKEN_LOCATION'] = ['cookies']
+app.config['JWT_COOKIE_SECURE'] = False  # Set to True in production
+app.config['JWT_COOKIE_CSRF_PROTECT'] = True
+app.config['JWT_ACCESS_COOKIE_PATH'] = '/'
+app.config['JWT_REFRESH_COOKIE_PATH'] = '/auth/refresh'
+app.config['JWT_COOKIE_SAMESITE'] = 'Lax'
 
 # Initialize extensions
 jwt = JWTManager(app)
@@ -52,37 +38,51 @@ from src.models.submission import Submission
 # Create database tables
 Base.metadata.create_all(bind=engine)
 
-
 def init_routes():
-    register_blueprints(app)
+    # Import routes
+    from src.routes import auth, documents, exercises, assignments, admin
 
+    # Register blueprints
+    app.register_blueprint(auth.bp)
+    app.register_blueprint(documents.bp)
+    app.register_blueprint(exercises.bp)
+    app.register_blueprint(assignments.bp)
+    app.register_blueprint(admin.bp)
 
 # Error handlers
-@app.route('/')
-def leo():
-    return render_template('auth/login.html')
-
-
 @app.errorhandler(404)
 def not_found_error(error):
-    return jsonify({"error": "Not found"}), 404
-
+    return jsonify({'error': 'Not found'}), 404
 
 @app.errorhandler(500)
 def internal_error(error):
-    return jsonify({"error": "Internal server error"}), 500
-
+    return jsonify({'error': 'Internal server error'}), 500
 
 # Health check endpoint
-@app.route("/health")
+@app.route('/health')
 def health_check():
-    return jsonify({"status": "healthy"}), 200
+    return jsonify({'status': 'healthy'}), 200
 
 
-# Initialize routes
-init_routes()
+
+# Rutas
+@app.route('/', methods=['GET','POST'])
+def index():
+    return redirect(url_for('login'))
 
 
-if __name__ == "__main__":
-    port = int(os.getenv("PORT", 5010))
-    app.run(host="0.0.0.0", port=port, debug=os.getenv("FLASK_ENV") == "development")
+@app.route('/login', methods=['GET','POST'])
+def login():
+     return render_template('auth/login.html')
+ 
+ 
+@app.route('/user', methods=['GET','POST'])
+def user():
+    return render_template('auth/user.html')
+
+
+
+
+if __name__ == '__main__':
+    port = int(os.getenv('PORT', 5010))
+    app.run(host='0.0.0.0', port=port, debug=os.getenv('FLASK_ENV') == 'development')

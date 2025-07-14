@@ -1,3 +1,19 @@
+{% extends "base.html" %}
+
+
+{% block title %}Iniciar Sesión{% endblock %}
+{% block extra_css %} 
+<link rel="stylesheet" href="{{ url_for('static', filename='css/menu.css') }}">
+
+{% endblock %}
+
+
+
+{% block content %}
+{% block menu %}{% endblock %}
+
+<div class="containe">
+<style>
 *{
     margin: 0;
     padding: 0;
@@ -255,3 +271,76 @@
         height: 80vh;
     }
 }
+
+
+</style>
+ <div class="bg-mision">
+    <div class="logo"></div>
+      <div class="mision-tp">
+        <h2>MISIÓN</h2>
+            <p>El Gimnasio Psicopedagógico integral “Gimsipei” es
+            una institución de carácter privado, autónoma
+            fundada para formar integralmente a los niños, bajo
+            parámetros de la práctica de valores y
+            responsabilidad social. Buscamos la excelencia
+            académica e impartimos a nuestros estudiantes una
+            formación basada en el crecimiento humano, el
+            desarrollo de la creatividad y capacidad de
+            razonamiento.</p>
+        </div>
+    
+ </div>
+ <div class="bg-vision">
+    <div class="vision-tp">
+        <h2>Visión</h2>
+        <p>Ser reconocidos por la alta calidad humana por la
+        integridad de la propuesta educativa, centrada en la
+        formación del ser y el desarrollo de competencias que
+        responden a altos estándares de calidad, mediante
+        procesos pedagógicos que reconoce la individualidad
+        y promueven la autonomía del estudiante y por el
+        profesionalismo y empeño de todo su personal
+        docente que labora para que los estudiantes sean
+        personas felices, ciudadanos respetables y ejemplos
+        en la sociedad.</p>
+    </div>
+ </div>
+
+     <div class="bg-lateral"></div>
+
+     <div class="menu">
+
+        <div class="box-menu gimsipei-hover">
+            <div class="gimsipei"></div>
+            <p>Gimsipei</p>
+            <div class="barra-gimsipei"></div>
+        </div>
+
+        <div class="box-menu clases-hover">
+            <div class="clases"></div>
+            <p>Clases</p>
+            <div class="barra-clases"></div>
+        </div>
+        <div class="box-menu recursos-hover">
+            <div class="recursos"></div>
+            <p>Recursos</p>
+            <div class="barra-recursos"></div>
+        </div>
+        <div class="box-menu evaluaciones-hover">
+            <div class="evaluaciones"></div>
+            <p>Evaluaciones</p>
+            <div class="barra-evaluaciones"></div>
+        </div>
+        <div class="box-menu libros-hover">
+            <div class="libros"></div>
+            <p>Libros</p>
+            <div class="barra-libros"></div>
+        </div>
+        <div class="box-menu calificaciones-hover">
+            <div class="calificaciones"></div>
+            <p>Calificaciones</p>
+            <div class="barra-calificaciones"></div>
+        </div>
+     </div>
+</div><!-- container-fluid bg-index -->
+{% endblock %}
