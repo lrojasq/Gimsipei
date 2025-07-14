@@ -3,5 +3,15 @@ env
 venv
 /venv
 
+# config
+*.json
+*.yaml
+*.yml
+*.toml
+*.ini
+*.env
+
+# __pycache__
+__pycache__/
 
 
