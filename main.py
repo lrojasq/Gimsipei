@@ -11,7 +11,7 @@ import os
 load_dotenv()
 
 # Initialize Flask app
-app = Flask(_name_, 
+app = Flask(__name__, 
     template_folder='src/templates',
     static_folder='src/static'
 )
@@ -74,6 +74,6 @@ def health_check():
 # Initialize routes
 init_routes()
 
-if _name_ == '_main_':
+if __name__ == '_main_':
     port = int(os.getenv('PORT', 5010))
-    app.run(host='0.0.0.0', port=port, debug=os.getenv('FLASK_ENV') == 'development')
+    app.run(host='0.0.0.0', port=port, debug=os.getenv('FLASK_ENV') =='development')
