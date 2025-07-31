@@ -38,6 +38,9 @@ def evaluaciones_controller(request: Request) -> Response:
 def libros_controller(request: Request) -> Response:
     return render_template("category/libros.html")
 
+def calificaciones_controller(request: Request) -> Response:
+    return render_template("category/calificaciones.html")
+
 
 
 
