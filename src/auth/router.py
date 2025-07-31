@@ -10,6 +10,7 @@ from .controllers import (
     recursos_controller,
     evaluaciones_controller,
     libros_controller,
+    calificaciones_controller
 )
 
 auth_bp = Blueprint("auth", __name__, url_prefix="/auth")
@@ -41,6 +42,10 @@ def evaluaciones():
 @auth_bp.route("/libros", methods=["GET"])
 def libros():
     return libros_controller(request)
+
+@auth_bp.route("/calificaciones", methods=["GET"])
+def calificaciones():
+    return calificaciones_controller(request)
 
 
 

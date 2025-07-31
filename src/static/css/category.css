@@ -24,7 +24,8 @@
 
 .container_category {
     justify-content: space-between;
-    padding: 3rem;
+    padding: 3rem 3rem 0rem;
+    height: 100vh;
 }
 
 h1 {
@@ -82,7 +83,7 @@ h1 {
     background-color: var(--gray-light);
     border-radius: 10px;
     width: 70%;
-    max-height: 560px;
+    max-height: 90vh;
     overflow: auto;
 }
 
@@ -140,7 +141,7 @@ h1 {
 .speciality {
     width: 45%;
     align-items: end;
-    height: 230px;
+    height: 40%;
     justify-content: center;
     text-align: center;
     border-radius: 10px;
@@ -191,9 +192,9 @@ hr.clases_br {
 /* aside menu */
 
 .menu_aside {
-    height: 100vh;
+    height: 100%;
     gap: 15px;
-    border-radius: 10px;
+    border-radius: 10px 10px 0px 0px;
     overflow: hidden;
     background-color: var(--clases);
 }
@@ -270,15 +271,17 @@ hr.clases_br {
 }
 
 /* estilos categoria */
-.exams{
+.exams {
     gap: 1rem;
     align-items: start;
     justify-content: flex-start;
     flex-wrap: nowrap;
 }
+
 .exam {
     width: 100%;
 }
+
 .exam_content {
     background: #ffff;
     gap: 1rem;
@@ -301,37 +304,43 @@ hr.clases_br {
     height: 100%;
     width: 20%;
 }
-.text-content{
+
+.text-content {
     gap: 1rem;
     padding: 1rem;
-    width:90%;
+    width: 90%;
     position: relative;
 }
+
 .text-content::before {
-       content: "";
+    content: "";
     width: 4px;
     height: 80%;
-    background-color:var(--gray-light);
+    background-color: var(--gray-light);
     border-radius: 15px;
     margin-bottom: 0.5rem;
     display: block;
     position: absolute;
     left: 0px;
 }
+
 .text-content h2 {
     font-size: 1rem;
     font-weight: bold;
     color: var(--evaluaciones);
 }
+
 .text-content p {
     font-size: 0.9rem;
     color: var(--dark-color);
 }
-.nota{
+
+.nota {
     width: 15%;
     justify-content: flex-start;
     gap: 0.5rem;
 }
+
 .nota span {
     font-size: 1.2rem;
     color: var(--dark-color);
@@ -343,7 +352,8 @@ hr.clases_br {
     justify-content: center;
     height: 40%;
 }
-.nota hr{
+
+.nota hr {
     width: 90%;
     height: 4px;
     border-radius: 10px;
@@ -352,13 +362,28 @@ hr.clases_br {
     background-color: var(--evaluaciones);
     margin: 0px auto;
 }
-.btn.active{
+
+.btn-evaluaciones {
+    color: var(--evaluaciones);
+    border-color: var(--evaluaciones);
+    width: 100%;
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.btn-evaluaciones.active {
     background-color: var(--evaluaciones-active);
     color: var(--light-color);
 }
 
+.btn-evaluaciones:hover {
+    background-color: var(--evaluaciones-active);
+    color: var(--light-color);
+    border-color: var(--light-color);
+}
+
 /* estilos libros */
-.books{
+.books {
     /* gap: 1rem; */
     align-items: start;
     justify-content: flex-start;
@@ -366,20 +391,22 @@ hr.clases_br {
     background-color: var(--light-color);
     position: relative;
 }
-.books::before{
+
+.books::before {
     content: "";
     width: 9px;
     height: 90%;
     background-color: #fdebff;
     border-radius: 15px;
-    margin-bottom: 0.5rem; 
+    margin-bottom: 0.5rem;
     position: absolute;
     left: 0px;
     top: 0%;
     bottom: 0%;
     margin: auto;
 }
-.book{
+
+.book {
     max-width: 20%;
     flex-wrap: nowrap;
     gap: 0px;
@@ -395,24 +422,40 @@ hr.clases_br {
     height: 100%;
     background-color: var(--libros);
 }
-.book .title_speciality{
+
+.book .title_speciality {
     padding: 0px;
     gap: 2px;
     font-size: small;
 }
+
 hr.libros_br {
     background-color: var(--libros);
     height: 5px;
     width: 90%;
     margin: 0px auto;
 }
-.btn-libros{
+
+.btn-libros {
     color: var(--libros);
     border-color: var(--libros);
 }
+
 .btn-libros:hover,
 .btn-libros.active {
     background-color: var(--libros);
     color: var(--light-color);
     border-color: var(--light-color);
+}
+
+/* estilos calificaciones */
+.grades {
+    gap: 1rem;
+    align-items: start;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+}
+
+.grade {
+    width: 100%;
 }
