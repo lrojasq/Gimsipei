@@ -1,4 +1,4 @@
-from flask import Blueprint
+from flask import Blueprint, render_template
 from flask_jwt_extended import jwt_required
 from src.utils.decorator_role_required import role_required
 from src.models.user import UserRole
@@ -25,7 +25,8 @@ def get_subject_route(subject_id):
 @class_bp.route("/subjects", methods=["GET"])
 @jwt_required()
 def get_all_subjects_route():
-    return controllers.get_all_subjects_controller()
+    controllers.get_all_subjects_controller()
+    return render_template('subCategory/clases/subcategoria.html')
 
 
 @class_bp.route("/subjects/<int:subject_id>", methods=["PUT"])
