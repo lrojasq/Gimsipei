@@ -5,18 +5,22 @@ from sqlalchemy.orm import relationship
 from src.database.database import Base
 
 class Assignment(Base):
-    """Assignment model for homework and tasks"""
+    """Assignment model for the application"""
+
     __tablename__ = "assignments"
 
-    id: int = Column(Integer, primary_key=True, index=True)
-    title: str = Column(String(255), nullable=False)
-    description: str = Column(Text, nullable=False)
-    author_id: int = Column(Integer, ForeignKey("users.id"), nullable=False)
-    due_date: datetime = Column(DateTime, nullable=False)
-    created_at: datetime = Column(DateTime, default=datetime.utcnow)
-    updated_at: datetime = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-    is_active: bool = Column(Integer, default=1)
+    id = Column(Integer, primary_key=True, index=True)
+    class_id = Column(Integer, ForeignKey("classes.id"), nullable=False)
+    author_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    title = Column(String(100), nullable=False)
+    description = Column(String(255), nullable=True)
+    due_date = Column(DateTime, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     # Relationships
+    class_ = relationship("ClassModel", back_populates="assignments")
     author = relationship("User", back_populates="assignments")
-    submissions = relationship("Submission", back_populates="assignment")
+    submissions = relationship(
+        "Submission", back_populates="assignment", lazy="dynamic"
+    )
