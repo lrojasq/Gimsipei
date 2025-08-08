@@ -81,9 +81,9 @@ def index():
 def user() -> Union[str, tuple[Dict[str, Any], int]]:
     return render_template('admin/user.html')
 
-@app.route('/auth/subcategoria')
-def subcategoria():
-    return render_template('subCategory/clases/subcategoria.html')
+# @app.route('/auth/subcategoria')
+# def subcategoria():
+#     return render_template('subCategory/clases/subcategoria.html')
 
 @app.errorhandler(404)
 def not_found_error(error):
