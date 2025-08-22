@@ -27,7 +27,7 @@ def index_menu_controller(request: Request) -> Response:
     return render_template("auth/user.html")
 
 def clases_controller(request: Request) -> Response:
-    return render_template("category/clases.html")
+    return render_template("category/clases.html") 
 
 def recursos_controller(request: Request) -> Response:
     return render_template("category/recursos.html")
