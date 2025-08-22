@@ -25,6 +25,7 @@
 .container_category {
     justify-content: space-between;
     padding: 3rem 3rem 0rem;
+    height: 100vh;
 }
 
 h1 {
@@ -82,7 +83,7 @@ h1 {
     background-color: var(--gray-light);
     border-radius: 10px;
     width: 70%;
-    max-height: 560px;
+    max-height: 90vh;
     overflow: auto;
 }
 
@@ -140,7 +141,7 @@ h1 {
 .speciality {
     width: 45%;
     align-items: end;
-    height: 230px;
+    height: 40%;
     justify-content: center;
     text-align: center;
     border-radius: 10px;
@@ -191,7 +192,7 @@ hr.clases_br {
 /* aside menu */
 
 .menu_aside {
-    height: 100vh;
+    height: 100%;
     gap: 15px;
     border-radius: 10px 10px 0px 0px;
     overflow: hidden;
@@ -457,4 +458,52 @@ hr.libros_br {
 
 .grade {
     width: 100%;
+}
+.grade_list{
+    gap: 0.5rem;
+}
+.grade_list li{
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    width: 100%;
+    gap: 0.5rem;
+}
+.grade_list li span{
+    background-color: var(--light-color);
+    color: var(--calificaciones);
+    flex-wrap: nowrap;
+    padding: 0.5rem;
+    border-radius: 5px;
+}
+.grade_list li span{
+    width: 80%;
+}
+.grade_list li span.grade{
+    width: 20%;
+    text-align: center;
+}
+.grade_list li span.subject_global{
+    width: 25%;
+}
+
+.grade_list li span.periodo{
+    width: 15%;
+    text-align: center;
+}
+.grade_list li:first-child span{
+    background-color: var(--calificaciones);
+    color: var(--light-color);
+}
+.btn-calificaciones{
+    color: var(--calificaciones);
+    background-color: var(--light-color);
+    border-color: var(--calificaciones);
+}
+.btn-calificaciones:hover{
+    background-color: var(--calificaciones);
+    color: var(--light-color);
+}
+.btn-calificaciones.active{
+    background-color: var(--calificaciones);
+    color: var(--light-color);
 }
