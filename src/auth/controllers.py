@@ -41,13 +41,11 @@ def libros_controller(request: Request) -> Response:
 def calificaciones_controller(request: Request) -> Response:
     return render_template("category/calificaciones.html")
 
+def calificaciones_controller(request: Request) -> Response:
+    return render_template("category/calificaciones.html")
 
-
-
-
-
-
-
+def admin_controller(request: Request) -> Response:
+    return render_template("admin/dashboard.html")
 
 @jwt_required()
 def get_current_user_controller(request: Request) -> Response | tuple[dict, int]:

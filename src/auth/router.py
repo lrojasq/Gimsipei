@@ -1,5 +1,6 @@
 from flask import Blueprint, request
 from .controllers import (
+    admin_controller,
     login_user_controller,
     get_current_user_controller,
     logout_user_controller,
@@ -10,7 +11,8 @@ from .controllers import (
     recursos_controller,
     evaluaciones_controller,
     libros_controller,
-    calificaciones_controller
+    calificaciones_controller,
+    admin_controller
 )
 
 auth_bp = Blueprint("auth", __name__, url_prefix="/auth")
@@ -47,7 +49,9 @@ def libros():
 def calificaciones():
     return calificaciones_controller(request)
 
-
+@auth_bp.route("/admin", methods=["GET"])
+def admin():
+    return admin_controller(request)
 
 
 
