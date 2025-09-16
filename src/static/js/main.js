@@ -51,6 +51,28 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
+// Función para manejar el dropdown
+document.querySelectorAll(".grado").forEach((grado) => {
+    grado.addEventListener("click", () => {
+        const materias = grado.nextElementSibling;
+        const icono = grado.querySelector("i");
+
+        materias.classList.toggle("active");
+        icono.classList.toggle("rotate");
+    });
+});
+
+var swiper = new Swiper(".mySwiper", {
+    direction: "vertical",   // 👈 scroll vertical
+    mousewheel: {
+        releaseOnEdges: true,  // permite salir al final si quieres
+    },
+    speed: 600,              // velocidad de transición
+    scrollbar: {
+        el: ".swiper-scrollbar",
+        draggable: true,
+    },
+});
 document.getElementById('hamburger').addEventListener('click', function () {
     document.getElementById('mobileNav').classList.toggle('active');
 
@@ -59,9 +81,11 @@ document.getElementById('hamburger').addEventListener('click', function () {
 });
 
 let menu = document.querySelectorAll('.mobile-nav li a')
+if (!menu) return
 menu.forEach(item => {
     item.addEventListener('click', () => {
         document.getElementById('mobileNav').classList.remove('active');
         document.getElementById('hamburger').classList.remove('open');
     });
 });
+

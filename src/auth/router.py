@@ -12,7 +12,11 @@ from .controllers import (
     evaluaciones_controller,
     libros_controller,
     calificaciones_controller,
-    admin_controller
+    admin_controller,
+    cursos_controller,
+    docentes_controller,
+    crear_usuario_controller,
+    datos_personales_controller
 )
 
 auth_bp = Blueprint("auth", __name__, url_prefix="/auth")
@@ -54,7 +58,22 @@ def admin():
     return admin_controller(request)
 
 
+@auth_bp.route("/cursos", methods=["GET"])
+def cursos():
+    return cursos_controller(request)
 
+
+@auth_bp.route("/docentes", methods=["GET"])
+def docentes():
+    return docentes_controller(request) 
+
+@auth_bp.route("/crear-usuario", methods=["GET"])
+def crear_usuario():
+    return crear_usuario_controller(request)
+
+@auth_bp.route("/datos-personales", methods=["GET"])
+def datos_personales():
+    return datos_personales_controller(request)
 
 
 
@@ -78,3 +97,4 @@ def logout():
 @auth_bp.route("/first-admin", methods=["POST"])
 def create_first_admin():
     return create_first_admin_controller(request)
+

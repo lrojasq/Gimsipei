@@ -20,6 +20,8 @@
     --libros-active: #d944ea;
     --calificaciones: #a270f2;
     --calificaciones-active: #6c43d1;
+    --admin :#f94e4e;
+    --admin-active: #e01e1e;
 }
 
 .container_category {
@@ -86,6 +88,10 @@ h1 {
     max-height: 90vh;
     overflow: auto;
 }
+.specialities_category.cursos{
+    width: 90%;
+    background-color: #fff;
+}
 
 .specialities_category::-webkit-scrollbar {
     width: 15px;
@@ -97,6 +103,10 @@ h1 {
     border-radius: 5px;
 }
 
+.specialities_category:has(.content-admin) {
+    text-align: left;
+    justify-content: start;
+}
 /* Handle */
 .clases_category .specialities_category::-webkit-scrollbar-thumb {
     background: var(--clases);
@@ -120,6 +130,11 @@ h1 {
 
 .calificaciones_category .specialities_category::-webkit-scrollbar-thumb {
     background: var(--calificaciones);
+    border-radius: 5px;
+}
+
+.admin_category .specialities_category::-webkit-scrollbar-thumb {
+    background: var(--admin);
     border-radius: 5px;
 }
 
@@ -164,8 +179,8 @@ h1 {
     background-color: var(--evaluaciones);
 }
 
-.calificaciones_category .speciality {
-    background-color: var(--calificaciones);
+.admin_category .speciality {
+    background-color: var(--admin);
 }
 
 .title_speciality {
@@ -213,6 +228,9 @@ hr.clases_br {
 
 .calificaciones_category .menu_aside {
     background-color: var(--calificaciones);
+}
+.admin_category .menu_aside {
+    background-color: var(--admin);
 }
 
 .menu_aside svg {
@@ -263,6 +281,10 @@ hr.clases_br {
 .calificaciones_category .aside_list li a.active,
 .calificaciones_category .aside_list li a:hover {
     background-color: var(--calificaciones-active);
+}
+.admin_category .aside_list li a.active,
+.admin_category .aside_list li a:hover {
+    background-color: var(--admin-active);
 }
 
 .aside_list li a.active svg,

@@ -41,11 +41,23 @@ def libros_controller(request: Request) -> Response:
 def calificaciones_controller(request: Request) -> Response:
     return render_template("category/calificaciones.html")
 
-def calificaciones_controller(request: Request) -> Response:
-    return render_template("category/calificaciones.html")
-
 def admin_controller(request: Request) -> Response:
     return render_template("admin/dashboard.html")
+
+
+def cursos_controller(request: Request) -> Response:
+    return render_template("admin/cursos.html")
+
+def docentes_controller(request: Request) -> Response:
+    return render_template("admin/docentes.html")
+
+def crear_usuario_controller(request: Request) -> Response:
+    return render_template("admin/crear_usuario.html")
+
+def datos_personales_controller(request: Request) -> Response:
+    return render_template("admin/datos_personales.html")
+
+
 
 @jwt_required()
 def get_current_user_controller(request: Request) -> Response | tuple[dict, int]:
