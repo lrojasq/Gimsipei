@@ -175,7 +175,7 @@ a {
 }
 
 /* col Extra Small devices (landscape phones, < 576px)*/
-@media (max-width: 576px) {
+@media (max-width: 1024px) {
     body {
         height: 100%;
     }
@@ -197,7 +197,7 @@ a {
         position: absolute;
         width: 90%;
         height: 500px;
-        margin-top: 95%;
+        margin-top: 80%;
     }
 
     label {
