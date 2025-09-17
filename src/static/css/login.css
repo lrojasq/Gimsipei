@@ -11,38 +11,51 @@
     --border-color: #00c2e7;
 }
 
-body {
-    max-height: 100vh;
+/* Reset para evitar scroll */
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100vh;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
 }
 
 .bg-index {
     position: relative;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     background-image: url("../images/bg-index.png");
     background-size: cover;
     background-repeat: no-repeat;
+    background-position: center;
+    overflow: hidden;
 }
 
 /* Auth Forms */
 .formulario {
-    position: relative;
+    position: absolute;
+    top: 0;
+    right: 0;
     display: flex;
-    justify-items: center;
+    justify-content: center;
     align-items: center;
     flex-direction: column;
     width: 50%;
     height: 100vh;
-    float: right;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
 form {
-    position: absolute;
+    position: relative;
     display: flex;
     flex-direction: column;
     width: 700px;
     height: 500px;
-    margin-top: 300px;
+    margin: 0;
 }
 
 .user {
@@ -177,27 +190,32 @@ a {
 /* col Extra Small devices (landscape phones, < 576px)*/
 @media (max-width: 576px) {
     body {
-        height: 100%;
+        height: 100vh;
+        overflow: hidden;
     }
 
     .bg-index {
         background-image: url("../images/bg-index-575.png");
-        height: 100%;
-        bottom: 0;
+        height: 100vh;
+        width: 100vw;
     }
 
     .formulario {
-        max-width: 1000px;
         width: 100%;
-        height: 80vh;
-        float: left;
+        height: 100vh;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        padding: 20px;
     }
 
     form {
-        position: absolute;
+        position: relative;
         width: 90%;
-        height: 500px;
-        margin-top: 95%;
+        height: auto;
+        margin: 0;
+        padding: 20px;
     }
 
     label {
