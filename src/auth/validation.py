@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr, constr, ValidationError
+from pydantic import BaseModel, constr
 from enum import Enum
 
 
@@ -14,8 +14,12 @@ class LoginSchema(BaseModel):
 
 
 class CreateFirstAdminSchema(BaseModel):
-    email: EmailStr
     username: constr(min_length=3, max_length=50)
     password: constr(min_length=6)
     full_name: constr(max_length=100)
     secret_key: str  # Para validar la creación del primer admin
+
+
+class ForgotPasswordSchema(BaseModel):
+    username: str
+    new_password: constr(min_length=6)

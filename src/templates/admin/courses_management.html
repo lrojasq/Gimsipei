@@ -1,0 +1,165 @@
+{% extends "admin/base_admin.html" %}
+
+{% block title %}
+    Gestión de Cursos
+{% endblock %}
+
+{% block extra_css %}
+    <link href="{{ url_for('static', filename='css/courses_management.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid p-4">
+        <!-- Header minimal y botón rojo AÑADIR -->
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <h1 class="h3 mb-0 text-dark">Cursos</h1>
+            <a href="{{ url_for('courses.create_course') }}" class="btn btn-danger btn-lg px-4">AÑADIR</a>
+        </div>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        <i class="fas fa-{% if category == 'success' %}check-circle{% elif category == 'danger' %}exclamation-triangle{% else %}info-circle{% endif %} me-2"></i>
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- Tabla acordeón -->
+        <div class="card shadow-sm">
+            <div class="card-body p-0">
+                {% if courses %}
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0" id="accordionCourses">
+                            <thead>
+                                <tr>
+                                    <th>Cursos</th>
+                                    <th>Materias</th>
+                                    <th class="text-end pe-4">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for course in courses %}
+                                    <tr class="accordion-row" data-course-id="{{ course.id }}">
+                                        <td class="course-name">{{ course.name }}</td>
+                                        <td class="subjects-cell">
+                                            <div class="subjects-list collapse" id="subjects-{{ course.id }}">
+                                                {% for subject in course.subjects %}
+                                                    <div class="d-flex justify-content-between align-items-center py-2">
+                                                        <div class="d-flex align-items-center gap-3">
+                                                            <span class="subject-name">{{ subject.subject_name }} - {{ subject.teacher_name }}</span>
+                                                        </div>
+                                                        <div class="d-flex align-items-center gap-2">
+                                                            <a href="{{ url_for('subjects.edit_subject', subject_id=subject.subject_id, course_id=course.id) }}" class="text-decoration-none btn btn-sm btn-outline-primary">Editar</a>
+                                                            <button type="button" class="btn btn-sm btn-outline-danger" 
+                                                                    data-bs-toggle="modal" 
+                                                                    data-bs-target="#deleteSubjectModal"
+                                                                    data-subject-id="{{ subject.subject_id }}"
+                                                                    data-course-id="{{ course.id }}"
+                                                                    data-subject-name="{{ subject.subject_name }}"
+                                                                    data-teacher-name="{{ subject.teacher_name }}">
+                                                                <i class="fas fa-trash"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                        </td>
+                                        <td class="text-end pe-4">
+                                            <button class="btn btn-link toggle-arrow" type="button"
+                                                    data-bs-toggle="collapse"
+                                                    data-bs-target="#subjects-{{ course.id }}"
+                                                    aria-expanded="false"
+                                                    aria-controls="subjects-{{ course.id }}">
+                                                <span class="arrow">∨</span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr class="subjects-actions">
+                                        <td></td>
+                                        <td class="py-3">
+                                            <div class="d-flex justify-content-center">
+                                                <a href="{{ url_for('subjects.create_subject', course_id=course.id) }}" class="btn btn-outline-danger add-subject-btn"
+                                                        data-course-id="{{ course.id }}">AÑADIR</a>
+                                            </div>
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="text-center py-5">
+                        <div class="empty-state">
+                            <i class="fas fa-graduation-cap fa-3x text-muted mb-3"></i>
+                            <h5 class="text-muted">No hay cursos registrados</h5>
+                            <p class="text-muted">Comienza creando el primer curso del sistema</p>
+                            <a href="{{ url_for('courses.create_course') }}" class="btn btn-primary">
+                                <i class="fas fa-plus me-2"></i>Crear Primer Curso
+                            </a>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Modal de confirmación elegante para eliminar materias -->
+        <div class="modal fade" id="deleteSubjectModal" tabindex="-1" aria-labelledby="deleteSubjectModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0 shadow-lg">
+                    <div class="modal-body text-center p-5">
+                        <!-- Icono de advertencia -->
+                        <div class="mb-4">
+                            <div class="delete-icon mx-auto">
+                                <i class="fas fa-trash-alt"></i>
+                            </div>
+                        </div>
+                        
+                        <!-- Título -->
+                        <h4 class="modal-title mb-3" id="deleteSubjectModalLabel">
+                            ¿Eliminar materia?
+                        </h4>
+                        
+                        <!-- Descripción -->
+                        <p class="text-muted mb-4">
+                            Esta acción eliminará permanentemente la materia y todas sus asignaciones a cursos.
+                            <br><strong>Esta operación no se puede deshacer.</strong>
+                        </p>
+                        
+                        <!-- Información de la materia -->
+                        <div class="alert alert-light border-0 mb-4" id="subjectInfo">
+                            <div class="d-flex align-items-center justify-content-center">
+                                <i class="fas fa-book me-2 text-primary"></i>
+                                <span id="subjectName" class="fw-semibold"></span>
+                                <span class="text-muted mx-2">-</span>
+                                <span id="teacherName" class="text-muted"></span>
+                            </div>
+                    </div>
+                        
+                        <!-- Botones -->
+                    <div class="d-flex gap-3 justify-content-center">
+                            <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">
+                                <i class="fas fa-times me-2"></i>Cancelar
+                            </button>
+                            <button type="button" class="btn btn-danger px-4" id="confirmDeleteBtn">
+                                <i class="fas fa-trash-alt me-2"></i>Eliminar materia
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Font Awesome -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='js/courses_management.js') }}"></script>
+{% endblock %}

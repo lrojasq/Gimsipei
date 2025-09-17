@@ -1,41 +1,38 @@
+from typing import Optional, Tuple
+
 from flask import Request, Response
-from flask_jwt_extended import jwt_required, get_jwt_identity, verify_jwt_in_request
-from typing import Tuple, Optional
-from .validation import UserCreateSchema, UserUpdateSchema, UserResponseSchema
-from .service import (
-    get_users_service,
-    get_user_service,
-    create_user_service,
-    update_user_service,
-    delete_user_service,
-)
+from flask_jwt_extended import get_jwt_identity, jwt_required
 from pydantic import ValidationError
-from src.utils.api_response import ApiResponse
-from src.models.user import User, UserRole
+
 from src.database.database import SessionLocal
-from src.utils.normalize_role_field import normalize_role_field
+from src.models.user import User, UserRole
+from src.utils.api_response import ApiResponse
 from src.utils.decorator_role_required import role_required
+from src.utils.normalize_role_field import normalize_role_field
+
+from .service import (
+    create_user_service,
+    delete_user_service,
+    get_user_service,
+    get_users_service,
+    update_user_service,
+)
+from .validation import UserCreateSchema, UserResponseSchema, UserUpdateSchema
 
 
 @jwt_required()
-@role_required([UserRole.ADMIN, UserRole.TEACHER, UserRole.STUDENT])
+@role_required([UserRole.ADMIN])
 def get_users_controller(request: Request) -> Response | Tuple[list, int]:
     try:
-        role = request.args.get("role")
-        search = request.args.get("search")
-        page = int(request.args.get("page", 1))
-        per_page = int(request.args.get("per_page", 10))
-
-        users, total = get_users_service(role, search, page, per_page)
+        # Solo obtener usuarios con rol TEACHER
+        users, total = get_users_service(role=UserRole.TEACHER)
         return ApiResponse.list_response(
             items=[user.dict() for user in users],
             total=total,
-            page=page,
-            per_page=per_page,
         )
     except Exception as e:
         return ApiResponse.error(
-            message="Error al obtener la lista de usuarios",
+            message="Error al obtener la lista de docentes",
             details=str(e),
             status_code=500,
         )

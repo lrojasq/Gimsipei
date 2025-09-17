@@ -10,7 +10,8 @@ class ClassModel(Base):
     __tablename__ = "classes"
 
     id = Column(Integer, primary_key=True, index=True)
-    period_id = Column(Integer, ForeignKey("periods.id"), nullable=False)
+    course_id = Column(Integer, ForeignKey("courses.id"), nullable=False)
+    subject_id = Column(Integer, ForeignKey("subjects.id"), nullable=False)
     title = Column(String(100), nullable=False)
     description = Column(String(255), nullable=True)
     class_number = Column(Integer, nullable=False)
@@ -18,11 +19,14 @@ class ClassModel(Base):
     created_by = Column(Integer, ForeignKey("users.id"), nullable=False)
     created_at = Column(DateTime, default=datetime.now(timezone.utc))
     updated_at = Column(
-        DateTime, default=datetime.now(timezone.utc), onupdate=datetime.now(timezone.utc)
+        DateTime,
+        default=datetime.now(timezone.utc),
+        onupdate=datetime.now(timezone.utc),
     )
 
     # Relationships
-    period = relationship("Period", back_populates="classes")
+    course = relationship("Course", back_populates="classes")
+    subject = relationship("Subject")
     creator = relationship("User", back_populates="created_classes")
     resources = relationship("Resource", back_populates="class_", lazy="dynamic")
     assignments = relationship("Assignment", back_populates="class_", lazy="dynamic")

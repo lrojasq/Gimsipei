@@ -1,11 +1,144 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>dashboard</title>
-</head>
-<body>
-    dashboard
-</body>
-</html>
+{% extends "admin/base_admin.html" %}
+
+{% block title %}
+    Dashboard - Administrador
+{% endblock %}
+
+{% block extra_css %}
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid p-4 bg-white">
+
+        {# Flash Messages #}
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- User info -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h5>{{ user.full_name }}</h5>
+                <p>
+                    ID: {{ user.id }} <br>
+                    Role: {{ user.role }}
+                </p>
+            </div>
+            {% if user.role == "TEACHER" %}
+                <div>
+                    <button class="btn btn-outline-dark me-2">Docentes</button>
+                    <button class="btn btn-outline-dark">Cursos</button>
+                </div>
+            {% endif %}
+        </div>
+
+        {# Features of the Admin #}
+        {% if user.role == "ADMIN" %}
+            <div class="row g-3 mt-2">
+                <div class="col-md-3">
+                    <a href="{{ url_for('users.teachers_management') }}" class="text-decoration-none text-dark">
+                        <div class="admin-card">
+                            <img src="{{ url_for('static', filename='images/svg/clases.svg') }}"
+                                 alt="Gestión de Docentes"
+                                 class="admin-icon mb-2"
+                                 style="width: 2.5rem; height: 2.5rem;">
+                            <p>Docentes</p>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-3">
+                    <a href="{{ url_for('courses.courses_management') }}" class="text-decoration-none text-dark">
+                        <div class="admin-card">
+                            <img src="{{ url_for('static', filename='images/svg/libros.svg') }}"
+                                 alt="Cursos"
+                                 class="admin-icon mb-2"
+                                 style="width: 2.5rem; height: 2.5rem;">
+                            <p>Cursos</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        {% endif %}
+
+        {# Features of the Teacher #}
+        {% if user.role == "TEACHER" %}
+            {# Show grades #}
+            {% if grades %}
+                <h5>Estudiantes</h5>
+                <div class="d-flex gap-3 mb-4">
+                    <ul class="list-unstyled d-flex gap-2 mb-0">
+                        {% for grade in grades %}
+                            <li>
+                                <button class="btn btn-outline-dark me-2">Grado {{ grade }}</button>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+
+            <!-- Show modules assigned -->
+            <h5>Administrar</h5>
+            <div class="row g-3 mt-2">
+                <div class="col-md-3">
+                    <a href="{{ url_for('admin.clases_recursos') }}" class="text-decoration-none text-dark">
+                        <div class="admin-card">
+                            <img src="{{ url_for('static', filename='images/svg/clases.svg') }}"
+                                 alt="Clases y recursos"
+                                 class="admin-icon mb-2"
+                                 style="width: 2.5rem; height: 2.5rem;">
+                            <p>Clases y recursos</p>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-3">
+                    <a href="{{ url_for('admin.evaluaciones') }}" class="text-decoration-none text-dark">
+                        <div class="admin-card">
+                            <img src="{{ url_for('static', filename='images/svg/evaluaciones.svg') }}"
+                                 alt="Evaluaciones"
+                                 class="admin-icon mb-2"
+                                 style="width: 2.5rem; height: 2.5rem;">
+                            <p>Evaluaciones</p>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-3">
+                    <a href="{{ url_for('admin.libros') }}" class="text-decoration-none text-dark">
+                        <div class="admin-card">
+                            <img src="{{ url_for('static', filename='images/svg/libros.svg') }}"
+                                 alt="Libros"
+                                 class="admin-icon mb-2"
+                                 style="width: 2.5rem; height: 2.5rem;">
+                            <p>Libros</p>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-3">
+                    <a href="{{ url_for('admin.calificaciones') }}" class="text-decoration-none text-dark">
+                        <div class="admin-card">
+                            <img src="{{ url_for('static', filename='images/svg/calificaciones.svg') }}"
+                                 alt="Calificaciones"
+                                 class="admin-icon mb-2"
+                                 style="width: 2.5rem; height: 2.5rem;">
+                            <p>Calificaciones</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if accion_logout %}
+            {% include "utils/logout_button.html" %}
+        {% endif %}
+
+        <!-- Bootstrap Icons -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+    </div>
+{% endblock %}
