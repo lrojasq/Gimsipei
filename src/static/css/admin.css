@@ -318,3 +318,41 @@ form.form-admin.flex.flex-column {
 .content-data-user{
     align-items: center;
 }
+.modal{
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    background-color: #0007;
+    justify-content: center;
+    align-items: center;
+    display: none;/*  oculto modal de confirmación  */
+
+}
+.content-modal{
+    background-color: #fff;
+    max-width: 35%;
+    padding: 2rem;
+    gap: 1rem;
+    text-align: center;
+    justify-content: center;
+    border-radius: 20px;
+}
+.content-modal i{
+    color: var(--admin-active);
+    font-size: 90px;
+}
+.content-modal span{
+    color: #b1b1b2;
+}
+.content-modal .flex{
+    justify-content: center;
+}
+.content-modal .flex .btn{
+    width: 40%;
+    background-color: #3bc0bb;
+    color: #fff;
+    border-color: transparent;
+}
+.content-modal .flex .btn:first-child{
+    background-color: var(--admin-active);
+}
