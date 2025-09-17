@@ -37,11 +37,51 @@ def login_user_controller(request: Request) -> Response | tuple[dict, int]:
             flash("Datos de formulario inválidos", "danger")
             return redirect(url_for("auth.login"))
     except Exception as e:
+<<<<<<< HEAD
         if request.is_json:
             return jsonify({"error": str(e)}), 500
         else:
             flash("Error interno del servidor", "danger")
             return redirect(url_for("auth.login"))
+=======
+        return jsonify({"error": str(e)}), 500
+
+
+def index_menu_controller(request: Request) -> Response:
+    return render_template("auth/user.html")
+
+def clases_controller(request: Request) -> Response:
+    return render_template("category/clases.html")
+
+def recursos_controller(request: Request) -> Response:
+    return render_template("category/recursos.html")
+
+def evaluaciones_controller(request: Request) -> Response:
+    return render_template("category/evaluaciones.html")
+
+def libros_controller(request: Request) -> Response:
+    return render_template("category/libros.html")
+
+def calificaciones_controller(request: Request) -> Response:
+    return render_template("category/calificaciones.html")
+
+def admin_controller(request: Request) -> Response:
+    return render_template("admin/dashboard.html")
+
+
+def cursos_controller(request: Request) -> Response:
+    return render_template("admin/cursos.html")
+
+def docentes_controller(request: Request) -> Response:
+    return render_template("admin/docentes.html")
+
+def crear_usuario_controller(request: Request) -> Response:
+    return render_template("admin/crear_usuario.html")
+
+def datos_personales_controller(request: Request) -> Response:
+    return render_template("admin/datos_personales.html")
+
+>>>>>>> e52515b82d4917b8f72febc6a935cb2c647f4625
 
 
 @jwt_required()

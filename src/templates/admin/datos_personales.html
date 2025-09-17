@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+
+{% block title %}Iniciar Sesión{% endblock %}
+{% block extra_css %}
+<link href="{{ url_for('static', filename='css/menu.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/category.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/admin.css') }}" rel="stylesheet">
+
+{% endblock %}
+
+
+
+{% block content %}
+{% block menu %}{% endblock %}
+<div class="container_datos_personales flex flex-column">
+
+    <div class="flex">
+        <div class="session flex flex-column">
+            <img src="../../static/images/avatares/raton.png" alt="">
+            <div class="flex flex-column ">
+                <h2>Fabian Forero Forero</h2>
+                <span>Docente</span>
+            </div>
+
+        </div>
+        <div class="info_data flex">
+            <div class="flex flex-column">
+                <h1>DATOS PERSONALES</h1>
+                <div class="flex content-data-user">
+                    <div class="data_usuario flex flex-column">
+                        <div class="group flex flex-column">
+                            <strong>NOMBRE</strong>
+                            <p>Fabian Forero Forero</p>
+                        </div>
+                        <div class="group flex flex-column">
+                            <strong>USUARIO</strong>
+                            <p>FFabian</p>
+                        </div>
+                        <div class="group flex flex-column">
+                            <strong>N° DE IDENTIDAD</strong>
+                            <p>100457520</p>
+                        </div>
+                    </div>
+                    <div class="container_avatares flex flex-column">
+                        <h2>¿QUIERES CAMBIAR TU AVATAR?</h2>
+                        <span>selecciona uno</span>
+                        <div class="content_avatares flex">
+                            <div class="avatar">
+                                <img src="../../static/images/avatares/oveja.png" alt="">
+                            </div>
+                            <div class="avatar">
+                                <img src="../../static/images/avatares/buho.png" alt="">
+                            </div>
+                            <div class="avatar">
+                                <img src="../../static/images/avatares/hipopotamo.png" alt="">
+                            </div>
+                            <div class="avatar">
+                                <img src="../../static/images/avatares/oso-polar.png" alt="">
+                            </div>
+                            <div class="avatar">
+                                <img src="../../static/images/avatares/coati.png" alt="">
+                            </div>
+
+                            <div class="avatar">
+                                <img src="../../static/images/avatares/zorro.png" alt="">
+                            </div>
+                            <div class="avatar">
+                                <img src="../../static/images/avatares/zorillo.png" alt="">
+                            </div>
+                            <div class="avatar">
+                                <img src="../../static/images/avatares/vaca.png" alt="">
+                            </div>
+                            <div class="avatar">
+                                <img src="../../static/images/avatares/perro.png" alt="">
+                            </div>
+                            <div class="avatar">
+                                <img src="../../static/images/avatares/perro-mini.png" alt="">
+                            </div>
+                            <div class="avatar">
+                                <img src="../../static/images/avatares/elefante.png" alt="">
+                            </div>
+                            <div class="avatar">
+                                <img src="../../static/images/avatares/marrano.png" alt="">
+                            </div>
+                            <div class="avatar">
+                                <img src="../../static/images/avatares/leon.png" alt="">
+                            </div>
+                            <div class="avatar">
+                                <img src="../../static/images/avatares/mico.png" alt="">
+                            </div>
+                            <div class="avatar">
+                                <img src="../../static/images/avatares/pato.png" alt="">
+                            </div>
+                            <div class="avatar">
+                                <img src="../../static/images/avatares/oso-negro.png" alt="">
+                            </div>
+                            <div class="avatar">
+                                <img src="../../static/images/avatares/tucan.png" alt="">
+                            </div>
+                            <div class="avatar">
+                                <img src="../../static/images/avatares/raton.png" alt="">
+                            </div>
+                            <div class="avatar">
+                                <img src="../../static/images/avatares/oso-miel.png" alt="">
+                            </div>
+                            <div class="avatar">
+                                <img src="../../static/images/avatares/oveja-lana.png" alt="">
+                            </div>
+                            <div class="avatar">
+                                <img src="../../static/images/avatares/marrano-cenu.png" alt="">
+                            </div>
+                            <div class="avatar">
+                                <img src="../../static/images/avatares/tigre.png" alt="">
+                            </div>
+                            <div class="avatar">
+                                <img src="../../static/images/avatares/cohala.png" alt="">
+                            </div>
+                            <div class="avatar">
+                                <img src="../../static/images/avatares/conejo.png" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+<!-- Fin Container -->
+
+{% endblock %}

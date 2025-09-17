@@ -22,13 +22,14 @@ ul{
     width: 100%;
 }
 .btn {
-    padding: 0.5rem 1rem;
+    padding: 0.3rem 1rem;
     border-radius: 15px;
     color: var(--secondary-color);
     text-decoration: none;
     text-align: center;
     background-color: var(--light-color);
     border: 1px solid var(--secondary-color);
+    transition: 0.3s all;
 }
 .btn:hover {
     background-color: var(--secondary-color);
@@ -42,4 +43,17 @@ select{
     border: 1px solid #b1adb2;
     background-color: var(--light-color);
     color:#b1adb2;
+}
+.swiper {
+    width: 100%;
+    height: 100%;
+}
+
+.swiper-slide {
+    text-align: center;
+    font-size: 18px;
+    background: #444;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

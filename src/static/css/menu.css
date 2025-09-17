@@ -30,20 +30,19 @@ html {
 
 .mision-tp p,
 .vision-tp p {
-    font-size: 1.6rem;
+    font-size: 1rem;
 }
 
 .bg-mision {
     display: flex;
     flex-direction: column;
     width: 100%;
-    padding: 140px 100px;
+    padding: 0px 100px;
     background-color: var(--primario);
     background-image: url("../images/menu-principal/bg-pencil.png");
     background-repeat: no-repeat;
     background-size: cover;
     position: relative;
-    bottom: -50px;
 }
 
 .logo {
@@ -68,8 +67,13 @@ html {
     background-color: #f6f6f6;
     border-radius: 50px 50px 0px 0px;
     z-index: 1000;
-    padding: 40px 80px;
+    padding: 100px 80px 0px;
     position: relative;
+}
+
+.bg-vision .bg-lateral {
+    background-position: top;
+    top: -40%;
 }
 
 .vision-tp {
@@ -92,15 +96,14 @@ html {
 
 .menu {
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
     align-items: center;
     flex-direction: row;
     flex-wrap: wrap;
     width: 100%;
-    background-color: #f6f6f6;
     z-index: 99991;
     position: relative;
-    gap: 20px;
+    gap: 5rem;
 }
 
 .box-menu {
@@ -109,7 +112,7 @@ html {
     align-items: center;
     flex-direction: column;
     gap: 15px;
-    width: 120px;
+    width: 150px;
     height: 158px;
     position: relative;
     border-radius: 15px;
@@ -140,6 +143,18 @@ html {
     background-image: url("../images/menu-principal/gimsipei.png");
 }
 
+<<<<<<< HEAD
+=======
+a {
+    text-decoration: none;
+}
+
+.margint-top {
+    position: relative;
+    margin-top: 200px;
+}
+
+>>>>>>> e52515b82d4917b8f72febc6a935cb2c647f4625
 .gimsipei-hover:hover {
     background-color: var(--barra-ginsipei);
 }
@@ -261,10 +276,8 @@ html {
     padding: 15px 20px;
     background-color: #3bbae4;
     color: white;
-    position: fixed;
+    position: sticky;
     top: 0;
-    left: 0;
-    right: 0;
     z-index: 999999;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
@@ -348,8 +361,22 @@ html {
     gap: 15px;
 }
 
+@media (min-width:1600px) {
 
-@media (max-width: 576px) {
+    .mision-tp p,
+    .vision-tp p {
+        font-size: 1.6rem;
+    }
+
+    .bg-lateral {
+        top: 200px;
+        z-index: 9999;
+        width: 743px;
+        height: 133%;
+    }
+}
+
+@media (max-width: 1080px) {
     .mision-tp {
         width: 90%;
         height: auto;
@@ -376,11 +403,13 @@ html {
         background-color: #f6f6f6;
     }
 
-    .bg-vision {
+    .section.bg-vision {
         width: 96.6%;
         background-color: #f6f6f6;
         border-radius: 15px;
         padding: 40px 0px;
+        overflow: auto;
+        height: auto;
     }
 
     .box-menu svg {
@@ -413,9 +442,12 @@ html {
         color: var(--gris-claro);
         margin-top: 5px;
     }
-    .mision-tp p, .vision-tp p {
+
+    .mision-tp p,
+    .vision-tp p {
         font-size: 1rem;
     }
+
     .barra {
         position: absolute;
         width: 90%;
@@ -427,7 +459,6 @@ html {
     .bg-lateral {
         display: none;
     }
-
     .mision-tp,
     .vision-tp {
         width: 90%;
@@ -436,13 +467,16 @@ html {
         padding: 20px;
     }
 
-    .bg-mision {
+    .section.bg-mision {
         width: 97%;
-        padding: 110px 0px 30px;
-        bottom: -10px;
+        padding: 10px 0px 30px;
+        bottom: 0px;
+        overflow: auto;
+        height: auto;
     }
+
     .mision-tp p,
-    .vision-tp p{
+    .vision-tp p {
         text-align: left;
     }
 

@@ -51,6 +51,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
+<<<<<<< HEAD
 // Menú hamburguesa - solo si existe el elemento
 const hamburger = document.getElementById('hamburger');
 const mobileNav = document.getElementById('mobileNav');
@@ -70,3 +71,37 @@ if (hamburger && mobileNav) {
         });
     });
 }
+=======
+// Función para manejar el dropdown
+document.querySelectorAll(".grado").forEach((grado) => {
+    grado.addEventListener("click", () => {
+        const materias = grado.nextElementSibling;
+        const icono = grado.querySelector("i");
+
+        materias.classList.toggle("active");
+        icono.classList.toggle("rotate");
+    });
+});
+
+if (document.getElementById('hamburger')) {
+    document.getElementById('hamburger').addEventListener('click', function () {
+        document.getElementById('mobileNav').classList.toggle('active');
+
+        // Animación para el menú hamburguesa (opcional)
+        this.classList.toggle('open');
+    });
+}
+
+
+let menu = document.querySelectorAll('.mobile-nav li a')
+if (menu) {
+    menu.forEach(item => {
+        item.addEventListener('click', () => {
+            document.getElementById('mobileNav').classList.remove('active');
+            document.getElementById('hamburger').classList.remove('open');
+        });
+    });
+}
+
+
+>>>>>>> e52515b82d4917b8f72febc6a935cb2c647f4625

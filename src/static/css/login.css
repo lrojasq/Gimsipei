@@ -55,7 +55,11 @@ form {
     flex-direction: column;
     width: 700px;
     height: 500px;
+<<<<<<< HEAD
     margin: 0;
+=======
+    margin-top: 180px;
+>>>>>>> e52515b82d4917b8f72febc6a935cb2c647f4625
 }
 
 .user {
@@ -72,9 +76,20 @@ h2 {
 label {
     margin-left: 13%;
 }
-
-.input {
+.form-group{
+    position: relative;
     width: 75%;
+    margin: auto;
+}
+.form-group i{
+    position: absolute;
+    right: 2rem;
+    top: 25px;
+    margin: auto;
+    color: var(--light-color);
+}
+.input {
+    width: 100%;
     height: 70px;
     border: 1px solid var(--info-color);
     border-radius: 8px;
@@ -82,11 +97,16 @@ label {
     margin: 0 auto;
     padding: 10px;
 }
-
+.input::placeholder{
+    color: var(--light-color);
+}
 input:hover {
     background-color: var(--light-color);
     border: 1px solid var(--info-color);
     ;
+}
+input:hover + i{
+    color: var(--info-color);
 }
 
 .form-checked {
@@ -136,10 +156,13 @@ a {
     .bg-index {
         background-image: url("../images/bg-index-1400.png");
     }
+    form{
+        margin-top: 180px;
+    }
 }
 
 /* xl -Large devices (large desktops, 1200px and up)*/
-@media (min-width: 1201px) and (max-width: 1400px) {
+@media (min-width: 1201px) and (max-width: 1600px) {
     .bg-index {
         background-image: url("../images/bg-index-1200.png");
     }
@@ -188,7 +211,7 @@ a {
 }
 
 /* col Extra Small devices (landscape phones, < 576px)*/
-@media (max-width: 576px) {
+@media (max-width: 1024px) {
     body {
         height: 100vh;
         overflow: hidden;
@@ -213,9 +236,14 @@ a {
     form {
         position: relative;
         width: 90%;
+<<<<<<< HEAD
         height: auto;
         margin: 0;
         padding: 20px;
+=======
+        height: 500px;
+        margin-top: 80%;
+>>>>>>> e52515b82d4917b8f72febc6a935cb2c647f4625
     }
 
     label {
