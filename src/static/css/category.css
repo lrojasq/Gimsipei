@@ -20,7 +20,7 @@
     --libros-active: #d944ea;
     --calificaciones: #a270f2;
     --calificaciones-active: #6c43d1;
-    --admin :#f94e4e;
+    --admin: #f94e4e;
     --admin-active: #e01e1e;
 }
 
@@ -88,7 +88,8 @@ h1 {
     max-height: 90vh;
     overflow: auto;
 }
-.specialities_category.cursos{
+
+.specialities_category.cursos {
     width: 90%;
     background-color: #fff;
 }
@@ -107,6 +108,7 @@ h1 {
     text-align: left;
     justify-content: start;
 }
+
 /* Handle */
 .clases_category .specialities_category::-webkit-scrollbar-thumb {
     background: var(--clases);
@@ -229,6 +231,7 @@ hr.clases_br {
 .calificaciones_category .menu_aside {
     background-color: var(--calificaciones);
 }
+
 .admin_category .menu_aside {
     background-color: var(--admin);
 }
@@ -282,6 +285,7 @@ hr.clases_br {
 .calificaciones_category .aside_list li a:hover {
     background-color: var(--calificaciones-active);
 }
+
 .admin_category .aside_list li a.active,
 .admin_category .aside_list li a:hover {
     background-color: var(--admin-active);
@@ -481,113 +485,144 @@ hr.libros_br {
 .grade {
     width: 100%;
 }
-.grade_list{
+
+.grade_list {
     gap: 0.5rem;
 }
-.grade_list li{
+
+.grade_list li {
     justify-content: space-between;
     flex-wrap: nowrap;
     width: 100%;
     gap: 0.5rem;
 }
-.grade_list li span{
+
+.grade_list li span {
     background-color: var(--light-color);
     color: var(--calificaciones);
     flex-wrap: nowrap;
     padding: 0.5rem;
     border-radius: 5px;
 }
-.grade_list li span{
+
+.grade_list li span {
     width: 80%;
 }
-.grade_list li span.grade{
+
+.grade_list li span.grade {
     width: 20%;
     text-align: center;
 }
-.grade_list li span.subject_global{
+
+.grade_list li span.subject_global {
     width: 25%;
 }
 
-.grade_list li span.periodo{
+.grade_list li span.periodo {
     width: 15%;
     text-align: center;
 }
-.grade_list li:first-child span{
+
+.grade_list li:first-child span {
     background-color: var(--calificaciones);
     color: var(--light-color);
 }
-.btn-calificaciones{
+
+.btn-calificaciones {
     color: var(--calificaciones);
     background-color: var(--light-color);
     border-color: var(--calificaciones);
 }
-.btn-calificaciones:hover{
+
+.btn-calificaciones:hover {
     background-color: var(--calificaciones);
     color: var(--light-color);
 }
-.btn-calificaciones.active{
+
+.btn-calificaciones.active {
     background-color: var(--calificaciones);
     color: var(--light-color);
 }
+
 @media (max-width:1024px) {
-    .data_categoty{
+    .data_categoty {
         text-align: center;
     }
-    .menu_aside{
+
+    .menu_aside {
         display: none;
     }
-    .container_category{
+
+    .container_category {
         flex-direction: column;
         height: auto;
         width: 100%;
         padding: 0rem;
     }
-    .data_categoty>.title{
+
+    .data_categoty>.title {
         flex-direction: column;
         text-align: center;
     }
-    .specialities_category{
+
+    .specialities_category {
         flex-direction: column;
         width: 100%;
         max-height: max-content;
     }
-    .speciality{
+
+    .speciality {
         width: 100%;
         height: 340px;
     }
+
+    .specialities_category.flex.books,
+    .filter {
+        flex-direction: row !important;
+        gap: 1rem;
+    }
 }
+
 @media (max-width:600px) {
-    .specialities_category{
+    .specialities_category {
         padding: 0.5rem;
     }
-    .exam{
+
+    .exam {
         gap: 0.5rem;
         flex-direction: column;
         align-items: end;
     }
-    .exam_content{
+
+    .exam_content {
         width: 100%;
     }
-    .nota{
+
+    .nota {
         width: 25%;
     }
-    .nota span{
+
+    .nota span {
         padding: 0.5rem 2rem;
         background: #e55d1a;
         color: white;
     }
-    .nota hr{
+
+    .nota hr {
         display: none;
     }
-    .text-content p{
+
+    .text-content p {
         font-size: 0.6rem;
     }
-    .container_category .btns{
-        flex-direction: row!important;
+
+    .container_category .btns {
+        flex-direction: row !important;
         justify-content: center;
         gap: 1rem;
     }
-    .btn-evaluaciones{
+
+    .btn-evaluaciones {
         max-width: 45%;
         height: 27px;
         padding: 0rem;
@@ -597,4 +632,14 @@ hr.libros_br {
         border-radius: 10px;
     }
 
+    .filter select {
+        max-width: 45%;
+    }
+
+    .book {
+        max-width: 45%;
+    }
+    .grade_list li span{
+        font-size: .5rem;
+    }
 }
