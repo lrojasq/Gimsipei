@@ -18,8 +18,9 @@ from .controllers import (
 auth_bp = Blueprint("auth", __name__, url_prefix="/auth")
 
 
-@auth_bp.route("/login", methods=["POST"])
+@auth_bp.route("/login", methods=["GET", "POST"])
 def login():
+    """Procesa login"""
     return login_user_controller(request)
 
 
@@ -64,13 +65,12 @@ def get_current_user():
     return get_current_user_controller(request)
 
 
-@auth_bp.route("/forgot-password", methods=["GET"])
+@auth_bp.route("/forgot-password", methods=["GET", "POST"])
 def forgot_password():
     return forgot_password_controller(request)
 
 
-
-@auth_bp.route("/logout", methods=["POST"])
+@auth_bp.route("/logout", methods=["GET", "POST"])
 def logout():
     return logout_user_controller(request)
 
