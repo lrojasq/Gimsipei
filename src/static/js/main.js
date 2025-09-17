@@ -62,30 +62,24 @@ document.querySelectorAll(".grado").forEach((grado) => {
     });
 });
 
-var swiper = new Swiper(".mySwiper", {
-    direction: "vertical",   // 👈 scroll vertical
-    mousewheel: {
-        releaseOnEdges: true,  // permite salir al final si quieres
-    },
-    speed: 600,              // velocidad de transición
-    scrollbar: {
-        el: ".swiper-scrollbar",
-        draggable: true,
-    },
-});
-document.getElementById('hamburger').addEventListener('click', function () {
-    document.getElementById('mobileNav').classList.toggle('active');
+if (document.getElementById('hamburger')) {
+    document.getElementById('hamburger').addEventListener('click', function () {
+        document.getElementById('mobileNav').classList.toggle('active');
 
-    // Animación para el menú hamburguesa (opcional)
-    this.classList.toggle('open');
-});
+        // Animación para el menú hamburguesa (opcional)
+        this.classList.toggle('open');
+    });
+}
+
 
 let menu = document.querySelectorAll('.mobile-nav li a')
-if (!menu) return
-menu.forEach(item => {
-    item.addEventListener('click', () => {
-        document.getElementById('mobileNav').classList.remove('active');
-        document.getElementById('hamburger').classList.remove('open');
+if (menu) {
+    menu.forEach(item => {
+        item.addEventListener('click', () => {
+            document.getElementById('mobileNav').classList.remove('active');
+            document.getElementById('hamburger').classList.remove('open');
+        });
     });
-});
+}
+
 

@@ -529,3 +529,72 @@ hr.libros_br {
     background-color: var(--calificaciones);
     color: var(--light-color);
 }
+@media (max-width:1024px) {
+    .data_categoty{
+        text-align: center;
+    }
+    .menu_aside{
+        display: none;
+    }
+    .container_category{
+        flex-direction: column;
+        height: auto;
+        width: 100%;
+        padding: 0rem;
+    }
+    .data_categoty>.title{
+        flex-direction: column;
+        text-align: center;
+    }
+    .specialities_category{
+        flex-direction: column;
+        width: 100%;
+        max-height: max-content;
+    }
+    .speciality{
+        width: 100%;
+        height: 340px;
+    }
+}
+@media (max-width:600px) {
+    .specialities_category{
+        padding: 0.5rem;
+    }
+    .exam{
+        gap: 0.5rem;
+        flex-direction: column;
+        align-items: end;
+    }
+    .exam_content{
+        width: 100%;
+    }
+    .nota{
+        width: 25%;
+    }
+    .nota span{
+        padding: 0.5rem 2rem;
+        background: #e55d1a;
+        color: white;
+    }
+    .nota hr{
+        display: none;
+    }
+    .text-content p{
+        font-size: 0.6rem;
+    }
+    .container_category .btns{
+        flex-direction: row!important;
+        justify-content: center;
+        gap: 1rem;
+    }
+    .btn-evaluaciones{
+        max-width: 45%;
+        height: 27px;
+        padding: 0rem;
+        margin: auto;
+        text-align: center;
+        font-size: 1rem;
+        border-radius: 10px;
+    }
+
+}
