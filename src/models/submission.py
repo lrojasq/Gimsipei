@@ -4,15 +4,19 @@ from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Text, JSON
 from sqlalchemy.orm import relationship
 from src.database.database import Base
 
+
 class Submission(Base):
     """Submission model for exercise and assignment submissions"""
+
     __tablename__ = "submissions"
 
     id: int = Column(Integer, primary_key=True, index=True)
     student_id: int = Column(Integer, ForeignKey("users.id"), nullable=False)
     exercise_id: int = Column(Integer, ForeignKey("exercises.id"), nullable=True)
     assignment_id: int = Column(Integer, ForeignKey("assignments.id"), nullable=True)
-    content: dict = Column(JSON, nullable=False)  # Store submission content in JSON format
+    content: dict = Column(
+        JSON, nullable=False
+    )  # Store submission content in JSON format
     score: float = Column(Float, nullable=True)
     feedback: str = Column(Text, nullable=True)
     submitted_at: datetime = Column(DateTime, default=datetime.utcnow)

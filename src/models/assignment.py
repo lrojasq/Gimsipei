@@ -4,6 +4,7 @@ from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Text
 from sqlalchemy.orm import relationship
 from src.database.database import Base
 
+
 class Assignment(Base):
     """Assignment model for the application"""
 
