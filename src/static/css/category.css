@@ -1,0 +1,645 @@
+/* Global Styles */
+:root {
+    --primary-color: #007bff;
+    --secondary-color: #6c757d;
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+    --info-color: #17a2b8;
+    --light-color: #ffffff;
+    --dark-color: #343a40;
+    --border-color: #00c2e7;
+    --gray-light: #f4f4f4;
+    --clases: #23ccc3;
+    --clases-active: #16b7ab;
+    --recursos: #f7cb52;
+    --recursos-active: #e5ab1a;
+    --evaluaciones: #f48d53;
+    --evaluaciones-active: #e55d1a;
+    --libros: #ea6ef4;
+    --libros-active: #d944ea;
+    --calificaciones: #a270f2;
+    --calificaciones-active: #6c43d1;
+    --admin: #f94e4e;
+    --admin-active: #e01e1e;
+}
+
+.container_category {
+    justify-content: space-between;
+    padding: 3rem 3rem 0rem;
+    height: 100vh;
+}
+
+h1 {
+    font-size: x-large;
+    font-weight: bolder;
+}
+
+.data_categoty {
+    gap: 1rem;
+}
+
+.clases_category .data_categoty svg {
+    fill: var(--clases);
+}
+
+.recursos_category .data_categoty svg {
+    fill: var(--recursos);
+}
+
+.libros_category .data_categoty svg {
+    fill: var(--libros);
+}
+
+.evaluaciones_category .data_categoty svg {
+    fill: var(--evaluaciones);
+}
+
+.calificaciones_category .data_categoty svg {
+    fill: var(--calificaciones);
+}
+
+.data_categoty>.title {
+    gap: 1rem;
+    align-items: center;
+}
+
+.data_categoty p {
+    font-size: larger;
+}
+
+.data_grade_category {
+    gap: 0rem;
+    color: var(--secondary-color);
+}
+
+.data_grade_category p {
+    margin: 0px;
+}
+
+/* specialities_category */
+.specialities_category {
+    justify-content: space-around;
+    gap: 3rem;
+    padding: 2rem;
+    background-color: var(--gray-light);
+    border-radius: 10px;
+    width: 70%;
+    max-height: 90vh;
+    overflow: auto;
+}
+
+.specialities_category.cursos {
+    width: 90%;
+    background-color: #fff;
+}
+
+.specialities_category::-webkit-scrollbar {
+    width: 15px;
+}
+
+/* Track */
+.specialities_category::-webkit-scrollbar-track {
+    background: #888;
+    border-radius: 5px;
+}
+
+.specialities_category:has(.content-admin) {
+    text-align: left;
+    justify-content: start;
+}
+
+/* Handle */
+.clases_category .specialities_category::-webkit-scrollbar-thumb {
+    background: var(--clases);
+    border-radius: 5px;
+}
+
+.recursos_category .specialities_category::-webkit-scrollbar-thumb {
+    background: var(--recursos);
+    border-radius: 5px;
+}
+
+.libros_category .specialities_category::-webkit-scrollbar-thumb {
+    background: var(--libros);
+    border-radius: 5px;
+}
+
+.evaluaciones_category .specialities_category::-webkit-scrollbar-thumb {
+    background: var(--evaluaciones);
+    border-radius: 5px;
+}
+
+.calificaciones_category .specialities_category::-webkit-scrollbar-thumb {
+    background: var(--calificaciones);
+    border-radius: 5px;
+}
+
+.admin_category .specialities_category::-webkit-scrollbar-thumb {
+    background: var(--admin);
+    border-radius: 5px;
+}
+
+/* Handle on hover */
+.specialities_category::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #888;
+    border-radius: 5px;
+}
+
+.speciality {
+    width: 45%;
+    align-items: end;
+    height: 40%;
+    justify-content: center;
+    text-align: center;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.clases_category .speciality {
+    background-color: var(--clases);
+}
+
+.recursos_category .speciality {
+    background-color: var(--recursos);
+}
+
+.libros_category .speciality {
+    background-color: var(--libros);
+}
+
+.evaluaciones_category .speciality {
+    background-color: var(--evaluaciones);
+}
+
+.admin_category .speciality {
+    background-color: var(--admin);
+}
+
+.title_speciality {
+    width: 100%;
+    background-color: var(--light-color);
+    padding: 1rem;
+    gap: 1rem;
+}
+
+.title_speciality hr {
+    width: 100%;
+    margin: auto;
+    height: 3px;
+    border-radius: 10px;
+    border: none;
+    opacity: 1;
+}
+
+hr.clases_br {
+    background-color: var(--clases);
+}
+
+
+/* aside menu */
+
+.menu_aside {
+    height: 100%;
+    gap: 15px;
+    border-radius: 10px 10px 0px 0px;
+    overflow: hidden;
+    background-color: var(--clases);
+}
+
+.recursos_category .menu_aside {
+    background-color: var(--recursos);
+}
+
+.libros_category .menu_aside {
+    background-color: var(--libros);
+}
+
+.evaluaciones_category .menu_aside {
+    background-color: var(--evaluaciones);
+}
+
+.calificaciones_category .menu_aside {
+    background-color: var(--calificaciones);
+}
+
+.admin_category .menu_aside {
+    background-color: var(--admin);
+}
+
+.menu_aside svg {
+    fill: var(--light-color);
+    max-width: 50px;
+    max-height: 50px;
+}
+
+.aside_list {
+    gap: 15px;
+}
+
+.aside_list li {
+    height: auto;
+    width: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-height: 80px;
+}
+
+.aside_list li a {
+    height: 100%;
+    width: 100%;
+    padding: 1rem;
+}
+
+.clases_category .aside_list li a.active,
+.clases_category .aside_list li a:hover {
+    background-color: var(--clases-active);
+}
+
+.recursos_category .aside_list li a.active,
+.recursos_category .aside_list li a:hover {
+    background-color: var(--recursos-active);
+}
+
+.libros_category .aside_list li a.active,
+.libros_category .aside_list li a:hover {
+    background-color: var(--libros-active);
+}
+
+.evaluaciones_category .aside_list li a.active,
+.evaluaciones_category .aside_list li a:hover {
+    background-color: var(--evaluaciones-active);
+}
+
+.calificaciones_category .aside_list li a.active,
+.calificaciones_category .aside_list li a:hover {
+    background-color: var(--calificaciones-active);
+}
+
+.admin_category .aside_list li a.active,
+.admin_category .aside_list li a:hover {
+    background-color: var(--admin-active);
+}
+
+.aside_list li a.active svg,
+.aside_list li a:hover svg {
+    fill: var(--light-color);
+}
+
+/* estilos categoria */
+.exams {
+    gap: 1rem;
+    align-items: start;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+}
+
+.exam {
+    width: 100%;
+}
+
+.exam_content {
+    background: #ffff;
+    gap: 1rem;
+    height: max-content;
+    padding: 0px;
+    align-items: center;
+    border-radius: 15px;
+    overflow: hidden;
+    flex-wrap: nowrap;
+    width: 80%;
+    height: 100%;
+}
+
+.evaluaciones_bg {
+    background-color: var(--evaluaciones);
+}
+
+.img_evaluaciones {
+    width: 100px;
+    height: 100%;
+    width: 20%;
+}
+
+.text-content {
+    gap: 1rem;
+    padding: 1rem;
+    width: 90%;
+    position: relative;
+}
+
+.text-content::before {
+    content: "";
+    width: 4px;
+    height: 80%;
+    background-color: var(--gray-light);
+    border-radius: 15px;
+    margin-bottom: 0.5rem;
+    display: block;
+    position: absolute;
+    left: 0px;
+}
+
+.text-content h2 {
+    font-size: 1rem;
+    font-weight: bold;
+    color: var(--evaluaciones);
+}
+
+.text-content p {
+    font-size: 0.9rem;
+    color: var(--dark-color);
+}
+
+.nota {
+    width: 15%;
+    justify-content: flex-start;
+    gap: 0.5rem;
+}
+
+.nota span {
+    font-size: 1.2rem;
+    color: var(--dark-color);
+    background-color: var(--light-color);
+    border-radius: 15px;
+    width: 100%;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    height: 40%;
+}
+
+.nota hr {
+    width: 90%;
+    height: 4px;
+    border-radius: 10px;
+    border: none;
+    opacity: 1;
+    background-color: var(--evaluaciones);
+    margin: 0px auto;
+}
+
+.btn-evaluaciones {
+    color: var(--evaluaciones);
+    border-color: var(--evaluaciones);
+    width: 100%;
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.btn-evaluaciones.active {
+    background-color: var(--evaluaciones-active);
+    color: var(--light-color);
+}
+
+.btn-evaluaciones:hover {
+    background-color: var(--evaluaciones-active);
+    color: var(--light-color);
+    border-color: var(--light-color);
+}
+
+/* estilos libros */
+.books {
+    /* gap: 1rem; */
+    align-items: start;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    background-color: var(--light-color);
+    position: relative;
+}
+
+.books::before {
+    content: "";
+    width: 9px;
+    height: 90%;
+    background-color: #fdebff;
+    border-radius: 15px;
+    margin-bottom: 0.5rem;
+    position: absolute;
+    left: 0px;
+    top: 0%;
+    bottom: 0%;
+    margin: auto;
+}
+
+.book {
+    max-width: 20%;
+    flex-wrap: nowrap;
+    gap: 0px;
+    background-color: var(--light-color);
+    text-align: center;
+    border: 11px solid #fdebff;
+    border-radius: 15px;
+    padding: 7px;
+}
+
+.book img {
+    width: 100%;
+    height: 100%;
+    background-color: var(--libros);
+}
+
+.book .title_speciality {
+    padding: 0px;
+    gap: 2px;
+    font-size: small;
+}
+
+hr.libros_br {
+    background-color: var(--libros);
+    height: 5px;
+    width: 90%;
+    margin: 0px auto;
+}
+
+.btn-libros {
+    color: var(--libros);
+    border-color: var(--libros);
+}
+
+.btn-libros:hover,
+.btn-libros.active {
+    background-color: var(--libros);
+    color: var(--light-color);
+    border-color: var(--light-color);
+}
+
+/* estilos calificaciones */
+.grades {
+    gap: 1rem;
+    align-items: start;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+}
+
+.grade {
+    width: 100%;
+}
+
+.grade_list {
+    gap: 0.5rem;
+}
+
+.grade_list li {
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    width: 100%;
+    gap: 0.5rem;
+}
+
+.grade_list li span {
+    background-color: var(--light-color);
+    color: var(--calificaciones);
+    flex-wrap: nowrap;
+    padding: 0.5rem;
+    border-radius: 5px;
+}
+
+.grade_list li span {
+    width: 80%;
+}
+
+.grade_list li span.grade {
+    width: 20%;
+    text-align: center;
+}
+
+.grade_list li span.subject_global {
+    width: 25%;
+}
+
+.grade_list li span.periodo {
+    width: 15%;
+    text-align: center;
+}
+
+.grade_list li:first-child span {
+    background-color: var(--calificaciones);
+    color: var(--light-color);
+}
+
+.btn-calificaciones {
+    color: var(--calificaciones);
+    background-color: var(--light-color);
+    border-color: var(--calificaciones);
+}
+
+.btn-calificaciones:hover {
+    background-color: var(--calificaciones);
+    color: var(--light-color);
+}
+
+.btn-calificaciones.active {
+    background-color: var(--calificaciones);
+    color: var(--light-color);
+}
+
+@media (max-width:1024px) {
+    .data_categoty {
+        text-align: center;
+    }
+
+    .menu_aside {
+        display: none;
+    }
+
+    .container_category {
+        flex-direction: column;
+        height: auto;
+        width: 100%;
+        padding: 0rem;
+    }
+
+    .data_categoty>.title {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .specialities_category {
+        flex-direction: column;
+        width: 100%;
+        max-height: max-content;
+    }
+
+    .speciality {
+        width: 100%;
+        height: 340px;
+    }
+
+    .specialities_category.flex.books,
+    .filter {
+        flex-direction: row !important;
+        gap: 1rem;
+    }
+}
+
+@media (max-width:600px) {
+    .specialities_category {
+        padding: 0.5rem;
+    }
+
+    .exam {
+        gap: 0.5rem;
+        flex-direction: column;
+        align-items: end;
+    }
+
+    .exam_content {
+        width: 100%;
+    }
+
+    .nota {
+        width: 25%;
+    }
+
+    .nota span {
+        padding: 0.5rem 2rem;
+        background: #e55d1a;
+        color: white;
+    }
+
+    .nota hr {
+        display: none;
+    }
+
+    .text-content p {
+        font-size: 0.6rem;
+    }
+
+    .container_category .btns {
+        flex-direction: row !important;
+        justify-content: center;
+        gap: 1rem;
+    }
+
+    .btn-evaluaciones {
+        max-width: 45%;
+        height: 27px;
+        padding: 0rem;
+        margin: auto;
+        text-align: center;
+        font-size: 1rem;
+        border-radius: 10px;
+    }
+
+    .filter select {
+        max-width: 45%;
+    }
+
+    .book {
+        max-width: 45%;
+    }
+    .grade_list li span{
+        font-size: .5rem;
+    }
+}
