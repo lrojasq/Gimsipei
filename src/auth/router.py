@@ -1,6 +1,5 @@
 from flask import Blueprint, request
 from .controllers import (
-    admin_controller,
     login_user_controller,
     get_current_user_controller,
     logout_user_controller,
