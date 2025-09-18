@@ -19,7 +19,6 @@
 {% endif %}
 {% endwith %}
 
-<<<<<<< HEAD
 {% block content %}
 <div class="bg-index">
     <div class="formulario">
@@ -48,44 +47,3 @@
     </div>
 </div>
 {% endblock %}
-=======
-<!-- Main Content -->
-<main class="flex-grow-1">
-
-
-    {% block content %}
-    <div class="bg-index">
-        <div class="formulario col">
-            <form method="POST" action="login">
-                <h2 class="mt-3">BIENVENIDOS</h2>
-                <div class="user mb-5">
-                    <label for="label-for">Usuario</label>
-                    <div class="form-group">
-                        <input type="text" name="username" id="" class="input" placeholder="Usuario">
-                        <i class="fa-solid fa-user"></i>
-                    </div>
-
-                </div>
-
-                <div class="user mb-2 ">
-                    <label for="label-for">Contraseña</label>
-                    <div class="form-group">
-                        <input type="password" name="password" id="" class="input" placeholder="Contraseña">
-                        <i class="fa-solid fa-lock"></i>
-                    </div>
-                </div>
-                <div class="links">
-                    <a href="{{ url_for('auth.forgot_password') }}">¿Olvidaste tu contraseña?</a>
-                </div>
-                <div class="mb-3 form-checked">
-                    <input type="checkbox" class="gx-0 gy-0" id="remember" name="remember">
-                    <label class="gx-0 gy-0 label" for="remember">Recordarme</label>
-                </div>
-                <div>
-                    <button type="submit" class="btn boton">Iniciar</button>
-                </div>
-            </form>
-        </div>
-    </div><!-- container-fluid bg-index -->
-    {% endblock %}
->>>>>>> e52515b82d4917b8f72febc6a935cb2c647f4625
