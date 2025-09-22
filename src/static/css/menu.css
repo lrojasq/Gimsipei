@@ -28,6 +28,13 @@ html {
     background-color: #f6f6f6;
 }
 
+.containe.bg-image-user {
+    background-color: var(--primario);
+    background-image: url("../images/menu-principal/bg-pencil.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
 .mision-tp p,
 .vision-tp p {
     font-size: 1rem;
@@ -38,10 +45,10 @@ html {
     flex-direction: column;
     width: 100%;
     padding: 0px 100px;
-    background-color: var(--primario);
-    background-image: url("../images/menu-principal/bg-pencil.png");
+    /* background-color: var(--primario); */
+    /* background-image: url("../images/menu-principal/bg-pencil.png");
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: cover; */
     position: relative;
 }
 
@@ -64,16 +71,17 @@ html {
 
 .bg-vision {
     width: 100%;
-    background-color: #f6f6f6;
+    background-color: transparent;
+    z-index: 999999;
     border-radius: 50px 50px 0px 0px;
     z-index: 1000;
-    padding: 100px 80px 0px;
     position: relative;
 }
 
-.bg-vision .bg-lateral {
-    background-position: top;
-    top: -40%;
+.bg-vision .content-vision{
+    padding: 100px 80px 0px;
+    margin: auto;
+    width: 100%;
 }
 
 .vision-tp {
@@ -82,16 +90,17 @@ html {
     padding: 20px;
 }
 
-.bg-lateral {
+.containe.bg-image-user::after {
+    content: "";
     position: absolute;
     background-image: url("../images/menu-principal/bg-rigth.png");
     background-repeat: no-repeat;
     background-size: contain;
+    top: 223px;
     right: 0px;
-    top: 170px;
-    z-index: 9999;
-    width: 624px;
-    height: 160%;
+    z-index: 999;
+    width: 724px;
+    height: 170%;
 }
 
 .menu {
@@ -230,7 +239,7 @@ a {
     gap: 10px;
     height: 100px;
     top: 40px;
-    background-color: #f6f6f6;
+    /* background-color: #f6f6f6; */
 }
 
 .barra_bg {
@@ -365,12 +374,14 @@ a {
         font-size: 1.6rem;
     }
 
-    .bg-lateral {
-        top: 200px;
-        z-index: 9999;
-        width: 743px;
-        height: 133%;
+    .containe.bg-image-user::after {
+        top: 240px;
+        right: 0px;
+        z-index: 999;
+        width: 50%;
+        height: 165%;
     }
+
 }
 
 @media (max-width: 1080px) {
@@ -402,11 +413,12 @@ a {
 
     .section.bg-vision {
         width: 96.6%;
-        background-color: #f6f6f6;
         border-radius: 15px;
         padding: 40px 0px;
         overflow: auto;
         height: auto;
+        background-color: transparent;
+        z-index: 999999;
     }
 
     .box-menu svg {
@@ -456,6 +468,7 @@ a {
     .bg-lateral {
         display: none;
     }
+
     .mision-tp,
     .vision-tp {
         width: 90%;
