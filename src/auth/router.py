@@ -1,4 +1,4 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, render_template
 from .controllers import (
     login_user_controller,
     get_current_user_controller,
@@ -14,6 +14,12 @@ auth_bp = Blueprint("auth", __name__, url_prefix="/auth")
 def login():
     """Procesa login"""
     return login_user_controller(request)
+
+@auth_bp.route("/user", methods=["GET", "POST"])
+def user():
+   
+    return render_template("auth/user.html")
+
 
 
 @auth_bp.route("/me", methods=["GET"])

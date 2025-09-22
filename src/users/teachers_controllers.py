@@ -22,9 +22,8 @@ def teachers_management_controller(request: Request) -> Response:
     """View to manage teachers"""
     try:
         users, total = get_users_service(role=UserRole.TEACHER)
-        return render_template(
-            "admin/teachers_management.html", teachers=users, total=total
-        )
+        
+        return render_template("admin/teachers_management.html", teachers=users, total=total)
     except Exception as e:
         flash(f"Error al cargar la lista de docentes: {str(e)}", "danger")
         return render_template("admin/teachers_management.html", teachers=[], total=0)
@@ -68,6 +67,7 @@ def edit_teacher_controller(teacher_id: int, request: Request) -> Response:
     if request.method == "GET":
         try:
             teacher, status_code = get_user_service(teacher_id, request)
+            
             if status_code == 404:
                 flash("Docente no encontrado", "danger")
                 return redirect(url_for("users.teachers_management"))

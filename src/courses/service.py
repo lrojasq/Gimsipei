@@ -30,6 +30,8 @@ def get_courses_service(
     try:
         query = db.query(Course)
 
+        print("DEBUG -> total cursos en BD:", query.count())
+
         # Aplicar filtros
         if academic_year:
             query = query.filter(Course.academic_year == academic_year)
@@ -43,6 +45,8 @@ def get_courses_service(
         courses = query.order_by(
             Course.academic_year.desc(), Course.period, Course.grade_level
         ).all()
+
+        print("DEBUG -> cursos después de filtros:", len(courses))
 
         return [
             CourseResponseSchema(
@@ -60,6 +64,7 @@ def get_courses_service(
         ], len(courses)
     finally:
         db.close()
+
 
 
 def get_course_service(

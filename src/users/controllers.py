@@ -70,6 +70,7 @@ def get_user_controller(
 def create_user_controller(
     request: Request,
 ) -> Response | Tuple[Optional[UserResponseSchema], int]:
+    
     try:
         if request.is_json:
             data = request.get_json()

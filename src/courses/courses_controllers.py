@@ -22,13 +22,12 @@ def courses_management_controller(request: Request) -> Response:
     """View to manage courses"""
     try:
         courses, total = get_courses_service()
-        # Load subjects for each course
-        from .service import get_course_subjects_service
+        print("DEBUG -> cursos encontrados en controller:", courses, total)
 
         courses_with_subjects = []
 
         for course in courses:
-            subjects, _ = get_course_subjects_service(course.id)
+            subjects, _ = get_courses_service(course.id)
             course_dict = {
                 "id": course.id,
                 "academic_year": course.academic_year,
@@ -44,11 +43,14 @@ def courses_management_controller(request: Request) -> Response:
             courses_with_subjects.append(course_dict)
 
         return render_template(
-            "admin/courses_management.html", courses=courses_with_subjects, total=total
+            "admin/courses_management.html",
+            courses=courses_with_subjects,
+            total=total,
         )
     except Exception as e:
         flash(f"Error al cargar la lista de cursos: {str(e)}", "danger")
         return render_template("admin/courses_management.html", courses=[], total=0)
+
 
 
 @jwt_required()
