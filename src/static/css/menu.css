@@ -238,7 +238,7 @@ a {
     flex-direction: column;
     gap: 10px;
     height: 100px;
-    top: 40px;
+    top: 10px;
     /* background-color: #f6f6f6; */
 }
 
@@ -412,10 +412,9 @@ a {
     }
 
     .section.bg-vision {
-        width: 96.6%;
+        width: 100%;
         border-radius: 15px;
-        padding: 40px 0px;
-        overflow: auto;
+        overflow-x: hidden;
         height: auto;
         background-color: transparent;
         z-index: 999999;
@@ -474,7 +473,7 @@ a {
         width: 90%;
         text-align: justify;
         margin: auto;
-        padding: 20px;
+        padding: 20 5px;
     }
 
     .section.bg-mision {
@@ -494,5 +493,24 @@ a {
         height: 20px;
         width: 60%;
         position: absolute;
+    }
+    .containe.bg-image-user::after {
+        display: none;
+    }
+    .bg-vision .content-vision{
+        padding: 40px 0px 0px;
+        background-color: var(--blanco);
+    }
+    .menu{
+        gap: 3rem;
+    }
+    .bg_section_footer{
+        height: 100px;
+        top: 10px;
+        background-color: #f6f6f6;
+    }
+    .bg-mision h2,
+    .bg-vision h2{
+        font-size: 1rem;
     }
 }
