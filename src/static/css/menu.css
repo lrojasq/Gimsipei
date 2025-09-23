@@ -1,0 +1,485 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --blanco: #ffffff;
+    --primario: #3BBAE4;
+    --gris-claro: #606060;
+    --azul-oscuro: #12A3DD;
+    --barra-ginsipei: #1CC3EA;
+    --barra-clases: #23CCC3;
+    --barra-recursos: #F7CB52;
+    --barra-evaluaciones: #F48D53;
+    --barra-libros: #EA6EF4;
+    --barra-calificaciones: #A270F2;
+}
+
+html {
+    background-color: #f6f6f6;
+}
+
+.containe {
+    width: 100%;
+    position: relative;
+    height: 100vh;
+    background-color: #f6f6f6;
+}
+
+.mision-tp p,
+.vision-tp p {
+    font-size: 1rem;
+}
+
+.bg-mision {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 0px 100px;
+    background-color: var(--primario);
+    background-image: url("../images/menu-principal/bg-pencil.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+}
+
+.logo {
+    width: 300px;
+    height: 60px;
+
+    margin-left: 50px;
+    margin-top: 50px;
+    background-image: url("../images/logo.png");
+    background-repeat: no-repeat;
+}
+
+.mision-tp {
+    width: 50%;
+    height: auto;
+    color: #ffffff;
+    margin: 0px;
+}
+
+.bg-vision {
+    width: 100%;
+    background-color: #f6f6f6;
+    border-radius: 50px 50px 0px 0px;
+    z-index: 1000;
+    padding: 100px 80px 0px;
+    position: relative;
+}
+
+.bg-vision .bg-lateral {
+    background-position: top;
+    top: -40%;
+}
+
+.vision-tp {
+    width: 50%;
+    color: var(--gris-claro);
+    padding: 20px;
+}
+
+.bg-lateral {
+    position: absolute;
+    background-image: url("../images/menu-principal/bg-rigth.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    right: 0px;
+    top: 170px;
+    z-index: 9999;
+    width: 624px;
+    height: 160%;
+}
+
+.menu {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    z-index: 99991;
+    position: relative;
+    gap: 5rem;
+}
+
+.box-menu {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 15px;
+    width: 150px;
+    height: 158px;
+    position: relative;
+    border-radius: 15px;
+    background-color: var(--azul-oscuro);
+}
+
+.box-menu {
+    color: var(--blanco);
+}
+
+.box-menu svg {
+    fill: #fff;
+    width: 80px;
+}
+
+/* botones menu*/
+
+
+.barra {
+    position: absolute;
+    width: 100%;
+    height: 13px;
+    border-radius: 5px;
+    bottom: -25px;
+}
+
+.gimsipei {
+    background-image: url("../images/menu-principal/gimsipei.png");
+}
+
+a {
+    text-decoration: none;
+}
+
+.margint-top {
+    position: relative;
+    margin-top: 200px;
+}
+
+.gimsipei-hover:hover {
+    background-color: var(--barra-ginsipei);
+}
+
+.libros {
+    background-image: url("../images/menu-principal/libros.png");
+}
+
+.clases {
+    background-image: url("../images/menu-principal/clases.png");
+
+}
+
+.clases-hover:hover {
+    background-color: var(--barra-clases);
+}
+
+.recursos {
+    background-image: url("../images/menu-principal/recursos.png");
+}
+
+.recursos-hover:hover {
+    background-color: var(--barra-recursos);
+}
+
+.evaluaciones {
+    background-image: url("../images/menu-principal/Evaluaciones.png");
+}
+
+.evaluaciones-hover:hover {
+    background-color: var(--barra-evaluaciones);
+}
+
+.libros-hover:hover {
+    background-color: var(--barra-libros);
+}
+
+.calificaciones {
+    background-image: url("../images/menu-principal/calificaciones.png");
+}
+
+.calificaciones-hover:hover {
+    background-color: var(--barra-calificaciones);
+}
+
+.barra-gimsipei {
+    background-color: var(--barra-ginsipei);
+}
+
+.barra-clases {
+    background-color: var(--barra-clases);
+}
+
+.barra-recursos {
+    background-color: var(--barra-recursos);
+}
+
+.barra-evaluaciones {
+    background-color: var(--barra-evaluaciones);
+}
+
+.barra-libros {
+    background-color: var(--barra-libros);
+}
+
+.barra-calificaciones {
+    background-color: var(--barra-calificaciones);
+}
+
+
+.bg_section_footer {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    height: 100px;
+    top: 40px;
+    background-color: #f6f6f6;
+}
+
+.barra_bg {
+    height: 20px;
+    width: 50%;
+    position: absolute;
+}
+
+.barra_bg_left {
+    left: 0px;
+    top: 20%;
+    border-radius: 0px 10px 10px 0px;
+}
+
+.barra_bg_right {
+    right: 0px;
+    bottom: 20%;
+    border-radius: 10px 0px 0px 10px;
+}
+
+.bg-blue {
+    background-color: #66c6e8;
+}
+
+.bg-gray {
+    background-color: #e2e2e2;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+.mobile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background-color: #3bbae4;
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 999999;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* .logo {
+    height: 30px;
+}
+
+.logo img {
+    height: 100%;
+} */
+
+.user-profile {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    overflow: hidden;
+    background-color: #ecf0f1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.user-profile img {
+    width: 100%;
+    height: auto;
+}
+
+.hamburger-menu {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    cursor: pointer;
+}
+
+.hamburger-menu span {
+    display: block;
+    width: 100%;
+    height: 3px;
+    background-color: white;
+    border-radius: 3px;
+    transition: all 0.3s ease;
+}
+
+/* Menú desplegable */
+.mobile-nav {
+    position: fixed;
+    top: 0px;
+    right: -250px;
+    width: 250px;
+    height: calc(100vh - 60px);
+    background-color: #3bbae4;
+    transition: right 0.3s ease;
+    padding: 20px 0;
+}
+
+.mobile-nav.active {
+    right: 0;
+}
+
+.mobile-nav ul {
+    list-style: none;
+}
+
+.mobile-nav ul li {
+    padding: 15px 20px;
+    border-bottom: 1px solid #34495e;
+}
+
+.mobile-nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+@media (min-width:1600px) {
+
+    .mision-tp p,
+    .vision-tp p {
+        font-size: 1.6rem;
+    }
+
+    .bg-lateral {
+        top: 200px;
+        z-index: 9999;
+        width: 743px;
+        height: 133%;
+    }
+}
+
+@media (max-width: 1080px) {
+    .mision-tp {
+        width: 90%;
+        height: auto;
+        color: #ffffff;
+        margin: auto;
+    }
+
+    .vision-tp {
+        width: 90%;
+        color: var(--gris-claro);
+    }
+
+    .logo {
+        height: 50px;
+        margin-left: 10px;
+        margin-top: 10px;
+    }
+
+    .containe {
+        width: 100%;
+    }
+
+    .html {
+        background-color: #f6f6f6;
+    }
+
+    .section.bg-vision {
+        width: 96.6%;
+        background-color: #f6f6f6;
+        border-radius: 15px;
+        padding: 40px 0px;
+        overflow: auto;
+        height: auto;
+    }
+
+    .box-menu svg {
+        fill: var(--gris-claro);
+        width: 80px;
+    }
+
+    .img_logo_brand {
+        width: 100%;
+        height: 46px;
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: center;
+    }
+
+    .barra-gimsipei {
+        bottom: 0px;
+    }
+
+    .box-menu {
+        width: 125px;
+        height: 140px;
+        position: relative;
+        background-color: #f6f6f6;
+    }
+
+    .box-menu p {
+        font-size: 12px;
+        text-align: center;
+        color: var(--gris-claro);
+        margin-top: 5px;
+    }
+
+    .mision-tp p,
+    .vision-tp p {
+        font-size: 1rem;
+    }
+
+    .barra {
+        position: absolute;
+        width: 90%;
+        height: 7px;
+        border-radius: 5px;
+        bottom: 0px;
+    }
+
+    .bg-lateral {
+        display: none;
+    }
+    .mision-tp,
+    .vision-tp {
+        width: 90%;
+        text-align: justify;
+        margin: auto;
+        padding: 20px;
+    }
+
+    .section.bg-mision {
+        width: 97%;
+        padding: 10px 0px 30px;
+        bottom: 0px;
+        overflow: auto;
+        height: auto;
+    }
+
+    .mision-tp p,
+    .vision-tp p {
+        text-align: left;
+    }
+
+    .barra_bg {
+        height: 20px;
+        width: 60%;
+        position: absolute;
+    }
+}

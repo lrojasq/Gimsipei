@@ -1,0 +1,121 @@
+/* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-color: #007bff;
+    --secondary-color: #6c757d;
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+    --info-color: #17a2b8;
+    --light-color: #f8f9fa;
+    --dark-color: #343a40;
+    --input-color: #00c2e7;
+    --input-color-hover: #1dd4f8;
+}
+
+body {
+    min-height: 100vh;
+}
+
+/* Auth Forms */
+section {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+}
+
+.login {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background-image: url('../images/menu-principal/bg-index.png');
+ 
+}
+
+.login img {
+    width: 100%;
+    height: auto;
+    background: no-repeat;
+    background: cover;
+    background-position: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 30%;
+    height: 500px;
+    z-index: 9000;
+    margin-top: -600px;
+    float: right;
+    margin-right: 50px;
+}
+
+label {
+    color: var(--secondary-color);
+    font-size: 26px;
+    font-weight: 600;
+}
+
+.input {
+    width: 90%;
+    margin: 0 auto;
+    padding: 15px;
+}
+
+.input:hover {
+    border: solid 1px var(--light-color);
+}
+
+
+input[type="text"],
+input[type="password"],
+input[type="submit"] {
+    height: 60px;
+    background-color: var(--input-color);
+    border: solid 1px var(--input-color);
+    font-size: 18px;
+    border-radius: 12px;
+    color: var(--light-color);
+}
+
+input[type="submit"] {
+    width: 90px;
+    float: left;
+    margin-left: 5%;
+}
+
+input[type="submit"]:hover {
+    background-color: var(--input-color-hover);
+}
+
+p {
+    color: var(--secondary-color);
+}
+
+.check {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 15px;
+}
+
+.swiper {
+    width: 100%;
+    height: 100%;
+}
+
+.swiper-slide {
+    text-align: center;
+    font-size: 18px;
+    background: #444;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
