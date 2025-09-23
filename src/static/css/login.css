@@ -11,38 +11,51 @@
     --border-color: #00c2e7;
 }
 
-body {
-    max-height: 100vh;
+/* Reset para evitar scroll */
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100vh;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
 }
 
 .bg-index {
     position: relative;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     background-image: url("../images/bg-index.png");
     background-size: cover;
     background-repeat: no-repeat;
+    background-position: center;
+    overflow: hidden;
 }
 
 /* Auth Forms */
 .formulario {
-    position: relative;
+    position: absolute;
+    top: 0;
+    right: 0;
     display: flex;
-    justify-items: center;
+    justify-content: center;
     align-items: center;
     flex-direction: column;
     width: 50%;
     height: 100vh;
-    float: right;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
 form {
-    position: absolute;
+    position: relative;
     display: flex;
     flex-direction: column;
     width: 700px;
     height: 500px;
-    margin-top: 180px;
+    margin: 0;
 }
 
 .user {
@@ -59,20 +72,9 @@ h2 {
 label {
     margin-left: 13%;
 }
-.form-group{
-    position: relative;
-    width: 75%;
-    margin: auto;
-}
-.form-group i{
-    position: absolute;
-    right: 2rem;
-    top: 25px;
-    margin: auto;
-    color: var(--light-color);
-}
+
 .input {
-    width: 100%;
+    width: 75%;
     height: 70px;
     border: 1px solid var(--info-color);
     border-radius: 8px;
@@ -80,16 +82,11 @@ label {
     margin: 0 auto;
     padding: 10px;
 }
-.input::placeholder{
-    color: var(--light-color);
-}
+
 input:hover {
     background-color: var(--light-color);
     border: 1px solid var(--info-color);
     ;
-}
-input:hover + i{
-    color: var(--info-color);
 }
 
 .form-checked {
@@ -139,13 +136,10 @@ a {
     .bg-index {
         background-image: url("../images/bg-index-1400.png");
     }
-    form{
-        margin-top: 180px;
-    }
 }
 
 /* xl -Large devices (large desktops, 1200px and up)*/
-@media (min-width: 1201px) and (max-width: 1600px) {
+@media (min-width: 1201px) and (max-width: 1400px) {
     .bg-index {
         background-image: url("../images/bg-index-1200.png");
     }
@@ -194,29 +188,34 @@ a {
 }
 
 /* col Extra Small devices (landscape phones, < 576px)*/
-@media (max-width: 1024px) {
+@media (max-width: 576px) {
     body {
-        height: 100%;
+        height: 100vh;
+        overflow: hidden;
     }
 
     .bg-index {
         background-image: url("../images/bg-index-575.png");
-        height: 100%;
-        bottom: 0;
+        height: 100vh;
+        width: 100vw;
     }
 
     .formulario {
-        max-width: 1000px;
         width: 100%;
-        height: 80vh;
-        float: left;
+        height: 100vh;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        padding: 20px;
     }
 
     form {
-        position: absolute;
+        position: relative;
         width: 90%;
-        height: 500px;
-        margin-top: 80%;
+        height: auto;
+        margin: 0;
+        padding: 20px;
     }
 
     label {

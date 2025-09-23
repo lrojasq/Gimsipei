@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Gimsipei - Acerca de nosotros{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/menu.css') }}">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+{% endblock %}
+{% block content %}
+
+<div class="containe">
+    <div class="bg-mision">
+        <div class="logo"></div>
+        <div class="mision-tp">
+            <h2>MISIÓN</h2>
+            <p>El Gimnasio Psicopedagógico integral "Gimsipei" es
+                una institución de carácter privado, autónoma
+                fundada para formar integralmente a los niños, bajo
+                parámetros de la práctica de valores y
+                responsabilidad social. Buscamos la excelencia
+                académica e impartimos a nuestros estudiantes una
+                formación basada en el crecimiento humano, el
+                desarrollo de la creatividad y capacidad de
+                razonamiento.</p>
+        </div>
+    </div>
+
+    <div class="bg-vision">
+        <div class="vision-tp">
+            <h2>Visión</h2>
+            <p>Ser reconocidos por la alta calidad humana por la
+                integridad de la propuesta educativa, centrada en la
+                formación del ser y el desarrollo de competencias que
+                responden a altos estándares de calidad, mediante
+                procesos pedagógicos que reconoce la individualidad
+                y promueven la autonomía del estudiante y por el
+                profesionalismo y empeño de todo su personal
+                docente que labora para que los estudiantes sean
+                personas felices, ciudadanos respetables y ejemplos
+                en la sociedad.</p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+
+{% endblock %}
