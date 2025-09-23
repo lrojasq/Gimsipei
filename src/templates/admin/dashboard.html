@@ -15,13 +15,14 @@
 
     <!-- Inicio Perfil -->
     <div class="data_categoty flex flex-column">
-        <p>Fabian Forero Forero</p>
+        
+        <p>{{ user.full_name}}</p>
         <div class="data_grade_category flex flex-column">
-            <p>1000457520</p>
+            <p>{{ user.document }}></p>
 
-            <p>Admin</p>
+            <p>{{ user.role }}</p>
         </div>
-
+      
     </div>
     <!-- fin Perfil -->
 
@@ -31,7 +32,7 @@
         <div class="content-admin flex flex-column">
             <h2>Administrar</h2>
             <div class="flex">
-                <a href="{{ url_for('auth.login')}}">
+                <a href="{{ url_for('users.teachers_management') }}">
                     <div class="box-menu clases-hover">
                         <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="64.77mm" height="64.9478mm"
                             version="1.1"
@@ -70,7 +71,7 @@
                         <div class="barra barra-clases"></div>
                     </div>
                 </a>
-                <a href="">
+                <a href="{{ url_for('courses.courses_management') }}">
                     <div class="box-menu libros-hover">
                         <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="77.47mm" height="52.2478mm"
                             version="1.1"

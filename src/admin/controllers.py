@@ -34,7 +34,8 @@ def dashboard_controller(request: Request) -> Response:
                 user={
                     "id": user.id,
                     "full_name": user.full_name,
-                    "role": user_role
+                    
+                    "role": user.role
                 },
                 accion_logout=True,
             )
@@ -50,7 +51,8 @@ def dashboard_controller(request: Request) -> Response:
                 user={
                     "id": user.id,
                     "full_name": user.full_name,
-                    "role": user_role
+                    
+                    "role": user.role
                 },
                 grades=grades,
                 accion_logout=True,
