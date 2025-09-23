@@ -57,6 +57,6 @@ def edit_teacher(teacher_id):
     return edit_teacher_controller(teacher_id, request)
 
 
-@users_bp.route("/teachers/<int:teacher_id>/delete", methods=["POST"])
+@users_bp.route("/teachers/<int:teacher_id>/delete", methods=["GET","POST"])
 def delete_teacher(teacher_id):
     return delete_teacher_controller(teacher_id, request)

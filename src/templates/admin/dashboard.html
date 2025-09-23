@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 
-{% block title %}Iniciar Sesión{% endblock %}
+{% block title %}Dashboard | Administrador{% endblock %}
 {% block extra_css %}
 <link href="{{ url_for('static', filename='css/menu.css') }}" rel="stylesheet">
 <link href="{{ url_for('static', filename='css/category.css') }}" rel="stylesheet">
@@ -11,6 +11,7 @@
 
 {% block content %}
 {% block menu %}{% endblock %}
+
 <div class="container_category flex recursos_category">
 
     <!-- Inicio Perfil -->
@@ -18,8 +19,7 @@
         
         <p>{{ user.full_name}}</p>
         <div class="data_grade_category flex flex-column">
-            <p>{{ user.document }}></p>
-
+            <p>{{ user.document }}</p>
             <p>{{ user.role }}</p>
         </div>
       
