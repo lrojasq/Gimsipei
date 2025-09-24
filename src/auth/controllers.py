@@ -30,6 +30,7 @@ def login_user_controller(request: Request) -> Response | tuple[dict, int]:
             username = form_data.get("username")
             password = form_data.get("password")
             validated = LoginSchema(username=username, password=password)
+            
 
         return login_user_service(validated, request)
     except ValidationError as e:
