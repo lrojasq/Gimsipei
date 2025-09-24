@@ -71,7 +71,9 @@ def edit_teacher_controller(teacher_id: int, request: Request) -> Response:
             if status_code == 404:
                 flash("Docente no encontrado", "danger")
                 return redirect(url_for("users.teachers_management"))
-            return render_template("admin/edit_teacher.html", teacher=teacher)
+            return render_template(
+                "admin/edit_teacher.html", teacher=teacher, user=teacher
+            )
         except Exception as e:
             flash(f"Error al cargar el docente: {str(e)}", "danger")
             return redirect(url_for("users.teachers_management"))

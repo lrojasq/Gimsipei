@@ -356,3 +356,23 @@ form.form-admin.flex.flex-column {
 .content-modal .flex .btn:first-child{
     background-color: var(--admin-active);
 }
+@media (max-width:1024px) {
+    .container_datos_personales{
+        background-position: top;
+        background-size: cover;
+        border-radius: 0px;
+    }
+    .container_datos_personales > .flex{
+        flex-direction: column;
+
+    }
+    .data_usuario.flex.flex-column,
+    .info_data.flex,
+    .container_avatares.flex.flex-column,
+    .session.flex.flex-column{
+        width: 100%;
+    }
+    .content-data-user{
+        flex-direction: column;
+    }
+}
