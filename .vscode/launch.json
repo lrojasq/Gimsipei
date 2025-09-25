@@ -1,23 +1,47 @@
+// {
+//   "version": "0.2.0",
+//   "configurations": [
+//     {
+//       "name": "debugpy Gimsipei",
+//       "type": "debugpy",
+//       "request": "launch",
+//       "program": "${workspaceFolder}/main.py",
+//       "args": [
+//         "run",
+//         "--no-debugger",
+//         "--no-reload",
+//         "--port=5000"
+//       ],
+//       "env": {
+//         "FLASK_APP": "main.py",
+//         "FLASK_ENV": "development",
+//         "FLASK_DEBUG": "1"
+//       },
+//       "console": "integratedTerminal",
+//       "justMyCode": true
+//     }
+//   ]
+// }
+
 {
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "debugpy Gimsipei",
-      "type": "debugpy",
+      "name": "Flask Debug",
+      "type": "python",
       "request": "launch",
-      "program": "${workspaceFolder}/main.py",
+      "module": "flask",
       "args": [
         "run",
-        "--no-debugger",
-        "--no-reload",
-        "--port=5000"
+        "--host=127.0.0.1",
+        "--port=5010"
       ],
       "env": {
         "FLASK_APP": "main.py",
         "FLASK_ENV": "development",
         "FLASK_DEBUG": "1"
       },
-      "console": "integratedTerminal",
+      "jinja": true,
       "justMyCode": true
     }
   ]

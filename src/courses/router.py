@@ -21,7 +21,6 @@ from .controllers import (
 
 courses_bp = Blueprint("courses", __name__, url_prefix="/courses")
 
-
 # Rutas para vistas HTML
 @courses_bp.route("", methods=["GET"])
 def courses_management():
@@ -39,6 +38,8 @@ def create_course():
 def edit_course(course_id):
     """Editar curso existente"""
     return edit_course_controller(course_id, request)
+
+
 
 
 @courses_bp.route("/<int:course_id>/delete", methods=["POST"])
