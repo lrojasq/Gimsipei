@@ -7,16 +7,84 @@
 <link href="{{ url_for('static', filename='css/menu.css') }}" rel="stylesheet">
 <link href="{{ url_for('static', filename='css/category.css') }}" rel="stylesheet">
 <link href="{{ url_for('static', filename='css/admin.css') }}" rel="stylesheet">
+<style>
+    .modal {
+        display: none;
+        /* Oculto por defecto */
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-content {
+        display: flex;
+        flex-direction: column;
+        background-color: white;
+        margin: 10% auto;
+        padding: 30px;
+        border-radius: 10px;
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .modal-content h2 {
+        color: #ff4f52;
+        font-size: 14px;
+    }
+
+    .modal-content input,
+    .modal-content button {
+        padding: 10px;
+        border: none;
+        border-radius: 4px;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        color: #ffffff;
+        padding: 20px;
+    }
+
+    input[type="text"] {
+        width: 100%;
+        height: 30px;
+        background-color: #ff4f52;
+        color: #fff;
+        padding: 8px;
+    }
+
+    .modal-footer {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+    }
+
+    .modal-footer button {
+        width: 30%;
+        height: 30px;
+        background-color: #ff4f52;
+        color: white;
+        cursor: pointer;
+        border: none;
+        border-radius: 4px;
+    }
+</style>
 {% endblock %}
-
-
-
 {% block content %}
 {% block menu %}{% endblock %}
 <div class="container_category flex admin_category">
     <!-- Inicio Cursos -->
     <div class="specialities_category cursos grades flex flex-column">
-        
+
         <div class="flex header-cursos">
             <div class="items-header">
                 <div class="flex">
@@ -38,15 +106,17 @@
                                 <span></span>
                                 <span>{{ subject.subject_name }} - {{ subject.teacher_name }}</span>
                                 <span class="flex actions">
-                                    <a href="{{ url_for('subjects.edit_subject', subject_id=subject.subject_id, course_id=course.id) }}" class="">Editar </a>
+                                    <a href="{{ url_for('subjects.edit_subject', subject_id=subject.subject_id, course_id=course.id) }}"
+                                        class="">Editar </a>
                                     <a href="#" class=""> <i class="fas fa-trash"></i></a>
                                 </span>
                             </li>
                             {% endfor %}
                         </ul>
                         <span class="flex add">
-                            <a href="{{ url_for('subjects.create_subject', course_id=course.id) }}" class="btn btn-outline-danger add-subject-btn"
-                                                        data-course-id="{{ course.id }}">AÑADIR</a>
+                            <a href="{{ url_for('subjects.create_subject', course_id=course.id) }}"
+                                class="btn btn-outline-danger add-subject-btn"
+                                data-course-id="{{ course.id }}">AÑADIR</a>
                         </span>
                     </div>
 
@@ -288,7 +358,7 @@
 
 </div>
 <!-- Fin Container -->
- <!-- MODAL CONFIRMACIÓN -->
+<!-- MODAL CONFIRMACIÓN -->
 <div class="modal">
     <div class="content-modal flex flex-column">
         <i class="fa-solid fa-circle-exclamation"></i>
@@ -301,5 +371,40 @@
     </div>
 
 </div>
+<!-- Ventana Modal Añadir Materia -->
+<div id="modalMateria" class="modal">
+    <div class="modal-content">
+        <h2>AÑADIR MATERIA</h2>
+        <form method="POST" action="{{ url_for('subjects.create_subject') }}">
+            <input type="hidden" name="course_id" id="modal-course-id">
+
+            <input type="text" name="subject_name" placeholder="NOMBRE" required style="color:#ffffff">
+            <input type="text" name="cover" placeholder="PORTADA" required style="color:#ffffff">
+
+            <div class="modal-footer">
+                <button type="submit">GUARDAR</button>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    // Mostrar el modal cuando se haga clic en "AÑADIR"
+    document.querySelectorAll('.add-subject-btn').forEach(btn => {
+        btn.addEventListener('click', function (event) {
+            event.preventDefault();  // Evita redireccionar
+            const courseId = this.getAttribute('data-course-id');
+            document.getElementById('modal-course-id').value = courseId;
+            document.getElementById('modalMateria').style.display = 'block';
+        });
+    });
+
+    // Cerrar modal si se hace clic fuera de él
+    window.onclick = function (event) {
+        const modal = document.getElementById('modalMateria');
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
+    }
+</script>
 
 {% endblock %}
