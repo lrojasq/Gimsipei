@@ -1,6 +1,7 @@
-from flask import Request, Response
+from flask import Request
 from typing import List, Optional, Tuple
-from sqlalchemy.orm import Session
+
+# from sqlalchemy.orm import Session
 from src.database.database import SessionLocal
 from src.models.user import User, UserRole
 from werkzeug.security import generate_password_hash
@@ -9,39 +10,30 @@ from .validation import UserCreateSchema, UserUpdateSchema, UserResponseSchema
 
 def get_users_service(
     role: Optional[UserRole] = None,
-    search: Optional[str] = None,
-    page: int = 1,
-    per_page: int = 10,
 ) -> Tuple[List[UserResponseSchema], int]:
     db = SessionLocal()
     try:
         query = db.query(User)
 
+        # Only active users
+        query = query.filter(User.is_active == 1)
+
         if role:
             query = query.filter(User.role == role)
 
-        if search:
-            search_term = f"%{search}%"
-            query = query.filter(
-                (User.username.ilike(search_term))
-                | (User.email.ilike(search_term))
-                | (User.full_name.ilike(search_term))
-            )
-
-        total = query.count()
-        users = query.offset((page - 1) * per_page).limit(per_page).all()
+        users = query.all()
 
         return [
             UserResponseSchema(
                 id=user.id,
-                email=user.email,
                 username=user.username,
+                document=user.document,
                 full_name=user.full_name,
                 role=user.role.value,
                 is_active=bool(user.is_active),
             )
             for user in users
-        ], total
+        ], len(users)
     finally:
         db.close()
 
@@ -57,8 +49,8 @@ def get_user_service(
         return (
             UserResponseSchema(
                 id=user.id,
-                email=user.email,
                 username=user.username,
+                document=user.document,
                 full_name=user.full_name,
                 role=user.role.value,
                 is_active=bool(user.is_active),
@@ -74,15 +66,17 @@ def create_user_service(
 ) -> Tuple[Optional[UserResponseSchema], int]:
     db = SessionLocal()
     try:
-        # Check if email or username already exists
-        if db.query(User).filter(User.email == data.email).first():
-            return None, 400
+        # Check if username already exists
         if db.query(User).filter(User.username == data.username).first():
             return None, 400
 
+        # Check if document already exists
+        if db.query(User).filter(User.document == data.document).first():
+            return None, 400
+
         user = User(
-            email=data.email,
             username=data.username,
+            document=data.document,
             hashed_password=generate_password_hash(data.password),
             full_name=data.full_name,
             role=data.role,
@@ -95,15 +89,15 @@ def create_user_service(
         # Convertir el usuario a UserResponseSchema antes de retornarlo
         user_response = UserResponseSchema(
             id=user.id,
-            email=user.email,
             username=user.username,
+            document=user.document,
             full_name=user.full_name,
             role=user.role.value,
             is_active=bool(user.is_active),
         )
 
         return user_response, 201
-    except Exception as e:
+    except Exception:
         db.rollback()
         return None, 500
     finally:
@@ -120,16 +114,6 @@ def update_user_service(
             return None, 404
 
         # Update fields if provided
-        if data.email is not None:
-            # Check if new email is already taken
-            if (
-                db.query(User)
-                .filter(User.email == data.email, User.id != user_id)
-                .first()
-            ):
-                return None, 400
-            user.email = data.email
-
         if data.username is not None:
             # Check if new username is already taken
             if (
@@ -139,6 +123,16 @@ def update_user_service(
             ):
                 return None, 400
             user.username = data.username
+
+        if data.document is not None:
+            # Check if new document is already taken
+            if (
+                db.query(User)
+                .filter(User.document == data.document, User.id != user_id)
+                .first()
+            ):
+                return None, 400
+            user.document = data.document
 
         if data.password is not None:
             user.hashed_password = generate_password_hash(data.password)
@@ -158,15 +152,15 @@ def update_user_service(
         return (
             UserResponseSchema(
                 id=user.id,
-                email=user.email,
                 username=user.username,
+                document=user.document,
                 full_name=user.full_name,
                 role=user.role.value,
                 is_active=bool(user.is_active),
             ),
             200,
         )
-    except Exception as e:
+    except Exception:
         db.rollback()
         return None, 500
     finally:
@@ -180,11 +174,12 @@ def delete_user_service(user_id: int, request: Request) -> Tuple[Optional[dict],
         if not user:
             return None, 404
 
-        db.delete(user)
+        # Soft delete: mark as inactive to avoid FK constraint issues
+        user.is_active = 0
         db.commit()
 
         return {"message": "User deleted successfully"}, 200
-    except Exception as e:
+    except Exception:
         db.rollback()
         return None, 500
     finally:

@@ -18,8 +18,8 @@ class User(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True)
-    email = Column(String(255), unique=True, index=True, nullable=False)
     username = Column(String(50), unique=True, index=True, nullable=False)
+    document = Column(String(20), unique=True, nullable=False)
     hashed_password = Column(String(255), nullable=False)
     full_name = Column(String(100), nullable=True)
     role = Column(Enum(UserRole), nullable=False)
@@ -32,3 +32,17 @@ class User(Base):
     exercises = relationship("Exercise", back_populates="author", lazy="dynamic")
     assignments = relationship("Assignment", back_populates="author", lazy="dynamic")
     submissions = relationship("Submission", back_populates="student", lazy="dynamic")
+    subjects = relationship("Subject", back_populates="teacher", lazy="dynamic")
+    created_classes = relationship(
+        "ClassModel", back_populates="creator", lazy="dynamic"
+    )
+    class_views = relationship("ClassView", back_populates="student", lazy="dynamic")
+
+    # New course-related relationships
+    created_courses = relationship("Course", back_populates="creator", lazy="dynamic")
+    course_enrollments = relationship(
+        "CourseStudent", back_populates="student", lazy="dynamic"
+    )
+    course_subject_assignments = relationship(
+        "CourseSubject", back_populates="teacher", lazy="dynamic"
+    )

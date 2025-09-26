@@ -13,9 +13,8 @@ class Period(Base):
     name = Column(String(100), unique=True, index=True, nullable=False)
     subject_id = Column(Integer, ForeignKey("subjects.id"), nullable=False)
     is_locked = Column(Boolean, default=False)
-    created_at = Column(DateTime, default=datetime.utcnow)
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = Column(DateTime, default=datetime.now())
+    updated_at = Column(DateTime, default=datetime.now(), onupdate=datetime.now())
 
     # Relationships
     subject = relationship("Subject", back_populates="periods")
-    classes = relationship("ClassModel", back_populates="period", lazy="dynamic")
