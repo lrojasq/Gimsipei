@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Optional
+# from typing import Optional
 from sqlalchemy import Column, Integer, String, DateTime, Enum
 from sqlalchemy.orm import relationship
 from src.database.database import Base
