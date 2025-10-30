@@ -1,5 +1,5 @@
 from flask import Request, Response, flash, redirect, render_template, url_for
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt
 from pydantic import ValidationError
 
 from src.models.user import UserRole
@@ -13,18 +13,17 @@ from .service import (
     update_course_service,
 )
 from .validation import CourseCreateSchema, CourseUpdateSchema
+from .service import get_course_subjects_service
 
 
 # View to manage courses
 @jwt_required()
 @role_required([UserRole.ADMIN])
-def courses_management_controller(request: Request) -> Response:
+def courses_management_controller(_: Request) -> Response:
     """View to manage courses"""
+    user_role = get_jwt().get("role").lower()
     try:
         courses, total = get_courses_service()
-        # Load subjects for each course
-        from .service import get_course_subjects_service
-
         courses_with_subjects = []
 
         for course in courses:
@@ -44,19 +43,20 @@ def courses_management_controller(request: Request) -> Response:
             courses_with_subjects.append(course_dict)
 
         return render_template(
-            "admin/courses_management.html", courses=courses_with_subjects, total=total
+            "admin/courses_management.html", courses=courses_with_subjects, total=total, user={"role": user_role}
         )
     except Exception as e:
         flash(f"Error al cargar la lista de cursos: {str(e)}", "danger")
-        return render_template("admin/courses_management.html", courses=[], total=0)
+        return render_template("admin/courses_management.html", courses=[], total=0, user={"role": user_role})
 
 
 @jwt_required()
 @role_required([UserRole.ADMIN])
 def create_course_controller(request: Request) -> Response:
     """View to create a new course"""
+    user_role = get_jwt().get("role").lower()
     if request.method == "GET":
-        return render_template("admin/create_course.html")
+        return render_template("admin/create_course.html", user={"role": user_role})
 
     try:
         data = request.form.to_dict()
@@ -70,17 +70,17 @@ def create_course_controller(request: Request) -> Response:
             flash(
                 "Ya existe un curso con ese nombre en el mismo año y período", "danger"
             )
-            return render_template("admin/create_course.html")
+            return render_template("admin/create_course.html", user={"role": user_role})
         else:
             flash("Error al crear el curso", "danger")
-            return render_template("admin/create_course.html")
+            return render_template("admin/create_course.html", user={"role": user_role})
 
     except ValidationError as e:
         flash(f"Datos inválidos: {str(e)}", "danger")
-        return render_template("admin/create_course.html")
+        return render_template("admin/create_course.html", user={"role": user_role})
     except Exception as e:
         flash(f"Error interno: {str(e)}", "danger")
-        return render_template("admin/create_course.html")
+        return render_template("admin/create_course.html", user={"role": user_role})
 
 
 @jwt_required()
