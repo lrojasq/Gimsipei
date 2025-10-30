@@ -17,7 +17,7 @@ def dashboard_controller(request: Request) -> Response:
     try:
         db = SessionLocal()
         user = (
-            db.query(User.id, User.full_name, User.document, User.role)
+            db.query(User.id, User.full_name, User.role)
             .filter(User.id == user_id)
             .first()
         )
@@ -34,8 +34,7 @@ def dashboard_controller(request: Request) -> Response:
                 user={
                     "id": user.id,
                     "full_name": user.full_name,
-                    "document": user.document,
-                    "role": user.role.value if hasattr(user.role, "value") else user.role
+                    "role": user_role
                 },
                 accion_logout=True,
             )
@@ -51,8 +50,7 @@ def dashboard_controller(request: Request) -> Response:
                 user={
                     "id": user.id,
                     "full_name": user.full_name,
-                    "document": user.document,
-                    "role": user.role.value if hasattr(user.role, "value") else user.role
+                    "role": user_role
                 },
                 grades=grades,
                 accion_logout=True,

@@ -40,8 +40,6 @@ def edit_course(course_id):
     return edit_course_controller(course_id, request)
 
 
-
-
 @courses_bp.route("/<int:course_id>/delete", methods=["POST"])
 def delete_course(course_id):
     """Eliminar curso"""

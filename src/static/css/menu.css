@@ -152,6 +152,8 @@ html {
     background-image: url("../images/menu-principal/gimsipei.png");
 }
 
+<<<<<<< HEAD
+=======
 a {
     text-decoration: none;
 }
@@ -161,6 +163,7 @@ a {
     margin-top: 200px;
 }
 
+>>>>>>> e52515b82d4917b8f72febc6a935cb2c647f4625
 .gimsipei-hover:hover {
     background-color: var(--barra-ginsipei);
 }

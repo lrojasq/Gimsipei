@@ -18,8 +18,6 @@ from flask import flash, redirect, url_for
 
 def login_user_controller(request: Request) -> Response | tuple[dict, int]:
     """Controlador para procesar el login"""
-    
-   
     if request.method == "GET":
         return render_template("auth/login.html")
     try:
@@ -30,7 +28,6 @@ def login_user_controller(request: Request) -> Response | tuple[dict, int]:
             username = form_data.get("username")
             password = form_data.get("password")
             validated = LoginSchema(username=username, password=password)
-            
 
         return login_user_service(validated, request)
     except ValidationError as e:
