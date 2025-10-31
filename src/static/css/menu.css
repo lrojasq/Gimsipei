@@ -28,6 +28,13 @@ html {
     background-color: #f6f6f6;
 }
 
+.containe.bg-image-user {
+    background-color: var(--primario);
+    background-image: url("../images/menu-principal/bg-pencil.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
 .mision-tp p,
 .vision-tp p {
     font-size: 1rem;
@@ -64,7 +71,8 @@ html {
 
 .bg-vision {
     width: 100%;
-    background-color: #f6f6f6;
+    background-color: transparent;
+    z-index: 999999;
     border-radius: 50px 50px 0px 0px;
     z-index: 1000;
     padding: 100px 80px 0px;
@@ -82,16 +90,17 @@ html {
     padding: 20px;
 }
 
-.bg-lateral {
+.containe.bg-image-user::after {
+    content: "";
     position: absolute;
     background-image: url("../images/menu-principal/bg-rigth.png");
     background-repeat: no-repeat;
     background-size: contain;
+    top: 223px;
     right: 0px;
-    top: 170px;
-    z-index: 9999;
-    width: 624px;
-    height: 160%;
+    z-index: 999;
+    width: 724px;
+    height: 170%;
 }
 
 .menu {
@@ -143,8 +152,6 @@ html {
     background-image: url("../images/menu-principal/gimsipei.png");
 }
 
-<<<<<<< HEAD
-=======
 a {
     text-decoration: none;
 }
@@ -153,8 +160,6 @@ a {
     position: relative;
     margin-top: 200px;
 }
-
->>>>>>> e52515b82d4917b8f72febc6a935cb2c647f4625
 .gimsipei-hover:hover {
     background-color: var(--barra-ginsipei);
 }
@@ -232,8 +237,8 @@ a {
     flex-direction: column;
     gap: 10px;
     height: 100px;
-    top: 40px;
-    background-color: #f6f6f6;
+    top: 10px;
+    /* background-color: #f6f6f6; */
 }
 
 .barra_bg {
@@ -464,7 +469,7 @@ a {
         width: 90%;
         text-align: justify;
         margin: auto;
-        padding: 20px;
+        padding: 20 5px;
     }
 
     .section.bg-mision {
@@ -484,5 +489,24 @@ a {
         height: 20px;
         width: 60%;
         position: absolute;
+    }
+    .containe.bg-image-user::after {
+        display: none;
+    }
+    .bg-vision .content-vision{
+        padding: 40px 0px 0px;
+        background-color: var(--blanco);
+    }
+    .menu{
+        gap: 3rem;
+    }
+    .bg_section_footer{
+        height: 100px;
+        top: 10px;
+        background-color: #f6f6f6;
+    }
+    .bg-mision h2,
+    .bg-vision h2{
+        font-size: 1rem;
     }
 }
