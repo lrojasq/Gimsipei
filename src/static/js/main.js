@@ -51,27 +51,6 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
-<<<<<<< HEAD
-// Menú hamburguesa - solo si existe el elemento
-const hamburger = document.getElementById('hamburger');
-const mobileNav = document.getElementById('mobileNav');
-
-if (hamburger && mobileNav) {
-    hamburger.addEventListener('click', function () {
-        mobileNav.classList.toggle('active');
-        // Animación para el menú hamburguesa (opcional)
-        this.classList.toggle('open');
-    });
-
-    let menu = document.querySelectorAll('.mobile-nav li a')
-    menu.forEach(item => {
-        item.addEventListener('click', () => {
-            mobileNav.classList.remove('active');
-            hamburger.classList.remove('open');
-        });
-    });
-}
-=======
 // Función para manejar el dropdown
 document.querySelectorAll(".grado").forEach((grado) => {
     grado.addEventListener("click", () => {
@@ -104,4 +83,3 @@ if (menu) {
 }
 
 
->>>>>>> e52515b82d4917b8f72febc6a935cb2c647f4625

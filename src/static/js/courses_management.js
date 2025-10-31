@@ -276,6 +276,24 @@ function initializeDeleteSubjectModal() {
         subjectNameElement.textContent = '';
         teacherNameElement.textContent = '';
     });
+   
+}
+
+const closeModal =()=>{
+    const btns = document.querySelectorAll(".close-modal");
+    const modal = document.querySelector(".modal");
+    btns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            if (modal) {
+                modal.classList.remove('show');
+                modal.setAttribute('aria-hidden', 'true');
+            }
+        });
+    });
+}
+
+window.onload = function() {
+     closeModal();
 }
 
 window.coursesManagement = {
@@ -284,3 +302,4 @@ window.coursesManagement = {
     hideLoadingState,
     initializeDeleteSubjectModal
 };
+

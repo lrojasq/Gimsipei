@@ -3,6 +3,7 @@
 {% block title %}Iniciar Sesión{% endblock %}
 {% block extra_css %}
 <link href="{{ url_for('static', filename='css/login.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/courses_management.css') }}" rel="stylesheet">
 {% endblock %}
 
 <!-- Flash Messages -->
@@ -56,4 +57,34 @@
         </div>
     </div>
 </main>
+
+<div class="modal modal_create show">
+    <div class="bg-back close-modal"></div>
+    <div class="container">
+        <i class="closed close-modal">X</i>
+        <h2>Crear curso</h2>
+        <form action="">
+            <div class="mb-3">
+                <label for="course-name" class="form-label">Nombre del curso</label>
+                <input type="text" class="form-control" id="course-name" placeholder="Ingresa el nombre del curso" required>
+            </div>
+            <div class="mb-3">
+                <label for="course-period" class="form-label">Periodo</label>
+                <select name="periodo" id="periodo" class="form-select" required>
+                    <option value="" disabled selected>Selecciona un periodo</option>
+                    <option value="1">Primer periodo</option>
+                    <option value="2">Segundo periodo</option>
+                    <option value="3">Tercer periodo</option>
+                    <option value="4">Cuarto periodo</option>
+                </select>
+            </div>
+            <div class="btns">
+                <button type="submit" class="btn btn-primary">Guardar</button> 
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/courses_management.js') }}"></script>
+
 {% endblock %}
