@@ -34,4 +34,3 @@ def logout():
 @auth_bp.route("/first-admin", methods=["POST"])
 def create_first_admin():
     return create_first_admin_controller(request)
-

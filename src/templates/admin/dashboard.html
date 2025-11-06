@@ -1,73 +1,29 @@
-
 {% extends "base.html" %}
 
-{% block title %}Dashboard | Administrador{% endblock %}
 
+{% block title %}Dashboard | Administrador{% endblock %}
 {% block extra_css %}
 <link href="{{ url_for('static', filename='css/menu.css') }}" rel="stylesheet">
 <link href="{{ url_for('static', filename='css/category.css') }}" rel="stylesheet">
 <link href="{{ url_for('static', filename='css/admin.css') }}" rel="stylesheet">
 {% endblock %}
 
-{% block content %}
-    {% block menu %}{% endblock %}
-
-    <div class="container_category flex recursos_category">
-
-        <!-- Perfil de Usuario -->
-    <div class="data_categoty flex flex-column">
-        <p>{{ user.full_name }}</p>
-        <div class="data_grade_category flex flex-column">
-            <p>{{ user.document }}</p>
-            <p>{{ user.role }}</p>
-        </div>
-    </div>
-
-        <!-- Menú Lateral -->
-        {% include "sidebar_menu.html" %}
-
-        {% if user.role == "TEACHER" %}
-            {% if grades %}
-                <h5>Estudiantes</h5>
-                <div class="d-flex gap-3 mb-4">
-                    <ul class="list-unstyled d-flex gap-2 mb-0">
-                        {% for grade in grades %}
-                            <li>
-                                <button class="btn btn-outline-dark me-2">Grado {{ grade }}</button>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            {% endif %}
-        {% endif %}
-
-        {% if accion_logout %}
-            {% include "utils/logout_button.html" %}
-        {% endif %}
-{% extends "base.html" %}
-
-
-{% block title %}Iniciar Sesión{% endblock %}
-{% block extra_css %}
-<link href="{{ url_for('static', filename='css/menu.css') }}" rel="stylesheet">
-<link href="{{ url_for('static', filename='css/category.css') }}" rel="stylesheet">
-{% endblock %}
-
 
 
 {% block content %}
 {% block menu %}{% endblock %}
+
 <div class="container_category flex recursos_category">
 
     <!-- Inicio Perfil -->
     <div class="data_categoty flex flex-column">
-        <p>Fabian Forero Forero</p>
+        
+        <p>{{ user.full_name}}</p>
         <div class="data_grade_category flex flex-column">
-            <p>1000457520</p>
-
-            <p>Admin</p>
+            <p>{{ user.document }}</p>
+            <p>{{ user.role }}</p>
         </div>
-
+      
     </div>
     <!-- fin Perfil -->
 
@@ -77,7 +33,7 @@
         <div class="content-admin flex flex-column">
             <h2>Administrar</h2>
             <div class="flex">
-                <a href="{{ url_for('auth.clases')}}">
+                <a href="{{ url_for('users.teachers_management') }}">
                     <div class="box-menu clases-hover">
                         <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="64.77mm" height="64.9478mm"
                             version="1.1"
@@ -116,7 +72,7 @@
                         <div class="barra barra-clases"></div>
                     </div>
                 </a>
-                <a href="{{ url_for('auth.libros')}}">
+                <a href="{{ url_for('courses.courses_management') }}">
                     <div class="box-menu libros-hover">
                         <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="77.47mm" height="52.2478mm"
                             version="1.1"
@@ -163,7 +119,10 @@
     <!-- Fin clases -->
 </div><!-- Fin Container -->
 
+<<<<<<< HEAD
 =======
 </div>
 >>>>>>> d44b487820f523b7c2bf4f87352540621f506916
+=======
+>>>>>>> main
 {% endblock %}
