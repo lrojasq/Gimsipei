@@ -1,11 +1,10 @@
 from flask import Request, Response, flash, redirect, render_template, url_for
 from flask_jwt_extended import get_jwt, get_jwt_identity, jwt_required
 
-from src.database.database import SessionLocal
-from src.models.user import User, UserRole
-
-# from src.models.course import Course
+from src.models.user import UserRole
 from src.utils.decorator_role_required import role_required
+from src.courses.service import get_all_courses_for_dashboard
+from src.users.service import get_user_service
 
 
 @jwt_required()
@@ -15,15 +14,9 @@ def dashboard_controller(_: Request) -> Response:
     user_role = get_jwt().get("role")
 
     try:
-        db = SessionLocal()
-        user = (
-            db.query(User.id, User.full_name, User.role, User.document)
-            .filter(User.id == user_id)
-            .first()
-        )
-        db.close()
-
-        if not user:
+        # Obtener información del usuario
+        user, status_code = get_user_service(user_id, _)
+        if status_code != 200 or not user:
             flash("Usuario no encontrado", "danger")
             return redirect(url_for("auth.login"))
 
@@ -35,26 +28,24 @@ def dashboard_controller(_: Request) -> Response:
                     "id": user.id,
                     "full_name": user.full_name,
                     "document": user.document,
-                    "role": user_role
+                    "role": user_role,
                 },
                 accion_logout=True,
             )
 
         # User is teacher
         elif user_role == "TEACHER":
-            # Grados en los que pertenece
-            # grades = db.query(Course.grade_level).filter(Course.teacher_id == user_id).all()
-            # grades = [grade.grade_level for grade in grades]
-            grades = [6, 7, 8, 9, 10, 11]
+            courses_list = get_all_courses_for_dashboard()
+
             return render_template(
                 "admin/dashboard.html",
                 user={
                     "id": user.id,
                     "full_name": user.full_name,
                     "document": user.document,
-                    "role": user_role
+                    "role": user_role,
                 },
-                grades=grades,
+                courses=courses_list,
                 accion_logout=True,
             )
 
