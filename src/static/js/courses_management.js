@@ -4,7 +4,11 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeAutoCloseAlerts();
     initializeLoadingStates();
     initializeAccordion();
+    initializeDeleteModalListeners(); // Inicializar listeners del modal de eliminación
     initializeDeleteSubjectModal();
+    initializeCreateCourseModal();
+    initializeCreateSubjectModal();
+    initializeEditSubjectModal();
 });
 
 // Form Validation
@@ -12,10 +16,16 @@ function initializeFormValidation() {
     const forms = document.querySelectorAll('.needs-validation');
     
     forms.forEach(form => {
+        // EXCLUIR los formularios de modales - se manejan separadamente
+        if (form.id === 'createCourseForm' || form.id === 'createSubjectForm' || form.id === 'editSubjectForm') {
+            return; // No agregar validación a estos formularios
+        }
+        
         form.addEventListener('submit', function(event) {
             if (!form.checkValidity()) {
                 event.preventDefault();
                 event.stopPropagation();
+                form.classList.add('was-validated');
             } else {
                 // Show loading state
                 const submitBtn = form.querySelector('#submitBtn');
@@ -23,7 +33,6 @@ function initializeFormValidation() {
                     showLoadingState(submitBtn);
                 }
             }
-            form.classList.add('was-validated');
         });
         
         // Real-time validation
@@ -59,8 +68,19 @@ function initializeAutoCloseAlerts() {
     
     alerts.forEach(alert => {
         setTimeout(() => {
+            // Verificar si Bootstrap está disponible
+            if (typeof bootstrap !== 'undefined' && bootstrap.Alert) {
             const bsAlert = new bootstrap.Alert(alert);
             bsAlert.close();
+            } else {
+                // Fallback: simplemente ocultar el alert
+                const closeBtn = alert.querySelector('.btn-close');
+                if (closeBtn) {
+                    closeBtn.click();
+                } else {
+                    alert.style.display = 'none';
+                }
+            }
         }, 5000);
     });
 }
@@ -104,21 +124,30 @@ function hideLoadingState(button) {
 
 // Accordion Functionality
 function initializeAccordion() {
-    const table = document.getElementById('accordionSubjects');
-    if (!table) return;
+    // New accordion for the current courses list layout
+    const courseItems = document.querySelectorAll('.list-cursos > li');
+    if (!courseItems.length) return;
 
-    table.querySelectorAll('.toggle-arrow').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            const row = this.closest('tr');
-            const courseId = row.getAttribute('data-course-id');
-            const list = document.getElementById(`subjects-${courseId}`);
-            const arrow = this.querySelector('.arrow');
+    courseItems.forEach((item, index) => {
+        const header = item.querySelector('.grado');
+        const content = item.querySelector('.content-materias');
+        const icon = header ? header.querySelector('i.fas') : null;
 
-            // toggle arrow
-            setTimeout(() => {
-                const expanded = list.classList.contains('show');
-                arrow.style.transform = expanded ? 'rotate(0deg)' : 'rotate(180deg)';
-            }, 250);
+        if (!header || !content) return;
+
+        // Initial state: all collapsed by default
+        content.style.display = 'none';
+        if (icon) { icon.classList.remove('fa-chevron-up'); icon.classList.add('fa-chevron-down'); }
+
+        header.addEventListener('click', function() {
+            const isVisible = content.style.display !== 'none';
+            if (isVisible) {
+                content.style.display = 'none';
+                if (icon) { icon.classList.remove('fa-chevron-up'); icon.classList.add('fa-chevron-down'); }
+                        } else {
+                content.style.display = 'flex';
+                if (icon) { icon.classList.remove('fa-chevron-down'); icon.classList.add('fa-chevron-up'); }
+            }
         });
     });
 }
@@ -176,8 +205,17 @@ function showToast(message, type = 'info') {
     
     // Show toast
     const toastElement = toastContainer.lastElementChild;
+    if (typeof bootstrap !== 'undefined' && bootstrap.Toast) {
     const toast = new bootstrap.Toast(toastElement);
     toast.show();
+    } else {
+        // Fallback: mostrar el toast manualmente
+        toastElement.style.display = 'block';
+        setTimeout(() => {
+            toastElement.style.opacity = '0';
+            setTimeout(() => toastElement.remove(), 300);
+        }, 3000);
+    }
     
     // Remove toast after it's hidden
     toastElement.addEventListener('hidden.bs.toast', function() {
@@ -220,67 +258,436 @@ function initializeAllForms() {
 // Keep only UI helpers available if needed globally
 // Delete Subject Modal Functionality
 function initializeDeleteSubjectModal() {
-    const deleteModal = document.getElementById('deleteSubjectModal');
-    const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
-    const subjectNameElement = document.getElementById('subjectName');
-    const teacherNameElement = document.getElementById('teacherName');
-    
-    if (!deleteModal || !confirmDeleteBtn || !subjectNameElement || !teacherNameElement) {
-        return; // Exit if elements don't exist
-    }
-    
-    let currentSubjectId = null;
-    let currentCourseId = null;
-    
-    // Handle click on delete buttons
-    document.querySelectorAll('[data-bs-target="#deleteSubjectModal"]').forEach(button => {
-        button.addEventListener('click', function() {
-            currentSubjectId = this.getAttribute('data-subject-id');
-            currentCourseId = this.getAttribute('data-course-id');
-            const subjectName = this.getAttribute('data-subject-name');
-            const teacherName = this.getAttribute('data-teacher-name');
-            
-            // Update information in the modal
-            subjectNameElement.textContent = subjectName;
-            teacherNameElement.textContent = teacherName;
+    setTimeout(function() {
+        const deleteButtons = document.querySelectorAll('.open-delete-subject-modal');
+        
+        // Abrir modal desde los botones de eliminar
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                const courseId = this.getAttribute('data-course-id');
+                const subjectId = this.getAttribute('data-subject-id');
+                const teacherId = this.getAttribute('data-teacher-id');
+                
+                // Construir la URL de eliminación
+                const deleteUrl = `/courses/${courseId}/subjects/${subjectId}/${teacherId}/remove`;
+                
+                // Mostrar modal de confirmación con la URL
+                showDeleteConfirmationModal(deleteUrl);
+            });
+        });
+    }, 100);
+}
+
+// Función global para cerrar modales (legacy - mantener para compatibilidad)
+const closeModalGlobal =()=>{
+    const btns = document.querySelectorAll(".close-modal");
+    const modal = document.querySelector(".modal");
+    btns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            if (modal) {
+                modal.classList.remove('show');
+                modal.setAttribute('aria-hidden', 'true');
+            }
         });
     });
-    
-    // Handle confirmation of deletion
-    confirmDeleteBtn.addEventListener('click', function() {
-        if (currentSubjectId && currentCourseId) {
-            // Create temporary form to submit the deletion
-            const form = document.createElement('form');
-            form.method = 'POST';
-            form.action = `/subjects/${currentSubjectId}/delete?course_id=${currentCourseId}`;
+}
+
+window.onload = () => closeModalGlobal();
+
+// Initialize Create Course Modal
+function initializeCreateCourseModal() {
+    setTimeout(function() {
+        const modal = document.getElementById('createCourseModal');
+        const openModalBtn = document.getElementById('openCreateCourseModal');
+        const closeModalBtns = document.querySelectorAll('.close-modal');
+        const form = document.getElementById('createCourseForm');
+        
+        if (!modal || !form) return;
+        
+        // Abrir modal
+        if (openModalBtn) {
+            openModalBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                modal.classList.add('show');
+                modal.style.display = 'flex';
+                modal.removeAttribute('aria-hidden'); // Quitar aria-hidden para accesibilidad
+                modal.setAttribute('aria-modal', 'true');
+                modal.setAttribute('role', 'dialog');
+                
+                if (form) {
+                    form.reset();
+                    form.classList.remove('was-validated');
+                    const inputs = form.querySelectorAll('.is-invalid, .is-valid');
+                    inputs.forEach(input => {
+                        input.classList.remove('is-invalid', 'is-valid');
+                    });
+                }
+                
+                const submitBtn = form.querySelector('#submitBtn');
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.removeAttribute('disabled');
+                }
+            });
+        }
+        
+        // Función para cerrar el modal
+        function closeModal() {
+            modal.classList.remove('show');
+            modal.style.display = 'none';
+            modal.setAttribute('aria-hidden', 'true');
+            modal.removeAttribute('aria-modal');
+            modal.removeAttribute('role');
             
-            // Add CSRF token if exists
-            const csrfToken = document.querySelector('meta[name="csrf-token"]');
-            if (csrfToken) {
-                const csrfInput = document.createElement('input');
-                csrfInput.type = 'hidden';
-                csrfInput.name = 'csrf_token';
-                csrfInput.value = csrfToken.getAttribute('content');
-                form.appendChild(csrfInput);
+            if (form) {
+                form.reset();
+                form.classList.remove('was-validated');
+                const inputs = form.querySelectorAll('.is-invalid, .is-valid');
+                inputs.forEach(input => {
+                    input.classList.remove('is-invalid', 'is-valid');
+                });
+            }
+        }
+        
+        // Cerrar modal
+        closeModalBtns.forEach(btn => {
+            btn.addEventListener('click', closeModal);
+        });
+        
+        // Cerrar modal al hacer clic en bg-back
+        const bgBack = modal.querySelector('.bg-back');
+        if (bgBack) {
+            bgBack.addEventListener('click', closeModal);
+        }
+        
+        // Manejar el submit del formulario
+        form.addEventListener('submit', function(e) {
+            if (!form.checkValidity()) {
+                e.preventDefault();
+                e.stopPropagation();
+                form.classList.add('was-validated');
+                return false;
             }
             
-            document.body.appendChild(form);
-            form.submit();
+            // Mostrar loading
+            const submitBtn = form.querySelector('#submitBtn');
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Procesando...';
+            }
+        }, false);
+    }, 100);
+}
+
+// Initialize Create Subject Modal
+function initializeCreateSubjectModal() {
+    setTimeout(function() {
+        const modal = document.getElementById('createSubjectModal');
+        const openModalBtns = document.querySelectorAll('.open-create-subject-modal');
+        const closeModalBtns = modal ? modal.querySelectorAll('.close-modal') : [];
+        const form = document.getElementById('createSubjectForm');
+        
+        if (!modal || !form) return;
+        
+        // Abrir modal desde los botones "AÑADIR" de materias
+        openModalBtns.forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const courseId = this.getAttribute('data-course-id');
+                
+                // Actualizar el course_id en el formulario
+                const courseIdInput = form.querySelector('#subjectCourseId');
+                if (courseIdInput && courseId) {
+                    courseIdInput.value = courseId;
+                } else if (courseId) {
+                    // Si no existe el input, crearlo
+                    const hiddenInput = document.createElement('input');
+                    hiddenInput.type = 'hidden';
+                    hiddenInput.name = 'course_id';
+                    hiddenInput.id = 'subjectCourseId';
+                    hiddenInput.value = courseId;
+                    form.appendChild(hiddenInput);
+                }
+                
+                modal.classList.add('show');
+                modal.style.display = 'flex';
+                modal.removeAttribute('aria-hidden');
+                modal.setAttribute('aria-modal', 'true');
+                modal.setAttribute('role', 'dialog');
+                
+                if (form) {
+                    form.reset();
+                    // Restaurar el course_id después del reset
+                    if (courseId) {
+                        const courseIdInput = form.querySelector('#subjectCourseId');
+                        if (courseIdInput) {
+                            courseIdInput.value = courseId;
+                        } else {
+                            const hiddenInput = document.createElement('input');
+                            hiddenInput.type = 'hidden';
+                            hiddenInput.name = 'course_id';
+                            hiddenInput.id = 'subjectCourseId';
+                            hiddenInput.value = courseId;
+                            form.appendChild(hiddenInput);
+                        }
+                    }
+                    form.classList.remove('was-validated');
+                    const inputs = form.querySelectorAll('.is-invalid, .is-valid');
+                    inputs.forEach(input => {
+                        input.classList.remove('is-invalid', 'is-valid');
+                    });
+                }
+                
+                const submitBtn = form.querySelector('#submitSubjectBtn');
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.removeAttribute('disabled');
+                }
+            });
+        });
+        
+        // Función para cerrar el modal
+        function closeModal() {
+            modal.classList.remove('show');
+            modal.style.display = 'none';
+            modal.setAttribute('aria-hidden', 'true');
+            modal.removeAttribute('aria-modal');
+            modal.removeAttribute('role');
+            
+            if (form) {
+                form.reset();
+                form.classList.remove('was-validated');
+                const inputs = form.querySelectorAll('.is-invalid, .is-valid');
+                inputs.forEach(input => {
+                    input.classList.remove('is-invalid', 'is-valid');
+                });
+            }
         }
-    });
+        
+        // Cerrar modal
+        closeModalBtns.forEach(btn => {
+            btn.addEventListener('click', closeModal);
+        });
+        
+        // Cerrar modal al hacer clic en bg-back
+        const bgBack = modal.querySelector('.bg-back');
+        if (bgBack) {
+            bgBack.addEventListener('click', closeModal);
+        }
+        
+        // Manejar el submit del formulario
+        form.addEventListener('submit', function(e) {
+            // Validar formulario
+            if (!form.checkValidity()) {
+                e.preventDefault();
+                e.stopPropagation();
+                form.classList.add('was-validated');
+                return false;
+            }
+            
+            // Asegurarse de que el course_id esté presente
+            const courseIdInput = form.querySelector('#subjectCourseId');
+            if (!courseIdInput || !courseIdInput.value) {
+                // Si no hay course_id, no permitir el envío
+                e.preventDefault();
+                alert('Error: No se pudo identificar el curso. Por favor, intente nuevamente.');
+                return false;
+            }
+            
+            // Mostrar loading
+            const submitBtn = form.querySelector('#submitSubjectBtn');
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Procesando...';
+            }
+            
+            // Permitir que el formulario se envíe normalmente
+            return true;
+        }, false);
+    }, 100);
+}
+
+// Initialize Edit Subject Modal
+function initializeEditSubjectModal() {
+    setTimeout(function() {
+        const modal = document.getElementById('editSubjectModal');
+        const openModalBtns = document.querySelectorAll('.open-edit-subject-modal');
+        const closeModalBtns = modal ? modal.querySelectorAll('.close-modal') : [];
+        const form = document.getElementById('editSubjectForm');
+        
+        if (!modal || !form) return;
+        
+        // Abrir modal desde los botones "Editar"
+        openModalBtns.forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const subjectId = this.getAttribute('data-subject-id');
+                const subjectName = this.getAttribute('data-subject-name');
+                
+                // Actualizar el formulario con los datos de la materia
+                const subjectIdInput = form.querySelector('#editSubjectId');
+                if (subjectIdInput) {
+                    subjectIdInput.value = subjectId;
+                }
+                
+                // Actualizar la acción del formulario
+                form.action = `/subjects/${subjectId}/edit`;
+                
+                // Seleccionar la materia actual en el select
+                const subjectSelect = form.querySelector('#edit-subject-name');
+                if (subjectSelect) {
+                    // Buscar la opción que coincida con el nombre de la materia
+                    const options = subjectSelect.querySelectorAll('option');
+                    options.forEach(option => {
+                        if (option.value === subjectName) {
+                            option.selected = true;
+                        } else {
+                            option.selected = false;
+                        }
+                    });
+                }
+                
+                modal.classList.add('show');
+                modal.style.display = 'flex';
+                modal.removeAttribute('aria-hidden');
+                modal.setAttribute('aria-modal', 'true');
+                modal.setAttribute('role', 'dialog');
+                
+                if (form) {
+                    form.classList.remove('was-validated');
+                    const inputs = form.querySelectorAll('.is-invalid, .is-valid');
+                    inputs.forEach(input => {
+                        input.classList.remove('is-invalid', 'is-valid');
+                    });
+                }
+                
+                const submitBtn = form.querySelector('#submitEditSubjectBtn');
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.removeAttribute('disabled');
+                }
+            });
+        });
+        
+        // Función para cerrar el modal
+        function closeModal() {
+            modal.classList.remove('show');
+            modal.style.display = 'none';
+            modal.setAttribute('aria-hidden', 'true');
+            modal.removeAttribute('aria-modal');
+            modal.removeAttribute('role');
+            
+            if (form) {
+                form.reset();
+                form.classList.remove('was-validated');
+                const inputs = form.querySelectorAll('.is-invalid, .is-valid');
+                inputs.forEach(input => {
+                    input.classList.remove('is-invalid', 'is-valid');
+                });
+            }
+        }
+        
+        // Cerrar modal
+        closeModalBtns.forEach(btn => {
+            btn.addEventListener('click', closeModal);
+        });
+        
+        // Cerrar modal al hacer clic en bg-back
+        const bgBack = modal.querySelector('.bg-back');
+        if (bgBack) {
+            bgBack.addEventListener('click', closeModal);
+        }
+        
+        // Manejar el submit del formulario
+        form.addEventListener('submit', function(e) {
+            // Validar formulario
+            if (!form.checkValidity()) {
+                e.preventDefault();
+                e.stopPropagation();
+                form.classList.add('was-validated');
+                return false;
+            }
+            
+            // Mostrar loading
+            const submitBtn = form.querySelector('#submitEditSubjectBtn');
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Procesando...';
+            }
+            
+            // Permitir que el formulario se envíe normalmente
+            return true;
+        }, false);
+    }, 100);
+}
+
+// Función genérica para mostrar modal de confirmación de eliminación
+function showDeleteConfirmationModal(actionUrl) {
+    const modal = document.getElementById('deleteConfirmationModal');
+    const form = document.getElementById('deleteConfirmationForm');
     
-    // Clear data when modal is closed
-    deleteModal.addEventListener('hidden.bs.modal', function() {
-        currentSubjectId = null;
-        currentCourseId = null;
-        subjectNameElement.textContent = '';
-        teacherNameElement.textContent = '';
-    });
+    if (!modal || !form) {
+        console.error('Modal o formulario de confirmación no encontrado');
+        return;
+    }
+    
+    // Establecer la acción del formulario
+    form.action = actionUrl;
+    
+    // Mostrar modal
+    modal.classList.add('show');
+    modal.style.display = 'flex';
+    modal.removeAttribute('aria-hidden');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('role', 'dialog');
+}
+
+// Inicializar listeners del modal (cerrar)
+function initializeDeleteModalListeners() {
+    setTimeout(function() {
+        const modal = document.getElementById('deleteConfirmationModal');
+        if (!modal) return;
+        
+        const closeModalBtns = modal.querySelectorAll('.close-modal');
+        const bgBack = modal.querySelector('.bg-back');
+        
+        // Función para cerrar el modal
+        function closeModal() {
+            modal.classList.remove('show');
+            modal.style.display = 'none';
+            modal.setAttribute('aria-hidden', 'true');
+            modal.removeAttribute('aria-modal');
+            modal.removeAttribute('role');
+        }
+        
+        // Listeners para los botones de cerrar
+        closeModalBtns.forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                closeModal();
+            });
+        });
+        
+        // Listener para el fondo
+        if (bgBack) {
+            bgBack.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                closeModal();
+            });
+        }
+    }, 200);
 }
 
 window.coursesManagement = {
     showToast,
     showLoadingState,
     hideLoadingState,
-    initializeDeleteSubjectModal
+    initializeDeleteSubjectModal,
+    initializeCreateCourseModal,
+    initializeCreateSubjectModal,
+    initializeEditSubjectModal,
+    showDeleteConfirmationModal
 };

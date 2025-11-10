@@ -6,10 +6,23 @@
 <link href="{{ url_for('static', filename='css/menu.css') }}" rel="stylesheet">
 <link href="{{ url_for('static', filename='css/category.css') }}" rel="stylesheet">
 <link href="{{ url_for('static', filename='css/admin.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/courses_management.css') }}" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
 {% block menu %}{% endblock %}
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                <i class="fas fa-{% if category == 'success' %}check-circle{% elif category == 'danger' %}exclamation-triangle{% else %}info-circle{% endif %} me-2"></i>
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
 
 <div class="container_category flex admin_category">
     <!-- Inicio Cursos -->
@@ -35,11 +48,11 @@
                     <span class="flex actions">
                         <a href="{{ url_for('users.edit_teacher', teacher_id=teacher.id) }}" class=""><i
                                 class="fas fa-edit"></i> </a>
-                        <button type="button" class="btn btn-danger btn-sm" title="Eliminar" data-bs-toggle="modal"
-                            data-bs-target="#deleteModal" data-teacher-id="{{ teacher.id }}"
-                            data-teacher-name="{{ teacher.full_name or teacher.username }}">
+                        <a href="#" class="open-delete-teacher-modal"
+                           data-teacher-id="{{ teacher.id }}"
+                           data-teacher-name="{{ teacher.full_name or teacher.username }}">
                             <i class="fas fa-trash"></i>
-                        </button>
+                        </a>
                     </span>
                 </li>
                 {% endfor %}
@@ -55,35 +68,9 @@
     {% include "sidebar_aside.html" %}
 </div>
 
-<!-- Delete Confirmation Modal -->
-<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-body text-center p-4">
-                <div class="delete-icon mb-3">
-                    <i class="fas fa-exclamation-triangle"></i>
-                </div>
-                <h5 class="modal-title mb-3" id="deleteModalLabel">¿Está seguro que desea eliminar el registro?</h5>
-                <p class="text-muted mb-4">Esta operación es irreversible</p>
-                <div class="d-flex gap-3 justify-content-center">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        Cancelar
-                    </button>
-                    <form id="deleteForm" method="POST" style="display: inline;">
-                        <button type="submit" class="btn btn-danger">
-                            Eliminar
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<!-- Modal de Confirmación de Eliminación -->
+{% include "delete_confirmation_modal.html" %}
 
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<!-- Font Awesome -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
 <!-- Custom JS -->
 <script src="{{ url_for('static', filename='js/teachers_management.js') }}"></script>
 {% endblock %}

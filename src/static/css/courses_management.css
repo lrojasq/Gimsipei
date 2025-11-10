@@ -643,3 +643,245 @@ table#accordionCourses thead th { border-bottom: 2px solid var(--course-primary)
 .badge.bg-secondary {
     background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%) !important;
 }
+
+/* MODALS */
+.modal{
+    height: 100vh;
+    width: 100vw;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1050;
+}
+.modal.show{
+    display: flex;
+}
+.modal.modal_create .bg-back {
+    background-color: rgba(0, 0, 0, 0.5);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+.modal.modal_create .container{
+    background-color: #ffffff !important;
+    color: var(--course-primary);
+    overflow: auto;
+    position: relative;
+    max-height: 80vh;
+    min-height: 400px;
+    text-align: left;
+    width: 90% !important;
+    max-width: 500px !important;
+    border-radius: 15px !important;
+    z-index: 2;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3) !important;
+    padding: 40px !important;
+}
+.modal.modal_create .container i.closed{
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 1.5rem;
+    color: var(--danger-color);
+    cursor: pointer;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+.modal.modal_create .container i.closed:hover{
+    color: #c82333;
+}
+.modal.modal_create .container h2{
+    text-align: left;
+    color: var(--danger-color);
+    margin-bottom: 30px;
+    font-size: 1.8rem;
+    font-weight: 600;
+}
+.modal.modal_create .container form{
+    width: 100%;
+    height: auto;
+    margin-top: 0px;
+}
+.modal.modal_create .container form .mb-3{
+    margin-bottom: 25px;
+}
+.modal.modal_create .container form .form-label{
+    display: block !important;
+    margin-bottom: 8px;
+    color: #333;
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+.modal.modal_create .container form input,
+.modal.modal_create .container form select,
+.modal.modal_create .container form .form-select{
+    background-color: #f8f9fa !important;
+    color: #333 !important;
+    border: 2px solid #dee2e6 !important;
+    border-radius: 8px !important;
+    padding: 12px 15px !important;
+    margin: 0px !important;
+    width: 100% !important;
+    font-size: 1rem !important;
+    transition: all 0.3s ease !important;
+}
+.modal.modal_create .container form input:focus,
+.modal.modal_create .container form select:focus{
+    background-color: #ffffff;
+    border-color: var(--course-primary);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 82, 82, 0.1);
+}
+.modal.modal_create .container form select option{
+    background-color: #ffffff;
+    color: #333;
+    padding: 10px;
+}
+.modal.modal_create .container form input::placeholder{
+    color: #6c757d;
+}
+.modal.modal_create .container form button,
+.modal.modal_create .container form .btn,
+.modal.modal_create .container form .btn-primary,
+.modal.modal_create .container form #submitBtn{
+    margin-top: 30px !important;
+    background-color: var(--course-primary) !important;
+    color: #ffffff !important;
+    width: auto !important;
+    min-width: 120px !important;
+    padding: 12px 30px !important;
+    border: none !important;
+    border-radius: 8px !important;
+    font-size: 1rem !important;
+    font-weight: 500 !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    float: none !important;
+}
+.modal.modal_create .container form button:hover{
+    background-color: var(--course-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 82, 82, 0.3);
+}
+.modal.modal_create .container form .btns{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 30px;
+}
+
+/* Modal de Eliminación */
+.modal.modal_delete .bg-back {
+    background-color: rgba(0, 0, 0, 0.5);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.modal.modal_delete .container {
+    background-color: #ffffff !important;
+    position: relative;
+    text-align: center;
+    width: 90% !important;
+    max-width: 450px !important;
+    border-radius: 15px !important;
+    z-index: 2;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3) !important;
+    padding: 50px 40px 40px 40px !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.modal.modal_delete .container .delete-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
+    margin-bottom: 25px;
+}
+
+.modal.modal_delete .container .delete-icon i {
+    font-size: 2.5rem;
+    color: #ffffff;
+}
+
+.modal.modal_delete .container .delete-title {
+    text-align: center;
+    color: #333;
+    margin-bottom: 15px;
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.modal.modal_delete .container .delete-warning {
+    text-align: center;
+    color: #6c757d;
+    margin-bottom: 35px;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.modal.modal_delete .container .delete-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+}
+
+.modal.modal_delete .container .delete-buttons .btn-cancel {
+    background-color: var(--course-primary) !important;
+    color: #ffffff !important;
+    border: none !important;
+    border-radius: 8px !important;
+    padding: 12px 35px !important;
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    min-width: 130px;
+    text-transform: uppercase;
+}
+
+.modal.modal_delete .container .delete-buttons .btn-cancel:hover {
+    background-color: var(--course-dark) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 82, 82, 0.3);
+}
+
+.modal.modal_delete .container .delete-buttons .btn-delete {
+    background-color: var(--teal) !important;
+    color: #ffffff !important;
+    border: none !important;
+    border-radius: 8px !important;
+    padding: 12px 35px !important;
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    min-width: 130px;
+    text-transform: uppercase;
+}
+
+.modal.modal_delete .container .delete-buttons .btn-delete:hover {
+    background-color: #15b3a6 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(25, 201, 188, 0.3);
+    opacity: 0.95;
+}

@@ -1,0 +1,289 @@
+/* Students Management Styles - Basado en diseño de Lovable convertido a CSS puro */
+
+/* Course Grade Indicator */
+.course-grade-indicator {
+    width: 70px;
+    height: 70px;
+    background: hsl(190, 65%, 55%);
+    border: 2px solid hsl(190, 65%, 55%);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 20px;
+    flex-shrink: 0;
+}
+
+.grade-number {
+    font-size: 2rem;
+    font-weight: 700;
+    color: hsl(0, 0%, 100%);
+}
+
+/* Header Students */
+.header-students {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+    padding: 0 0 20px 0;
+    border-bottom: 2px solid hsl(0, 0%, 88%);
+}
+
+.course-title {
+    flex: 1;
+}
+
+.course-title h2 {
+    margin: 0;
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: hsl(0, 0%, 25%);
+}
+
+/* Course Grade Button in Dashboard */
+.course-grade-btn {
+    min-width: 60px;
+    height: 60px;
+    font-size: 1.5rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid hsl(190, 65%, 55%);
+    color: hsl(190, 65%, 55%);
+    background: hsl(190, 20%, 92%);
+    transition: all 0.3s ease;
+    border-radius: 8px;
+    text-decoration: none;
+}
+
+.course-grade-btn:hover {
+    background: hsl(190, 65%, 55%);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Students Table Wrapper */
+.students-table-wrapper {
+    width: 100%;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+/* Students Table - Basado en diseño de Lovable */
+.students-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+}
+
+.students-table thead {
+    background: white;
+}
+
+.students-table thead tr {
+    border-bottom: 2px solid hsl(0, 0%, 88%);
+}
+
+.students-table thead th {
+    text-align: left;
+    padding: 1rem;
+    color: hsl(0, 0%, 25%);
+    font-weight: 600;
+    font-size: 1.125rem;
+    background: white;
+}
+
+.students-table tbody tr {
+    border-bottom: 1px solid hsl(0, 0%, 88%);
+    transition: background-color 0.2s ease;
+}
+
+.students-table tbody tr:hover {
+    background-color: hsl(0, 0%, 96%);
+}
+
+.students-table tbody td {
+    padding: 1.5rem 1rem;
+    color: hsl(0, 0%, 25%);
+    font-size: 1rem;
+}
+
+/* Empty State */
+.students-table tbody tr.empty-state-row {
+    border: none;
+}
+
+.students-table tbody tr.empty-state-row:hover {
+    background-color: white;
+}
+
+.students-table tbody .empty-state-cell {
+    text-align: center;
+    padding: 3rem 1rem;
+}
+
+.students-table tbody .empty-state-cell p {
+    color: hsl(0, 0%, 45%);
+    font-size: 1rem;
+    margin: 0;
+}
+
+/* View Link Buttons */
+.view-link-btn {
+    background: none;
+    border: none;
+    color: hsl(190, 65%, 55%);
+    font-weight: 500;
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 0;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.view-link-btn:hover {
+    text-decoration: underline;
+    color: hsl(190, 65%, 45%);
+}
+
+/* Actions Buttons */
+.actions-buttons {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.action-btn {
+    background: none;
+    border: none;
+    color: hsl(0, 0%, 45%);
+    cursor: pointer;
+    padding: 0.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+}
+
+.action-btn:hover {
+    color: hsl(0, 0%, 25%);
+    background-color: hsl(0, 0%, 96%);
+}
+
+.action-btn.edit-student:hover {
+    color: hsl(190, 65%, 55%);
+}
+
+.action-btn.delete-student:hover {
+    color: hsl(0, 70%, 60%);
+    background-color: hsl(0, 70%, 96%);
+}
+
+.action-btn i {
+    font-size: 1.25rem;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Add Button */
+.admin_category .add.grados a,
+.admin_category .add.grados .btn-primary {
+    background-color: hsl(190, 65%, 55%);
+    color: #fff;
+    border-color: hsl(190, 65%, 55%);
+}
+
+.admin_category .add.grados a:hover,
+.admin_category .add.grados .btn-primary:hover {
+    background-color: hsl(190, 65%, 45%);
+    color: #fff;
+    border-color: hsl(190, 65%, 45%);
+}
+
+/* Sidebar */
+.admin_category .menu_aside {
+    background-color: hsl(190, 65%, 55%);
+}
+
+.admin_category .menu_aside .aside_list li a.active,
+.admin_category .menu_aside .aside_list li a:hover {
+    background-color: hsl(190, 65%, 45%);
+}
+
+/* Alert Styles */
+.alert {
+    border: none;
+    border-radius: 15px;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.alert-success {
+    background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+    color: #155724;
+}
+
+.alert-danger {
+    background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+    color: #721c24;
+}
+
+.alert-info {
+    background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
+    color: #0c5460;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .header-students {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .course-grade-indicator {
+        margin-bottom: 15px;
+        margin-right: 0;
+    }
+
+    .students-table-wrapper {
+        overflow-x: auto;
+    }
+
+    .students-table {
+        min-width: 600px;
+    }
+
+    .students-table thead th,
+    .students-table tbody td {
+        padding: 0.75rem 0.5rem;
+        font-size: 0.9rem;
+    }
+}
+
+/* Animation for table rows */
+.students-table tbody tr {
+    animation: fadeInUp 0.3s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block title %}Estudiantes - {{ course.name }}{% endblock %}
+
+{% block extra_css %}
+<link href="{{ url_for('static', filename='css/menu.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/category.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/admin.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/students_management.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+{% block menu %}{% endblock %}
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                <i class="fas fa-{% if category == 'success' %}check-circle{% elif category == 'danger' %}exclamation-triangle{% else %}info-circle{% endif %} me-2"></i>
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+<div class="container_category flex admin_category">
+    <!-- Inicio Estudiantes -->
+    <div class="specialities_category cursos grades flex flex-column">
+        <!-- Header con número de grado y título -->
+        <div class="flex header-students">
+            <div class="course-grade-indicator">
+                <span class="grade-number">{{ course.grade_number }}</span>
+            </div>
+            <div class="course-title">
+                <h2>Estudiantes - {{ course.name }}</h2>
+            </div>
+        </div>
+
+        <!-- Tabla de estudiantes -->
+        <div class="students-table-wrapper">
+            <table class="students-table">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Documento</th>
+                        <th>Tareas</th>
+                        <th>Evaluaciones</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if students %}
+                        {% for student in students %}
+                        <tr data-student-id="{{ student.id }}">
+                            <td>{{ student.full_name }}</td>
+                            <td>{{ student.document }}</td>
+                            <td>
+                                <button class="view-link-btn" data-type="tasks" data-student-id="{{ student.id }}">
+                                    Ver
+                                </button>
+                            </td>
+                            <td>
+                                <button class="view-link-btn" data-type="evaluations" data-student-id="{{ student.id }}">
+                                    Ver
+                                </button>
+                            </td>
+                            <td>
+                                <div class="actions-buttons">
+                                    <button class="action-btn edit-student" 
+                                            data-student-id="{{ student.id }}" 
+                                            title="Editar"
+                                            aria-label="Editar estudiante">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="action-btn delete-student" 
+                                            data-student-id="{{ student.id }}"
+                                            data-student-name="{{ student.full_name }}"
+                                            title="Eliminar"
+                                            aria-label="Eliminar estudiante">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr class="empty-state-row">
+                            <td colspan="5" class="empty-state-cell">
+                                <p>No hay estudiantes inscritos en este curso.</p>
+                            </td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="flex add grados">
+            <a href="#" class="btn btn-primary" id="createStudentBtn">
+                <i class="fas fa-plus me-2"></i>CREAR USUARIO
+            </a>
+        </div>
+    </div>
+
+    <!-- Sidebar Menu Component -->
+    {% include "sidebar_aside.html" %}
+</div>
+
+<!-- Modal de Confirmación de Eliminación -->
+{% include "delete_confirmation_modal.html" %}
+
+<!-- Custom JS -->
+<script src="{{ url_for('static', filename='js/students_management.js') }}"></script>
+{% endblock %}
+

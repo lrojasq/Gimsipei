@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}Crear Estudiante{% endblock %}
+
+{% block extra_css %}
+<link href="{{ url_for('static', filename='css/menu.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/category.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/admin.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/create_student.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+{% block menu %}{% endblock %}
+
+<div class="container_category flex admin_category">
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+        <i
+            class="fas fa-{% if category == 'success' %}check-circle{% elif category == 'danger' %}exclamation-triangle{% else %}info-circle{% endif %} me-2"></i>
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <!-- Formulario de Creación -->
+    <div class="specialities_category flex create-student-container">
+        <div class="content-admin flex flex-column">
+            <div class="form-crear flex">
+                <form method="POST" action="{{ url_for('users.create_student', course_id=course.id) }}"
+                    class="form-admin flex flex-column">
+                    <div class="content-form flex flex-column">
+                        <h2 class="right-text">Crear Usuario</h2>
+                        <div class="flex flex-form">
+                            <div class="img-usuario">
+                                <i class="fa-regular fa-circle-user"></i>
+                            </div>
+                            <div class="flex flex-column form-crear-content">
+                                <div class="flex input-group">
+                                    <input type="text" name="full_name" id="full_name" placeholder="NOMBRE" required>
+                                </div>
+
+                                <div class="flex input-group">
+                                    <input type="text" name="document" id="document" placeholder="DOCUMENTO" required>
+                                </div>
+
+                                <div class="flex input-group">
+                                    <input type="text" name="username" id="username" placeholder="USUARIO" required>
+                                </div>
+
+                                <div class="flex input-group">
+                                    <input type="password" name="password" id="password" placeholder="CONTRASEÑA"
+                                        required>
+                                </div>
+
+                                <!-- Selección de curso -->
+                                <div class="flex input-group">
+                                    <select name="course_id" id="course_id" class="form-select" required>
+                                        <option value="">CURSO</option>
+                                        {% for course_option in courses %}
+                                        <option value="{{ course_option.id }}" {% if course_option.id==course.id
+                                            %}selected{% endif %}>
+                                            {{ course_option.name }} - {{ course_option.academic_year }}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-admin">GUARDAR</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar Aside Component -->
+    {% include "sidebar_aside.html" %}
+</div>
+
+<!-- Custom JS -->
+<script src="{{ url_for('static', filename='js/create_student.js') }}"></script>
+{% endblock %}

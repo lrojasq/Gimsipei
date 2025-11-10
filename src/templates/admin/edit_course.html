@@ -107,28 +107,6 @@
                                 <div class="form-text">Ej: Sexto A, Séptimo B, etc.</div>
                             </div>
 
-                            <!-- Status -->
-                            <div class="col-12 mb-4">
-                                <label class="form-label">ESTADO</label>
-                                <div class="status-selection">
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="is_active" id="status_active"
-                                            value="true" {% if course.is_active %}checked{% endif %}>
-                                        <label class="form-check-label" for="status_active">
-                                            ACTIVO
-                                        </label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="is_active"
-                                            id="status_inactive" value="false" {% if not course.is_active %}checked{%
-                                            endif %}>
-                                        <label class="form-check-label" for="status_inactive">
-                                            INACTIVO
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-
                             <!-- Submit Button -->
                             <div class="col-12 text-center">
                                 <button type="submit" class="btn btn-primary btn-lg px-5" id="submitBtn">

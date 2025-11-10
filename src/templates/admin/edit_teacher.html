@@ -39,19 +39,19 @@
                             <div class="flex flex-column form-crear-content">
                                 <div class="flex input-group">
                                     <input type="text" name="full_name" id="full_name" placeholder="Nombre" value="{{ teacher.full_name}}" required>
-                                </div>
+                            </div>
 
                                 <div class="flex input-group">
                                     <input type="text" name="document" id="document" placeholder="Documento" value="{{ teacher.document }}" required>
-                                </div>
+                            </div>
 
                                 <div class="flex input-group">
                                     <input type="text" name="username" id="username" placeholder="Usuario" value="{{ teacher.username }}" required>
-                                </div>
+                            </div>
 
                                 <div class="flex input-group">
                                     <input type="password" name="password" id="password" placeholder="Nueva contraseña (opcional)">
-                                </div>
+                            </div>
 
                                 <!-- Selección de rol -->
                                 <div class="flex input-group">
@@ -67,8 +67,8 @@
                     <div class="flex" style="gap:12px;">
                         <a href="{{ url_for('users.teachers_management') }}" class="btn-admin btn-cancelar">VOLVER</a>
                         <button type="submit" class="btn-admin">ACTUALIZAR</button>
-                    </div>
-                </form>
+                        </div>
+                    </form>
             </div>
         </div>
     </div>

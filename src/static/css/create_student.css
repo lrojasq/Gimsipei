@@ -1,0 +1,208 @@
+/* Create Student Form Styles - Basado en diseño proporcionado */
+
+/* Container principal con fondo azul claro */
+.create-student-container {
+    background-color: hsl(190, 65%, 55%);
+    border-radius: 10px;
+    padding: 2rem;
+    min-height: 600px;
+}
+
+/* Content form con fondo azul claro */
+.create-student-container .content-form {
+    background-color: hsl(190, 65%, 55%);
+    border-radius: 10px;
+    padding: 2rem;
+    width: 100%;
+}
+
+/* Título "Crear Usuario" */
+.create-student-container .right-text {
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.75rem;
+    text-align: right;
+    margin-bottom: 2rem;
+}
+
+/* Ícono de usuario */
+.create-student-container .img-usuario {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 200px;
+    height: 200px;
+    background-color: transparent;
+    border: 3px solid #fff;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.create-student-container .img-usuario i {
+    font-size: 120px;
+    color: #fff;
+}
+
+/* Form content */
+.create-student-container .form-crear-content {
+    width: 70%;
+    gap: 1.5rem;
+}
+
+/* Input groups */
+.create-student-container .input-group {
+    position: relative;
+    width: 100%;
+}
+
+.create-student-container .input-group input,
+.create-student-container .input-group select {
+    padding: 1rem;
+    border-radius: 8px;
+    width: 100%;
+    border: none;
+    background-color: #fff;
+    font-size: 1rem;
+    color: hsl(190, 65%, 55%);
+    font-weight: 500;
+}
+
+.create-student-container .input-group input::placeholder {
+    color: hsl(190, 65%, 55%);
+    text-transform: uppercase;
+    font-weight: 500;
+    opacity: 0.8;
+}
+
+.create-student-container .input-group input:focus,
+.create-student-container .input-group select:focus {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+}
+
+/* Select dropdown styling */
+.create-student-container .input-group select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%234A90E2' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 12px;
+    padding-right: 2.5rem;
+    cursor: pointer;
+}
+
+.create-student-container .input-group select option {
+    color: hsl(190, 65%, 55%);
+    background-color: #fff;
+    padding: 0.5rem;
+}
+
+/* Botón Guardar */
+.create-student-container .btn-admin {
+    padding: 1rem 3rem;
+    background-color: hsl(190, 65%, 55%);
+    color: #fff;
+    border-radius: 8px;
+    border: 2px solid #fff;
+    font-weight: 700;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    margin-top: 2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.create-student-container .btn-admin:hover {
+    background-color: #fff;
+    color: hsl(190, 65%, 55%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Flex form layout */
+.create-student-container .flex-form {
+    gap: 3rem;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+/* Form container */
+.create-student-container .form-crear {
+    width: 100%;
+}
+
+.create-student-container .form-admin {
+    width: 100%;
+    align-items: flex-end;
+}
+
+/* Sidebar styling - mismo color azul */
+.admin_category .menu_aside {
+    background-color: hsl(190, 65%, 55%);
+}
+
+.admin_category .menu_aside .aside_list li a.active,
+.admin_category .menu_aside .aside_list li a:hover {
+    background-color: hsl(190, 65%, 45%);
+}
+
+/* Alert messages */
+.alert {
+    border: none;
+    border-radius: 15px;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.alert-success {
+    background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+    color: #155724;
+}
+
+.alert-danger {
+    background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+    color: #721c24;
+}
+
+.alert-warning {
+    background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+    color: #856404;
+}
+
+.alert-info {
+    background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
+    color: #0c5460;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .create-student-container {
+        padding: 1.5rem;
+    }
+
+    .create-student-container .flex-form {
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .create-student-container .img-usuario {
+        width: 150px;
+        height: 150px;
+    }
+
+    .create-student-container .img-usuario i {
+        font-size: 80px;
+    }
+
+    .create-student-container .form-crear-content {
+        width: 100%;
+    }
+
+    .create-student-container .right-text {
+        text-align: center;
+        font-size: 1.5rem;
+    }
+}
+
