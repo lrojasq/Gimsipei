@@ -11,9 +11,14 @@ from .service import (
     get_course_service,
     get_courses_service,
     update_course_service,
+    get_available_course_names,
 )
 from .validation import CourseCreateSchema, CourseUpdateSchema
 from .service import get_course_subjects_service
+from src.subject.service import (
+    get_teachers_for_form_service,
+    get_available_subject_names,
+)
 
 
 # View to manage courses
@@ -24,6 +29,9 @@ def courses_management_controller(_: Request) -> Response:
     user_role = get_jwt().get("role").lower()
     try:
         courses, total = get_courses_service()
+        available_courses = get_available_course_names()
+        teachers = get_teachers_for_form_service()
+        available_subjects = get_available_subject_names()
         courses_with_subjects = []
 
         for course in courses:
@@ -31,10 +39,7 @@ def courses_management_controller(_: Request) -> Response:
             course_dict = {
                 "id": course.id,
                 "academic_year": course.academic_year,
-                "period": course.period,
-                "grade_level": course.grade_level,
                 "name": course.name,
-                "is_active": course.is_active,
                 "created_by": course.created_by,
                 "created_at": course.created_at,
                 "updated_at": course.updated_at,
@@ -43,20 +48,33 @@ def courses_management_controller(_: Request) -> Response:
             courses_with_subjects.append(course_dict)
 
         return render_template(
-            "admin/courses_management.html", courses=courses_with_subjects, total=total, user={"role": user_role}
+            "admin/courses_management.html",
+            courses=courses_with_subjects,
+            total=total,
+            user={"role": user_role},
+            available_courses=available_courses,
+            teachers=teachers,
+            available_subjects=available_subjects,
         )
     except Exception as e:
         flash(f"Error al cargar la lista de cursos: {str(e)}", "danger")
-        return render_template("admin/courses_management.html", courses=[], total=0, user={"role": user_role})
+        return render_template(
+            "admin/courses_management.html",
+            courses=[],
+            total=0,
+            user={"role": user_role},
+            available_courses=[],
+            teachers=[],
+            available_subjects=[],
+        )
 
 
 @jwt_required()
 @role_required([UserRole.ADMIN])
 def create_course_controller(request: Request) -> Response:
     """View to create a new course"""
-    user_role = get_jwt().get("role").lower()
     if request.method == "GET":
-        return render_template("admin/create_course.html", user={"role": user_role})
+        return redirect(url_for("courses.courses_management"))
 
     try:
         data = request.form.to_dict()
@@ -68,19 +86,19 @@ def create_course_controller(request: Request) -> Response:
             return redirect(url_for("courses.courses_management"))
         elif status_code == 400:
             flash(
-                "Ya existe un curso con ese nombre en el mismo año y período", "danger"
+                "Ya existe un curso con ese nombre en el mismo año académico", "danger"
             )
-            return render_template("admin/create_course.html", user={"role": user_role})
+            return redirect(url_for("courses.courses_management"))
         else:
             flash("Error al crear el curso", "danger")
-            return render_template("admin/create_course.html", user={"role": user_role})
+            return redirect(url_for("courses.courses_management"))
 
     except ValidationError as e:
         flash(f"Datos inválidos: {str(e)}", "danger")
-        return render_template("admin/create_course.html", user={"role": user_role})
+        return redirect(url_for("courses.courses_management"))
     except Exception as e:
         flash(f"Error interno: {str(e)}", "danger")
-        return render_template("admin/create_course.html", user={"role": user_role})
+        return redirect(url_for("courses.courses_management"))
 
 
 @jwt_required()
@@ -214,7 +232,7 @@ def remove_subject_from_course_controller(
     try:
         from .service import remove_subject_from_course_service
 
-        result, status_code = remove_subject_from_course_service(
+        _, status_code = remove_subject_from_course_service(
             course_id, subject_id, teacher_id, request
         )
 
@@ -227,4 +245,4 @@ def remove_subject_from_course_controller(
     except Exception as e:
         flash(f"Error interno: {str(e)}", "danger")
 
-    return redirect(url_for("courses.course_detail", course_id=course_id))
+    return redirect(url_for("courses.courses_management"))

@@ -31,15 +31,9 @@ def get_courses_api_controller(request: Request) -> Response | Tuple[list, int]:
     try:
         # Obtener parámetros de filtro
         academic_year = request.args.get("academic_year")
-        period = request.args.get("period", type=int)
-        grade_level = request.args.get("grade_level")
-        is_active = request.args.get("is_active", type=bool)
 
         courses, total = get_courses_service(
             academic_year=academic_year,
-            period=period,
-            grade_level=grade_level,
-            is_active=is_active,
         )
 
         return ApiResponse.list_response(
