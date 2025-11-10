@@ -185,12 +185,15 @@ def create_first_admin_service(
         if db.query(User).filter(User.role == UserRole.ADMIN).first():
             return {"error": "Ya existe un administrador en el sistema"}, 400
 
-        # Verificar si el username ya está en uso
         if db.query(User).filter_by(username=validated.username).first():
             return {"error": "El nombre de usuario ya está en uso"}, 400
 
+        if db.query(User).filter_by(document=validated.document).first():
+            return {"error": "El documento ya está en uso"}, 400
+
         user = User(
             username=validated.username,
+            document=validated.document,
             hashed_password=generate_password_hash(validated.password),
             full_name=validated.full_name,
             role=UserRole.ADMIN,
@@ -199,6 +202,8 @@ def create_first_admin_service(
         db.commit()
         db.refresh(user)
         return {"message": "Administrador creado exitosamente"}, 201
-    finally:
+    except Exception as e:
         db.rollback()
+        return {"error": f"Error al crear el administrador: {str(e)}"}, 500
+    finally:
         db.close()
