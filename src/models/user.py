@@ -1,4 +1,5 @@
 from datetime import datetime
+
 # from typing import Optional
 from sqlalchemy import Column, Integer, String, DateTime, Enum
 from sqlalchemy.orm import relationship
@@ -32,7 +33,6 @@ class User(Base):
     exercises = relationship("Exercise", back_populates="author", lazy="dynamic")
     assignments = relationship("Assignment", back_populates="author", lazy="dynamic")
     submissions = relationship("Submission", back_populates="student", lazy="dynamic")
-    subjects = relationship("Subject", back_populates="teacher", lazy="dynamic")
     created_classes = relationship(
         "ClassModel", back_populates="creator", lazy="dynamic"
     )
