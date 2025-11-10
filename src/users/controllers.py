@@ -148,7 +148,8 @@ def delete_user_controller(
     user_id: int, request: Request
 ) -> Response | Tuple[Optional[dict], int]:
     try:
-        result, status_code = delete_user_service(user_id, request)
+        current_user_id = get_jwt_identity()
+        _, status_code = delete_user_service(user_id, request, current_user_id)
 
         if status_code == 200:
             return ApiResponse.success(message="Usuario eliminado exitosamente")

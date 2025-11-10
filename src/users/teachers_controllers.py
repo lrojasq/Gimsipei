@@ -1,5 +1,5 @@
 from flask import Request, Response, flash, redirect, render_template, url_for
-from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from pydantic import ValidationError
 
 from src.models.user import UserRole
@@ -158,14 +158,28 @@ def edit_teacher_controller(teacher_id: int, request: Request) -> Response:
 def delete_teacher_controller(teacher_id: int, request: Request) -> Response:
     """Delete a teacher"""
     try:
-        _, status_code = delete_user_service(teacher_id, request)
+        current_user_id = get_jwt_identity()
+        result, status_code = delete_user_service(teacher_id, request, current_user_id)
 
         if status_code == 200:
-            flash("Docente eliminado exitosamente", "success")
+            flash("Usuario eliminado exitosamente", "success")
         elif status_code == 404:
-            flash("Docente no encontrado", "danger")
+            flash("Usuario no encontrado", "danger")
+        elif status_code == 409:
+            message = result.get(
+                "message",
+                "No se puede eliminar el usuario porque tiene datos relacionados",
+            )
+            flash(message, "warning")
+        elif status_code == 500:
+            message = (
+                result.get("message", "Error al eliminar el usuario")
+                if result
+                else "Error al eliminar el usuario"
+            )
+            flash(message, "danger")
         else:
-            flash("Error al eliminar el docente", "danger")
+            flash("Error al eliminar el usuario", "danger")
 
     except Exception as e:
         flash(f"Error interno: {str(e)}", "danger")
