@@ -1,5 +1,5 @@
 from flask import render_template, Request, jsonify, Response
-from flask_jwt_extended import jwt_required, create_access_token, set_access_cookies
+from flask_jwt_extended import jwt_required
 from .service import (
     login_user_service,
     get_current_user_service,

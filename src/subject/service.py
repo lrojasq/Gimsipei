@@ -23,9 +23,13 @@ def get_subjects_service(
     try:
         query = db.query(Subject)
 
-        # Aplicar filtros
+        # Si se filtra por teacher_id, obtener subjects a través de CourseSubject
         if teacher_id:
-            query = query.filter(Subject.teacher_id == teacher_id)
+            query = (
+                query.join(CourseSubject, Subject.id == CourseSubject.subject_id)
+                .filter(CourseSubject.teacher_id == teacher_id)
+                .distinct()
+            )
 
         subjects = query.order_by(Subject.name).all()
 
@@ -33,7 +37,6 @@ def get_subjects_service(
             SubjectResponseSchema(
                 id=subject.id,
                 name=subject.name,
-                teacher_id=subject.teacher_id,
                 created_at=subject.created_at,
                 updated_at=subject.updated_at,
             )
@@ -56,7 +59,6 @@ def get_subject_service(
         return SubjectResponseSchema(
             id=subject.id,
             name=subject.name,
-            teacher_id=subject.teacher_id,
             created_at=subject.created_at,
             updated_at=subject.updated_at,
         ), 200
@@ -67,26 +69,23 @@ def get_subject_service(
 def create_subject_service(
     data: SubjectCreateSchema, request: Request
 ) -> Tuple[Optional[SubjectResponseSchema], int]:
-    """Crear una nueva materia"""
+    """Crear una nueva materia o retornar la existente si ya existe"""
     db = SessionLocal()
     try:
-        # Verificar que el profesor existe
-        teacher = (
-            db.query(User)
-            .filter(User.id == data.teacher_id, User.role == UserRole.TEACHER)
-            .first()
-        )
-        if not teacher:
-            return None, 400
+        # check if the subject already exists
+        existing_subject = db.query(Subject).filter(Subject.name == data.name).first()
 
-        # No validamos duplicados de nombre aquí porque un profesor puede dictar
-        # la misma materia en diferentes cursos. La validación de duplicados se hace
-        # a nivel de asignación curso-materia-profesor en CourseSubject.
+        if existing_subject:
+            # return the existing subject
+            return SubjectResponseSchema(
+                id=existing_subject.id,
+                name=existing_subject.name,
+                created_at=existing_subject.created_at,
+                updated_at=existing_subject.updated_at,
+            ), 200
 
-        subject = Subject(
-            name=data.name,
-            teacher_id=data.teacher_id,
-        )
+        # if not exists, create new subject
+        subject = Subject(name=data.name)
 
         db.add(subject)
         db.commit()
@@ -95,7 +94,6 @@ def create_subject_service(
         return SubjectResponseSchema(
             id=subject.id,
             name=subject.name,
-            teacher_id=subject.teacher_id,
             created_at=subject.created_at,
             updated_at=subject.updated_at,
         ), 201
@@ -116,25 +114,17 @@ def update_subject_service(
         if not subject:
             return None, 404
 
-        # Verificar que el nuevo profesor existe (si se está cambiando)
-        if data.teacher_id and data.teacher_id != subject.teacher_id:
-            teacher = (
-                db.query(User)
-                .filter(User.id == data.teacher_id, User.role == UserRole.TEACHER)
-                .first()
+        # Verificar si el nuevo nombre ya existe (si se está cambiando)
+        if data.name and data.name != subject.name:
+            existing_subject = (
+                db.query(Subject).filter(Subject.name == data.name).first()
             )
-            if not teacher:
+            if existing_subject:
                 return None, 400
-
-        # No validamos duplicados de nombre aquí porque un profesor puede dictar
-        # la misma materia en diferentes cursos. La validación de duplicados se hace
-        # a nivel de asignación curso-materia-profesor en CourseSubject.
 
         # Actualizar campos si se proporcionan
         if data.name is not None:
             subject.name = data.name
-        if data.teacher_id is not None:
-            subject.teacher_id = data.teacher_id
 
         db.commit()
         db.refresh(subject)
@@ -142,7 +132,6 @@ def update_subject_service(
         return SubjectResponseSchema(
             id=subject.id,
             name=subject.name,
-            teacher_id=subject.teacher_id,
             created_at=subject.created_at,
             updated_at=subject.updated_at,
         ), 200
@@ -180,6 +169,31 @@ def delete_subject_service(
         return None, 500
     finally:
         db.close()
+
+
+def get_available_subject_names() -> List[str]:
+    """Genera lista de nombres de materias disponibles para un colegio"""
+    subject_names = [
+        "Matemáticas",
+        "Español",
+        "Ciencias Naturales",
+        "Ciencias Sociales",
+        "Inglés",
+        "Educación Física",
+        "Arte",
+        "Música",
+        "Religión",
+        "Ética y Valores",
+        "Tecnología e Informática",
+        "Química",
+        "Física",
+        "Biología",
+        "Historia",
+        "Geografía",
+        "Filosofía",
+        "Economía",
+    ]
+    return subject_names
 
 
 def get_teachers_for_form_service() -> List[dict]:

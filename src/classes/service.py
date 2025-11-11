@@ -81,12 +81,20 @@ def delete_subject(subject_id: int, current_user_id: int):
         if not db_subject:
             return None
 
-        # If user is a teacher, they can only delete their own subjects
-        if (
-            current_user.role.name == UserRole.TEACHER.name
-            and db_subject.teacher_id != current_user.id
-        ):
-            raise PermissionError("No autorizado para eliminar esta materia")
+        # If user is a teacher, they can only delete subjects they are assigned to
+        if current_user.role.name == UserRole.TEACHER.name:
+            from src.models.course_subject import CourseSubject
+
+            assignment = (
+                db.query(CourseSubject)
+                .filter(
+                    CourseSubject.subject_id == subject_id,
+                    CourseSubject.teacher_id == current_user.id,
+                )
+                .first()
+            )
+            if not assignment:
+                raise PermissionError("No autorizado para eliminar esta materia")
 
         db.delete(db_subject)
         db.commit()
@@ -147,11 +155,20 @@ def update_period(period_id: int, period: PeriodUpdate, current_user_id: int):
         if not db_period:
             return None
 
-        # Si es profesor, solo puede actualizar sus propios periodos
+        # Si es profesor, solo puede actualizar periodos de materias asignadas a él
         if current_user.role.name == UserRole.TEACHER.name:
-            # Verificar si el periodo pertenece a una materia del profesor
-            subject = db.query(Subject).get(db_period.subject_id)
-            if not subject or subject.teacher_id != current_user.id:
+            from src.models.course_subject import CourseSubject
+
+            # Verificar si el profesor está asignado a esta materia en algún curso
+            assignment = (
+                db.query(CourseSubject)
+                .filter(
+                    CourseSubject.subject_id == db_period.subject_id,
+                    CourseSubject.teacher_id == current_user.id,
+                )
+                .first()
+            )
+            if not assignment:
                 raise PermissionError("No autorizado para actualizar este periodo")
 
         update_data = period.dict(exclude_unset=True)
@@ -184,11 +201,20 @@ def delete_period(period_id: int, current_user_id: int):
         if not db_period:
             return None
 
-        # Si es profesor, solo puede eliminar sus propios periodos
+        # Si es profesor, solo puede eliminar periodos de materias asignadas a él
         if current_user.role.name == UserRole.TEACHER.name:
-            # Verificar si el periodo pertenece a una materia del profesor
-            subject = db.query(Subject).get(db_period.subject_id)
-            if not subject or subject.teacher_id != current_user.id:
+            from src.models.course_subject import CourseSubject
+
+            # Verificar si el profesor está asignado a esta materia en algún curso
+            assignment = (
+                db.query(CourseSubject)
+                .filter(
+                    CourseSubject.subject_id == db_period.subject_id,
+                    CourseSubject.teacher_id == current_user.id,
+                )
+                .first()
+            )
+            if not assignment:
                 raise PermissionError("No autorizado para eliminar este periodo")
 
         db.delete(db_period)

@@ -88,6 +88,13 @@ h1 {
     max-height: 90vh;
     overflow: auto;
 }
+.specialities_category:has(form){
+    padding: 0px;
+}
+.specialities_category:has(form) label.btn.btn-outline-danger{
+    border-radius: 5px;
+    width: 40%;
+}
 
 .specialities_category.cursos {
     width: 90%;

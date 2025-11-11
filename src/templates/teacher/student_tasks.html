@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block title %}{{ student.full_name }} - Tareas{% endblock %}
+
+{% block extra_css %}
+<link href="{{ url_for('static', filename='css/menu.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/category.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/admin.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/student_tasks.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+{% block menu %}{% endblock %}
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category, message in messages %}
+<div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+    <i
+        class="fas fa-{% if category == 'success' %}check-circle{% elif category == 'danger' %}exclamation-triangle{% else %}info-circle{% endif %} me-2"></i>
+    {{ message }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+</div>
+{% endfor %}
+{% endif %}
+{% endwith %}
+
+<div class="container_category flex admin_category">
+    <!-- Inicio Tareas del Estudiante -->
+    <div class="specialities_category cursos grades flex flex-column">
+        <!-- Header con número de grado y título -->
+        <div class="flex header-students">
+            <div class="course-grade-indicator">
+                <span class="grade-number">{{ course.grade_number }}</span>
+            </div>
+            <div class="course-title">
+                <h2>{{ student.full_name }} - Tareas</h2>
+            </div>
+        </div>
+
+        <!-- Tabla de tareas agrupadas por asignatura -->
+        <div class="tasks-table-wrapper">
+            <table class="tasks-table">
+                <thead>
+                    <tr>
+                        <th>Asignatura</th>
+                        <th>Nombre</th>
+                        <th>Fecha</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if subjects %}
+                    {% for subject in subjects %}
+                    <!-- Fila de asignatura (expandible) -->
+                    <tr class="subject-row" data-subject-id="{{ subject.subject_id }}">
+                        <td colspan="4" class="subject-header">
+                            <div class="flex subject-header-content">
+                                <span class="subject-name">{{ subject.subject_name }}</span>
+                                <i class="fas fa-chevron-down toggle-subject"></i>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- Filas de clases (ocultas por defecto) -->
+                    {% if subject.classes %}
+                        {% for class_item in subject.classes %}
+                        <tr class="subject-content-row class-row" data-subject-id="{{ subject.subject_id }}" style="display: none;">
+                            <td class="class-indent"></td>
+                            <td class="class-name-cell">Clase {{ class_item.class_number }}</td>
+                            <td class="class-date-cell">{{ class_item.date }}</td>
+                            <td class="class-actions-cell">
+                                <a href="#" class="download-link" data-class-id="{{ class_item.id }}">
+                                    Descargar
+                                </a>
+                                <button class="delete-class-btn" 
+                                        data-class-id="{{ class_item.id }}"
+                                        data-class-title="Clase {{ class_item.class_number }}" 
+                                        title="Eliminar">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr class="subject-content-row" data-subject-id="{{ subject.subject_id }}" style="display: none;">
+                            <td colspan="4" class="empty-classes-cell">
+                                <p>No hay clases registradas para esta asignatura.</p>
+                            </td>
+                        </tr>
+                    {% endif %}
+                    {% endfor %}
+                    {% else %}
+                    <tr class="empty-state-row">
+                        <td colspan="4" class="empty-state-cell">
+                            <p>Este curso no tiene materias asignadas. Por favor, asigne materias al curso primero.</p>
+                        </td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Sidebar Menu Component -->
+    {% include "sidebar_aside.html" %}
+</div>
+
+<!-- Custom JS -->
+<script src="{{ url_for('static', filename='js/student_tasks.js') }}"></script>
+{% endblock %}

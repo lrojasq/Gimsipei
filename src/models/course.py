@@ -1,5 +1,5 @@
 from datetime import datetime
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Boolean
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
 from src.database.database import Base
 
@@ -10,13 +10,8 @@ class Course(Base):
     __tablename__ = "courses"
 
     id = Column(Integer, primary_key=True, index=True)
-    academic_year = Column(String(9), nullable=False)  # e.g., "2024-2025"
-    period = Column(Integer, nullable=False)  # 1, 2, 3 (trimestres)
-    grade_level = Column(
-        String(50), nullable=False
-    )  # e.g., "Sexto", "Séptimo", "Octavo"
-    name = Column(String(100), nullable=False)  # e.g., "Sexto A", "Séptimo B"
-    is_active = Column(Boolean, default=True)
+    academic_year = Column(String(4), nullable=False)
+    name = Column(String(100), nullable=False)  # e.g., "Sexto"...
     created_by = Column(Integer, ForeignKey("users.id"), nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
@@ -28,4 +23,6 @@ class Course(Base):
     classes = relationship("ClassModel", back_populates="course", lazy="dynamic")
 
     def __repr__(self):
-        return f"<Course(id={self.id}, name='{self.name}', year='{self.academic_year}', period={self.period})>"
+        return (
+            f"<Course(id={self.id}, name='{self.name}', year='{self.academic_year}')>"
+        )

@@ -7,6 +7,7 @@ from .courses_controllers import (
     course_detail_controller,
     remove_student_from_course_controller,
     remove_subject_from_course_controller,
+    teacher_classes_controller,
 )
 from .controllers import (
     get_courses_api_controller,
@@ -20,6 +21,7 @@ from .controllers import (
 )
 
 courses_bp = Blueprint("courses", __name__, url_prefix="/courses")
+
 
 # Rutas para vistas HTML
 @courses_bp.route("", methods=["GET"])
@@ -65,6 +67,13 @@ def remove_subject_from_course(course_id, subject_id, teacher_id):
     return remove_subject_from_course_controller(
         course_id, subject_id, teacher_id, request
     )
+
+
+# Teacher classes view
+@courses_bp.route("/teacher/classes", methods=["GET"])
+def teacher_classes():
+    """Vista de clases y recursos para teachers"""
+    return teacher_classes_controller(request)
 
 
 # Rutas API

@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+
+{% block title %}Clases y recursos{% endblock %}
+
+{% block extra_css %}
+<link href="{{ url_for('static', filename='css/menu.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/category.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/admin.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/classes_resources.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+{% block menu %}{% endblock %}
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                <i class="fas fa-{% if category == 'success' %}check-circle{% elif category == 'danger' %}exclamation-triangle{% else %}info-circle{% endif %} me-2"></i>
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+<div class="container_category flex admin_category">
+    <!-- Inicio Clases y Recursos -->
+    <div class="specialities_category cursos grades flex flex-column">
+        <!-- Header con ícono y título -->
+        <div class="flex header-classes">
+            <div class="classes-icon-wrapper">
+                <img src="{{ url_for('static', filename='images/svg/clases.svg') }}" alt="Clases" class="classes-icon">
+            </div>
+            <div class="classes-title">
+                <h2>Clases y recursos</h2>
+            </div>
+        </div>
+
+        <!-- Tabla de clases por curso -->
+        <div class="classes-table-wrapper">
+            <table class="classes-table">
+                <thead>
+                    <tr>
+                        <th>Cursos</th>
+                        <th>Clases</th>
+                        <th>Clases</th>
+                        <th>Recursos</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if courses %}
+                        {% for course in courses %}
+                        <tr class="course-row" data-course-id="{{ course.id }}">
+                            <td class="course-name-cell">
+                                <div class="flex align-items-center">
+                                    <span class="course-name">{{ course.name }}</span>
+                                    <button class="expand-btn" 
+                                            data-course-id="{{ course.id }}"
+                                            aria-label="Expandir curso"
+                                            title="Ver clases del curso">
+                                        <i class="fas fa-chevron-down"></i>
+                                    </button>
+                                </div>
+                            </td>
+                            <td class="classes-count">
+                                <span class="count-badge">{{ course.classes_count or 0 }}</span>
+                            </td>
+                            <td class="classes-count">
+                                <span class="count-badge">{{ course.classes_count or 0 }}</span>
+                            </td>
+                            <td class="resources-count">
+                                <span class="count-badge">{{ course.resources_count or 0 }}</span>
+                            </td>
+                        </tr>
+                        <!-- Fila expandible con las clases del curso -->
+                        <tr class="expandable-row" data-course-id="{{ course.id }}" style="display: none;">
+                            <td colspan="4">
+                                <div class="expanded-content">
+                                    <div class="classes-grid">
+                                        {% if course.classes %}
+                                            {% for class_item in course.classes %}
+                                            <div class="class-card">
+                                                <div class="class-card-header">
+                                                    <h4>{{ class_item.title }}</h4>
+                                                    <span class="class-number">Clase {{ class_item.class_number }}</span>
+                                                </div>
+                                                <div class="class-card-body">
+                                                    <p class="class-description">{{ class_item.description or 'Sin descripción' }}</p>
+                                                    <div class="class-meta">
+                                                        <span class="class-subject">
+                                                            <i class="fas fa-book"></i> {{ class_item.subject_name }}
+                                                        </span>
+                                                        <span class="class-period">
+                                                            <i class="fas fa-calendar"></i> Periodo {{ class_item.period }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="class-card-footer">
+                                                    <button class="action-btn edit-class" 
+                                                            data-class-id="{{ class_item.id }}"
+                                                            title="Editar clase">
+                                                        <i class="fas fa-edit"></i>
+                                                    </button>
+                                                    <button class="action-btn view-resources" 
+                                                            data-class-id="{{ class_item.id }}"
+                                                            title="Ver recursos">
+                                                        <i class="fas fa-folder-open"></i>
+                                                    </button>
+                                                    <button class="action-btn delete-class" 
+                                                            data-class-id="{{ class_item.id }}"
+                                                            title="Eliminar clase">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            {% endfor %}
+                                        {% else %}
+                                            <div class="empty-classes">
+                                                <p>No hay clases registradas para este curso en el periodo seleccionado</p>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr class="empty-state-row">
+                            <td colspan="4" class="empty-state-cell">
+                                <p>No hay cursos disponibles.</p>
+                            </td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Botones de períodos -->
+        <div class="periods-selector">
+            <button class="period-btn active" data-period="1">PERIODO 1</button>
+            <button class="period-btn" data-period="2">PERIODO 2</button>
+            <button class="period-btn" data-period="3">PERIODO 3</button>
+            <button class="period-btn" data-period="4">PERIODO 4</button>
+        </div>
+    </div>
+
+    <!-- Sidebar Menu Component -->
+    {% include "sidebar_aside.html" %}
+</div>
+
+<!-- Custom JS -->
+<script src="{{ url_for('static', filename='js/classes_resources.js') }}"></script>
+{% endblock %}
+

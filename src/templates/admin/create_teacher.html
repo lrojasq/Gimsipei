@@ -1,26 +1,23 @@
-{% extends "admin/base_admin.html" %}
+{% extends "base.html" %}
 
 {% block title %}Crear Docente{% endblock %}
 
 {% block extra_css %}
-<link href="{{ url_for('static', filename='css/teachers_management.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/menu.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/category.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/admin.css') }}" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
-<div class="container-fluid p-4">
-    <!-- Header -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h1 class="h3 mb-0 text-dark">Crear Usuario</h1>
-            <p class="text-muted mb-0">Registra un nuevo docente en el sistema</p>
-        </div>
-        <a href="{{ url_for('users.teachers_management') }}" class="btn btn-outline-secondary">
-            <i class="fas fa-arrow-left me-2"></i>Volver
-        </a>
-    </div>
+{% block menu %}{% endblock %}
+
+<div class="container_category flex admin_category">
+    <!-- Perfil de Usuario -->
+    {% include "user_profile.html" %}
+    <!-- Fin Perfil -->
 
     <!-- Flash Messages -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
+    {# {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
     {% for category, message in messages %}
     <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
@@ -31,107 +28,68 @@
     </div>
     {% endfor %}
     {% endif %}
-    {% endwith %}
+    {% endwith %} #}
 
-    <!-- Create Teacher Form -->
-    <div class="row justify-content-center">
-        <div class="col-lg-8">
-            <div class="card shadow-sm">
-                <div class="card-body p-4">
-                    <form method="POST" class="needs-validation" novalidate id="createTeacherForm">
-                        <div class="row">
-                            <!-- User Icon -->
-                            <div class="col-12 text-center mb-4">
-                                <div class="user-icon-large">
-                                    <i class="fas fa-user"></i>
-                                </div>
+    <!-- Formulario de Creación -->
+    <div class="specialities_category flex">
+        <div class="content-admin flex flex-column">
+            <div class="form-crear flex">
+                <form method="POST" action="{{ url_for('users.create_teacher') }}" class="form-admin flex flex-column">
+                    <div class="content-form flex flex-column">
+                        <h1 class="right-text">Crear Usuario</h1>
+                        <div class="flex flex-form">
+                            <div class="img-usuario">
+                                <i class="fa-slab-press fa-regular fa-circle-user"></i>
                             </div>
-
-                            <!-- Full Name -->
-                            <div class="col-md-6 mb-3">
-                                <label for="full_name" class="form-label">NOMBRE</label>
-                                <input type="text" class="form-control" id="full_name" name="full_name"
-                                    placeholder="Nombre completo" required>
-                                <div class="invalid-feedback">
-                                    Por favor ingrese el nombre completo.
+                            <div class="flex flex-column form-crear-content">
+                                <div class="flex input-group">
+                                    <input type="text" name="full_name" id="full_name" placeholder="Nombre" required>
                                 </div>
-                            </div>
 
-                            <!-- Document -->
-                            <div class="col-md-6 mb-3">
-                                <label for="document" class="form-label">DOCUMENTO</label>
-                                <input type="text" class="form-control" id="document" name="document"
-                                    placeholder="Número de documento" required>
-                                <div class="invalid-feedback">
-                                    Por favor ingrese el número de documento.
+                                <div class="flex input-group">
+                                    <input type="text" name="document" id="document" placeholder="Documento" required>
                                 </div>
-                            </div>
 
-                            <!-- Username -->
-                            <div class="col-md-6 mb-3">
-                                <label for="username" class="form-label">USUARIO</label>
-                                <input type="text" class="form-control" id="username" name="username"
-                                    placeholder="Nombre de usuario" required>
-                                <div class="invalid-feedback">
-                                    Por favor ingrese el nombre de usuario.
+                                <div class="flex input-group">
+                                    <input type="text" name="username" id="username" placeholder="Usuario" required>
                                 </div>
-                            </div>
 
-                            <!-- Password -->
-                            <div class="col-md-6 mb-3">
-                                <label for="password" class="form-label">CONTRASEÑA</label>
-                                <div class="input-group">
-                                    <input type="password" class="form-control" id="password" name="password"
-                                        placeholder="Contraseña" required>
-                                    <button class="btn btn-outline-secondary" type="button" id="togglePassword">
-                                        <i class="fas fa-eye" id="toggleIcon"></i>
-                                    </button>
+                                <div class="flex input-group">
+                                    <input type="password" name="password" id="password" placeholder="Contraseña"
+                                        required>
                                 </div>
-                                <div class="invalid-feedback">
-                                    Por favor ingrese una contraseña.
-                                </div>
-                            </div>
 
+                                <!-- Selección de rol explícita -->
+                                <div class="container mt-3">
+                                    <div class="btn-group flex justify-content-around" role="group" aria-label="Tipo de usuario">
+                                        <input type="radio" class="btn-check" name="tipoUsuario" id="docente"
+                                            value="docente" autocomplete="off" checked />
+                                        <label class="btn btn-outline-danger" for="docente">DOCENTE</label>
 
-                            <!-- Role Selection -->
-                            <div class="col-12 mb-4">
-                                <label class="form-label">ROL</label>
-                                <div class="role-selection">
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="role" id="role_teacher"
-                                            value="TEACHER" checked>
-                                        <label class="form-check-label" for="role_teacher">
-                                            DOCENTE
-                                        </label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="role" id="role_admin"
-                                            value="ADMIN">
-                                        <label class="form-check-label" for="role_admin">
-                                            ADMINISTRADOR
-                                        </label>
+                                        <input type="radio" class="btn-check" name="tipoUsuario" id="admin"
+                                            value="administrador" autocomplete="off" />
+                                        <label class="btn btn-outline-danger" for="admin">ADMINISTRADOR</label>
                                     </div>
                                 </div>
-                            </div>
-
-                            <!-- Submit Button -->
-                            <div class="col-12 text-center">
-                                <button type="submit" class="btn btn-primary btn-lg px-5" id="submitBtn">
-                                    <i class="fas fa-save me-2"></i>Guardar
-                                </button>
                             </div>
                         </div>
-                    </form>
-                </div>
+                    </div>
+                    <button type="submit" class="btn-admin">GUARDAR</button>
+                </form>
             </div>
         </div>
     </div>
 </div>
 
+<!-- Sidebar Aside Component -->
+{% include "sidebar_aside.html" %}
+
 <!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+{#
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> #}
 <!-- Font Awesome -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+{#
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script> #}
 <!-- Custom JS -->
 <script src="{{ url_for('static', filename='js/teachers_management.js') }}"></script>
 {% endblock %}

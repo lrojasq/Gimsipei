@@ -1,0 +1,65 @@
+
+<!-- Sidebar Menu Component -->
+<!-- Admin Menu -->
+{% if user.role == "ADMIN" %}
+    <div class="specialities_category flex">
+        <div class="content-admin flex flex-column">
+            <h2>Administrar</h2>
+            <div class="flex">
+                <a href="{{ url_for('users.teachers_management') }}">
+                    <div class="box-menu clases-hover">
+                        <img src="{{ url_for('static', filename='images/svg/clases.svg') }}" alt="Docentes" style="width: 80px; height: 80px;">
+                        <p>Docente</p>
+                        <div class="barra barra-clases"></div>
+                    </div>
+                </a>
+                <a href="{{ url_for('courses.courses_management') }}">
+                    <div class="box-menu libros-hover">
+                        <img src="{{ url_for('static', filename='images/svg/libros.svg') }}" alt="Cursos" style="width: 80px; height: 60px;">
+                        <p>Cursos</p>
+                        <div class="barra barra-libros"></div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+<!-- Teacher Menu -->
+{% if user.role == "TEACHER" %}
+    <div class="specialities_category flex">
+        <div class="content-admin flex flex-column">
+            <h2>Administrar</h2>
+            <div class="flex">
+                <a href="{{ url_for('admin.clases_recursos') }}">
+                    <div class="box-menu clases-hover">
+                        <img src="{{ url_for('static', filename='images/svg/clases.svg') }}" alt="Clases y recursos" style="width: 80px; height: 80px;">
+                        <p>Clases y recursos</p>
+                        <div class="barra barra-clases"></div>
+                    </div>
+                </a>
+                <a href="{{ url_for('admin.evaluaciones') }}">
+                    <div class="box-menu libros-hover">
+                        <img src="{{ url_for('static', filename='images/svg/evaluaciones.svg') }}" alt="Evaluaciones" style="width: 80px; height: 60px;">
+                        <p>Evaluaciones</p>
+                        <div class="barra barra-libros"></div>
+                    </div>
+                </a>
+                <a href="{{ url_for('admin.libros') }}">
+                    <div class="box-menu libros-hover">
+                        <img src="{{ url_for('static', filename='images/svg/libros.svg') }}" alt="Libros" style="width: 80px; height: 60px;">
+                        <p>Libros</p>
+                        <div class="barra barra-libros"></div>
+                    </div>
+                </a>
+                <a href="{{ url_for('admin.calificaciones') }}">
+                    <div class="box-menu libros-hover">
+                        <img src="{{ url_for('static', filename='images/svg/calificaciones.svg') }}" alt="Calificaciones" style="width: 80px; height: 60px;">
+                        <p>Calificaciones</p>
+                        <div class="barra barra-libros"></div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+{% endif %}

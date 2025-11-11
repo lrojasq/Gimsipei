@@ -53,21 +53,9 @@
                         <div class="col-md-9">
                             <h4 class="mb-3">{{ course.name }}</h4>
                             <div class="row">
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <p class="mb-1"><strong>Año Académico:</strong></p>
                                     <span class="badge bg-info">{{ course.academic_year }}</span>
-                                </div>
-                                <div class="col-md-4">
-                                    <p class="mb-1"><strong>Período:</strong></p>
-                                    <span class="badge bg-secondary">Período {{ course.period }}</span>
-                                </div>
-                                <div class="col-md-4">
-                                    <p class="mb-1"><strong>Estado:</strong></p>
-                                    {% if course.is_active %}
-                                    <span class="badge bg-success">Activo</span>
-                                    {% else %}
-                                    <span class="badge bg-danger">Inactivo</span>
-                                    {% endif %}
                                 </div>
                             </div>
                         </div>
@@ -139,8 +127,11 @@
                                             <td>{{ student.document }}</td>
                                             <td>{{ student.enrolled_at[:10] }}</td>
                                             <td class="text-center">
-                                                <form method="POST" action="{{ url_for('courses.remove_student_from_course', course_id=course.id, student_id=student.id) }}" class="d-inline">
-                                                    <button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('¿Está seguro que desea remover a {{ (student.full_name or student.username)|e }} del curso?');">
+                                                <form method="POST"
+                                                    action="{{ url_for('courses.remove_student_from_course', course_id=course.id, student_id=student.id) }}"
+                                                    class="d-inline">
+                                                    <button type="submit" class="btn btn-outline-danger btn-sm"
+                                                        onclick="return confirm('¿Está seguro que desea remover a {{ (student.full_name or student.username)|e }} del curso?');">
                                                         <i class="fas fa-user-minus"></i>
                                                     </button>
                                                 </form>
@@ -163,7 +154,8 @@
                         <div class="tab-pane fade" id="subjects" role="tabpanel">
                             <div class="d-flex justify-content-between align-items-center mb-3">
                                 <h5 class="mb-0">Materias Asignadas</h5>
-                                <a href="{{ url_for('subjects.create_subject', course_id=course.id) }}" class="btn btn-primary btn-sm">
+                                <a href="{{ url_for('subjects.create_subject', course_id=course.id) }}"
+                                    class="btn btn-primary btn-sm">
                                     <i class="fas fa-plus me-2"></i>Agregar Materia
                                 </a>
                             </div>
@@ -196,8 +188,11 @@
                                             <td>{{ subject.teacher_name }}</td>
                                             <td>{{ subject.assigned_at[:10] }}</td>
                                             <td class="text-center">
-                                                <form method="POST" action="{{ url_for('courses.remove_subject_from_course', course_id=course.id, subject_id=subject.subject_id, teacher_id=subject.teacher_id) }}" class="d-inline">
-                                                    <button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('¿Está seguro que desea remover la materia asignada a {{ subject.teacher_name|e }}?');">
+                                                <form method="POST"
+                                                    action="{{ url_for('courses.remove_subject_from_course', course_id=course.id, subject_id=subject.subject_id, teacher_id=subject.teacher_id) }}"
+                                                    class="d-inline">
+                                                    <button type="submit" class="btn btn-outline-danger btn-sm"
+                                                        onclick="return confirm('¿Está seguro que desea remover la materia asignada a {{ subject.teacher_name|e }}?');">
                                                         <i class="fas fa-book-minus"></i>
                                                     </button>
                                                 </form>

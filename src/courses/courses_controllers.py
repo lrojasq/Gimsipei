@@ -1,5 +1,5 @@
 from flask import Request, Response, flash, redirect, render_template, url_for
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt
 from pydantic import ValidationError
 
 from src.models.user import UserRole
@@ -11,20 +11,28 @@ from .service import (
     get_course_service,
     get_courses_service,
     update_course_service,
+    get_available_course_names,
+    get_teacher_classes_by_period_service,
 )
 from .validation import CourseCreateSchema, CourseUpdateSchema
+from .service import get_course_subjects_service
+from src.subject.service import (
+    get_teachers_for_form_service,
+    get_available_subject_names,
+)
 
 
 # View to manage courses
 @jwt_required()
 @role_required([UserRole.ADMIN])
-def courses_management_controller(request: Request) -> Response:
+def courses_management_controller(_: Request) -> Response:
     """View to manage courses"""
+    user_role = get_jwt().get("role").lower()
     try:
         courses, total = get_courses_service()
-        # Load subjects for each course
-        from .service import get_course_subjects_service
-
+        available_courses = get_available_course_names()
+        teachers = get_teachers_for_form_service()
+        available_subjects = get_available_subject_names()
         courses_with_subjects = []
 
         for course in courses:
@@ -32,10 +40,7 @@ def courses_management_controller(request: Request) -> Response:
             course_dict = {
                 "id": course.id,
                 "academic_year": course.academic_year,
-                "period": course.period,
-                "grade_level": course.grade_level,
                 "name": course.name,
-                "is_active": course.is_active,
                 "created_by": course.created_by,
                 "created_at": course.created_at,
                 "updated_at": course.updated_at,
@@ -44,11 +49,25 @@ def courses_management_controller(request: Request) -> Response:
             courses_with_subjects.append(course_dict)
 
         return render_template(
-            "admin/courses_management.html", courses=courses_with_subjects, total=total
+            "admin/courses_management.html",
+            courses=courses_with_subjects,
+            total=total,
+            user={"role": user_role},
+            available_courses=available_courses,
+            teachers=teachers,
+            available_subjects=available_subjects,
         )
     except Exception as e:
         flash(f"Error al cargar la lista de cursos: {str(e)}", "danger")
-        return render_template("admin/courses_management.html", courses=[], total=0)
+        return render_template(
+            "admin/courses_management.html",
+            courses=[],
+            total=0,
+            user={"role": user_role},
+            available_courses=[],
+            teachers=[],
+            available_subjects=[],
+        )
 
 
 @jwt_required()
@@ -56,7 +75,7 @@ def courses_management_controller(request: Request) -> Response:
 def create_course_controller(request: Request) -> Response:
     """View to create a new course"""
     if request.method == "GET":
-        return render_template("admin/create_course.html")
+        return redirect(url_for("courses.courses_management"))
 
     try:
         data = request.form.to_dict()
@@ -68,19 +87,19 @@ def create_course_controller(request: Request) -> Response:
             return redirect(url_for("courses.courses_management"))
         elif status_code == 400:
             flash(
-                "Ya existe un curso con ese nombre en el mismo año y período", "danger"
+                "Ya existe un curso con ese nombre en el mismo año académico", "danger"
             )
-            return render_template("admin/create_course.html")
+            return redirect(url_for("courses.courses_management"))
         else:
             flash("Error al crear el curso", "danger")
-            return render_template("admin/create_course.html")
+            return redirect(url_for("courses.courses_management"))
 
     except ValidationError as e:
         flash(f"Datos inválidos: {str(e)}", "danger")
-        return render_template("admin/create_course.html")
+        return redirect(url_for("courses.courses_management"))
     except Exception as e:
         flash(f"Error interno: {str(e)}", "danger")
-        return render_template("admin/create_course.html")
+        return redirect(url_for("courses.courses_management"))
 
 
 @jwt_required()
@@ -214,7 +233,7 @@ def remove_subject_from_course_controller(
     try:
         from .service import remove_subject_from_course_service
 
-        result, status_code = remove_subject_from_course_service(
+        _, status_code = remove_subject_from_course_service(
             course_id, subject_id, teacher_id, request
         )
 
@@ -227,4 +246,46 @@ def remove_subject_from_course_controller(
     except Exception as e:
         flash(f"Error interno: {str(e)}", "danger")
 
-    return redirect(url_for("courses.course_detail", course_id=course_id))
+    return redirect(url_for("courses.courses_management"))
+
+
+@jwt_required()
+@role_required([UserRole.TEACHER, UserRole.ADMIN])
+def teacher_classes_controller(request: Request) -> Response:
+    """Vista para que los teachers vean sus clases organizadas por período"""
+    user_id = get_jwt_identity()
+    user_role = get_jwt().get("role")
+    
+    try:
+        # Obtener el período de la query string, por defecto 1
+        period = request.args.get("period", 1, type=int)
+        
+        # Validar que el período esté entre 1 y 4
+        if period < 1 or period > 4:
+            period = 1
+        
+        # Obtener las clases del teacher para el período
+        courses, status_code = get_teacher_classes_by_period_service(user_id, period)
+        
+        if status_code != 200:
+            flash("Error al cargar las clases", "danger")
+            courses = []
+        
+        # Obtener información del usuario actual
+        from src.users.service import get_user_service
+        user_data, _ = get_user_service(user_id, request)
+        
+        return render_template(
+            "teacher/teacher_classes.html",
+            courses=courses,
+            current_period=period,
+            user={"role": user_role.lower(), "id": user_id},
+        )
+    except Exception as e:
+        flash(f"Error al cargar las clases: {str(e)}", "danger")
+        return render_template(
+            "teacher/teacher_classes.html",
+            courses=[],
+            current_period=1,
+            user={"role": user_role.lower(), "id": user_id},
+        )

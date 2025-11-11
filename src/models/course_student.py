@@ -1,5 +1,5 @@
 from datetime import datetime
-from sqlalchemy import Column, Integer, DateTime, ForeignKey, Boolean
+from sqlalchemy import Column, Integer, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
 from src.database.database import Base
 
@@ -13,7 +13,6 @@ class CourseStudent(Base):
     course_id = Column(Integer, ForeignKey("courses.id"), nullable=False)
     student_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     enrolled_at = Column(DateTime, default=datetime.utcnow)
-    is_active = Column(Boolean, default=True)
 
     # Relationships
     course = relationship("Course", back_populates="students")

@@ -1,0 +1,63 @@
+<!-- Lateral Sidebar Module -->
+<aside class="menu_aside flex">
+    <ul class="aside_list flex flex-column">
+        {% if user.role == "admin" %}
+            <li>
+                <a href="{{ url_for('admin.dashboard') }}" title="Inicio">
+                    <img src="{{ url_for('static', filename='images/svg/inicio.svg') }}" alt="Inicio"
+                        style="width: 70px; height: 70px;">
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('users.teachers_management') }}" title="Docentes">
+                    <img src="{{ url_for('static', filename='images/svg/clases.svg') }}" alt="Docentes"
+                        style="width: 70px; height: 70px;">
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('courses.courses_management') }}" title="Cursos">
+                    <img src="{{ url_for('static', filename='images/svg/libros.svg') }}" alt="Cursos"
+                        style="width: 70px; height: 50px;">
+                </a>
+            </li>
+        {% elif user.role == "teacher" %}
+            <li>
+                <a href="{{ url_for('courses.teacher_classes') }}" title="Mis Clases y recursos">
+                    <img src="{{ url_for('static', filename='images/svg/clases.svg') }}" alt="Clases y recursos"
+                         style="width: 70px; height: 70px;">
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('admin.evaluaciones') }}" title="Mis Evaluaciones">
+                    <img src="{{ url_for('static', filename='images/svg/evaluaciones.svg') }}" alt="Evaluaciones"
+                         style="width: 70px; height: 70px;">
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('admin.calificaciones') }}" title="Calificaciones">
+                    <img src="{{ url_for('static', filename='images/svg/calificaciones.svg') }}" alt="Calificaciones"
+                         style="width: 55px; height: 70px;">
+                </a>
+            </li>
+        {% elif user.role == "student" %}
+            <li>
+                <a href="{{ url_for('admin.libros') }}" title="Mis Libros">
+                    <img src="{{ url_for('static', filename='images/svg/libros.svg') }}" alt="Libros"
+                         style="width: 70px; height: 50px;">
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('admin.evaluaciones') }}" title="Mis Evaluaciones">
+                    <img src="{{ url_for('static', filename='images/svg/evaluaciones.svg') }}" alt="Evaluaciones"
+                         style="width: 70px; height: 70px;">
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('admin.calificaciones') }}" title="Mis Calificaciones">
+                    <img src="{{ url_for('static', filename='images/svg/calificaciones.svg') }}" alt="Calificaciones"
+                         style="width: 55px; height: 70px;">
+                </a>
+            </li>
+        {% endif %}
+    </ul>
+</aside>

@@ -12,6 +12,13 @@ from .teachers_controllers import (
     edit_teacher_controller,
     delete_teacher_controller,
 )
+from .students_controllers import (
+    course_students_controller,
+    create_student_controller,
+    edit_student_controller,
+    delete_student_controller,
+    student_tasks_controller,
+)
 
 users_bp = Blueprint("users", __name__, url_prefix="/users")
 
@@ -57,10 +64,38 @@ def edit_teacher(teacher_id):
     return edit_teacher_controller(teacher_id, request)
 
 
-<<<<<<< HEAD
-@users_bp.route("/teachers/<int:teacher_id>/delete", methods=["GET","POST"])
-=======
 @users_bp.route("/teachers/<int:teacher_id>/delete", methods=["POST"])
->>>>>>> feature
 def delete_teacher(teacher_id):
     return delete_teacher_controller(teacher_id, request)
+
+
+# Routes for students management by course
+@users_bp.route("/courses/<int:course_id>/students", methods=["GET"])
+def course_students(course_id):
+    return course_students_controller(course_id, request)
+
+
+@users_bp.route("/courses/<int:course_id>/students/create", methods=["GET", "POST"])
+def create_student(course_id):
+    return create_student_controller(course_id, request)
+
+
+@users_bp.route(
+    "/courses/<int:course_id>/students/<int:student_id>/edit", methods=["GET", "POST"]
+)
+def edit_student(course_id, student_id):
+    return edit_student_controller(course_id, student_id, request)
+
+
+@users_bp.route(
+    "/courses/<int:course_id>/students/<int:student_id>/delete", methods=["POST"]
+)
+def delete_student(course_id, student_id):
+    return delete_student_controller(course_id, student_id, request)
+
+
+@users_bp.route(
+    "/courses/<int:course_id>/students/<int:student_id>/tasks", methods=["GET"]
+)
+def student_tasks(course_id, student_id):
+    return student_tasks_controller(course_id, student_id, request)

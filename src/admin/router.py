@@ -1,5 +1,11 @@
 from flask import Blueprint, request
-from .controllers import dashboard_controller, clases_recursos_controller, evaluaciones_controller, libros_controller, calificaciones_controller
+from .controllers import (
+    dashboard_controller,
+    clases_recursos_controller,
+    evaluaciones_controller,
+    libros_controller,
+    calificaciones_controller,
+)
 
 admin_bp = Blueprint("admin", __name__, url_prefix="/admin")
 
