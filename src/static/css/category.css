@@ -550,7 +550,11 @@ hr.libros_br {
     background-color: var(--calificaciones);
     color: var(--light-color);
 }
-
+@media (max-width:1600px) {
+    .specialities_category.cursos.grades.flex.flex-column{
+        max-height: 80vh;
+    }
+}
 @media (max-width:1024px) {
     .data_categoty {
         text-align: center;

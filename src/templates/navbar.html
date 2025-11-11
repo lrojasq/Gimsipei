@@ -1,6 +1,31 @@
+<link href="{{ url_for('static', filename='css/menu.css') }}" rel="stylesheet">
 {% block menu %}
 
 <style>
+  :root {
+    --primary-color: #007bff;
+    --secondary-color: #6c757d;
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+    --info-color: #17a2b8;
+    --light-color: #ffffff;
+    --dark-color: #343a40;
+    --border-color: #00c2e7;
+    --gray-light: #f4f4f4;
+    --clases: #23ccc3;
+    --clases-active: #16b7ab;
+    --recursos: #f7cb52;
+    --recursos-active: #e5ab1a;
+    --evaluaciones: #f48d53;
+    --evaluaciones-active: #e55d1a;
+    --libros: #ea6ef4;
+    --libros-active: #d944ea;
+    --calificaciones: #a270f2;
+    --calificaciones-active: #6c43d1;
+    --admin: #f94e4e;
+    --admin-active: #e01e1e;
+}
   html,
   body {
     margin: 0;
@@ -31,36 +56,6 @@
     max-width: 800px;
     text-align: left;
   }
-  
-  .mobile-header{
-    position: relative;
-  }
-  .mobile-header:has(+ .teachers_management),
-  .mobile-header:has(+ .courses_management) {
-    background-color: white;
-  }
-  .mobile-header:has(+ .teachers_management):after,
-  .mobile-header:has(+ .courses_management):after{
-    content: "";
-    height: 2px;
-    border-radius: 5px;
-    width: 98%;
-    position: absolute;
-    left: 0px;
-    right: 0px;
-    margin: auto;
-    bottom: 0px;
-    background: red;
-  }
-  .mobile-header:has(+ .teachers_management)  .logo,
-  .mobile-header:has(+ .courses_management) .logo{
-    background-color: red;
-  }
-  .mobile-header:has(+ .teachers_management)  .hamburger-menu span,
-  .mobile-header:has(+ .courses_management) .hamburger-menu span{
-    background-color: gray;
-  }
-
   @media (max-width:1080px) {
     body {
       overflow: auto;
