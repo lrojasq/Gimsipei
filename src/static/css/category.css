@@ -88,10 +88,12 @@ h1 {
     max-height: 90vh;
     overflow: auto;
 }
-.specialities_category:has(form){
+
+.specialities_category:has(form) {
     padding: 0px;
 }
-.specialities_category:has(form) label.btn.btn-outline-danger{
+
+.specialities_category:has(form) label.btn.btn-outline-danger {
     border-radius: 5px;
     width: 40%;
 }
@@ -550,11 +552,107 @@ hr.libros_br {
     background-color: var(--calificaciones);
     color: var(--light-color);
 }
+
+/* modals create  */
+#registroModalClass .modal-dialog.modal-dialog-centered,
+#registroModalCourse .modal-dialog.modal-dialog-centered,
+#registroModalAsignature .modal-dialog.modal-dialog-centered,
+#registroModalQuiz .modal-dialog.modal-dialog-centered {
+    max-width: 50%;
+}
+
+#registroModalClass .title-modal {
+    color: var(--clases);
+}
+
+#registroModalCourse .title-modal,
+#registroModalAsignature .title-modal {
+    color: var(--admin-active);
+}
+
+#registroModalQuiz .title-modal {
+    color: var(--evaluaciones-active);
+}
+
+#registroModalClass .modal-header,
+#registroModalCourse .modal-header,
+#registroModalAsignature .modal-header,
+#registroModalQuiz .modal-header {
+    border: none;
+}
+
+#registroModalClass button.btn,
+#registroModalCourse button.btn,
+#registroModalAsignature button.btn,
+#registroModalQuiz button.btn {
+    padding: 0.5rem 4rem;
+    border-radius: 10px;
+    font-weight: bold;
+}
+
+#registroModalClass button.btn.btn-danger {
+    background-color: var(--clases);
+    background: var(--clases);
+    color: #fff;
+    border: 1px solid var(--clases);
+}
+
+#registroModalCourse button.btn.btn-danger,
+#registroModalAsignature button.btn.btn-danger {
+    background-color: var(--admin-active);
+    background: var(--admin-active);
+    color: #fff;
+    border: 1px solid var(--admin-active);
+}
+
+#registroModalQuiz button.btn.btn-danger {
+    background-color: var(--evaluaciones-active);
+    background: var(--evaluaciones-active);
+    color: #fff;
+    border: 1px solid var(--evaluaciones-active);
+}
+
+#registroModalClass .modal-content,
+#registroModalCourse .modal-content,
+#registroModalAsignature .modal-content,
+#registroModalQuiz .modal-content {
+    padding: 1rem 2rem;
+    border-radius: 10px;
+}
+
+#registroModalClass .modal-header,
+#registroModalCourse .modal-header,
+#registroModalAsignature .modal-header,
+#registroModalQuiz .modal-header {
+    padding: 1rem 0px;
+}
+
+#registroModalClass .modal-body,
+#registroModalCourse .modal-body,
+#registroModalAsignature .modal-body,
+#registroModalQuiz .modal-body {
+    padding: 0px;
+}
+
+#registroModalClass .form-control:valid {
+    border-color: var(--clases)
+}
+
+#registroModalCourse .form-control:valid,
+#registroModalAsignature .form-control:valid {
+    border-color: var(--admin-active)
+}
+
+#registroModalQuiz .form-control:valid {
+    border-color: var(--evaluaciones-active)
+}
+
 @media (max-width:1600px) {
-    .specialities_category.cursos.grades.flex.flex-column{
+    .specialities_category.cursos.grades.flex.flex-column {
         max-height: 80vh;
     }
 }
+
 @media (max-width:1024px) {
     .data_categoty {
         text-align: center;
@@ -591,6 +689,13 @@ hr.libros_br {
     .filter {
         flex-direction: row !important;
         gap: 1rem;
+    }
+
+    #registroModalClass .modal-dialog.modal-dialog-centered,
+    #registroModalCourse .modal-dialog.modal-dialog-centered,
+    #registroModalAsignature .modal-dialog.modal-dialog-centered,
+    #registroModalQuiz .modal-dialog.modal-dialog-centered {
+        max-width: 90%;
     }
 }
 
@@ -650,7 +755,8 @@ hr.libros_br {
     .book {
         max-width: 45%;
     }
-    .grade_list li span{
+
+    .grade_list li span {
         font-size: .5rem;
     }
 }

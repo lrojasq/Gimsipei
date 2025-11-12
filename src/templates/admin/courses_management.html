@@ -3,21 +3,21 @@
 {% block title %}Gestión de Cursos{% endblock %}
 
 {% block extra_css %}
-    <link href="{{ url_for('static', filename='css/menu.css') }}" rel="stylesheet">
-    <link href="{{ url_for('static', filename='css/category.css') }}" rel="stylesheet">
-    <link href="{{ url_for('static', filename='css/admin.css') }}" rel="stylesheet">
-    <link href="{{ url_for('static', filename='css/courses_management.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/menu.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/category.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/admin.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/courses_management.css') }}" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
-    {% block menu %}{% endblock %}
+{% block menu %}{% endblock %}
 
-    {# Flash Messages #}
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            {% for category, message in messages %}
-                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-                    <i class="fas fa-
+{# Flash Messages #}
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category, message in messages %}
+<div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+    <i class="fas fa-
                         {% if category == 'success' %}
                             check-circle
                         {% elif category == 'danger' %}
@@ -25,95 +25,91 @@
                         {% else %}
                             info-circle
                         {% endif %} me-2"></i>
-                    {{ message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
+    {{ message }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endfor %}
+{% endif %}
+{% endwith %}
 
-    <div class="container_category flex admin_category courses_management">
-        {# Inicio Cursos #}
-        <div class="specialities_category cursos grades flex flex-column">
-            <div class="flex header-cursos">
-                <div class="items-header">
-                    <div class="flex">
-                        <span>Cursos</span>
-                        <span>Materias</span>
-                    </div>
-                    <span>Acciones</span>
+<div class="container_category flex admin_category courses_management">
+    {# Inicio Cursos #}
+    <div class="specialities_category cursos grades flex flex-column">
+        <div class="flex header-cursos">
+            <div class="items-header">
+                <div class="flex">
+                    <span>Cursos</span>
+                    <span>Materias</span>
                 </div>
+                <span>Acciones</span>
             </div>
-            <div class="content-cursos">
-                {% if courses %}
-                    <ul class="flex flex-column list-cursos">
-                        {% for course in courses %}
-                            <li>
-                                <span class="grado">
-                                    {{ course.name }} <i class="fas fa-chevron-down"></i>
-                                </span>
-                                <div class="flex flex-column content-materias">
-                                    <ul class="flex flex-column list-materias">
-                                        {% for subject in course.subjects %}
-                                            <li class="flex">
-                                                <span></span>
-                                                <span>
-                                                    {{ subject.subject_name }} - {{ subject.teacher_name }}
-                                                </span>
-                                                <span class="flex actions">
-                                                    <a href="#"
-                                                       class="open-edit-subject-modal"
-                                                       data-subject-id="{{ subject.subject_id }}"
-                                                       data-subject-name="{{ subject.subject_name }}">
-                                                        Editar
-                                                    </a>
-                                                    <a href="#"
-                                                       class="open-delete-subject-modal"
-                                                       data-course-id="{{ course.id }}"
-                                                       data-subject-id="{{ subject.subject_id }}"
-                                                       data-teacher-id="{{ subject.teacher_id }}"
-                                                       data-subject-name="{{ subject.subject_name }}"
-                                                       data-teacher-name="{{ subject.teacher_name }}">
-                                                        <i class="fas fa-trash"></i>
-                                                    </a>
-                                                </span>
-                                            </li>
-                                        {% endfor %}
-                                    </ul>
-                                    <span class="flex add">
-                                        <a href="#"
-                                           class="btn btn-outline-danger add-subject-btn open-create-subject-modal"
-                                           data-course-id="{{ course.id }}">
-                                            AÑADIR
-                                        </a>
-                                    </span>
-                                </div>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                {% else %}
-                    <ul class="flex flex-column list-cursos">
-                        <li>
-                            <span class="grado">No hay cursos registrados</span>
-                        </li>
-                    </ul>
-                {% endif %}
-            </div>
-            <span class="flex add grados">
-                <a href="#" id="openCreateCourseModal">AÑADIR</a>
-            </span>
         </div>
-
-        {# Sidebar Menu Component #}
-        {% include "sidebar_aside.html" %}
+        <div class="content-cursos">
+            {% if courses %}
+            <ul class="flex flex-column list-cursos">
+                {% for course in courses %}
+                <li>
+                    <span class="grado">
+                        {{ course.name }} <i class="fas fa-chevron-down"></i>
+                    </span>
+                    <div class="flex flex-column content-materias">
+                        <ul class="flex flex-column list-materias">
+                            {% for subject in course.subjects %}
+                            <li class="flex">
+                                <span></span>
+                                <span>
+                                    {{ subject.subject_name }} - {{ subject.teacher_name }}
+                                </span>
+                                <span class="flex actions">
+                                    <a href="#" class="open-edit-subject-modal"
+                                        data-subject-id="{{ subject.subject_id }}"
+                                        data-subject-name="{{ subject.subject_name }}">
+                                        Editar
+                                    </a>
+                                    <a href="#" class="open-delete-subject-modal" data-course-id="{{ course.id }}"
+                                        data-subject-id="{{ subject.subject_id }}"
+                                        data-teacher-id="{{ subject.teacher_id }}"
+                                        data-subject-name="{{ subject.subject_name }}"
+                                        data-teacher-name="{{ subject.teacher_name }}">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </span>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        <span class="flex add">
+                            <a href="#" class="btn btn-outline-danger add-subject-btn open-create-subject-modal"
+                                data-course-id="{{ course.id }}">
+                                AÑADIR
+                            </a>
+                        </span>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <ul class="flex flex-column list-cursos">
+                <li>
+                    <span class="grado">No hay cursos registrados</span>
+                </li>
+            </ul>
+            {% endif %}
+        </div>
+        <span class="flex add grados">
+            <a href="#" id="openCreateCourseModal">AÑADIR</a>
+        </span>
     </div>
 
-    {# Modales superpuestos a la página #}
-    {% include "admin/create_course.html" %}
-    {% include "admin/create_subject.html" %}
-    {% include "admin/edit_subject.html" %}
-    {% include "delete_confirmation_modal.html" %}
+    {# Sidebar Menu Component #}
+    {% include "sidebar_aside.html" %}
+</div>
 
-    {# Custom JS #}
-    <script src="{{ url_for('static', filename='js/courses_management.js') }}"></script>
+{# Modales superpuestos a la página #}
+{% include "admin/create_course.html" %}
+{% include "admin/create_subject.html" %}
+{% include "admin/edit_subject.html" %}
+{% include "delete_confirmation_modal.html" %}
+
+{# Custom JS #}
+<script src="{{ url_for('static', filename='js/courses_management.js') }}"></script>
 {% endblock %}

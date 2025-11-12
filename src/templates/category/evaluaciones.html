@@ -145,7 +145,60 @@
                 </div>
             </div>
         </div>
+     <!-- Botón para abrir el modal evaluacion-->
+        <div class="container mt-4 text-center">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registroModalQuiz">
+                Crear clase
+            </button>
+        </div>
+    </div>
 
+     <!-- Modal crear clase -->
+    <div class="modal fade" id="registroModalQuiz" tabindex="-1" aria-labelledby="registroModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header text-gray">
+                    <h5 class="modal-title title-modal" id="registroModalLabel">
+                        CREAR CLASE
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+
+                    <!-- Campos del formulario -->
+                    <form>
+                        <input type="number" class="form-control mb-3" placeholder="Número de clases" required />
+
+                        <input type="text" class="form-control mb-3" placeholder="Título" required />
+
+                        <input type="file" class="form-control mb-3" placeholder="Agregar portada" accept="image/*" />
+                        
+                        <textarea class="form-control mb-3" placeholder="Descripción" rows="3" required></textarea>
+
+
+                        <select class="form-select mb-3" required>
+                            <option value="">Seleccione un periodo</option>
+                            <option value="1">Periodo 1</option>
+                            <option value="2">Periodo 2</option>
+                            <option value="3">Periodo 3</option>
+                            <option value="4">Periodo 4</option>
+                        </select>
+                    </form>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        Cancelar
+                    </button>
+                    <button type="button" class="btn btn-danger">
+                        Guardar
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
     <!-- Fin EXAMENES -->
 
