@@ -22,8 +22,21 @@
             </li>
         {% elif user.role == "teacher" %}
             <li>
-                <a href="{{ url_for('admin.clases_recursos') }}" title="Mis Clases y recursos">
+                <a href="{{ url_for('admin.dashboard') }}" title="Inicio">
+                    <img src="{{ url_for('static', filename='images/svg/inicio.svg') }}" alt="Inicio"
+                        style="width: 70px; height: 70px;">
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('classes.teacher_classes_view') }}" title="Mis Clases y recursos">
                     <img src="{{ url_for('static', filename='images/svg/clases.svg') }}" alt="Clases y recursos"
+                         style="width: 70px; height: 70px;">
+                </a>
+            </li>
+            <!-- Resources -->
+            <li>
+                <a href="{{ url_for('resources.resources_view') }}" title="Recursos">
+                    <img src="{{ url_for('static', filename='images/svg/recursos.svg') }}" alt="Recursos"
                          style="width: 70px; height: 70px;">
                 </a>
             </li>

@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Crear Estudiante{% endblock %}
+{% block title %}Editar Estudiante{% endblock %}
 
 {% block extra_css %}
 <link href="{{ url_for('static', filename='css/menu.css') }}" rel="stylesheet">
@@ -14,7 +14,6 @@
 
 <!-- Perfil de Usuario -->
 {% include "user_profile.html" %}
-
 
 <div class="container_category flex admin_category">
     <!-- Flash Messages -->
@@ -31,51 +30,61 @@
     {% endif %}
     {% endwith %}
 
-    <!-- Formulario de Creación -->
+    <!-- Formulario de Edición -->
     <div class="specialities_category flex create-student-container">
         <div class="content-admin flex flex-column">
             <div class="form-crear flex">
-                <form method="POST" action="{{ url_for('users.create_student', course_id=course.id) }}"
-                    class="form-admin flex flex-column">
+                <form method="POST"
+                    action="{{ url_for('users.edit_student', course_id=course.id, student_id=student.id) }}"
+                    class="form-admin flex flex-column" id="editStudentForm">
                     <div class="content-form flex flex-column">
-                        <h2 class="right-text">Crear Usuario</h2>
+                        <h2 class="right-text">Editar Usuario</h2>
                         <div class="flex flex-form">
                             <div class="img-usuario">
                                 <i class="fa-slab-press fa-regular fa-circle-user"></i>
                             </div>
                             <div class="flex flex-column form-crear-content">
                                 <div class="flex input-group">
-                                    <input type="text" name="full_name" id="full_name" placeholder="NOMBRE" required>
+                                    <input type="text" name="full_name" id="full_name" placeholder="NOMBRE"
+                                        value="{{ student.full_name }}" required>
                                 </div>
 
                                 <div class="flex input-group">
-                                    <input type="text" name="document" id="document" placeholder="DOCUMENTO" required>
+                                    <input type="text" name="document" id="document" placeholder="DOCUMENTO"
+                                        value="{{ student.document }}" required>
                                 </div>
 
                                 <div class="flex input-group">
-                                    <input type="text" name="username" id="username" placeholder="USUARIO" required>
+                                    <input type="text" name="username" id="username" placeholder="USUARIO"
+                                        value="{{ student.username }}" required>
                                 </div>
 
                                 <div class="flex input-group">
-                                    <input type="password" name="password" id="password" placeholder="CONTRASEÑA"
-                                        required>
+                                    <input type="password" name="password" id="password"
+                                        placeholder="NUEVA CONTRASEÑA (OPCIONAL)">
                                 </div>
 
                                 <!-- Selección de curso -->
                                 <div class="flex input-group">
-                                    <select name="course_id" id="course_id" class="form-select" required>
-                                        <option value="" selected>CURSO</option>
+                                    <select name="course_id" id="course_id" class="form-select" disabled>
+                                        <option value="">CURSO</option>
                                         {% for course_option in courses %}
-                                        <option value="{{ course_option.id }}">
+                                        <option value="{{ course_option.id }}" {% if course_option.id==course.id
+                                            %}selected{% endif %}>
                                             {{ course_option.name }} - {{ course_option.academic_year }}
                                         </option>
                                         {% endfor %}
                                     </select>
+                                    <small class="text-muted">El curso no se puede cambiar al editar</small>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <button type="submit" class="btn-admin">GUARDAR</button>
+                    <div class="flex" style="gap:12px;">
+                        <a href="{{ url_for('users.course_students', course_id=course.id) }}"
+                            class="btn-admin btn-cancelar">VOLVER</a>
+                        <button type="submit" class="btn-admin">ACTUALIZAR</button>
+                    </div>
                 </form>
             </div>
         </div>

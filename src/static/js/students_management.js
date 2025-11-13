@@ -21,18 +21,12 @@ function showDeleteConfirmationModal(actionUrl) {
     // Establecer la acción del formulario
     form.action = actionUrl;
     
-    // Usar Bootstrap Modal si está disponible
-    if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
-        const bsModal = new bootstrap.Modal(modal);
-        bsModal.show();
-    } else {
-        // Fallback si Bootstrap no está disponible
-        modal.classList.add('show');
-        modal.style.display = 'flex';
-        modal.removeAttribute('aria-hidden');
-        modal.setAttribute('aria-modal', 'true');
-        modal.setAttribute('role', 'dialog');
-    }
+    // Mostrar modal
+    modal.classList.add('show');
+    modal.style.display = 'flex';
+    modal.removeAttribute('aria-hidden');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('role', 'dialog');
 }
 
 // Inicializar listeners del modal (cerrar)
@@ -75,8 +69,33 @@ function initializeDeleteModalListeners() {
 
 // Delete Student Modal Functionality
 function initializeDeleteModal() {
-    // La funcionalidad de eliminar ahora se maneja en el event listener global
-    // para soportar tanto botones <a> como <button>
+    setTimeout(function() {
+        const deleteButtons = document.querySelectorAll('.delete-student');
+        
+        // Abrir modal desde los botones de eliminar
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                const studentId = this.getAttribute('data-student-id');
+                
+                // Obtener el course_id de la URL actual
+                const urlParts = window.location.pathname.split('/');
+                const courseIdIndex = urlParts.indexOf('courses');
+                const courseId = courseIdIndex !== -1 && urlParts[courseIdIndex + 1] ? urlParts[courseIdIndex + 1] : null;
+                
+                if (!courseId) {
+                    console.error('No se pudo obtener el ID del curso');
+                    return;
+                }
+                
+                // Construir la URL de eliminación
+                const deleteUrl = `/users/courses/${courseId}/students/${studentId}/delete`;
+                
+                // Mostrar modal de confirmación con la URL
+                showDeleteConfirmationModal(deleteUrl);
+            });
+        });
+    }, 100);
 }
 
 // Auto Close Alerts
@@ -85,8 +104,19 @@ function initializeAutoCloseAlerts() {
     
     alerts.forEach(alert => {
         setTimeout(() => {
-            const bsAlert = new bootstrap.Alert(alert);
-            bsAlert.close();
+            // Verificar si Bootstrap está disponible
+            if (typeof bootstrap !== 'undefined' && bootstrap.Alert) {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            } else {
+                // Fallback: simplemente ocultar el alert
+                const closeBtn = alert.querySelector('.btn-close');
+                if (closeBtn) {
+                    closeBtn.click();
+                } else {
+                    alert.style.display = 'none';
+                }
+            }
         }, 5000);
     });
 }
@@ -112,40 +142,16 @@ function initializeCreateStudentButton() {
     }
 }
 
-// Initialize View Links (Tareas y Evaluaciones)
+// Initialize View Links (Tareas y Evaluaciones) - Solo para estilos
 function initializeViewLinks() {
+    // Los enlaces ahora son directos en HTML, solo necesitamos asegurar estilos
     const viewLinks = document.querySelectorAll('.view-link-btn');
     
     viewLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            // Obtener el course_id y student_id
-            const urlParts = window.location.pathname.split('/');
-            const courseIdIndex = urlParts.indexOf('courses');
-            const courseId = courseIdIndex !== -1 && urlParts[courseIdIndex + 1] ? urlParts[courseIdIndex + 1] : null;
-            
-            const studentId = this.getAttribute('data-student-id');
-            
-            // Determinar si es Tareas o Evaluaciones basado en el atributo data-type
-            const linkType = this.getAttribute('data-type');
-            
-            if (courseId && studentId) {
-                if (linkType === 'tasks') {
-                    // Redirigir a vista de tareas del estudiante
-                    window.location.href = `/users/courses/${courseId}/students/${studentId}/tasks`;
-                } else if (linkType === 'evaluations') {
-                    // Redirigir a vista de evaluaciones del estudiante
-                    window.location.href = `/users/courses/${courseId}/students/${studentId}/evaluations`;
-                } else {
-                    // Por ahora, solo mostrar un mensaje
-                    alert('Funcionalidad en desarrollo');
-                }
-            } else {
-                console.error('No se pudo obtener el ID del curso o estudiante');
-                // Por ahora, solo mostrar un mensaje
-                alert('Funcionalidad en desarrollo');
-            }
-        });
+        // Asegurar que los enlaces tengan el estilo correcto
+        if (!link.classList.contains('view-link-btn')) {
+            link.classList.add('view-link-btn');
+        }
     });
 }
 
@@ -170,38 +176,6 @@ document.addEventListener('click', function(e) {
         }
     }
     
-    // Handle delete button clicks
-    if (e.target.closest('.delete-student')) {
-        e.preventDefault();
-        const deleteBtn = e.target.closest('.delete-student');
-        const studentId = deleteBtn.getAttribute('data-student-id');
-        const studentName = deleteBtn.getAttribute('data-student-name');
-        
-        // Obtener el course_id de la URL actual
-        const urlParts = window.location.pathname.split('/');
-        const courseIdIndex = urlParts.indexOf('courses');
-        const courseId = courseIdIndex !== -1 && urlParts[courseIdIndex + 1] ? urlParts[courseIdIndex + 1] : null;
-        
-        if (!courseId) {
-            console.error('No se pudo obtener el ID del curso');
-            return;
-        }
-        
-        // Construir la URL de eliminación
-        const deleteUrl = `/users/courses/${courseId}/students/${studentId}/delete`;
-        
-        // Actualizar el mensaje del modal si existe
-        const modal = document.getElementById('deleteConfirmationModal');
-        if (modal) {
-            const modalBody = modal.querySelector('.modal-body p');
-            if (modalBody && studentName) {
-                modalBody.textContent = `¿Está seguro que desea eliminar a ${studentName} de este curso? Esta operación es irreversible.`;
-            }
-        }
-        
-        // Mostrar modal de confirmación con la URL
-        showDeleteConfirmationModal(deleteUrl);
-    }
 });
 
 // Utility Functions
@@ -231,8 +205,13 @@ function showToast(message, type = 'info') {
     
     // Show toast
     const toastElement = toastContainer.lastElementChild;
-    const toast = new bootstrap.Toast(toastElement);
-    toast.show();
+    if (typeof bootstrap !== 'undefined' && bootstrap.Toast) {
+        const toast = new bootstrap.Toast(toastElement);
+        toast.show();
+    } else {
+        // Fallback: mostrar el toast manualmente
+        toastElement.classList.add('show');
+    }
     
     // Remove toast after it's hidden
     toastElement.addEventListener('hidden.bs.toast', function() {

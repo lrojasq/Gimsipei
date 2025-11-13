@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block title %}Clases y recursos{% endblock %}
+
+{% block extra_css %}
+<link href="{{ url_for('static', filename='css/menu.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/category.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/admin.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/classes_resources.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+{% block menu %}{% endblock %}
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category, message in messages %}
+<div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+    <i
+        class="fas fa-{% if category == 'success' %}check-circle{% elif category == 'danger' %}exclamation-triangle{% else %}info-circle{% endif %} me-2"></i>
+    {{ message }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+</div>
+{% endfor %}
+{% endif %}
+{% endwith %}
+
+<div class="container_category flex admin_category">
+    <!-- Inicio Clases y Recursos -->
+    <div class="specialities_category cursos grades flex flex-column">
+        <!-- Header con ícono y título -->
+        <div class="flex header-classes">
+            <div class="classes-icon-wrapper">
+                <img src="{{ url_for('static', filename='images/svg/clases.svg') }}" alt="Clases" class="classes-icon">
+            </div>
+            <div class="classes-title">
+                <h2>Clases y recursos</h2>
+            </div>
+        </div>
+
+        <!-- Tabla de clases por curso -->
+        <div class="classes-table-wrapper">
+            <table class="classes-table">
+                <thead class="table-header-collapsed">
+                    <tr>
+                        <th>Cursos</th>
+                        <th>Asignaturas</th>
+                        <th>Clases</th>
+                        <th>Recursos</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if courses %}
+                    {% for course in courses %}
+                    <tr class="course-row" data-course-id="{{ course.id }}">
+                        <td class="course-name-cell" colspan="4">
+                            <div class="course-header">
+                                <span class="course-name">{{ course.name }}</span>
+                                <button class="expand-btn" data-course-id="{{ course.id }}" aria-label="Expandir curso"
+                                    title="Ver materias del curso">
+                                    <i class="fas fa-chevron-down"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- Fila expandible con las materias del curso -->
+                    <tr class="expandable-row" data-course-id="{{ course.id }}" style="display: none;">
+                        <td colspan="4" class="expanded-content-cell">
+                            <div class="subjects-list">
+                                {% if course.subjects %}
+                                {% for subject in course.subjects %}
+                                <div class="subject-row-expanded">
+                                    <div class="empty-cell"></div>
+                                    <div class="subject-name-cell">
+                                        <span class="subject-name">{{ subject.name }}</span>
+                                    </div>
+                                    <div class="subject-action-cell">
+                                        <button class="add-link-btn add-class-btn" 
+                                                data-course-id="{{ course.id }}"
+                                                data-subject-id="{{ subject.id }}"
+                                                data-subject-name="{{ subject.name }}"
+                                                title="Añadir clase">
+                                            Añadir
+                                        </button>
+                                    </div>
+                                    <div class="subject-action-cell">
+                                        <button class="add-link-btn add-resource-btn" 
+                                                data-course-id="{{ course.id }}"
+                                                data-subject-id="{{ subject.id }}"
+                                                data-subject-name="{{ subject.name }}"
+                                                title="Añadir recurso">
+                                            Añadir
+                                        </button>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                                {% else %}
+                                <div class="empty-subjects">
+                                    <p>No hay materias asignadas a este curso</p>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    {% else %}
+                    <tr class="empty-state-row">
+                        <td colspan="4" class="empty-state-cell">
+                            <p>No hay cursos disponibles.</p>
+                        </td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Sidebar Menu Component -->
+    {% include "sidebar_aside.html" %}
+</div>
+
+<!-- Modales superpuestos a la página -->
+{% include "teacher/create_class_modal.html" %}
+{% include "teacher/create_resource_modal.html" %}
+
+<!-- Custom JS -->
+<script src="{{ url_for('static', filename='js/classes_resources.js') }}"></script>
+{% endblock %}

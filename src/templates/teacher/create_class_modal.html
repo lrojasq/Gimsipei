@@ -1,0 +1,51 @@
+<!-- Modal: Crear Clase -->
+<div class="modal-overlay" id="createClassModal" style="display: none;">
+    <div class="modal-container">
+        <div class="modal-header">
+            <h3>CREAR CLASE</h3>
+            <button class="modal-close" onclick="closeCreateClassModal()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <form id="createClassForm" method="POST" action="/classes/create" enctype="multipart/form-data">
+            <input type="hidden" name="course_id" id="class_course_id">
+            <input type="hidden" name="subject_id" id="class_subject_id">
+
+            <div class="form-group">
+                <input type="number" name="class_number" id="class_number" placeholder="NÚMERO DE CLASE" required
+                    min="1">
+            </div>
+
+            <div class="form-group">
+                <input type="text" name="title" id="class_title" placeholder="TÍTULO" required maxlength="100">
+            </div>
+
+            <div class="form-group">
+                <textarea name="description" id="class_description" placeholder="DESCRIPCIÓN" rows="4"
+                    maxlength="255"></textarea>
+            </div>
+
+            <div class="form-group file-upload-group">
+                <label for="class_cover" class="file-upload-label">
+                    <i class="fas fa-upload"></i> AGREGAR PORTADA
+                </label>
+                <input type="file" name="cover_image" id="class_cover" accept="image/*">
+                <span class="file-name" id="class_cover_name"></span>
+            </div>
+
+            <div class="form-group">
+                <select name="period" class="period-select" required>
+                    <option value="">SELECCIONA PERIODO</option>
+                    <option value="1">PERIODO 1</option>
+                    <option value="2">PERIODO 2</option>
+                    <option value="3">PERIODO 3</option>
+                    <option value="4">PERIODO 4</option>
+                </select>
+            </div>
+
+            <div class="modal-actions">
+                <button type="submit" class="btn-submit">GUARDAR</button>
+            </div>
+        </form>
+    </div>
+</div>

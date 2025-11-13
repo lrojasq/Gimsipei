@@ -1,0 +1,47 @@
+<!-- Modal: Crear Recurso -->
+<div class="modal-overlay" id="createResourceModal" style="display: none;">
+    <div class="modal-container">
+        <div class="modal-header">
+            <h3>CREAR RECURSO</h3>
+            <button class="modal-close" onclick="closeCreateResourceModal()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <form id="createResourceForm" method="POST" action="{{ url_for('resources.create_resource') }}"
+            enctype="multipart/form-data">
+            <input type="hidden" name="course_id" id="resource_course_id">
+            <input type="hidden" name="subject_id" id="resource_subject_id">
+
+            <div class="form-group">
+                <input type="number" name="class_id" id="resource_class_number" placeholder="NÚMERO DE CLASE" required
+                    min="1">
+            </div>
+
+            <div class="form-group">
+                <input type="text" name="title" id="resource_title" placeholder="TÍTULO" required maxlength="200">
+            </div>
+
+            <div class="form-group file-upload-group">
+                <label for="resource_cover_image" class="file-upload-label">
+                    <i class="fas fa-upload"></i> AGREGAR PORTADA
+                </label>
+                <input type="file" name="cover_image" id="resource_cover_image" accept="image/*">
+                <span class="file-name" id="resource_cover_image_name"></span>
+            </div>
+
+            <div class="form-group">
+                <select name="period" class="period-select" required>
+                    <option value="">PERIODO</option>
+                    <option value="1">PERIODO 1</option>
+                    <option value="2">PERIODO 2</option>
+                    <option value="3">PERIODO 3</option>
+                    <option value="4">PERIODO 4</option>
+                </select>
+            </div>
+
+            <div class="modal-actions">
+                <button type="submit" class="btn-submit btn-submit-resource">GUARDAR</button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -56,14 +56,16 @@
                             <td>{{ student.full_name }}</td>
                             <td>{{ student.document }}</td>
                             <td>
-                                <button class="view-link-btn" data-type="tasks" data-student-id="{{ student.id }}">
+                                <a href="{{ url_for('users.student_tasks', course_id=course.id, student_id=student.id) }}" 
+                                   class="view-link-btn">
                                     Ver
-                                </button>
+                                </a>
                             </td>
                             <td>
-                                <button class="view-link-btn" data-type="evaluations" data-student-id="{{ student.id }}">
+                                <a href="#" 
+                                   class="view-link-btn">
                                     Ver
-                                </button>
+                                </a>
                             </td>
                             <td>
                                 <div class="actions-buttons">

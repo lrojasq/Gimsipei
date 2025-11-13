@@ -1,0 +1,950 @@
+/* Classes and Resources Management Styles */
+
+/* Header Classes */
+.header-classes {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+    padding: 0 0 20px 0;
+    border-bottom: 2px solid hsl(0, 0%, 88%);
+}
+
+.classes-icon-wrapper {
+    width: 70px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 20px;
+    flex-shrink: 0;
+}
+
+.classes-icon {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+}
+
+.classes-title {
+    flex: 1;
+}
+
+.classes-title h2 {
+    margin: 0;
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: hsl(0, 0%, 25%);
+}
+
+/* Classes Table Wrapper */
+.classes-table-wrapper {
+    width: 100%;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+/* Classes Table */
+.classes-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+}
+
+.classes-table thead {
+    background: white;
+}
+
+.classes-table thead tr {
+    border-bottom: 2px solid hsl(0, 0%, 88%);
+}
+
+.classes-table thead th {
+    text-align: left;
+    padding: 1rem;
+    color: hsl(0, 0%, 25%);
+    font-weight: 600;
+    font-size: 1.125rem;
+    background: white;
+}
+
+.classes-table tbody tr.course-row {
+    border-bottom: 1px solid hsl(0, 0%, 88%);
+    transition: background-color 0.2s ease;
+}
+
+.classes-table tbody tr.course-row:hover {
+    background-color: hsl(0, 0%, 96%);
+}
+
+.classes-table tbody tr.course-row.expanded {
+    background-color: hsl(190, 20%, 95%);
+}
+
+.classes-table tbody td {
+    padding: 1.5rem 1rem;
+    color: hsl(0, 0%, 25%);
+    font-size: 1rem;
+}
+
+/* Course Name Cell */
+.course-name-cell .flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.course-name {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: hsl(0, 0%, 25%);
+}
+
+/* Expand Button */
+.expand-btn {
+    background: none;
+    border: none;
+    color: hsl(190, 65%, 55%);
+    cursor: pointer;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+}
+
+.expand-btn:hover {
+    background-color: hsl(190, 20%, 92%);
+    color: hsl(190, 65%, 45%);
+}
+
+.expand-btn i {
+    font-size: 1rem;
+    transition: transform 0.3s ease;
+}
+
+.expand-btn.expanded i {
+    transform: rotate(180deg);
+}
+
+/* Count Badges */
+.count-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    height: 40px;
+    padding: 0.5rem 0.75rem;
+    background: hsl(190, 65%, 55%);
+    color: white;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.classes-count .count-badge {
+    background: hsl(190, 65%, 55%);
+}
+
+.resources-count .count-badge {
+    background: hsl(160, 65%, 55%);
+}
+
+/* Expandable Row */
+.expandable-row {
+    display: none;
+    border-bottom: 2px solid hsl(190, 65%, 55%);
+}
+
+.expandable-row.show {
+    display: table-row;
+}
+
+.expandable-row td {
+    padding: 0;
+    background-color: hsl(0, 0%, 98%);
+}
+
+.expanded-content {
+    padding: 2rem;
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Classes Grid */
+.classes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+/* Class Card */
+.class-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.class-card:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+}
+
+.class-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    gap: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid hsl(0, 0%, 92%);
+}
+
+.class-card-header h4 {
+    margin: 0;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: hsl(0, 0%, 25%);
+    flex: 1;
+}
+
+.class-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.25rem 0.75rem;
+    background: hsl(190, 65%, 55%);
+    color: white;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.class-card-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.class-description {
+    margin: 0;
+    font-size: 0.9375rem;
+    color: hsl(0, 0%, 45%);
+    line-height: 1.5;
+}
+
+.class-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.class-subject,
+.class-period {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: hsl(0, 0%, 35%);
+}
+
+.class-subject i,
+.class-period i {
+    color: hsl(190, 65%, 55%);
+    width: 16px;
+}
+
+.class-card-footer {
+    display: flex;
+    gap: 0.75rem;
+    padding-top: 1rem;
+    border-top: 1px solid hsl(0, 0%, 92%);
+}
+
+.class-card-footer .action-btn {
+    flex: 1;
+    background: none;
+    border: 1px solid hsl(0, 0%, 80%);
+    color: hsl(0, 0%, 45%);
+    cursor: pointer;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    border-radius: 6px;
+}
+
+.class-card-footer .action-btn:hover {
+    color: hsl(0, 0%, 25%);
+    background-color: hsl(0, 0%, 96%);
+    border-color: hsl(0, 0%, 60%);
+}
+
+.class-card-footer .action-btn.edit-class:hover {
+    color: hsl(190, 65%, 55%);
+    background-color: hsl(190, 20%, 92%);
+    border-color: hsl(190, 65%, 55%);
+}
+
+.class-card-footer .action-btn.view-resources:hover {
+    color: hsl(160, 65%, 55%);
+    background-color: hsl(160, 20%, 92%);
+    border-color: hsl(160, 65%, 55%);
+}
+
+.class-card-footer .action-btn.delete-class:hover {
+    color: hsl(0, 70%, 60%);
+    background-color: hsl(0, 70%, 96%);
+    border-color: hsl(0, 70%, 60%);
+}
+
+.class-card-footer .action-btn i {
+    font-size: 1rem;
+}
+
+/* Empty Classes State */
+.empty-classes {
+    text-align: center;
+    padding: 3rem 2rem;
+}
+
+.empty-classes p {
+    color: hsl(0, 0%, 45%);
+    font-size: 1rem;
+    margin: 0;
+}
+
+/* Periods Selector */
+.periods-selector {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    padding: 1.5rem 0;
+    margin-top: 1rem;
+}
+
+.period-btn {
+    min-width: 150px;
+    padding: 0.875rem 2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: hsl(0, 0%, 45%);
+    background: white;
+    border: 2px solid hsl(0, 0%, 80%);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.period-btn:hover {
+    color: hsl(190, 65%, 55%);
+    border-color: hsl(190, 65%, 55%);
+    background-color: hsl(190, 20%, 92%);
+}
+
+.period-btn.active {
+    color: white;
+    background: hsl(190, 65%, 55%);
+    border-color: hsl(190, 65%, 55%);
+    box-shadow: 0 4px 12px rgba(25, 201, 188, 0.3);
+}
+
+.period-btn.active:hover {
+    background: hsl(190, 65%, 45%);
+    border-color: hsl(190, 65%, 45%);
+}
+
+/* Empty State */
+.classes-table tbody tr.empty-state-row {
+    border: none;
+}
+
+.classes-table tbody tr.empty-state-row:hover {
+    background-color: white;
+}
+
+.classes-table tbody .empty-state-cell {
+    text-align: center;
+    padding: 3rem 1rem;
+}
+
+.classes-table tbody .empty-state-cell p {
+    color: hsl(0, 0%, 45%);
+    font-size: 1rem;
+    margin: 0;
+}
+
+/* Sidebar */
+.admin_category .menu_aside {
+    background-color: hsl(190, 65%, 55%);
+}
+
+.admin_category .menu_aside .aside_list li a.active,
+.admin_category .menu_aside .aside_list li a:hover {
+    background-color: hsl(190, 65%, 45%);
+}
+
+/* Alert Styles */
+.alert {
+    border: none;
+    border-radius: 15px;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.alert-success {
+    background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+    color: #155724;
+}
+
+.alert-danger {
+    background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+    color: #721c24;
+}
+
+.alert-info {
+    background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
+    color: #0c5460;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .classes-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
+    
+    .periods-selector {
+        flex-wrap: wrap;
+    }
+}
+
+@media (max-width: 768px) {
+    .header-classes {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .classes-icon-wrapper {
+        margin-bottom: 15px;
+        margin-right: 0;
+    }
+    
+    .classes-table-wrapper {
+        overflow-x: auto;
+    }
+    
+    .classes-table {
+        min-width: 600px;
+    }
+    
+    .classes-table thead th,
+    .classes-table tbody td {
+        padding: 0.75rem 0.5rem;
+        font-size: 0.9rem;
+    }
+    
+    .classes-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .periods-selector {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .period-btn {
+        width: 100%;
+    }
+    
+    .expanded-content {
+        padding: 1rem;
+    }
+}
+
+/* Animation for table rows */
+.classes-table tbody tr.course-row {
+    animation: fadeInUp 0.3s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Loading State */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid hsl(0, 0%, 88%);
+    border-top-color: hsl(190, 65%, 55%);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Table header styles */
+.table-header-collapsed th {
+    padding: 1.25rem 2rem;
+    text-align: left;
+    font-weight: 600;
+    color: hsl(0, 0%, 35%);
+    font-size: 1rem;
+    border-bottom: 2px solid hsl(0, 0%, 90%);
+}
+
+/* Course header when collapsed */
+.course-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.course-row .course-name-cell {
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid hsl(0, 0%, 85%);
+}
+
+.course-row:hover {
+    background-color: hsl(0, 0%, 98%);
+}
+
+/* Keep course row visible when expanded */
+.expandable-row.show {
+    display: table-row !important;
+}
+
+/* Add bottom border to expanded course row */
+.course-row.expanded .course-name-cell {
+    border-bottom: 2px solid hsl(0, 0%, 85%);
+}
+
+/* Expanded content - Subjects list */
+.expanded-content-cell {
+    padding: 0 !important;
+    background-color: white;
+    border-bottom: 2px solid hsl(0, 0%, 85%);
+}
+
+.subjects-list {
+    width: 100%;
+}
+
+.subject-row-expanded {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 1.25rem 2rem;
+    background-color: hsl(0, 0%, 98%);
+    border-bottom: 1px solid hsl(0, 0%, 90%);
+    transition: background-color 0.2s ease;
+}
+
+.subject-row-expanded:hover {
+    background-color: hsl(0, 0%, 95%);
+}
+
+.subject-row-expanded:last-child {
+    border-bottom: none;
+}
+
+.subject-row-expanded .empty-cell {
+    width: 20%;
+}
+
+.subject-row-expanded .subject-name-cell {
+    width: 35%;
+}
+
+.subject-row-expanded .subject-name {
+    font-size: 1.05rem;
+    font-weight: 400;
+    color: hsl(0, 0%, 30%);
+}
+
+.subject-row-expanded .subject-action-cell {
+    width: 22.5%;
+    text-align: center;
+}
+
+.add-link-btn {
+    background: none;
+    border: none;
+    color: hsl(190, 65%, 55%);
+    font-weight: 500;
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 0;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.add-link-btn:hover {
+    text-decoration: underline;
+    color: hsl(190, 65%, 45%);
+}
+
+.empty-subjects {
+    padding: 3rem 2rem;
+    text-align: center;
+}
+
+.empty-subjects p {
+    color: hsl(0, 0%, 45%);
+    font-size: 1rem;
+    margin: 0;
+}
+
+/* Modal Overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    backdrop-filter: blur(2px);
+}
+
+.modal-container {
+    background: white;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    animation: modalFadeIn 0.3s ease-out;
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-30px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.modal-header {
+    padding: 2rem 2.5rem 1.5rem;
+    border-bottom: 2px solid hsl(0, 0%, 92%);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: hsl(190, 65%, 55%);
+    letter-spacing: 1px;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: hsl(0, 0%, 45%);
+    cursor: pointer;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+}
+
+.modal-close:hover {
+    background-color: hsl(0, 0%, 96%);
+    color: hsl(0, 0%, 25%);
+}
+
+/* Modal Form Styles - Crear Clase (Turquesa) */
+#createClassModal form {
+    padding: 2.5rem;
+}
+
+#createClassModal .form-group {
+    margin-bottom: 1.5rem;
+}
+
+#createClassModal input[type="number"],
+#createClassModal input[type="text"],
+#createClassModal textarea,
+#createClassModal select {
+    width: 100%;
+    padding: 1rem 1.25rem;
+    border: none;
+    background-color: hsl(190, 65%, 55%);
+    color: white;
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+#createClassModal input::placeholder,
+#createClassModal textarea::placeholder {
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 500;
+}
+
+#createClassModal input:focus,
+#createClassModal textarea:focus,
+#createClassModal select:focus {
+    outline: none;
+    background-color: hsl(190, 65%, 50%);
+    box-shadow: 0 0 0 3px hsla(190, 65%, 55%, 0.2);
+}
+
+#createClassModal textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+#createClassModal select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='white' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    padding-right: 3rem;
+}
+
+#createClassModal .file-upload-group {
+    position: relative;
+}
+
+#createClassModal .file-upload-label {
+    display: block;
+    width: 100%;
+    padding: 1rem 1.25rem;
+    background-color: hsl(190, 65%, 55%);
+    color: white;
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#createClassModal .file-upload-label:hover {
+    background-color: hsl(190, 65%, 50%);
+}
+
+#createClassModal input[type="file"] {
+    display: none;
+}
+
+#createClassModal .file-name {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: hsl(0, 0%, 45%);
+}
+
+#createClassModal .modal-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+#createClassModal .btn-submit {
+    width: 50%;
+    padding: 1rem 2rem;
+    background-color: hsl(190, 65%, 55%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    letter-spacing: 1px;
+}
+
+#createClassModal .btn-submit:hover {
+    background-color: hsl(190, 65%, 45%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(25, 201, 188, 0.3);
+}
+
+/* Modal Form Styles - Crear Recurso (Amarillo/Naranja) */
+#createResourceModal form {
+    padding: 2.5rem;
+}
+
+#createResourceModal .form-group {
+    margin-bottom: 1.5rem;
+}
+
+#createResourceModal input[type="number"],
+#createResourceModal input[type="text"],
+#createResourceModal select {
+    width: 100%;
+    padding: 1rem 1.25rem;
+    border: none;
+    background-color: hsl(40, 85%, 60%);
+    color: white;
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+#createResourceModal input::placeholder {
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 500;
+}
+
+#createResourceModal input:focus,
+#createResourceModal select:focus {
+    outline: none;
+    background-color: hsl(40, 85%, 55%);
+    box-shadow: 0 0 0 3px hsla(40, 85%, 60%, 0.2);
+}
+
+#createResourceModal select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='white' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    padding-right: 3rem;
+}
+
+#createResourceModal .file-upload-label {
+    display: block;
+    width: 100%;
+    padding: 1rem 1.25rem;
+    background-color: hsl(40, 85%, 60%);
+    color: white;
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#createResourceModal .file-upload-label:hover {
+    background-color: hsl(40, 85%, 55%);
+}
+
+#createResourceModal input[type="file"] {
+    display: none;
+}
+
+#createResourceModal .file-name {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: hsl(0, 0%, 45%);
+}
+
+#createResourceModal .modal-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+#createResourceModal .btn-submit-resource {
+    width: 50%;
+    padding: 1rem 3rem;
+    background-color: hsl(40, 85%, 60%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    letter-spacing: 1px;
+}
+
+#createResourceModal .btn-submit-resource:hover {
+    background-color: hsl(40, 85%, 55%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3);
+}
+
+/* Modal Responsive */
+@media (max-width: 768px) {
+    .modal-container {
+        width: 95%;
+        max-height: 95vh;
+    }
+    
+    .modal-header {
+        padding: 1.5rem 1.5rem 1rem;
+    }
+    
+    .modal-header h3 {
+        font-size: 1.25rem;
+    }
+    
+    #createClassModal form,
+    #createResourceModal form {
+        padding: 1.5rem;
+    }
+}
+

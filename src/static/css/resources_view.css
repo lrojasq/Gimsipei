@@ -1,0 +1,394 @@
+/* Resources View Styles - New Design */
+
+.container_category {
+    display: flex;
+    min-height: 100vh;
+    background: #f5f5f5;
+    position: relative;
+}
+
+/* ========== Left Sidebar ========== */
+.resources-sidebar {
+    width: 320px;
+    background: white;
+    padding: 2rem 1.5rem;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.sidebar-icon {
+    width: 50px;
+    height: 50px;
+}
+
+.sidebar-header h3 {
+    font-size: 1.5rem;
+    color: #333;
+    font-weight: 600;
+    margin: 0;
+}
+
+/* Teacher Info */
+.teacher-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.teacher-name {
+    font-size: 1rem;
+    color: #666;
+    margin: 0;
+    font-weight: 400;
+}
+
+.teacher-id {
+    font-size: 1rem;
+    color: #666;
+    margin: 0;
+}
+
+.teacher-grade {
+    font-size: 1rem;
+    color: #666;
+    margin: 0;
+}
+
+/* Period Buttons */
+.period-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.period-btn {
+    width: 100%;
+    padding: 0.8rem 1.5rem;
+    background: white;
+    border: 2px solid #e0e0e0;
+    border-radius: 25px;
+    color: #666;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.period-btn:hover {
+    border-color: #f5b342;
+    background: #fef8f0;
+}
+
+.period-btn.active {
+    background: linear-gradient(135deg, #f5b342 0%, #f39c12 100%);
+    color: white;
+    border-color: #f39c12;
+    box-shadow: 0 4px 10px rgba(243, 156, 18, 0.3);
+}
+
+/* Add Button */
+.btn-add-resource {
+    width: 100%;
+    padding: 0.9rem 1.5rem;
+    background: linear-gradient(135deg, #f5b342 0%, #f39c12 100%);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(243, 156, 18, 0.3);
+    margin-top: auto;
+}
+
+.btn-add-resource:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(243, 156, 18, 0.4);
+}
+
+/* ========== Main Content Area ========== */
+.resources-main-content {
+    flex: 1;
+    padding: 2rem 3rem;
+    background: #f5f5f5;
+    overflow-y: auto;
+    margin-right: 80px; /* Espacio para el sidebar derecho */
+}
+
+/* Subject Header */
+.subject-header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-bottom: 2.5rem;
+    background: white;
+    padding: 1.5rem 2rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.subject-header h2 {
+    color: #333;
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+/* ========== Resources Grid ========== */
+.resources-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+    padding: 1rem 0;
+}
+
+/* Resource Card */
+.resource-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.resource-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* Resource Image with Overlay */
+.resource-image {
+    width: 100%;
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    padding: 1rem;
+}
+
+.resource-overlay {
+    width: 100%;
+}
+
+.resource-class-label {
+    display: inline-block;
+    background: white;
+    color: #333;
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Resource Footer with Actions */
+.resource-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.2rem;
+    background: white;
+    gap: 0.8rem;
+}
+
+.btn-download {
+    flex: 1;
+    padding: 0.7rem 1.5rem;
+    background: linear-gradient(135deg, #f5b342 0%, #f39c12 100%);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(243, 156, 18, 0.3);
+}
+
+.btn-download:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(243, 156, 18, 0.4);
+}
+
+.btn-download.btn-disabled {
+    background: #bdc3c7;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.btn-download.btn-disabled:hover {
+    transform: none;
+}
+
+.btn-delete-icon {
+    width: 40px;
+    height: 40px;
+    background: #f5b342;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+.btn-delete-icon:hover {
+    background: #e74c3c;
+    transform: scale(1.1);
+}
+
+/* Empty States */
+.empty-resources {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 3rem;
+    background: white;
+    border-radius: 12px;
+    color: #999;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: white;
+    border-radius: 12px;
+    max-width: 500px;
+    margin: 2rem auto;
+}
+
+.empty-state-icon {
+    font-size: 5rem;
+    color: #ddd;
+    margin-bottom: 1.5rem;
+}
+
+.empty-state h3 {
+    color: #333;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.empty-state p {
+    color: #999;
+    font-size: 1rem;
+}
+
+/* Period Content Display */
+.period-content {
+    display: none;
+}
+
+.period-content[style*="display: grid"],
+.period-content[style*="display:grid"] {
+    display: grid !important;
+}
+
+/* Alerts */
+.alert {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    min-width: 300px;
+    max-width: 500px;
+}
+
+/* ========== Responsive Design ========== */
+@media (max-width: 1200px) {
+    .resources-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1.5rem;
+    }
+}
+
+@media (max-width: 992px) {
+    .resources-sidebar {
+        width: 280px;
+        padding: 1.5rem 1rem;
+    }
+    
+    .resources-main-content {
+        padding: 1.5rem 2rem;
+    }
+    
+    .resources-grid {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .container_category {
+        flex-direction: column;
+    }
+    
+    .resources-sidebar {
+        width: 100%;
+        padding: 1.5rem;
+    }
+    
+    .period-buttons {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    
+    .period-btn {
+        flex: 1 1 45%;
+    }
+    
+    .resources-main-content {
+        padding: 1.5rem;
+    }
+    
+    .resources-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.5rem;
+    }
+    
+    .subject-header {
+        padding: 1rem 1.5rem;
+    }
+    
+    .subject-header h2 {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .resources-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .period-btn {
+        flex: 1 1 100%;
+    }
+    
+    .subject-header {
+        gap: 1rem;
+    }
+}

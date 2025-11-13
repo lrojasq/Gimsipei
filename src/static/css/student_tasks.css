@@ -1,0 +1,295 @@
+/* Student Tasks Styles - Basado en students_management.css y courses_management.css */
+
+/* Course Grade Indicator */
+.course-grade-indicator {
+    width: 70px;
+    height: 70px;
+    background: hsl(190, 65%, 55%);
+    border: 2px solid hsl(190, 65%, 55%);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 20px;
+    flex-shrink: 0;
+}
+
+.grade-number {
+    font-size: 2rem;
+    font-weight: 700;
+    color: hsl(0, 0%, 100%);
+}
+
+/* Header Students */
+.header-students {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+    padding: 0 0 20px 0;
+    border-bottom: 2px solid hsl(0, 0%, 88%);
+}
+
+.course-title {
+    flex: 1;
+}
+
+.course-title h2 {
+    margin: 0;
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: hsl(0, 0%, 25%);
+}
+
+/* Tasks Table Wrapper */
+.tasks-table-wrapper {
+    width: 100%;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+/* Tasks Table */
+.tasks-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+}
+
+.tasks-table thead {
+    background: white;
+}
+
+.tasks-table thead tr {
+    border-bottom: 2px solid hsl(0, 0%, 88%);
+}
+
+.tasks-table thead th {
+    text-align: left;
+    padding: 1rem;
+    color: hsl(0, 0%, 25%);
+    font-weight: 600;
+    font-size: 1.125rem;
+    background: white;
+}
+
+.tasks-table tbody tr {
+    border-bottom: 1px solid hsl(0, 0%, 88%);
+}
+
+/* Subject Row */
+.subject-row {
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.subject-row:hover {
+    background-color: hsl(0, 0%, 96%);
+}
+
+.subject-header {
+    padding: 0 !important;
+}
+
+.subject-header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    width: 100%;
+}
+
+.subject-name {
+    font-weight: 600;
+    color: hsl(0, 0%, 25%);
+    font-size: 1rem;
+}
+
+.toggle-subject {
+    color: hsl(0, 0%, 45%);
+    transition: transform 0.3s ease;
+    cursor: pointer;
+}
+
+.subject-row.expanded .toggle-subject {
+    transform: rotate(180deg);
+}
+
+/* Subject Content Row */
+.subject-content-row {
+    background-color: hsl(0, 0%, 98%);
+}
+
+.subject-content-row.class-row {
+    background-color: hsl(0, 0%, 98%);
+}
+
+.class-indent {
+    width: 40px;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid hsl(0, 0%, 92%);
+}
+
+.class-name-cell {
+    padding: 0.75rem 1rem;
+    color: hsl(0, 0%, 25%);
+    font-size: 0.95rem;
+    border-bottom: 1px solid hsl(0, 0%, 92%);
+}
+
+.class-date-cell {
+    padding: 0.75rem 1rem;
+    color: hsl(190, 65%, 55%);
+    font-size: 0.95rem;
+    font-weight: 500;
+    border-bottom: 1px solid hsl(0, 0%, 92%);
+}
+
+.class-actions-cell {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid hsl(0, 0%, 92%);
+}
+
+.class-row:last-child .class-indent,
+.class-row:last-child .class-name-cell,
+.class-row:last-child .class-date-cell,
+.class-row:last-child .class-actions-cell {
+    border-bottom: none;
+}
+
+.empty-classes-cell {
+    padding: 1rem;
+    text-align: center;
+}
+
+.class-actions-cell {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.download-link {
+    color: hsl(190, 65%, 55%);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: color 0.2s ease;
+}
+
+.download-link:hover {
+    color: hsl(190, 65%, 45%);
+    text-decoration: underline;
+}
+
+.delete-class-btn {
+    background: none;
+    border: none;
+    color: hsl(0, 0%, 45%);
+    cursor: pointer;
+    padding: 0.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+}
+
+.delete-class-btn:hover {
+    color: hsl(0, 70%, 60%);
+    background-color: hsl(0, 70%, 96%);
+}
+
+.delete-class-btn i {
+    font-size: 1rem;
+}
+
+.empty-classes-cell p {
+    color: hsl(0, 0%, 45%);
+    font-size: 0.95rem;
+    margin: 0;
+}
+
+/* Empty State */
+.tasks-table tbody tr.empty-state-row {
+    border: none;
+}
+
+.tasks-table tbody tr.empty-state-row:hover {
+    background-color: white;
+}
+
+.tasks-table tbody .empty-state-cell {
+    text-align: center;
+    padding: 3rem 1rem;
+}
+
+.tasks-table tbody .empty-state-cell p {
+    color: hsl(0, 0%, 45%);
+    font-size: 1rem;
+    margin: 0;
+}
+
+/* Sidebar */
+.admin_category .menu_aside {
+    background-color: hsl(190, 65%, 55%);
+}
+
+.admin_category .menu_aside .aside_list li a.active,
+.admin_category .menu_aside .aside_list li a:hover {
+    background-color: hsl(190, 65%, 45%);
+}
+
+/* Alert Styles */
+.alert {
+    border: none;
+    border-radius: 15px;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.alert-success {
+    background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+    color: #155724;
+}
+
+.alert-danger {
+    background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+    color: #721c24;
+}
+
+.alert-info {
+    background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
+    color: #0c5460;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .header-students {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .course-grade-indicator {
+        margin-bottom: 15px;
+        margin-right: 0;
+    }
+
+    .tasks-table-wrapper {
+        overflow-x: auto;
+    }
+
+    .tasks-table {
+        min-width: 600px;
+    }
+
+    .tasks-table thead th,
+    .tasks-table tbody td {
+        padding: 0.75rem 0.5rem;
+        font-size: 0.9rem;
+    }
+}
+
