@@ -1,6 +1,7 @@
 from flask import Request, Response, flash, redirect, render_template, url_for
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from pydantic import ValidationError
+import traceback
 
 from src.models.user import UserRole
 from src.utils.decorator_role_required import role_required
@@ -8,11 +9,17 @@ from src.courses.service import (
     get_course_students_for_view_service,
     get_courses_service,
     add_student_to_course_service,
+    get_student_tasks_service,
 )
 from src.courses.validation import CourseStudentSchema
 
-from .service import get_user_service, create_user_service
-from .validation import StudentCreateSchema
+from .service import (
+    get_user_service,
+    create_user_service,
+    update_user_service,
+    delete_user_service,
+)
+from .validation import StudentCreateSchema, UserUpdateSchema
 
 
 @jwt_required()
@@ -166,3 +173,187 @@ def create_student_controller(course_id: int, request: Request) -> Response:
     except Exception as e:
         flash(f"Error al cargar el formulario: {str(e)}", "danger")
         return redirect(url_for("admin.dashboard"))
+
+
+@jwt_required()
+@role_required([UserRole.ADMIN, UserRole.TEACHER])
+def edit_student_controller(
+    course_id: int, student_id: int, request: Request
+) -> Response:
+    """Vista para editar un estudiante"""
+    user_id = get_jwt_identity()
+
+    try:
+        # Obtener información del usuario actual
+        current_user, status_code = get_user_service(user_id, request)
+        if status_code != 200 or not current_user:
+            flash("Usuario no encontrado", "danger")
+            return redirect(url_for("auth.login"))
+
+        # Obtener información del curso
+        course_data, _, course_status = get_course_students_for_view_service(course_id)
+        if course_status == 404 or not course_data:
+            flash("Curso no encontrado", "danger")
+            return redirect(url_for("admin.dashboard"))
+
+        # Obtener lista de cursos para el dropdown
+        courses, _ = get_courses_service()
+
+        if request.method == "GET":
+            try:
+                student, status_code = get_user_service(student_id, request)
+                if status_code == 404:
+                    flash("Estudiante no encontrado", "danger")
+                    return redirect(
+                        url_for("users.course_students", course_id=course_id)
+                    )
+                return render_template(
+                    "teacher/edit_student.html",
+                    student=student,
+                    user=current_user,
+                    course=course_data,
+                    courses=courses,
+                )
+            except Exception as e:
+                flash(f"Error al cargar el estudiante: {str(e)}", "danger")
+                return redirect(url_for("users.course_students", course_id=course_id))
+
+        try:
+            # Obtener datos del estudiante primero para fallback en caso de error
+            student_data, _ = get_user_service(student_id, request)
+
+            data = request.form.to_dict()
+
+            # Remover campo de contraseña vacío para hacerlo opcional
+            if "password" in data and not data["password"].strip():
+                del data["password"]
+
+            # Validar con UserUpdateSchema
+            validated = UserUpdateSchema(**data)
+            _, status_code = update_user_service(student_id, validated, request)
+
+            if status_code == 200:
+                flash("Estudiante actualizado exitosamente", "success")
+                return redirect(url_for("users.course_students", course_id=course_id))
+            elif status_code == 404:
+                flash("Estudiante no encontrado", "danger")
+                return redirect(url_for("users.course_students", course_id=course_id))
+            else:
+                flash("Error al actualizar el estudiante", "danger")
+                return render_template(
+                    "teacher/edit_student.html",
+                    student=student_data,
+                    user=current_user,
+                    course=course_data,
+                    courses=courses,
+                )
+
+        except ValidationError:
+            flash("Datos inválidos. Por favor verifique la información", "danger")
+            return render_template(
+                "teacher/edit_student.html",
+                student=student_data,
+                user=current_user,
+                course=course_data,
+                courses=courses,
+            )
+
+        except Exception as e:
+            flash(f"Error interno: {str(e)}", "danger")
+            return redirect(url_for("users.course_students", course_id=course_id))
+
+    except Exception as e:
+        flash(f"Error al cargar el formulario: {str(e)}", "danger")
+        return redirect(url_for("admin.dashboard"))
+
+
+@jwt_required()
+@role_required([UserRole.ADMIN, UserRole.TEACHER])
+def delete_student_controller(
+    course_id: int, student_id: int, request: Request
+) -> Response:
+    """Eliminar un estudiante de un curso"""
+    try:
+        current_user_id = get_jwt_identity()
+        result, status_code = delete_user_service(student_id, request, current_user_id)
+
+        if status_code == 200:
+            flash("Estudiante eliminado exitosamente", "success")
+        elif status_code == 404:
+            flash("Estudiante no encontrado", "danger")
+        elif status_code == 409:
+            message = result.get(
+                "message",
+                "No se puede eliminar el estudiante porque tiene datos relacionados",
+            )
+            flash(message, "warning")
+        elif status_code == 500:
+            message = (
+                result.get("message", "Error al eliminar el estudiante")
+                if result
+                else "Error al eliminar el estudiante"
+            )
+            flash(message, "danger")
+        else:
+            flash("Error al eliminar el estudiante", "danger")
+
+    except Exception as e:
+        flash(f"Error interno: {str(e)}", "danger")
+
+    return redirect(url_for("users.course_students", course_id=course_id))
+
+
+@jwt_required()
+@role_required([UserRole.ADMIN, UserRole.TEACHER])
+def student_tasks_controller(
+    course_id: int, student_id: int, request: Request
+) -> Response:
+    """Vista para mostrar las tareas/clases de un estudiante específico"""
+    user_id = get_jwt_identity()
+
+    try:
+        # Obtener información del usuario actual
+        current_user, status_code = get_user_service(user_id, request)
+        if status_code != 200 or not current_user:
+            flash("Usuario no encontrado", "danger")
+            return redirect(url_for("auth.login"))
+
+        # Obtener datos del curso, estudiante y tareas agrupadas por asignatura
+        data, subjects_list, status_code = get_student_tasks_service(
+            course_id, student_id
+        )
+
+        print(
+            f"DEBUG: status_code={status_code}, data={data is not None}, subjects_list length={len(subjects_list) if subjects_list else 0}"
+        )
+
+        if status_code == 404 or not data:
+            flash("Curso o estudiante no encontrado", "danger")
+            return redirect(url_for("users.course_students", course_id=course_id))
+
+        if status_code != 200:
+            flash(
+                f"Error al obtener las materias del curso (código: {status_code})",
+                "danger",
+            )
+            return redirect(url_for("users.course_students", course_id=course_id))
+
+        # Si no hay materias, mostrar mensaje pero aún así renderizar la vista
+        if not subjects_list:
+            flash("Este curso no tiene materias asignadas", "info")
+
+        print(
+            f"DEBUG: Renderizando template con {len(subjects_list) if subjects_list else 0} materias"
+        )
+        return render_template(
+            "teacher/student_tasks.html",
+            user=current_user,
+            course=data["course"],
+            student=data["student"],
+            subjects=subjects_list,
+        )
+    except Exception as e:
+        error_trace = traceback.format_exc()
+        flash(f"Error al cargar las tareas: {str(e)}", "danger")
+        print(f"Error en student_tasks_controller: {error_trace}")  # Para debugging
+        return redirect(url_for("users.course_students", course_id=course_id))

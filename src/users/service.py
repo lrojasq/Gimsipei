@@ -226,16 +226,31 @@ def delete_user_service(
                 409,
             )
 
-        enrollments = (
-            db.query(CourseStudent).filter(CourseStudent.student_id == user_id).count()
-        )
-        if enrollments > 0:
-            return (
-                {
-                    "message": f"No se puede eliminar el usuario porque está inscrito en {enrollments} curso(s). Por favor, elimine primero las inscripciones."
-                },
-                409,
+        # If is a student, delete their enrollments
+        if user.role == UserRole.STUDENT:
+            enrollments = (
+                db.query(CourseStudent)
+                .filter(CourseStudent.student_id == user_id)
+                .all()
             )
+            if enrollments:
+                for enrollment in enrollments:
+                    db.delete(enrollment)
+                db.flush()
+        else:
+            # For other roles, check if they have enrollments and do not allow deletion
+            enrollments = (
+                db.query(CourseStudent)
+                .filter(CourseStudent.student_id == user_id)
+                .count()
+            )
+            if enrollments > 0:
+                return (
+                    {
+                        "message": f"No se puede eliminar el usuario porque está inscrito en {enrollments} curso(s). Por favor, elimine primero las inscripciones."
+                    },
+                    409,
+                )
 
         try:
             created_classes = (
