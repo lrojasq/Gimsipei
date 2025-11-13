@@ -52,8 +52,8 @@ def dashboard_controller(_: Request) -> Response:
         # User is student
         else:
             return render_template("about_us.html", accion_logout=True)
-    except Exception:
-        flash("Error al obtener el dashboard", "danger")
+    except Exception as e:
+        flash(f"Error al obtener el dashboard: {str(e)}", "danger")
         return redirect(url_for("auth.login"))
 
 
@@ -62,12 +62,6 @@ def dashboard_controller(_: Request) -> Response:
 # @role_required([UserRole.ADMIN, UserRole.TEACHER, UserRole.STUDENT])
 # def materias_controller(request: Request) -> Response:
 #     return render_template("category/materias.html", accion_logout=True)
-
-
-@jwt_required()
-@role_required([UserRole.ADMIN, UserRole.TEACHER, UserRole.STUDENT])
-def clases_recursos_controller(request: Request) -> Response:
-    return render_template("category/clases-recursos.html", accion_logout=True)
 
 
 @jwt_required()

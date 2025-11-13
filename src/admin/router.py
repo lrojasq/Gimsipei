@@ -1,7 +1,6 @@
 from flask import Blueprint, request
 from .controllers import (
     dashboard_controller,
-    clases_recursos_controller,
     evaluaciones_controller,
     libros_controller,
     calificaciones_controller,
@@ -18,11 +17,6 @@ def dashboard():
 # @admin_bp.route("/materias", methods=["GET"])
 # def materias():
 #     return materias_controller(request)
-
-
-@admin_bp.route("/clases", methods=["GET"])
-def clases_recursos():
-    return clases_recursos_controller(request)
 
 
 @admin_bp.route("/evaluaciones", methods=["GET"])
