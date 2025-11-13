@@ -15,8 +15,9 @@ class ClassModel(Base):
     title = Column(String(100), nullable=False)
     description = Column(String(255), nullable=True)
     class_number = Column(Integer, nullable=False)
-    date = Column(DateTime, nullable=False)
+    cover_image = Column(String(255), nullable=True)
     created_by = Column(Integer, ForeignKey("users.id"), nullable=False)
+    period = Column(Integer, nullable=False)
     created_at = Column(DateTime, default=datetime.now(timezone.utc))
     updated_at = Column(
         DateTime,
