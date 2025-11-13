@@ -1,9 +1,10 @@
-from flask import request, jsonify
-from flask_jwt_extended import get_jwt_identity
+from flask import request, jsonify, render_template, flash, redirect, url_for
+from flask_jwt_extended import get_jwt_identity, get_jwt
 from pydantic import ValidationError
 
 from src.classes import service, validation
-from src.models.user import UserRole
+from src.classes.service import create_class_service
+from src.classes.service import create_resource_service
 
 
 # Subject Controllers
@@ -380,3 +381,89 @@ def unlock_period_controller(period_id: int):
 #         if db_class_view is None:
 #             return jsonify({"message": "Class view not found"}), 404
 #         return jsonify({"message": "Class view deleted successfully"})
+
+
+# HTML View Controllers
+def teacher_classes_view_controller():
+    """Vista HTML para que los teachers vean los cursos con sus materias"""
+    try:
+        courses, status_code = service.get_all_courses_with_subjects()
+
+        if status_code != 200:
+            flash("Error al cargar los cursos", "danger")
+            courses = []
+
+        return render_template(
+            "teacher/teacher_classes.html",
+            courses=courses,
+            user={"role": get_jwt().get("role").lower(), "id": get_jwt().get("id")},
+        )
+    except Exception as e:
+        flash(f"Error al cargar los cursos: {str(e)}", "danger")
+        return render_template(
+            "teacher/teacher_classes.html",
+            courses=[],
+            user={"role": get_jwt().get("role").lower(), "id": get_jwt().get("id")},
+        )
+
+
+def create_class_controller():
+    """Controlador para crear una nueva clase"""
+    try:
+        current_user_id = get_jwt_identity()
+
+        # Obtener datos del formulario
+        data = {
+            "course_id": request.form.get("course_id"),
+            "subject_id": request.form.get("subject_id"),
+            "class_number": request.form.get("class_number"),
+            "title": request.form.get("title"),
+            "description": request.form.get("description", ""),
+            "period": request.form.get("period", 1),
+        }
+
+        # Obtener archivo de portada si existe
+        cover_file = request.files.get("cover_image")
+        result, status_code = create_class_service(data, cover_file, current_user_id)
+
+        if status_code == 201:
+            flash(result["message"], "success")
+        else:
+            flash(result.get("error", "Error al crear la clase"), "danger")
+
+        return redirect(url_for("classes.teacher_classes_view"))
+    except Exception:
+        flash("Error al crear la clase", "danger")
+        return redirect(url_for("classes.teacher_classes_view"))
+
+
+def create_resource_controller():
+    """Controlador para crear un nuevo recurso"""
+    try:
+        # Obtener datos del formulario
+        data = {
+            "class_id": request.form.get("class_id"),
+            "title": request.form.get("title"),
+            "description": request.form.get("description", ""),
+            "url": request.form.get("url", ""),
+        }
+
+        # Obtener archivo del recurso si existe
+        resource_file = request.files.get("resource_file")
+        result, status_code = create_resource_service(data, resource_file)
+
+        if status_code == 201:
+            flash(result["message"], "success")
+        else:
+            flash(result.get("error", "Error al crear el recurso"), "danger")
+
+        # Redirigir a la vista de clases
+        return redirect(url_for("classes.teacher_classes_view"))
+
+    except Exception as e:
+        import traceback
+
+        error_trace = traceback.format_exc()
+        print(f"Error en create_resource_controller: {str(e)}\n{error_trace}")
+        flash("Error al crear el recurso", "danger")
+        return redirect(url_for("classes.teacher_classes_view"))

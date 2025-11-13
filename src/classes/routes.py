@@ -90,6 +90,15 @@ def unlock_period_route(period_id):
     return controllers.unlock_period_controller(period_id)
 
 
+# HTML View Routes
+@class_bp.route("/teacher", methods=["GET"])
+@jwt_required()
+@role_required(UserRole.TEACHER)
+def teacher_classes_view():
+    """Vista HTML de clases y recursos para teachers"""
+    return controllers.teacher_classes_view_controller()
+
+
 # # Class Routes
 # @class_bp.route('/classes', methods=['POST'])
 # @jwt_required()
@@ -198,3 +207,20 @@ def unlock_period_route(period_id):
 # @role_required([UserRole.ADMIN, UserRole.TEACHER, UserRole.STUDENT])
 # def delete_class_view_route(class_view_id):
 #     return controllers.delete_class_view_controller(class_view_id)
+
+
+# Rutas para crear clases y recursos
+@class_bp.route("/create", methods=["POST"])
+@jwt_required()
+@role_required(UserRole.TEACHER)
+def create_class():
+    """Crear una nueva clase"""
+    return controllers.create_class_controller()
+
+
+@class_bp.route("/resources/create", methods=["POST"])
+@jwt_required()
+@role_required(UserRole.TEACHER)
+def create_resource():
+    """Crear un nuevo recurso"""
+    return controllers.create_resource_controller()
