@@ -10,6 +10,7 @@ from src.models.course_student import CourseStudent
 from src.models.course_subject import CourseSubject
 from src.models.user import User, UserRole
 from src.models.subject import Subject
+from src.models.class_model import ClassModel
 
 from .validation import (
     CourseCreateSchema,
@@ -508,5 +509,120 @@ def remove_subject_from_course_service(
     except Exception:
         db.rollback()
         return None, 500
+    finally:
+        db.close()
+
+
+def get_student_tasks_service(
+    course_id: int, student_id: int
+) -> Tuple[Optional[dict], List[dict], int]:
+    """Obtener tareas/clases de un estudiante en un curso, agrupadas por asignatura"""
+    db = SessionLocal()
+    try:
+        # Verificar que el curso existe
+        course = db.query(Course).filter(Course.id == course_id).first()
+        if not course:
+            return None, [], 404
+
+        # Verificar que el estudiante existe y está inscrito en el curso
+        student = db.query(User).filter(User.id == student_id).first()
+        if not student:
+            return None, [], 404
+
+        course_student = (
+            db.query(CourseStudent)
+            .filter(
+                CourseStudent.course_id == course_id,
+                CourseStudent.student_id == student_id,
+            )
+            .first()
+        )
+        if not course_student:
+            return None, [], 404
+
+        # Obtener todas las materias del curso (aunque no tengan clases)
+        course_subjects = (
+            db.query(CourseSubject, Subject)
+            .join(Subject, CourseSubject.subject_id == Subject.id)
+            .filter(CourseSubject.course_id == course_id)
+            .order_by(Subject.name)
+            .all()
+        )
+
+        # Crear diccionario con todas las materias del curso
+        subjects_dict = {}
+        for course_subject, subject in course_subjects:
+            subjects_dict[subject.id] = {
+                "subject_id": subject.id,
+                "subject_name": subject.name,
+                "classes": [],
+            }
+
+        # Obtener todas las clases del curso y agregarlas a las materias correspondientes
+        classes = (
+            db.query(ClassModel, Subject)
+            .join(Subject, ClassModel.subject_id == Subject.id)
+            .filter(ClassModel.course_id == course_id)
+            .order_by(Subject.name, ClassModel.class_number)
+            .all()
+        )
+
+        # Agrupar clases por asignatura
+        for class_model, subject in classes:
+            if subject.id in subjects_dict:
+                subjects_dict[subject.id]["classes"].append(
+                    {
+                        "id": class_model.id,
+                        "title": class_model.title,
+                        "class_number": class_model.class_number,
+                        "date": class_model.date.strftime("%d-%m-%y")
+                        if class_model.date
+                        else "",
+                        "description": class_model.description,
+                    }
+                )
+
+        # Si no hay clases reales, agregar clases de ejemplo para cada materia
+        if not classes:
+            from datetime import datetime
+
+            example_date = datetime.now().strftime("%d-%m-%y")
+            for subject_id, subject_data in subjects_dict.items():
+                # Agregar 3 clases de ejemplo por materia
+                for i in range(1, 4):
+                    subject_data["classes"].append(
+                        {
+                            "id": f"example_{subject_id}_{i}",
+                            "title": f"Clase de ejemplo {i}",
+                            "class_number": i,
+                            "date": example_date,
+                            "description": "Clase de ejemplo",
+                        }
+                    )
+
+        # Convert to ordered list
+        subjects_list = list(subjects_dict.values())
+
+        # Preparar datos del curso y estudiante
+        course_data = {
+            "id": course.id,
+            "name": course.name,
+            "academic_year": course.academic_year,
+            "grade_number": get_grade_number_from_course_name(course.name),
+        }
+
+        student_data = {
+            "id": student.id,
+            "full_name": student.full_name or student.username,
+            "document": student.document,
+        }
+
+        return {"course": course_data, "student": student_data}, subjects_list, 200
+    except Exception as e:
+        import traceback
+
+        error_trace = traceback.format_exc()
+        print(f"Error en get_student_tasks_service: {str(e)}\n{error_trace}")
+        return None, [], 500
     finally:
         db.close()

@@ -6,6 +6,8 @@ from src.assignments.router import assignments_bp
 from src.documents.router import documents_bp
 from src.exercises.router import exercises_bp
 from src.courses.router import courses_bp
+from src.classes.routes import class_bp
+from src.resources.router import resources_bp
 
 # from src.academic.router import academic_bp
 from src.subject.router import subjects_bp
@@ -20,5 +22,7 @@ def register_blueprints(app):
     app.register_blueprint(documents_bp)
     app.register_blueprint(exercises_bp)
     app.register_blueprint(courses_bp)
+    app.register_blueprint(class_bp)
+    app.register_blueprint(resources_bp)
     # app.register_blueprint(academic_bp)
     app.register_blueprint(subjects_bp)
