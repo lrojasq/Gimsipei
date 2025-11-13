@@ -55,9 +55,6 @@ html {
 .logo {
     width: 300px;
     height: 60px;
-
-    margin-left: 50px;
-    margin-top: 50px;
     background-image: url("../images/logo.png");
     background-repeat: no-repeat;
 }
@@ -78,7 +75,7 @@ html {
     position: relative;
 }
 
-.bg-vision .content-vision{
+.bg-vision .content-vision {
     padding: 100px 80px 0px;
     margin: auto;
     width: 100%;
@@ -106,12 +103,14 @@ html {
 .menu {
     display: flex;
     justify-content: center;
+    justify-content: center;
     align-items: center;
     flex-direction: row;
     flex-wrap: wrap;
     width: 100%;
     z-index: 99991;
     position: relative;
+    gap: 5rem;
     gap: 5rem;
 }
 
@@ -121,7 +120,7 @@ html {
     align-items: center;
     flex-direction: column;
     gap: 15px;
-    width: 150px;
+    width: 120px;
     height: 158px;
     position: relative;
     border-radius: 15px;
@@ -333,13 +332,93 @@ a {
 /* Menú desplegable */
 .mobile-nav {
     position: fixed;
-    top: 0px;
+    top: 90px;
     right: -250px;
     width: 250px;
     height: calc(100vh - 60px);
     background-color: #3bbae4;
     transition: right 0.3s ease;
     padding: 20px 0;
+    filter: drop-shadow(2px 8px 6px black);
+}
+
+.mobile-header {
+    position: relative;
+}
+
+.mobile-header:has(+ .teachers_management),
+.mobile-header:has(+ .courses_management),
+.mobile-header:has(+ .libros_category),
+.mobile-header:has(+ .calificaciones_category),
+.mobile-header:has(+ .evaluaciones_category) {
+    background-color: white;
+}
+
+.mobile-header:has(+ .teachers_management):after,
+.mobile-header:has(+ .courses_management):after,
+.mobile-header:has(+ .libros_category):after,
+.mobile-header:has(+ .calificaciones_category):after,
+.mobile-header:has(+ .evaluaciones_category):after {
+    content: "";
+    height: 2px;
+    border-radius: 5px;
+    width: 98%;
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    margin: auto;
+    bottom: 0px;
+
+}
+
+.mobile-header:has(+ .teachers_management):after,
+.mobile-header:has(+ .courses_management):after {
+    background: var(--admin-active);
+}
+
+.mobile-header:has(+ .teachers_management) .logo,
+.mobile-header:has(+ .courses_management) .logo,
+.mobile-header:has(+ .libros_category) .logo,
+.mobile-header:has(+ .calificaciones_category) .logo ,
+.mobile-header:has(+ .evaluaciones_category) .logo {
+    background-color: var(--secondary-color);
+}
+
+.mobile-header:has(+ .teachers_management) .hamburger-menu span,
+.mobile-header:has(+ .courses_management) .hamburger-menu span,
+.mobile-header:has(+ .libros_category) .hamburger-menu span,
+.mobile-header:has(+ .calificaciones_category) .hamburger-menu span ,
+.mobile-header:has(+ .evaluaciones_category) .hamburger-menu span {
+    background-color: gray;
+}
+
+.mobile-header:has(+ .teachers_management) .mobile-nav,
+.mobile-header:has(+ .courses_management) .mobile-nav,
+.mobile-header:has(+ .libros_category) .mobile-nav,
+.mobile-header:has(+ .calificaciones_category) .mobile-nav ,
+.mobile-header:has(+ .evaluaciones_category) .mobile-nav {
+    background-color: white;
+}
+
+.mobile-header:has(+ .teachers_management) .mobile-nav a,
+.mobile-header:has(+ .courses_management) .mobile-nav a,
+.mobile-header:has(+ .libros_category) .mobile-nav a,
+.mobile-header:has(+ .calificaciones_category) .mobile-nav a,
+.mobile-header:has(+ .evaluaciones_category) .mobile-nav a {
+    color: gray;
+}
+
+
+.mobile-header:has(+ .libros_category):after {
+    background: var(--libros-active);
+}
+
+.mobile-header:has(+ .calificaciones_category):after {
+    background: var(--calificaciones-active);
+}
+
+.mobile-header:has(+ .evaluaciones_category):after {
+    background: var(--evaluaciones-active);
 }
 
 .mobile-nav.active {
@@ -493,24 +572,5 @@ a {
         height: 20px;
         width: 60%;
         position: absolute;
-    }
-    .containe.bg-image-user::after {
-        display: none;
-    }
-    .bg-vision .content-vision{
-        padding: 40px 0px 0px;
-        background-color: var(--blanco);
-    }
-    .menu{
-        gap: 3rem;
-    }
-    .bg_section_footer{
-        height: 100px;
-        top: 10px;
-        background-color: #f6f6f6;
-    }
-    .bg-mision h2,
-    .bg-vision h2{
-        font-size: 1rem;
     }
 }

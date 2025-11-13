@@ -11,23 +11,24 @@
 {% block content %}
 {% block menu %}{% endblock %}
 
-<div class="container_category flex admin_category">
+<div class="container_category flex admin_category teachers_management">
     <!-- Perfil de Usuario -->
     {% include "user_profile.html" %}
     <!-- Fin Perfil -->
 
     <!-- Flash Messages -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            {% for category, message in messages %}
-                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-                    <i class="fas fa-{% if category == 'success' %}check-circle{% elif category == 'danger' %}exclamation-triangle{% else %}info-circle{% endif %} me-2"></i>
-                    {{ message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
+    {# {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+        <i
+            class="fas fa-{% if category == 'success' %}check-circle{% elif category == 'danger' %}exclamation-triangle{% else %}info-circle{% endif %} me-2"></i>
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %} #}
 
     <!-- Formulario de Creación -->
     <div class="specialities_category flex">
@@ -35,7 +36,7 @@
             <div class="form-crear flex">
                 <form method="POST" action="{{ url_for('users.create_teacher') }}" class="form-admin flex flex-column">
                     <div class="content-form flex flex-column">
-                        <h2 class="right-text">Crear Usuario</h2>
+                        <h1 class="right-text">Crear Usuario</h1>
                         <div class="flex flex-form">
                             <div class="img-usuario">
                                 <i class="fa-slab-press fa-regular fa-circle-user"></i>
@@ -48,22 +49,27 @@
                                 <div class="flex input-group">
                                     <input type="text" name="document" id="document" placeholder="Documento" required>
                                 </div>
-                                
+
                                 <div class="flex input-group">
                                     <input type="text" name="username" id="username" placeholder="Usuario" required>
                                 </div>
-                                
+
                                 <div class="flex input-group">
-                                    <input type="password" name="password" id="password" placeholder="Contraseña" required>
+                                    <input type="password" name="password" id="password" placeholder="Contraseña"
+                                        required>
                                 </div>
 
                                 <!-- Selección de rol explícita -->
-                                <div class="flex input-group">
-                                    <label class="mb-1" for="role">Rol *</label>
-                                    <select name="role" id="role" class="form-select" required>
-                                        <option value="teacher" selected>Docente</option>
-                                        <option value="admin">Administrador</option>
-                                    </select>
+                                <div class="container mt-3">
+                                    <div class="btn-group flex justify-content-around" role="group" aria-label="Tipo de usuario">
+                                        <input type="radio" class="btn-check" name="tipoUsuario" id="docente"
+                                            value="docente" autocomplete="off" checked />
+                                        <label class="btn btn-outline-danger" for="docente">DOCENTE</label>
+
+                                        <input type="radio" class="btn-check" name="tipoUsuario" id="admin"
+                                            value="administrador" autocomplete="off" />
+                                        <label class="btn btn-outline-danger" for="admin">ADMINISTRADOR</label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -75,7 +81,7 @@
     </div>
 </div>
 
- <!-- Sidebar Aside Component -->
+<!-- Sidebar Aside Component -->
 {% include "sidebar_aside.html" %}
 
 <!-- Custom JS -->

@@ -1,39 +1,96 @@
+<link href="{{ url_for('static', filename='css/menu.css') }}" rel="stylesheet">
 {% block menu %}
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="#">Navbar</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
+<style>
+  :root {
+    --primary-color: #007bff;
+    --secondary-color: #6c757d;
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+    --info-color: #17a2b8;
+    --light-color: #ffffff;
+    --dark-color: #343a40;
+    --border-color: #00c2e7;
+    --gray-light: #f4f4f4;
+    --clases: #23ccc3;
+    --clases-active: #16b7ab;
+    --recursos: #f7cb52;
+    --recursos-active: #e5ab1a;
+    --evaluaciones: #f48d53;
+    --evaluaciones-active: #e55d1a;
+    --libros: #ea6ef4;
+    --libros-active: #d944ea;
+    --calificaciones: #a270f2;
+    --calificaciones-active: #6c43d1;
+    --admin: #f94e4e;
+    --admin-active: #e01e1e;
+}
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+    /* evitamos scroll nativo */
+  }
 
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Link</a>
-      </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Dropdown
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="#">Action</a>
-          <a class="dropdown-item" href="#">Another action</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Something else here</a>
-        </div>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link disabled" href="#">Disabled</a>
-      </li>
-    </ul>
-    <form class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-    </form>
+  .section {
+    height: 100vh;
+    /* cada sección ocupa toda la pantalla */
+    display: flex;
+    align-items: start;
+    justify-content: center;
+    flex-direction: column;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  h2 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+  }
+
+  p {
+    font-size: 1.2rem;
+    max-width: 800px;
+    text-align: left;
+  }
+  @media (max-width:1080px) {
+    body {
+      overflow: auto;
+    }
+  }
+</style>
+<header class="mobile-header">
+  <div class="logo">
+    <!-- <img src="https://via.placeholder.com/150x50?text=LOGO" alt="Logo"> -->
   </div>
-</nav>
+
+  <div class="header-content">
+    <div class="user-profile">
+      <img src="/static/images/avatares/buho.png" alt="Foto de usuario">
+    </div>
+
+    <div class="hamburger-menu" id="hamburger">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+
+  <nav class="mobile-nav" id="mobileNav">
+    <ul>
+      <li><a href="#">Inicio</a></li>
+      <li><a href="#">Perfil</a></li>
+      <li><a href="#">Configuración</a></li>
+      <li><a href="#">Notificaciones</a></li>
+
+      {% if accion_logout %}
+      {% include "utils/logout_button.html" %}
+      {% endif %}
+    </ul>
+  </nav>
+</header>
 
 {% endblock %}

@@ -4,22 +4,23 @@
     <div class="container">
         <i class="closed close-modal">X</i>
         <h2>Crear curso</h2>
-        <form method="POST" action="{{ url_for('courses.create_course') }}" id="createCourseForm" class="needs-validation" novalidate>
+        <form method="POST" action="{{ url_for('courses.create_course') }}" id="createCourseForm"
+            class="needs-validation" novalidate>
             <div class="mb-3">
                 <label for="course-name" class="form-label">Nombre del curso</label>
                 <select class="form-select" id="course-name" name="name" required>
                     <option value="" disabled selected>Selecciona un curso</option>
                     {% if available_courses %}
-                        {% for course_name in available_courses %}
-                        <option value="{{ course_name }}">{{ course_name }}</option>
-                {% endfor %}
-            {% endif %}
-                                    </select>
+                    {% for course_name in available_courses %}
+                    <option value="{{ course_name }}">{{ course_name }}</option>
+                    {% endfor %}
+                    {% endif %}
+                </select>
                 <div class="invalid-feedback">Por favor seleccione un curso.</div>
-                                    </div>
+            </div>
             <div class="btns">
                 <button type="submit" class="btn btn-primary" id="submitBtn">Guardar</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+            </div>
+        </form>
+    </div>
+</div>

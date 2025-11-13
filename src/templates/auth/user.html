@@ -1,0 +1,418 @@
+{% extends "base.html" %}
+
+
+{% block title %}Iniciar Sesión{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/menu.css') }}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+{% endblock %}
+
+
+{% block content %}
+{% block menu %}{% endblock %}
+
+<div class="containe">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #12A3DD;
+        }
+
+        :root {
+            --blanco: #ffffff;
+            --primario: #3BBAE4;
+            --gris-claro: #606060;
+            --azul-oscuro: #12A3DD;
+            --barra-ginsipei: #1CC3EA;
+            --barra-clases: #23CCC3;
+            --barra-recursos: #F7CB52;
+            --barra-evaluaciones: #F48D53;
+            --barra-libros: #EA6EF4;
+            --barra-calificaciones: #A270F2;
+        }
+
+        .containe {
+            width: 100vw;
+            height: 100vh;
+        }
+
+        .bg-mision {
+            display: flex;
+            flex-direction: column;
+
+            width: 100%;
+            height: 54vh;
+
+            background-color: var(--primario);
+            background-image: url("../images/menu-principal/bg-pencil.png");
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        .logo {
+            width: 300px;
+            height: 60px;
+
+            margin-left: 50px;
+            margin-top: 50px;
+            background-image: url("../images/logo.png");
+            background-repeat: no-repeat;
+        }
+
+        .mision-tp {
+            position: absolute;
+            width: 400px;
+            height: auto;
+
+            margin-left: 110px;
+            margin-top: 100px;
+
+            color: #ffffff;
+        }
+
+        .bg-vision {
+            width: 100%;
+            height: 50vh;
+
+            background-color: #f6f6f6;
+            border-radius: 50px 50px 0px 0px;
+            margin-top: -2.3%;
+            z-index: 1000;
+        }
+
+        .vision-tp {
+            position: absolute;
+            width: 400px;
+            height: auto;
+
+            margin-left: 110px;
+            margin-top: 50px;
+
+            color: var(--gris-claro);
+        }
+
+        .bg-lateral {
+            position: relative;
+            width: 20%;
+            height: 70%;
+
+            background-image: url("../images/menu-principal/bg-rigth.png");
+            background-repeat: no-repeat;
+            background-size: cover;
+
+            float: right;
+            margin-top: -770px;
+        }
+
+        .menu {
+            position: absolute;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-direction: row;
+            flex-wrap: wrap;
+            gap: 30px;
+
+            width: 55%;
+            height: 90px;
+
+            margin-left: 35%;
+            margin-top: -200px;
+        }
+
+        .box-menu {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            gap: 5px;
+            width: 120px;
+            height: 158px;
+
+            border-radius: 15px;
+            background-color: var(--azul-oscuro);
+        }
+
+        .box-menu {
+            color: var(--blanco);
+        }
+
+        /* botones menu*/
+
+
+        .barra-gimsipei,
+        .barra-clases,
+        .barra-recursos,
+        .barra-evaluaciones,
+        .barra-libros,
+        .barra-calificaciones {
+            position: absolute;
+            width: 129px;
+            height: 13px;
+
+            margin-top: 200px;
+            border-radius: 5px;
+        }
+
+        .gimsipei {
+            width: 68px;
+            height: 88px;
+
+            background-image: url("../images/menu-principal/gimsipei.png");
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        .gimsipei-hover:hover {
+            background-color: var(--barra-ginsipei);
+        }
+
+        .clases {
+            width: 77px;
+            height: 77px;
+
+            background-image: url("../images/menu-principal/clases.png");
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        .clases-hover:hover {
+            background-color: var(--barra-clases);
+        }
+
+        .recursos {
+            width: 88px;
+            height: 88px;
+
+            background-image: url("../images/menu-principal/recursos.png");
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        .recursos-hover:hover {
+            background-color: var(--barra-recursos);
+        }
+
+        .evaluaciones {
+            width: 68px;
+            height: 88px;
+
+            background-image: url("../images/menu-principal/Evaluaciones.png");
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        .evaluaciones-hover:hover {
+            background-color: var(--barra-evaluaciones);
+        }
+
+        .libros {
+            width: 110px;
+            height: 88px;
+
+            background-image: url("../images/menu-principal/libros.png");
+            background-repeat: no-repeat;
+            background-size: cover;
+            margin-left: -10px;
+        }
+
+        .libros-hover:hover {
+            background-color: var(--barra-libros);
+        }
+
+        .calificaciones {
+            width: 68px;
+            height: 88px;
+
+            background-image: url("../images/menu-principal/calificaciones.png");
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        .calificaciones-hover:hover {
+            background-color: var(--barra-calificaciones);
+        }
+
+        .barra-gimsipei {
+            background-color: var(--barra-ginsipei);
+        }
+
+        .barra-clases {
+            background-color: var(--barra-clases);
+        }
+
+        .barra-recursos {
+            background-color: var(--barra-recursos);
+        }
+
+        .barra-evaluaciones {
+            background-color: var(--barra-evaluaciones);
+        }
+
+        .barra-libros {
+            background-color: var(--barra-libros);
+        }
+
+        .barra-calificaciones {
+            background-color: var(--barra-calificaciones);
+        }
+
+        html,
+        body {
+            position: relative;
+            height: 100%;
+        }
+
+        body {
+            background: #000;
+            font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+            font-size: 14px;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+
+        .swiper {
+            width: 100%;
+            height: 100%;
+        }
+
+        .swiper-slide {
+            text-align: center;
+            font-size: 18px;
+            background: #444;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .swiper-slide img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        @media (max-width: 576px) {
+            .containe {
+                width: 100%;
+            }
+
+            .html {
+                background-color: #f6f6f6;
+            }
+
+            .bg-vision {
+                width: 97%;
+                height: 90vh;
+                border-radius: 15px;
+            }
+
+            .menu {
+                margin-top: 60px;
+            }
+
+            .bg-lateral {
+                display: none;
+            }
+
+            .mision-tp,
+            .vision-tp {
+                width: 90%;
+                margin-left: 10px;
+                text-align: justify;
+            }
+
+            .bg-mision {
+                width: 97%;
+                height: 80vh;
+            }
+        }
+    </style>
+
+    <div class="swiper mySwiper">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">
+                <div class="bg-mision">
+                    <div class="logo"></div>
+                    <div class="mision-tp">
+                        <h2>MISIÓN</h2>
+                        <p>El Gimnasio Psicopedagógico integral “Gimsipei” es
+                            una institución de carácter privado, autónoma
+                            fundada para formar integralmente a los niños, bajo
+                            parámetros de la práctica de valores y
+                            responsabilidad social. Buscamos la excelencia
+                            académica e impartimos a nuestros estudiantes una
+                            formación basada en el crecimiento humano, el
+                            desarrollo de la creatividad y capacidad de
+                            razonamiento.</p>
+                    </div>
+
+                </div>
+            </div>
+            <div class="swiper-slide">
+                <div class="bg-vision">
+                    <div class="vision-tp">
+                        <h2>Visión</h2>
+                        <p>Ser reconocidos por la alta calidad humana por la
+                            integridad de la propuesta educativa, centrada en la
+                            formación del ser y el desarrollo de competencias que
+                            responden a altos estándares de calidad, mediante
+                            procesos pedagógicos que reconoce la individualidad
+                            y promueven la autonomía del estudiante y por el
+                            profesionalismo y empeño de todo su personal
+                            docente que labora para que los estudiantes sean
+                            personas felices, ciudadanos respetables y ejemplos
+                            en la sociedad.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="swiper-pagination"></div>
+
+
+
+    <div class="bg-lateral"></div>
+
+    <div class="menu">
+
+        <div class="box-menu gimsipei-hover">
+            <div class="gimsipei"></div>
+            <p>Gimsipei</p>
+            <div class="barra-gimsipei"></div>
+        </div>
+
+        <div class="box-menu clases-hover">
+            <div class="clases"></div>
+            <p>Clases</p>
+            <div class="barra-clases"></div>
+        </div>
+        <div class="box-menu recursos-hover">
+            <div class="recursos"></div>
+            <p>Recursos</p>
+            <div class="barra-recursos"></div>
+        </div>
+        <div class="box-menu evaluaciones-hover">
+            <div class="evaluaciones"></div>
+            <p>Evaluaciones</p>
+            <div class="barra-evaluaciones"></div>
+        </div>
+        <div class="box-menu libros-hover">
+            <div class="libros"></div>
+            <p>Libros</p>
+            <div class="barra-libros"></div>
+        </div>
+        <div class="box-menu calificaciones-hover">
+            <div class="calificaciones"></div>
+            <p>Calificaciones</p>
+            <div class="barra-calificaciones"></div>
+        </div>
+    </div>
+</div><!-- container-fluid bg-index -->
+<script src="../../static/js/main.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+{% endblock %}

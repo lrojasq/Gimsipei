@@ -51,7 +51,7 @@
         <p>Fabian Forero Forero</p>
         <div class="data_grade_category flex flex-column">
             <p>1000457520</p>
-            
+
             <p>Grado 10</p>
         </div>
 
@@ -61,44 +61,181 @@
     <!-- Inicio Clases -->
     <div class="specialities_category flex">
 
-      
-          
+
+
         <a href="{{ url_for('subcategoria')}}" class="speciality flex">
             <div class="title_speciality flex flex-column">
-                <hr class="clases_br"/>
+                <hr class="clases_br" />
                 LENGUAJE
             </div>
         </a>
-      
+
 
         <a href="{{ url_for('subcategoria')}}" class="speciality flex">
             <div class="title_speciality flex flex-column">
-                <hr class="clases_br"/>
+                <hr class="clases_br" />
                 MATEMATICAS
             </div>
         </a>
-        
+
 
         <a href="{{ url_for('subcategoria')}}" class="speciality flex">
             <div class="title_speciality flex flex-column">
-                <hr class="clases_br"/>
+                <hr class="clases_br" />
                 SOCIALES
             </div>
         </a>
 
         <a href="{{ url_for('subcategoria')}}" class="speciality flex">
             <div class="title_speciality flex flex-column">
-                <hr class="clases_br"/>
+                <hr class="clases_br" />
                 NATURALES
             </div>
         </a>
+        <!-- Botón para abrir el modal clase-->
+        <div class="container mt-4 text-center">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registroModalClass">
+                Crear clase
+            </button>
+        </div>
+        <!-- Botón para abrir el modal curso -->
+        <div class="container mt-4 text-center">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registroModalCourse">
+                Crear curso
+            </button>
+        </div>
 
-       
+        <!-- Botón para abrir el modal materia -->
+        <div class="container mt-4 text-center">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registroModalAsignature">
+                Crear Materia
+            </button>
+        </div>
+
     </div>
+
+
+    <!-- Modal crear clase -->
+    <div class="modal fade" id="registroModalClass" tabindex="-1" aria-labelledby="registroModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header text-gray">
+                    <h5 class="modal-title title-modal" id="registroModalLabel">
+                        CREAR CLASE
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+
+                    <!-- Campos del formulario -->
+                    <form>
+                        <input type="number" class="form-control mb-3" placeholder="Número de clases" required />
+
+                        <input type="text" class="form-control mb-3" placeholder="Título" required />
+
+                        <textarea class="form-control mb-3" placeholder="Descripción" rows="3" required></textarea>
+
+                        <input type="file" class="form-control mb-3" placeholder="Agregar portada" accept="image/*" />
+
+                        <select class="form-select mb-3" required>
+                            <option value="">Seleccione un periodo</option>
+                            <option value="1">Periodo 1</option>
+                            <option value="2">Periodo 2</option>
+                            <option value="3">Periodo 3</option>
+                            <option value="4">Periodo 4</option>
+                        </select>
+                    </form>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        Cancelar
+                    </button>
+                    <button type="button" class="btn btn-danger">
+                        Guardar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+     <!-- Modal crear curso -->
+    <div class="modal fade" id="registroModalCourse" tabindex="-1" aria-labelledby="registroModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header text-gray">
+                    <h5 class="modal-title title-modal" id="registroModalLabel">
+                        CREAR CURSO
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+
+                    <!-- Campos del formulario -->
+                    <form>
+                        <input type="number" class="form-control mb-3" placeholder="Número de curso" required />
+
+                        <input type="file" class="form-control mb-3" placeholder="Agregar portada" accept="image/*" />
+                    </form>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        Cancelar
+                    </button>
+                    <button type="button" class="btn btn-danger">
+                        Guardar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+     <!-- Modal crear Materia -->
+    <div class="modal fade" id="registroModalAsignature" tabindex="-1" aria-labelledby="registroModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header text-gray">
+                    <h5 class="modal-title title-modal" id="registroModalLabel">
+                        AÑEDIR MATERIA
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+
+                    <!-- Campos del formulario -->
+                    <form>
+                        <input type="number" class="form-control mb-3" placeholder="Número de materia" required />
+
+                        <input type="file" class="form-control mb-3" placeholder="Agregar portada" accept="image/*" />
+                    </form>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        Cancelar
+                    </button>
+                    <button type="button" class="btn btn-danger">
+                        Guardar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Fin clases -->
 
     <!-- Menu lateral -->
-    <aside class="menu_aside flex" >
+    <aside class="menu_aside flex">
         <ul class="aside_list flex flex-column">
             <li>
                 <a href="">
@@ -322,7 +459,7 @@
         </ul>
     </aside>
     <!-- Menu lateral -->
-     
+
 </div><!-- Fin Container -->
 
 {% endblock %}

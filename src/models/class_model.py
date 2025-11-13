@@ -18,6 +18,7 @@ class ClassModel(Base):
     cover_image = Column(String(255), nullable=True)
     created_by = Column(Integer, ForeignKey("users.id"), nullable=False)
     period = Column(Integer, nullable=False)
+    period = Column(Integer, nullable=False)
     created_at = Column(DateTime, default=datetime.now(timezone.utc))
     updated_at = Column(
         DateTime,

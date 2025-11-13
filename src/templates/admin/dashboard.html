@@ -13,19 +13,21 @@
 
     <div class="container_category flex recursos_category">
 
-        <!-- Perfil de Usuario -->
+        <!-- Perfil de Usuario --> 
     <div class="data_categoty flex flex-column">
         <p>{{ user.full_name }}</p>
         <div class="data_grade_category flex flex-column">
             <p>{{ user.document }}</p>
             <p>{{ user.role }}</p>
         </div>
+        
     </div>
 
         <!-- Menú Lateral -->
         {% include "sidebar_menu.html" %}
 
         {% if user.role == "TEACHER" %}
+            {% if grades %}
                 <h5>Estudiantes</h5>
             {% if courses %}
                 <div class="d-flex gap-3 mb-4">
@@ -45,8 +47,5 @@
             {% endif %}
         {% endif %}
 
-        {% if accion_logout %}
-            {% include "utils/logout_button.html" %}
-        {% endif %}
 </div>
 {% endblock %}

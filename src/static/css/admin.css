@@ -79,6 +79,9 @@
 .list-materias li .actions a {
     color: #606060;
 }
+.admin_category{
+    justify-content: start;
+}
 .admin_category .add {
     width: 100%;
     justify-content: end;
@@ -183,11 +186,20 @@
     color: var(--admin);
     text-transform: uppercase;
 }
+.container_category.flex.recursos_category {
+    justify-content: start;
+}
 
 .content-admin.flex.flex-column {
     width: 100%;
+    padding: 2rem;
+    border-radius: 15px;
+    background: var(--gray-light);
 }
-
+.content-admin.flex.flex-column h2{
+    color:#5f6161;
+    margin-bottom: 1rem;
+}
 .form-crear.flex {
     width: 100%;
 }
@@ -195,6 +207,10 @@
 form.form-admin.flex.flex-column {
     width: 100%;
     align-items: end;
+}
+form.form-admin.flex.flex-column h1{
+    color: white;
+    font-size: x-large;
 }
 .img-usuario i{
     font-size: 100px;
@@ -326,6 +342,7 @@ form.form-admin.flex.flex-column {
     justify-content: center;
     align-items: center;
     display: none;/*  oculto modal de confirmación  */
+    z-index: 999999;
 
 }
 .content-modal{
@@ -381,33 +398,35 @@ form.form-admin.flex.flex-column {
 .menu_aside {
     position: fixed;
     right: 20px; /* pegar al borde derecho como en el diseño */
-    top: 80px;
+    top: 110px;
     background-color: var(--admin-active);
     border-radius: 10px;
-    padding: 12px 10px;
     z-index: 1000;
+    width: 80px;
 }
 
 .menu_aside .aside_list {
-    gap: 14px;
+    gap: 5px;
 }
 
 .menu_aside .aside_list li {
     list-style: none;
+    width: 100%;
 }
 
 .menu_aside .aside_list a {
-    display: block;
-    line-height: 0;
+    display: flex;
+    justify-content: center;
+    height: auto;
 }
+
 
 .menu_aside .aside_list img {
     display: block;
-    width: 42px; /* tamaño consistente y elegante */
-    height: 42px;
     filter: invert(90%) sepia(2%) saturate(0%) hue-rotate(180deg) brightness(105%) contrast(90%);
     opacity: 0.9;
     transition: transform .2s ease, opacity .2s ease;
+    max-width: 100%;
 }
 
 .menu_aside .aside_list a:hover img {

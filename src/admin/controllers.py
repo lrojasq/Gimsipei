@@ -52,8 +52,8 @@ def dashboard_controller(_: Request) -> Response:
         # User is student
         else:
             return render_template("about_us.html", accion_logout=True)
-    except Exception as e:
-        flash(f"Error al obtener el dashboard: {str(e)}", "danger")
+    except Exception:
+        flash("Error al obtener el dashboard", "danger")
         return redirect(url_for("auth.login"))
 
 

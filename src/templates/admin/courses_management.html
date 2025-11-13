@@ -25,24 +25,23 @@
                         {% else %}
                             info-circle
                         {% endif %} me-2"></i>
-                    {{ message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
+    {{ message }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endfor %}
+{% endif %}
+{% endwith %}
 
-    <div class="container_category flex admin_category">
-        {# Inicio Cursos #}
-        <div class="specialities_category cursos grades flex flex-column">
-            <div class="flex header-cursos">
-                <div class="items-header">
-                    <div class="flex">
-                        <span>Cursos</span>
-                        <span>Materias</span>
-                    </div>
-                    <span>Acciones</span>
+<div class="container_category flex admin_category courses_management">
+    {# Inicio Cursos #}
+    <div class="specialities_category cursos grades flex flex-column">
+        <div class="flex header-cursos">
+            <div class="items-header">
+                <div class="flex">
+                    <span>Cursos</span>
+                    <span>Materias</span>
                 </div>
+                <span>Acciones</span>
             </div>
             <div class="content-cursos">
                 {% if courses %}
