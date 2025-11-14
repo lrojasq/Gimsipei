@@ -622,3 +622,292 @@ def create_resource_service(data: dict, resource_file=None):
         return {"error": "Error al crear el recurso"}, 500
     finally:
         db.close()
+
+
+def get_classes_by_subject_service(course_id: int, subject_id: int):
+    """
+    Obtiene las clases de una materia específica organizadas por periodo
+
+    Args:
+        course_id: ID del curso
+        subject_id: ID de la materia
+
+    Returns:
+        Tuple con (datos, status_code)
+    """
+    db = SessionLocal()
+    try:
+        # Obtener información del curso
+        course = db.query(Course).filter(Course.id == course_id).first()
+        if not course:
+            return {"error": "Curso no encontrado"}, 404
+
+        # Obtener información de la materia
+        subject = db.query(Subject).filter(Subject.id == subject_id).first()
+        if not subject:
+            return {"error": "Materia no encontrada"}, 404
+
+        # Obtener el profesor asignado a esta materia en este curso
+        course_subject = (
+            db.query(CourseSubject)
+            .filter(
+                CourseSubject.course_id == course_id,
+                CourseSubject.subject_id == subject_id,
+            )
+            .first()
+        )
+
+        teacher = None
+        if course_subject and course_subject.teacher_id:
+            teacher = (
+                db.query(User).filter(User.id == course_subject.teacher_id).first()
+            )
+
+        # Obtener todas las clases de esta materia en este curso
+        classes = (
+            db.query(ClassModel)
+            .filter(
+                ClassModel.course_id == course_id, ClassModel.subject_id == subject_id
+            )
+            .order_by(ClassModel.period, ClassModel.class_number)
+            .all()
+        )
+
+        # Organizar clases por periodo
+        classes_by_period = {1: [], 2: [], 3: [], 4: []}
+        for class_item in classes:
+            if class_item.period in classes_by_period:
+                classes_by_period[class_item.period].append(
+                    {
+                        "id": class_item.id,
+                        "class_number": class_item.class_number,
+                        "title": class_item.title,
+                        "description": class_item.description,
+                        "cover_image": class_item.cover_image,
+                        "period": class_item.period,
+                        "created_at": class_item.created_at.strftime("%Y-%m-%d")
+                        if class_item.created_at
+                        else None,
+                    }
+                )
+
+        result = {
+            "course": {
+                "id": course.id,
+                "name": course.name,
+                "academic_year": course.academic_year,
+            },
+            "subject": {"id": subject.id, "name": subject.name},
+            "teacher": {
+                "id": teacher.id,
+                "full_name": teacher.full_name,
+                "document": teacher.document,
+            }
+            if teacher
+            else None,
+            "classes_by_period": classes_by_period,
+        }
+
+        return result, 200
+
+    except Exception as e:
+        import traceback
+
+        error_trace = traceback.format_exc()
+        print(f"Error en get_classes_by_subject_service: {str(e)}\n{error_trace}")
+        return {"error": "Error al obtener las clases"}, 500
+    finally:
+        db.close()
+
+
+def update_class_service(class_id: int, data: dict, cover_file=None):
+    """
+    Actualiza una clase existente
+
+    Args:
+        class_id: ID de la clase a actualizar
+        data: Diccionario con los datos actualizados
+        cover_file: Archivo de imagen de portada (opcional)
+
+    Returns:
+        Tuple con (resultado, status_code)
+    """
+    db = SessionLocal()
+    try:
+        # Buscar la clase
+        class_to_update = db.query(ClassModel).filter(ClassModel.id == class_id).first()
+        if not class_to_update:
+            return {"error": "Clase no encontrada"}, 404
+
+        # Actualizar campos básicos
+        if "class_number" in data:
+            # Verificar que no exista otra clase con el mismo número
+            existing = (
+                db.query(ClassModel)
+                .filter(
+                    ClassModel.course_id == class_to_update.course_id,
+                    ClassModel.subject_id == class_to_update.subject_id,
+                    ClassModel.class_number == data["class_number"],
+                    ClassModel.period == data.get("period", class_to_update.period),
+                    ClassModel.id != class_id,
+                )
+                .first()
+            )
+            if existing:
+                return {
+                    "error": "Ya existe una clase con ese número en esta materia y periodo"
+                }, 400
+
+            class_to_update.class_number = data["class_number"]
+
+        if "title" in data:
+            class_to_update.title = data["title"]
+
+        if "description" in data:
+            class_to_update.description = data["description"]
+
+        if "period" in data:
+            class_to_update.period = data["period"]
+
+        # Procesar nueva portada si existe
+        if cover_file and cover_file.filename:
+            # Eliminar la portada anterior si existe
+            if class_to_update.cover_image:
+                old_image_path = os.path.join(
+                    "src", class_to_update.cover_image.lstrip("/")
+                )
+                if os.path.exists(old_image_path):
+                    try:
+                        os.remove(old_image_path)
+                    except Exception as e:
+                        print(f"Error al eliminar imagen anterior: {str(e)}")
+
+            # Guardar nueva portada
+            filename = secure_filename(cover_file.filename)
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            filename = f"{timestamp}_{filename}"
+
+            upload_folder = os.path.join("src", "static", "uploads", "classes")
+            os.makedirs(upload_folder, exist_ok=True)
+
+            file_path = os.path.join(upload_folder, filename)
+            cover_file.save(file_path)
+            class_to_update.cover_image = f"/static/uploads/classes/{filename}"
+
+        db.commit()
+        db.refresh(class_to_update)
+
+        return {
+            "message": "Clase actualizada exitosamente",
+            "class": {
+                "id": class_to_update.id,
+                "title": class_to_update.title,
+                "class_number": class_to_update.class_number,
+            },
+        }, 200
+
+    except Exception as e:
+        db.rollback()
+        import traceback
+
+        error_trace = traceback.format_exc()
+        print(f"Error en update_class_service: {str(e)}\n{error_trace}")
+        return {"error": "Error al actualizar la clase"}, 500
+    finally:
+        db.close()
+
+
+def delete_class_service(class_id: int, current_user_id: int):
+    """
+    Elimina una clase y su imagen de portada
+
+    Args:
+        class_id: ID de la clase a eliminar
+        current_user_id: ID del usuario que intenta eliminar
+
+    Returns:
+        Tuple con (resultado, status_code)
+    """
+    db = SessionLocal()
+    try:
+        # Buscar la clase
+        class_to_delete = db.query(ClassModel).filter(ClassModel.id == class_id).first()
+        if not class_to_delete:
+            return {"error": "Clase no encontrada"}, 404
+
+        # Verificar permisos
+        current_user = db.query(User).filter(User.id == current_user_id).first()
+        if not current_user:
+            return {"error": "Usuario no encontrado"}, 404
+
+        if (
+            current_user.role.name != UserRole.ADMIN.name
+            and class_to_delete.created_by != current_user_id
+        ):
+            return {"error": "No tienes permisos para eliminar esta clase"}, 403
+
+        # Eliminar la imagen de portada si existe
+        if class_to_delete.cover_image:
+            image_path = os.path.join("src", class_to_delete.cover_image.lstrip("/"))
+            if os.path.exists(image_path):
+                try:
+                    os.remove(image_path)
+                    print(f"Imagen eliminada: {image_path}")
+                except Exception as e:
+                    print(f"Error al eliminar imagen: {str(e)}")
+
+        # Eliminar la clase
+        db.delete(class_to_delete)
+        db.commit()
+
+        return {"message": "Clase eliminada exitosamente"}, 200
+
+    except Exception as e:
+        db.rollback()
+        import traceback
+
+        error_trace = traceback.format_exc()
+        print(f"Error en delete_class_service: {str(e)}\n{error_trace}")
+        return {"error": "Error al eliminar la clase"}, 500
+    finally:
+        db.close()
+
+
+def get_class_by_id_service(class_id: int):
+    """
+    Obtiene los datos de una clase específica
+
+    Args:
+        class_id: ID de la clase
+
+    Returns:
+        Tuple con (datos, status_code)
+    """
+    db = SessionLocal()
+    try:
+        class_item = db.query(ClassModel).filter(ClassModel.id == class_id).first()
+        if not class_item:
+            return {"error": "Clase no encontrada"}, 404
+
+        result = {
+            "id": class_item.id,
+            "course_id": class_item.course_id,
+            "subject_id": class_item.subject_id,
+            "class_number": class_item.class_number,
+            "title": class_item.title,
+            "description": class_item.description,
+            "period": class_item.period,
+            "cover_image": class_item.cover_image,
+            "created_by": class_item.created_by,
+        }
+
+        return result, 200
+
+    except Exception as e:
+        import traceback
+
+        error_trace = traceback.format_exc()
+        print(f"Error en get_class_by_id_service: {str(e)}\n{error_trace}")
+        return {"error": "Error al obtener la clase"}, 500
+    finally:
+        db.close()

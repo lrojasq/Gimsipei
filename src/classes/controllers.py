@@ -469,3 +469,110 @@ def create_resource_controller():
         print(f"Error en create_resource_controller: {str(e)}\n{error_trace}")
         flash("Error al crear el recurso", "danger")
         return redirect(url_for("classes.teacher_classes_view"))
+
+
+def subject_classes_view_controller(course_id: int, subject_id: int):
+    """Vista HTML para mostrar las clases de una materia específica"""
+    try:
+        data, status_code = service.get_classes_by_subject_service(
+            course_id, subject_id
+        )
+
+        if status_code != 200:
+            flash(data.get("error", "Error al cargar las clases"), "danger")
+            return redirect(url_for("classes.teacher_classes_view"))
+
+        return render_template(
+            "teacher/subject_classes_view.html",
+            course=data["course"],
+            subject=data["subject"],
+            teacher=data["teacher"],
+            classes_by_period=data["classes_by_period"],
+            user={"role": get_jwt().get("role").lower(), "id": get_jwt().get("id")},
+            accion_logout=True,
+        )
+    except Exception as e:
+        import traceback
+
+        error_trace = traceback.format_exc()
+        print(f"Error en subject_classes_view_controller: {str(e)}\n{error_trace}")
+        flash(f"Error al cargar las clases: {str(e)}", "danger")
+        return redirect(url_for("classes.teacher_classes_view"))
+
+
+def update_class_controller(class_id: int):
+    """Controlador para actualizar una clase existente"""
+    try:
+        data = {
+            "class_number": request.form.get("class_number"),
+            "title": request.form.get("title"),
+            "description": request.form.get("description", ""),
+            "period": request.form.get("period"),
+        }
+
+        # Obtener archivo de portada si existe
+        cover_file = request.files.get("cover_image")
+        result, status_code = service.update_class_service(class_id, data, cover_file)
+
+        if status_code == 200:
+            flash(result["message"], "success")
+        else:
+            flash(result.get("error", "Error al actualizar la clase"), "danger")
+
+        # Redirigir a la vista anterior (obtener de referrer o default)
+        course_id = request.form.get("course_id")
+        subject_id = request.form.get("subject_id")
+
+        if course_id and subject_id:
+            return redirect(
+                url_for(
+                    "classes.subject_classes_view",
+                    course_id=course_id,
+                    subject_id=subject_id,
+                )
+            )
+        return redirect(url_for("classes.teacher_classes_view"))
+
+    except Exception as e:
+        import traceback
+
+        error_trace = traceback.format_exc()
+        print(f"Error en update_class_controller: {str(e)}\n{error_trace}")
+        flash("Error al actualizar la clase", "danger")
+        return redirect(url_for("classes.teacher_classes_view"))
+
+
+def delete_class_controller(class_id: int):
+    """Controlador para eliminar una clase"""
+    try:
+        current_user_id = get_jwt_identity()
+        result, status_code = service.delete_class_service(class_id, current_user_id)
+
+        if status_code == 200:
+            flash(result["message"], "success")
+        else:
+            flash(result.get("error", "Error al eliminar la clase"), "danger")
+
+        # Redirigir a la vista anterior
+        return redirect(request.referrer or url_for("classes.teacher_classes_view"))
+    except Exception as e:
+        import traceback
+
+        error_trace = traceback.format_exc()
+        print(f"Error en delete_class_controller: {str(e)}\n{error_trace}")
+        flash("Error al eliminar la clase", "danger")
+        return redirect(url_for("classes.teacher_classes_view"))
+
+
+def get_class_controller(class_id: int):
+    """Controlador para obtener datos de una clase específica"""
+    try:
+        result, status_code = service.get_class_by_id_service(class_id)
+        return jsonify(result), status_code
+
+    except Exception as e:
+        import traceback
+
+        error_trace = traceback.format_exc()
+        print(f"Error en get_class_controller: {str(e)}\n{error_trace}")
+        return jsonify({"error": "Error al obtener la clase"}), 500

@@ -99,6 +99,14 @@ def teacher_classes_view():
     return controllers.teacher_classes_view_controller()
 
 
+@class_bp.route("/teacher/subject/<int:course_id>/<int:subject_id>", methods=["GET"])
+@jwt_required()
+@role_required(UserRole.TEACHER)
+def subject_classes_view(course_id: int, subject_id: int):
+    """Vista HTML de clases de una materia específica"""
+    return controllers.subject_classes_view_controller(course_id, subject_id)
+
+
 # # Class Routes
 # @class_bp.route('/classes', methods=['POST'])
 # @jwt_required()
@@ -224,3 +232,27 @@ def create_class():
 def create_resource():
     """Crear un nuevo recurso"""
     return controllers.create_resource_controller()
+
+
+@class_bp.route("/update/<int:class_id>", methods=["POST"])
+@jwt_required()
+@role_required(UserRole.TEACHER)
+def update_class(class_id: int):
+    """Actualizar una clase existente"""
+    return controllers.update_class_controller(class_id)
+
+
+@class_bp.route("/delete/<int:class_id>", methods=["POST"])
+@jwt_required()
+@role_required(UserRole.TEACHER)
+def delete_class(class_id: int):
+    """Eliminar una clase"""
+    return controllers.delete_class_controller(class_id)
+
+
+@class_bp.route("/get/<int:class_id>", methods=["GET"])
+@jwt_required()
+@role_required(UserRole.TEACHER)
+def get_class(class_id: int):
+    """Obtener datos de una clase específica"""
+    return controllers.get_class_controller(class_id)
