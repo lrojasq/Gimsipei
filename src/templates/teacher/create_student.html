@@ -12,9 +12,6 @@
 {% block content %}
 {% block menu %}{% endblock %}
 
-<!-- Perfil de Usuario -->
-{% include "user_profile.html" %}
-
 
 <div class="container_category flex admin_category">
     <!-- Flash Messages -->
@@ -30,6 +27,9 @@
     {% endfor %}
     {% endif %}
     {% endwith %}
+    <!-- Perfil de Usuario -->
+    {% include "user_profile.html" %}
+
 
     <!-- Formulario de Creación -->
     <div class="specialities_category flex create-student-container">

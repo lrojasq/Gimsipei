@@ -24,24 +24,5 @@
         <!-- Menú Lateral -->
         {% include "sidebar_menu.html" %}
 
-        {% if user.role == "TEACHER" %}
-            <h5>Estudiantes</h5>
-            {% if courses %}
-                <div class="d-flex gap-3 mb-4">
-                    <ul class="list-unstyled d-flex gap-2 mb-0">
-                        {% for course in courses %}
-                            <li>
-                                <a href="{{ url_for('users.course_students', course_id=course.id) }}"
-                                   class="btn btn-outline-dark me-2 course-grade-btn">
-                                    {{ course.grade_number }}
-                                </a>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            {% else %}
-                <p class="text-muted">No hay cursos disponibles en el colegio.</p>
-            {% endif %}
-        {% endif %}
     </div>
 {% endblock %}
