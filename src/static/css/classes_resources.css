@@ -1,12 +1,25 @@
+:root {
+    --blanco: #ffffff;
+    --primario: #3BBAE4;
+    --gris-claro: #606060;
+    --azul-oscuro: #12A3DD;
+    --barra-ginsipei: #1CC3EA;
+    --barra-clases: #23CCC3;
+    --barra-recursos: #F7CB52;
+    --barra-evaluaciones: #F48D53;
+    --barra-libros: #EA6EF4;
+    --barra-calificaciones: #A270F2;
+    --gray-light: #f4f4f4;
+}
 /* Classes and Resources Management Styles */
 
 /* Header Classes */
 .header-classes {
     display: flex;
     align-items: center;
-    margin-bottom: 30px;
+    /* margin-bottom: 30px; */
     padding: 0 0 20px 0;
-    border-bottom: 2px solid hsl(0, 0%, 88%);
+    /* border-bottom: 2px solid hsl(0, 0%, 88%); */
 }
 
 .classes-icon-wrapper {
@@ -41,8 +54,13 @@
     width: 100%;
     background: white;
     border-radius: 8px;
-    overflow: hidden;
+    overflow: auto;
     margin-bottom: 20px;
+
+}
+.classes-table-wrapper::-webkit-scrollbar-thumb {
+    background: var(--barra-clases);
+    border-radius: 5px;
 }
 
 /* Classes Table */
@@ -62,7 +80,7 @@
 
 .classes-table thead th {
     text-align: left;
-    padding: 1rem;
+    padding: 1rem 0px;
     color: hsl(0, 0%, 25%);
     font-weight: 600;
     font-size: 1.125rem;
@@ -551,8 +569,9 @@
 }
 
 .course-row .course-name-cell {
-    padding: 1.5rem 2rem;
+    padding: 1.5rem 0rem;
     border-bottom: 1px solid hsl(0, 0%, 85%);
+    background-color: white;
 }
 
 .course-row:hover {
@@ -612,11 +631,20 @@
     color: hsl(0, 0%, 30%);
 }
 
-.subject-row-expanded .subject-action-cell {
-    width: 22.5%;
+.subject-row-expanded .subject-action-cell{
+    width: 22.5%; 
     text-align: center;
 }
+.subject-row-expanded .subject-action-cell:has(button){
+    text-align: left;
+}
+button.add-link-btn{
+    border: none;
+    background-color: transparent;
+    color: var(--barra-clases);
+}
 
+.class_resource_list
 .add-link-btn {
     background: none;
     border: none;

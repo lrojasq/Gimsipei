@@ -198,7 +198,7 @@
 }
 .content-admin.flex.flex-column h2{
     color:#5f6161;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
 }
 .form-crear.flex {
     width: 100%;
@@ -432,6 +432,19 @@ form.form-admin.flex.flex-column h1{
 .menu_aside .aside_list a:hover img {
     transform: scale(1.05);
     opacity: 1;
+}
+
+.students_list a.btn.btn-outline-dark.me-2.course-grade-btn {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    background: var(--azul-oscuro);
+    color: white;
+    border: none;
+    font-size: 20px;
 }
 
 @media (max-width: 992px) {

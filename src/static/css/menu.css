@@ -111,7 +111,10 @@ html {
     z-index: 99991;
     position: relative;
     gap: 5rem;
-    gap: 5rem;
+}
+.container_boxs_menu{
+    justify-content: space-between;
+    gap: 0px;
 }
 
 .box-menu {
@@ -119,8 +122,8 @@ html {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    gap: 15px;
-    width: 120px;
+    gap: 10px;
+    width: 147px;
     height: 158px;
     position: relative;
     border-radius: 15px;
@@ -134,6 +137,9 @@ html {
 .box-menu svg {
     fill: #fff;
     width: 80px;
+}
+.box-menu p {
+    font-size: 16px;
 }
 
 /* botones menu*/

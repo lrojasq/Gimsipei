@@ -1,65 +1,98 @@
-
 <!-- Sidebar Menu Component -->
 <!-- Admin Menu -->
 {% if user.role == "ADMIN" %}
-    <div class="specialities_category flex">
-        <div class="content-admin flex flex-column">
-            <h2>Administrar</h2>
-            <div class="flex">
-                <a href="{{ url_for('users.teachers_management') }}">
-                    <div class="box-menu clases-hover">
-                        <img src="{{ url_for('static', filename='images/svg/clases.svg') }}" alt="Docentes" style="width: 80px; height: 80px;">
-                        <p>Docente</p>
-                        <div class="barra barra-clases"></div>
-                    </div>
-                </a>
-                <a href="{{ url_for('courses.courses_management') }}">
-                    <div class="box-menu libros-hover">
-                        <img src="{{ url_for('static', filename='images/svg/libros.svg') }}" alt="Cursos" style="width: 80px; height: 60px;">
-                        <p>Cursos</p>
-                        <div class="barra barra-libros"></div>
-                    </div>
-                </a>
-            </div>
+<div class="specialities_category flex">
+    <div class="content-admin flex flex-column">
+        <h2>Administrar</h2>
+        <div class="flex">
+            <a href="{{ url_for('users.teachers_management') }}">
+                <div class="box-menu clases-hover">
+                    <img src="{{ url_for('static', filename='images/svg/clases.svg') }}" alt="Docentes"
+                        style="width: 80px; height: 80px;">
+                    <p>Docente</p>
+                    <div class="barra barra-clases"></div>
+                </div>
+            </a>
+            <a href="{{ url_for('courses.courses_management') }}">
+                <div class="box-menu libros-hover">
+                    <img src="{{ url_for('static', filename='images/svg/libros.svg') }}" alt="Cursos"
+                        style="width: 80px; height: 60px;">
+                    <p>Cursos</p>
+                    <div class="barra barra-libros"></div>
+                </div>
+            </a>
         </div>
     </div>
+</div>
 {% endif %}
 
 <!-- Teacher Menu -->
 {% if user.role == "TEACHER" %}
-    <div class="specialities_category flex">
-        <div class="content-admin flex flex-column">
-            <h2>Administrar</h2>
-            <div class="flex">
-                <a href="{{ url_for('classes.teacher_classes_view') }}">
-                    <div class="box-menu clases-hover">
-                        <img src="{{ url_for('static', filename='images/svg/clases.svg') }}" alt="Clases y recursos" style="width: 80px; height: 80px;">
-                        <p>Clases y recursos</p>
-                        <div class="barra barra-clases"></div>
-                    </div>
-                </a>
-                <a href="{{ url_for('admin.evaluaciones') }}">
-                    <div class="box-menu evaluaciones-hover">
-                        <img src="{{ url_for('static', filename='images/svg/evaluaciones.svg') }}" alt="Evaluaciones" style="width: 80px; height: 60px;">
-                        <p>Evaluaciones</p>
-                        <div class="barra barra-evaluaciones"></div>
-                    </div>
-                </a>
-                <a href="{{ url_for('admin.libros') }}">
-                    <div class="box-menu libros-hover">
-                        <img src="{{ url_for('static', filename='images/svg/libros.svg') }}" alt="Libros" style="width: 80px; height: 60px;">
-                        <p>Libros</p>
-                        <div class="barra barra-libros"></div>
-                    </div>
-                </a>
-                <a href="{{ url_for('admin.calificaciones') }}">
-                    <div class="box-menu calificaciones-hover">
-                        <img src="{{ url_for('static', filename='images/svg/calificaciones.svg') }}" alt="Calificaciones" style="width: 80px; height: 60px;">
-                        <p>Calificaciones</p>
-                        <div class="barra barra-calificaciones"></div>
-                    </div>
-                </a>
-            </div>
+<div class="specialities_category flex">
+    <div class="content-admin flex flex-column">
+        {% if user.role == "TEACHER" %}
+        <h2>Estudiantes</h2>
+        {% if courses %}
+        <div class="d-flex gap-3">
+            <ul class="list-unstyled d-flex gap-2 mb-0 students_list">
+                {% for course in courses %}
+                <li>
+                    <a href="{{ url_for('users.course_students', course_id=course.id) }}"
+                        class="btn btn-outline-dark me-2 course-grade-btn">
+                        {{ course.grade_number }}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% else %}
+        <p class="text-muted">No hay cursos disponibles en el colegio.</p>
+        {% endif %}
+        {% endif %}
+        <h2>Administrar</h2>
+        <div class="flex container_boxs_menu">
+            <a href="{{ url_for('classes.teacher_classes_view') }}">
+                <div class="box-menu clases-hover">
+                    <img src="{{ url_for('static', filename='images/svg/clases.svg') }}" alt="Clases y recursos"
+                        style="width: 80px; height: 80px;">
+                    <p>Clases y recursos</p>
+                    <div class="barra barra-clases"></div>
+                </div>
+            </a>
+            <a href="{{ url_for('admin.evaluaciones') }}">
+                <div class="box-menu evaluaciones-hover">
+                    <img src="{{ url_for('static', filename='images/svg/evaluaciones.svg') }}" alt="Evaluaciones"
+                        style="width: 80px; height: 60px;">
+                    <p>Evaluaciones</p>
+                    <div class="barra barra-evaluaciones"></div>
+                </div>
+            </a>
+            <a href="{{ url_for('admin.libros') }}">
+                <div class="box-menu libros-hover">
+                    <img src="{{ url_for('static', filename='images/svg/libros.svg') }}" alt="Libros"
+                        style="width: 80px; height: 60px;">
+                    <p>Libros</p>
+                    <div class="barra barra-libros"></div>
+                </div>
+            </a>
+            <a href="{{ url_for('admin.calificaciones') }}">
+                <div class="box-menu calificaciones-hover">
+                    <img src="{{ url_for('static', filename='images/svg/calificaciones.svg') }}" alt="Calificaciones"
+                        style="width: 80px; height: 60px;">
+                    <p>Calificaciones</p>
+                    <div class="barra barra-calificaciones"></div>
+                </div>
+            </a>
+            
+            <a href="{{ url_for('admin.calificaciones') }}">
+                <div class="box-menu recursos-hover">
+                    <img src="{{ url_for('static', filename='images/svg/calificaciones.svg') }}" alt="recursos"
+                        style="width: 80px; height: 60px;">
+                    <p>Recursos</p>
+                    <div class="barra barra-recursos"></div>
+                </div>
+            </a>
         </div>
     </div>
+</div>
 {% endif %}
