@@ -35,6 +35,7 @@ def teachers_management_controller(request: Request) -> Response:
             teachers=users,
             total=total,
             user=current_user,
+            accion_logout=True,
         )
     except Exception as e:
         flash(f"Error al cargar la lista de docentes: {str(e)}", "danger")
@@ -45,7 +46,11 @@ def teachers_management_controller(request: Request) -> Response:
         except Exception:
             current_user = None
         return render_template(
-            "admin/teachers_management.html", teachers=[], total=0, user=current_user
+            "admin/teachers_management.html",
+            teachers=[],
+            total=0,
+            user=current_user,
+            accion_logout=True,
         )
 
 
@@ -57,7 +62,9 @@ def create_teacher_controller(request: Request) -> Response:
         # Get current user info for the template
         current_user_id = get_jwt_identity()
         current_user, _ = get_user_service(current_user_id, request)
-        return render_template("admin/create_teacher.html", user=current_user)
+        return render_template(
+            "admin/create_teacher.html", user=current_user, accion_logout=True
+        )
 
     try:
         data = request.form.to_dict()
@@ -72,26 +79,34 @@ def create_teacher_controller(request: Request) -> Response:
             # Get current user info for the template
             current_user_id = get_jwt_identity()
             current_user, _ = get_user_service(current_user_id, request)
-            return render_template("admin/create_teacher.html", user=current_user)
+            return render_template(
+                "admin/create_teacher.html", user=current_user, accion_logout=True
+            )
         else:
             flash("Error al crear el docente", "danger")
             # Get current user info for the template
             current_user_id = get_jwt_identity()
             current_user, _ = get_user_service(current_user_id, request)
-            return render_template("admin/create_teacher.html", user=current_user)
+            return render_template(
+                "admin/create_teacher.html", user=current_user, accion_logout=True
+            )
 
     except ValidationError:
         flash("Datos inválidos. Por favor verifique la información", "danger")
         # Get current user info for the template
         current_user_id = get_jwt_identity()
         current_user, _ = get_user_service(current_user_id, request)
-        return render_template("admin/create_teacher.html", user=current_user)
+        return render_template(
+            "admin/create_teacher.html", user=current_user, accion_logout=True
+        )
     except Exception as e:
         flash(f"Error interno: {str(e)}", "danger")
         # Get current user info for the template
         current_user_id = get_jwt_identity()
         current_user, _ = get_user_service(current_user_id, request)
-        return render_template("admin/create_teacher.html", user=current_user)
+        return render_template(
+            "admin/create_teacher.html", user=current_user, accion_logout=True
+        )
 
 
 @jwt_required()
@@ -107,7 +122,10 @@ def edit_teacher_controller(teacher_id: int, request: Request) -> Response:
                 flash("Docente no encontrado", "danger")
                 return redirect(url_for("users.teachers_management"))
             return render_template(
-                "admin/edit_teacher.html", teacher=teacher, user=current_user
+                "admin/edit_teacher.html",
+                teacher=teacher,
+                user=current_user,
+                accion_logout=True,
             )
         except Exception as e:
             flash(f"Error al cargar el docente: {str(e)}", "danger")
@@ -139,13 +157,19 @@ def edit_teacher_controller(teacher_id: int, request: Request) -> Response:
         else:
             flash("Error al actualizar el docente", "danger")
             return render_template(
-                "admin/edit_teacher.html", teacher=teacher_data, user=current_user
+                "admin/edit_teacher.html",
+                teacher=teacher_data,
+                user=current_user,
+                accion_logout=True,
             )
 
     except ValidationError:
         flash("Datos inválidos. Por favor verifique la información", "danger")
         return render_template(
-            "admin/edit_teacher.html", teacher=teacher_data, user=current_user
+            "admin/edit_teacher.html",
+            teacher=teacher_data,
+            user=current_user,
+            accion_logout=True,
         )
 
     except Exception as e:

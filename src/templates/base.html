@@ -15,7 +15,9 @@
 
 <body class="d-flex flex-column min-vh-100">
     <!-- Navigation -->
-     {% include "navbar.html" %}
+    {% if accion_logout %}
+        {% include "navbar.html" %}
+    {% endif %}
     {% block content %}{% endblock %}
     </main>
 

@@ -40,6 +40,7 @@ def create_subject_controller(request: Request) -> Response:
             available_subjects=available_subjects,
             course=course,
             course_id=course_id,
+            accion_logout=True,
         )
 
     try:

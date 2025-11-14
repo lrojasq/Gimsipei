@@ -55,6 +55,7 @@ def courses_management_controller(_: Request) -> Response:
             available_courses=available_courses,
             teachers=teachers,
             available_subjects=available_subjects,
+            accion_logout=True,
         )
     except Exception as e:
         flash(f"Error al cargar la lista de cursos: {str(e)}", "danger")
@@ -66,6 +67,7 @@ def courses_management_controller(_: Request) -> Response:
             available_courses=[],
             teachers=[],
             available_subjects=[],
+            accion_logout=True,
         )
 
 
@@ -111,7 +113,9 @@ def edit_course_controller(course_id: int, request: Request) -> Response:
             if status_code == 404:
                 flash("Curso no encontrado", "danger")
                 return redirect(url_for("courses.courses_management"))
-            return render_template("admin/edit_course.html", course=course)
+            return render_template(
+                "admin/edit_course.html", course=course, accion_logout=True
+            )
         except Exception as e:
             flash(f"Error al cargar el curso: {str(e)}", "danger")
             return redirect(url_for("courses.courses_management"))
@@ -134,17 +138,25 @@ def edit_course_controller(course_id: int, request: Request) -> Response:
             flash(
                 "Ya existe un curso con ese nombre en el mismo año y período", "danger"
             )
-            return render_template("admin/edit_course.html", course=result)
+            return render_template(
+                "admin/edit_course.html", course=result, accion_logout=True
+            )
         else:
             flash("Error al actualizar el curso", "danger")
-            return render_template("admin/edit_course.html", course=result)
+            return render_template(
+                "admin/edit_course.html", course=result, accion_logout=True
+            )
 
     except ValidationError as e:
         flash(f"Datos inválidos: {str(e)}", "danger")
-        return render_template("admin/edit_course.html", course=course_data)
+        return render_template(
+            "admin/edit_course.html", course=course_data, accion_logout=True
+        )
     except Exception as e:
         flash(f"Error interno: {str(e)}", "danger")
-        return render_template("admin/edit_course.html", course=course_data)
+        return render_template(
+            "admin/edit_course.html", course=course_data, accion_logout=True
+        )
 
 
 @jwt_required()
@@ -192,6 +204,7 @@ def course_detail_controller(course_id: int, request: Request) -> Response:
             course=course,
             students=students,
             subjects=subjects,
+            accion_logout=True,
         )
     except Exception as e:
         flash(f"Error al cargar el detalle del curso: {str(e)}", "danger")

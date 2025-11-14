@@ -50,6 +50,7 @@ def resources_view_controller(request: Request):
             "teacher/resources_view.html",
             user=user,
             subjects=resources_data.get("subjects", []),
+            accion_logout=True,
         )
     except Exception as e:
         print(f"Error en resources_view_controller: {str(e)}")

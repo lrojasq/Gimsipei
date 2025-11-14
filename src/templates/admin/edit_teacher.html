@@ -58,28 +58,20 @@
                                             placeholder="Nueva contraseña (opcional)">
                                     </div>
 
-                                    <!-- Selección de rol -->
-                                    <!-- <div class="flex input-group">
-                                        <label class="mb-1" for="role">Rol *</label>
-                                        <select name="role" id="role" class="form-select" required>
-                                            <option value="teacher" {% if teacher.role=='TEACHER' %}selected{% endif %}>
-                                                Docente</option>
-                                            <option value="admin" {% if teacher.role=='ADMIN' %}selected{% endif %}>
-                                                Administrador</option>
-                                        </select>
-                                    </div> -->
-                                         <!-- Selección de rol explícita -->
-                                <div class="container mt-3">
-                                    <div class="btn-group flex justify-content-around" role="group" aria-label="Tipo de usuario">
-                                        <input type="radio" class="btn-check" name="tipoUsuario" id="docente"
-                                            value="docente" autocomplete="off" {% if teacher.role=='TEACHER' %}checked{% endif %} />
-                                        <label class="btn btn-outline-danger" for="docente">DOCENTE</label>
+                                    <!-- Selección de rol explícita -->
+                                    <div class="container mt-3">
+                                        <div class="btn-group flex justify-content-around" role="group"
+                                            aria-label="Tipo de usuario">
+                                            <input type="radio" class="btn-check" name="role" id="docente"
+                                                value="teacher" autocomplete="off" {% if teacher.role=='TEACHER'
+                                                %}checked{% endif %} />
+                                            <label class="btn btn-outline-danger" for="docente">DOCENTE</label>
 
-                                        <input type="radio" class="btn-check" name="tipoUsuario" id="admin"
-                                            value="administrador" autocomplete="off" {% if teacher.role=='ADMIN' %}checked{% endif %}/>
-                                        <label class="btn btn-outline-danger" for="admin">ADMINISTRADOR</label>
+                                            <input type="radio" class="btn-check" name="role" id="admin" value="admin"
+                                                autocomplete="off" {% if teacher.role=='ADMIN' %}checked{% endif %} />
+                                            <label class="btn btn-outline-danger" for="admin">ADMINISTRADOR</label>
+                                        </div>
                                     </div>
-                                </div>
                                 </div>
                             </div>
                         </div>
@@ -88,19 +80,14 @@
                                 class="btn-admin btn-cancelar">VOLVER</a>
                             <button type="submit" class="btn-admin">ACTUALIZAR</button>
                         </div>
-                    </div>
-                    <div class="flex" style="gap:12px;">
-                        <a href="{{ url_for('users.teachers_management') }}" class="btn-admin btn-cancelar">VOLVER</a>
-                        <button type="submit" class="btn-admin">ACTUALIZAR</button>
-                        </div>
                     </form>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- Sidebar Aside Component -->
-    {% include "sidebar_aside.html" %}
+        <!-- Sidebar Aside Component -->
+        {% include "sidebar_aside.html" %}
 
-    <!-- Custom JS -->
-    <script src="{{ url_for('static', filename='js/teachers_management.js') }}"></script>
-    {% endblock %}
+        <!-- Custom JS -->
+        <script src="{{ url_for('static', filename='js/teachers_management.js') }}"></script>
+        {% endblock %}

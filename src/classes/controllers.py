@@ -397,6 +397,7 @@ def teacher_classes_view_controller():
             "teacher/teacher_classes.html",
             courses=courses,
             user={"role": get_jwt().get("role").lower(), "id": get_jwt().get("id")},
+            accion_logout=True,
         )
     except Exception as e:
         flash(f"Error al cargar los cursos: {str(e)}", "danger")
@@ -404,6 +405,7 @@ def teacher_classes_view_controller():
             "teacher/teacher_classes.html",
             courses=[],
             user={"role": get_jwt().get("role").lower(), "id": get_jwt().get("id")},
+            accion_logout=True,
         )
 
 

@@ -50,6 +50,7 @@ def course_students_controller(course_id: int, request: Request) -> Response:
             course=course_data,
             students=students_list,
             total=len(students_list),
+            accion_logout=True,
         )
     except Exception as e:
         flash(f"Error al cargar los estudiantes: {str(e)}", "danger")
@@ -86,6 +87,7 @@ def create_student_controller(course_id: int, request: Request) -> Response:
                 user=current_user,
                 course=course_data,
                 courses=courses,
+                accion_logout=True,
             )
 
         # POST: Crear estudiante
@@ -143,6 +145,7 @@ def create_student_controller(course_id: int, request: Request) -> Response:
                     user=current_user,
                     course=course_data,
                     courses=courses,
+                    accion_logout=True,
                 )
             else:
                 flash("Error al crear el estudiante", "danger")
@@ -151,6 +154,7 @@ def create_student_controller(course_id: int, request: Request) -> Response:
                     user=current_user,
                     course=course_data,
                     courses=courses,
+                    accion_logout=True,
                 )
 
         except ValidationError:
@@ -160,6 +164,7 @@ def create_student_controller(course_id: int, request: Request) -> Response:
                 user=current_user,
                 course=course_data,
                 courses=courses,
+                accion_logout=True,
             )
         except Exception as e:
             flash(f"Error interno: {str(e)}", "danger")
@@ -168,6 +173,7 @@ def create_student_controller(course_id: int, request: Request) -> Response:
                 user=current_user,
                 course=course_data,
                 courses=courses,
+                accion_logout=True,
             )
 
     except Exception as e:
@@ -213,6 +219,7 @@ def edit_student_controller(
                     user=current_user,
                     course=course_data,
                     courses=courses,
+                    accion_logout=True,
                 )
             except Exception as e:
                 flash(f"Error al cargar el estudiante: {str(e)}", "danger")
@@ -246,6 +253,7 @@ def edit_student_controller(
                     user=current_user,
                     course=course_data,
                     courses=courses,
+                    accion_logout=True,
                 )
 
         except ValidationError:
@@ -256,6 +264,7 @@ def edit_student_controller(
                 user=current_user,
                 course=course_data,
                 courses=courses,
+                accion_logout=True,
             )
 
         except Exception as e:
@@ -351,6 +360,7 @@ def student_tasks_controller(
             course=data["course"],
             student=data["student"],
             subjects=subjects_list,
+            accion_logout=True,
         )
     except Exception as e:
         error_trace = traceback.format_exc()

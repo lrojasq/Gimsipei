@@ -3,38 +3,35 @@
 {% block title %}Dashboard | Administrador{% endblock %}
 
 {% block extra_css %}
-<link href="{{ url_for('static', filename='css/menu.css') }}" rel="stylesheet">
-<link href="{{ url_for('static', filename='css/category.css') }}" rel="stylesheet">
-<link href="{{ url_for('static', filename='css/admin.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/menu.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/category.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
 {% endblock %}
 
 {% block content %}
     {% block menu %}{% endblock %}
 
     <div class="container_category flex recursos_category">
-
-        <!-- Perfil de Usuario --> 
-    <div class="data_categoty flex flex-column">
-        <p>{{ user.full_name }}</p>
-        <div class="data_grade_category flex flex-column">
-            <p>{{ user.document }}</p>
-            <p>{{ user.role }}</p>
+        <!-- Perfil de Usuario -->
+        <div class="data_categoty flex flex-column">
+            <p>{{ user.full_name }}</p>
+            <div class="data_grade_category flex flex-column">
+                <p>{{ user.document }}</p>
+                <p>{{ user.role }}</p>
+            </div>
         </div>
-        
-    </div>
 
         <!-- Menú Lateral -->
         {% include "sidebar_menu.html" %}
 
         {% if user.role == "TEACHER" %}
-            {% if grades %}
-                <h5>Estudiantes</h5>
+            <h5>Estudiantes</h5>
             {% if courses %}
                 <div class="d-flex gap-3 mb-4">
                     <ul class="list-unstyled d-flex gap-2 mb-0">
                         {% for course in courses %}
                             <li>
-                                <a href="{{ url_for('users.course_students', course_id=course.id) }}" 
+                                <a href="{{ url_for('users.course_students', course_id=course.id) }}"
                                    class="btn btn-outline-dark me-2 course-grade-btn">
                                     {{ course.grade_number }}
                                 </a>
@@ -46,6 +43,5 @@
                 <p class="text-muted">No hay cursos disponibles en el colegio.</p>
             {% endif %}
         {% endif %}
-
-</div>
+    </div>
 {% endblock %}
