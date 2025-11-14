@@ -1,3 +1,27 @@
+:root {
+    --primary-color: #007bff;
+    --secondary-color: #6c757d;
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+    --info-color: #17a2b8;
+    --light-color: #ffffff;
+    --dark-color: #343a40;
+    --border-color: #00c2e7;
+    --gray-light: #f4f4f4;
+    --clases: #23ccc3;
+    --clases-active: #16b7ab;
+    --recursos: #f7cb52;
+    --recursos-active: #e5ab1a;
+    --evaluaciones: #f48d53;
+    --evaluaciones-active: #e55d1a;
+    --libros: #ea6ef4;
+    --libros-active: #d944ea;
+    --calificaciones: #a270f2;
+    --calificaciones-active: #6c43d1;
+    --admin: #f94e4e;
+    --admin-active: #e01e1e;
+}
 .header-cursos {
     width: 100%;
     background-color: #fff;
@@ -395,6 +419,7 @@ form.form-admin.flex.flex-column h1{
 }
 
 /* ========== Lateral Aside Menu (icons column) ========== */
+
 .menu_aside {
     position: fixed;
     right: 20px; /* pegar al borde derecho como en el diseño */
@@ -403,6 +428,21 @@ form.form-admin.flex.flex-column h1{
     border-radius: 10px;
     z-index: 1000;
     width: 80px;
+}
+.menu_aside.clases{
+    background-color: var(--clases);
+}
+.menu_aside.recursos{
+    background-color: var(--recursos);
+}
+.menu_aside.evaluaciones{
+    background-color: var(--evaluaciones);
+}
+.menu_aside.libros{
+    background-color: var(--libros);
+}
+.menu_aside.calificaciones{
+    background-color: var(--calificaciones);
 }
 
 .menu_aside .aside_list {

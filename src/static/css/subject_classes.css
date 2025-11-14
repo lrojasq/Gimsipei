@@ -7,6 +7,10 @@
     position: relative;
 }
 
+.container_category.flex.clases_category {
+    justify-content: center;
+}
+
 /* ========== Left Sidebar ========== */
 .classes-sidebar {
     width: 320px;

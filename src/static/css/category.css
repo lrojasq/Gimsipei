@@ -225,6 +225,10 @@ hr.clases_br {
     background-color: var(--clases);
 }
 
+.menu_aside:has(+ .clases_category){
+    background-color: var(--clases);
+}
+
 .recursos_category .menu_aside {
     background-color: var(--recursos);
 }
@@ -317,6 +321,7 @@ hr.clases_br {
     width: 100%;
 }
 
+
 .exam_content {
     background: #ffff;
     gap: 1rem;
@@ -329,9 +334,15 @@ hr.clases_br {
     width: 80%;
     height: 100%;
 }
+.class .exam_content{
+    width: 100%;
+}
 
 .evaluaciones_bg {
     background-color: var(--evaluaciones);
+}
+.class .evaluaciones_bg {
+    background-color: var(--clases);
 }
 
 .img_evaluaciones {
@@ -363,6 +374,10 @@ hr.clases_br {
     font-size: 1rem;
     font-weight: bold;
     color: var(--evaluaciones);
+}
+
+.class .text-content h2 {
+    color: var(--clases);
 }
 
 .text-content p {
@@ -552,6 +567,23 @@ hr.libros_br {
     background-color: var(--calificaciones);
     color: var(--light-color);
 }
+  
+
+.btn-clases {
+    color: var(--clases);
+    background-color: var(--light-color);
+    border-color: var(--clases);
+}
+
+.btn-clases:hover {
+    background-color: var(--clases);
+    color: var(--light-color);
+}
+
+.btn-clases.active {
+    background-color: var(--clases);
+    color: var(--light-color);
+}
 
 /* modals create  */
 #registroModalClass .modal-dialog.modal-dialog-centered,
@@ -648,7 +680,8 @@ hr.libros_br {
 }
 
 @media (max-width:1600px) {
-    .specialities_category.cursos.grades.flex.flex-column {
+    .specialities_category.cursos.grades.flex.flex-column ,
+    .specialities_category {
         max-height: 80vh;
     }
 }
