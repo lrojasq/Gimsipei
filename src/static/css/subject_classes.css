@@ -1,0 +1,656 @@
+/* Subject Classes View Styles */
+
+.container_category {
+    display: flex;
+    min-height: 100vh;
+    background: #f5f5f5;
+    position: relative;
+}
+
+/* ========== Left Sidebar ========== */
+.classes-sidebar {
+    width: 320px;
+    background: white;
+    padding: 2rem 1.5rem;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    position: fixed;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.sidebar-icon-wrapper {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sidebar-icon {
+    width: 45px;
+    height: 45px;
+}
+
+.sidebar-header h3 {
+    font-size: 1.5rem;
+    color: #333;
+    font-weight: 600;
+    margin: 0;
+}
+
+/* Teacher Info */
+.teacher-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.teacher-name {
+    font-size: 1rem;
+    color: #333;
+    margin: 0;
+    font-weight: 500;
+}
+
+.teacher-id {
+    font-size: 0.95rem;
+    color: #666;
+    margin: 0;
+}
+
+.teacher-grade {
+    font-size: 0.95rem;
+    color: #666;
+    margin: 0;
+}
+
+/* Period Buttons */
+.period-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.period-btn {
+    width: 100%;
+    padding: 0.65rem 1.2rem;
+    background: white;
+    border: 2px solid #e0e0e0;
+    border-radius: 20px;
+    color: #666;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.period-btn:hover {
+    border-color: hsl(190, 65%, 55%);
+    background: hsl(190, 20%, 92%);
+    transform: translateX(5px);
+}
+
+.period-btn.active {
+    background: hsl(190, 65%, 55%);
+    color: white;
+    border-color: hsl(190, 65%, 55%);
+    box-shadow: 0 4px 15px rgba(25, 201, 188, 0.4);
+}
+
+/* Add Button */
+.btn-add-class {
+    width: 100%;
+    padding: 1rem 1.5rem;
+    background: hsl(190, 65%, 55%);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 1rem;
+    box-shadow: 0 4px 10px rgba(25, 201, 188, 0.3);
+}
+
+.btn-add-class:hover {
+    background: hsl(190, 65%, 45%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(25, 201, 188, 0.4);
+}
+
+/* ========== Main Content Area ========== */
+.classes-content {
+    flex: 1;
+    margin-left: 320px;
+    padding: 2rem 3rem;
+    padding-right: 120px;
+}
+
+.content-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+}
+
+.back-btn {
+    width: 45px;
+    height: 45px;
+    background: hsl(190, 65%, 55%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    font-size: 1.2rem;
+}
+
+.back-btn:hover {
+    background: hsl(190, 65%, 45%);
+    transform: translateX(-5px);
+}
+
+.subject-title {
+    font-size: 2rem;
+    color: #333;
+    font-weight: 700;
+    margin: 0;
+}
+
+/* ========== Classes Grid ========== */
+.period-classes-container {
+    animation: fadeIn 0.4s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.classes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2rem;
+}
+
+.class-card {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.class-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.class-image-container {
+    width: 100%;
+    height: 180px;
+    overflow: hidden;
+    background: #e0e0e0;
+    position: relative;
+}
+
+.class-image-container.default-image {
+    background: hsl(190, 65%, 55%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.default-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.default-placeholder i {
+    font-size: 4rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.class-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.class-info {
+    padding: 1.5rem;
+    flex: 1;
+}
+
+.class-title {
+    font-size: 1.1rem;
+    color: hsl(190, 65%, 55%);
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+}
+
+.class-description-title {
+    font-size: 0.95rem;
+    color: #333;
+    font-weight: 600;
+    margin: 0 0 0.5rem 0;
+}
+
+.class-description {
+    font-size: 0.85rem;
+    color: #666;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.class-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    padding: 1rem 1.5rem;
+    background: #f9f9f9;
+    border-top: 1px solid #e0e0e0;
+}
+
+.btn-edit,
+.btn-delete {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+}
+
+.btn-edit {
+    background: #3498db;
+    color: white;
+}
+
+.btn-edit:hover {
+    background: #2980b9;
+    transform: scale(1.1);
+}
+
+.btn-delete {
+    background: #e74c3c;
+    color: white;
+}
+
+.btn-delete:hover {
+    background: #c0392b;
+    transform: scale(1.1);
+}
+
+/* Empty Period State */
+.empty-period {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+    background: white;
+    border-radius: 15px;
+    text-align: center;
+}
+
+.empty-period i {
+    font-size: 4rem;
+    color: #bdc3c7;
+    margin-bottom: 1rem;
+}
+
+.empty-period p {
+    font-size: 1.1rem;
+    color: #7f8c8d;
+    margin-bottom: 1.5rem;
+}
+
+.btn-add-first-class {
+    padding: 0.8rem 2rem;
+    background: hsl(190, 65%, 55%);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-add-first-class:hover {
+    background: hsl(190, 65%, 45%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(25, 201, 188, 0.3);
+}
+
+/* ========== Modal Styles ========== */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    animation: fadeIn 0.3s ease;
+}
+
+.modal-container {
+    background: white;
+    border-radius: 20px;
+    padding: 2.5rem;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.modal-header h3 {
+    font-size: 1.5rem;
+    color: #333;
+    font-weight: 700;
+    margin: 0;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #999;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-close:hover {
+    color: #333;
+    transform: rotate(90deg);
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 0.9rem 1.2rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #1abc9c;
+    box-shadow: 0 0 0 3px rgba(26, 188, 156, 0.1);
+}
+
+.file-upload-group {
+    position: relative;
+}
+
+.file-upload-label {
+    display: inline-block;
+    padding: 0.9rem 1.5rem;
+    background: #f0f0f0;
+    color: #666;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+}
+
+.file-upload-label:hover {
+    background: #e0e0e0;
+}
+
+.file-upload-group input[type="file"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.file-name {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.modal-actions {
+    margin-top: 2rem;
+}
+
+.btn-submit {
+    width: 100%;
+    padding: 1rem;
+    background: hsl(190, 65%, 55%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-submit:hover {
+    background: hsl(190, 65%, 45%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(25, 201, 188, 0.3);
+}
+
+/* ========== Delete Confirmation Modal Styles ========== */
+.modal.modal_delete {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10000;
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal.modal_delete[aria-hidden="false"] {
+    display: flex;
+}
+
+.modal.modal_delete .bg-back {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(2px);
+}
+
+.modal.modal_delete .container {
+    position: relative;
+    z-index: 10001;
+    background: white;
+    border-radius: 20px;
+    padding: 3rem 2.5rem;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    animation: slideUp 0.3s ease;
+}
+
+.modal.modal_delete .delete-icon {
+    font-size: 4rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal.modal_delete .delete-icon i {
+    width: 80px;
+    height: 80px;
+    background: #ffe0e0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+}
+
+.modal.modal_delete .delete-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #333;
+    margin: 0 0 1rem 0;
+}
+
+.modal.modal_delete .delete-warning {
+    font-size: 1rem;
+    color: #666;
+    margin: 0 0 2rem 0;
+}
+
+.modal.modal_delete .delete-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.modal.modal_delete .btn {
+    padding: 0.9rem 2rem;
+    border: none;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 130px;
+}
+
+.modal.modal_delete .btn-cancel {
+    background: #e0e0e0;
+    color: #666;
+}
+
+.modal.modal_delete .btn-cancel:hover {
+    background: #d0d0d0;
+    transform: translateY(-2px);
+}
+
+.modal.modal_delete .btn-delete {
+    background: #e74c3c;
+    color: white;
+}
+
+.modal.modal_delete .btn-delete:hover {
+    background: #c0392b;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
+}
+
+/* ========== Sidebar Styles ========== */
+.admin_category .menu_aside {
+    background-color: hsl(190, 65%, 55%);
+}
+
+.admin_category .menu_aside .aside_list li a.active,
+.admin_category .menu_aside .aside_list li a:hover {
+    background-color: hsl(190, 65%, 45%);
+}
+
+/* ========== Responsive Design ========== */
+@media (max-width: 1200px) {
+    .classes-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .classes-sidebar {
+        width: 100%;
+        position: relative;
+        height: auto;
+    }
+
+    .classes-content {
+        margin-left: 0;
+        padding: 1.5rem;
+    }
+
+    .classes-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .subject-title {
+        font-size: 1.5rem;
+    }
+}
+

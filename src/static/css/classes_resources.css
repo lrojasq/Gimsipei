@@ -948,3 +948,20 @@
     }
 }
 
+/* Subject Name Link */
+.subject-name-link {
+    text-decoration: none;
+    color: inherit;
+    display: inline-block;
+    transition: all 0.2s ease;
+}
+
+.subject-name-link:hover {
+    transform: translateX(5px);
+}
+
+.subject-name-link:hover .subject-name {
+    color: hsl(190, 65%, 55%);
+    text-decoration: underline;
+}
+

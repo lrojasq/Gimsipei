@@ -72,23 +72,22 @@
                                 <div class="subject-row-expanded">
                                     <div class="empty-cell"></div>
                                     <div class="subject-name-cell">
-                                        <span class="subject-name">{{ subject.name }}</span>
+                                        <a href="{{ url_for('classes.subject_classes_view', course_id=course.id, subject_id=subject.id) }}"
+                                            class="subject-name-link">
+                                            <span class="subject-name">{{ subject.name }}</span>
+                                        </a>
                                     </div>
                                     <div class="subject-action-cell">
-                                        <button class="add-link-btn add-class-btn" 
-                                                data-course-id="{{ course.id }}"
-                                                data-subject-id="{{ subject.id }}"
-                                                data-subject-name="{{ subject.name }}"
-                                                title="Añadir clase">
+                                        <button class="add-link-btn add-class-btn" data-course-id="{{ course.id }}"
+                                            data-subject-id="{{ subject.id }}" data-subject-name="{{ subject.name }}"
+                                            title="Añadir clase">
                                             Añadir
                                         </button>
                                     </div>
                                     <div class="subject-action-cell">
-                                        <button class="add-link-btn add-resource-btn" 
-                                                data-course-id="{{ course.id }}"
-                                                data-subject-id="{{ subject.id }}"
-                                                data-subject-name="{{ subject.name }}"
-                                                title="Añadir recurso">
+                                        <button class="add-link-btn add-resource-btn" data-course-id="{{ course.id }}"
+                                            data-subject-id="{{ subject.id }}" data-subject-name="{{ subject.name }}"
+                                            title="Añadir recurso">
                                             Añadir
                                         </button>
                                     </div>
