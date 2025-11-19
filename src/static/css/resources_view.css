@@ -1,275 +1,274 @@
-/* Resources View Styles - New Design */
+/* Resources View Styles - Adjusted Design */
 
-.container_category {
-    display: flex;
-    min-height: 100vh;
-    background: #f5f5f5;
-    position: relative;
-}
-
-/* ========== Left Sidebar ========== */
-.resources-sidebar {
-    width: 320px;
+/* Sidebar adjustments for resources */
+.resources_category .data_categoty {
     background: white;
-    padding: 2rem 1.5rem;
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
 }
 
-.sidebar-header {
-    display: flex;
+.resources_category .title {
     align-items: center;
     gap: 1rem;
     padding-bottom: 1.5rem;
     border-bottom: 1px solid #e0e0e0;
+    margin-bottom: 1.5rem;
 }
 
-.sidebar-icon {
-    width: 50px;
-    height: 50px;
-}
-
-.sidebar-header h3 {
+.resources_category .title h1 {
     font-size: 1.5rem;
     color: #333;
     font-weight: 600;
     margin: 0;
 }
 
-/* Teacher Info */
-.teacher-info {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+/* Sidebar icon for resources */
+.resources_category .sidebar-icon,
+.resources_category .title img {
+    width: 45px;
+    height: 45px;
 }
 
-.teacher-name {
-    font-size: 1rem;
-    color: #666;
-    margin: 0;
-    font-weight: 400;
+/* Gap between sections */
+.resources_category .flex-column.gap-5 {
+    gap: 1.5rem;
 }
 
-.teacher-id {
-    font-size: 1rem;
-    color: #666;
-    margin: 0;
+.resources_category .data_grade_category {
+    gap: 0.3rem;
+    margin-bottom: 1rem;
 }
 
-.teacher-grade {
-    font-size: 1rem;
-    color: #666;
-    margin: 0;
-}
-
-/* Period Buttons */
-.period-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 0.8rem;
-}
-
-.period-btn {
-    width: 100%;
-    padding: 0.8rem 1.5rem;
-    background: white;
-    border: 2px solid #e0e0e0;
-    border-radius: 25px;
-    color: #666;
-    font-weight: 600;
+/* Recursos button styles */
+.btn-recursos {
+    padding: 0.6rem 1.2rem;
     font-size: 0.9rem;
+    border-radius: 8px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
     cursor: pointer;
     transition: all 0.3s ease;
-    text-align: center;
-}
-
-.period-btn:hover {
-    border-color: #f5b342;
-    background: #fef8f0;
-}
-
-.period-btn.active {
-    background: linear-gradient(135deg, #f5b342 0%, #f39c12 100%);
-    color: white;
-    border-color: #f39c12;
-    box-shadow: 0 4px 10px rgba(243, 156, 18, 0.3);
-}
-
-/* Add Button */
-.btn-add-resource {
-    width: 100%;
-    padding: 0.9rem 1.5rem;
-    background: linear-gradient(135deg, #f5b342 0%, #f39c12 100%);
-    color: white;
     border: none;
-    border-radius: 25px;
-    font-weight: 600;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 10px rgba(243, 156, 18, 0.3);
-    margin-top: auto;
 }
 
-.btn-add-resource:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(243, 156, 18, 0.4);
-}
-
-/* ========== Main Content Area ========== */
-.resources-main-content {
-    flex: 1;
-    padding: 2rem 3rem;
-    background: #f5f5f5;
-    overflow-y: auto;
-    margin-right: 80px; /* Espacio para el sidebar derecho */
-}
-
-/* Subject Header */
-.subject-header {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    margin-bottom: 2.5rem;
+.btn-recursos:not(.active) {
     background: white;
-    padding: 1.5rem 2rem;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    color: hsl(40, 85%, 60%);
+    border: 2px solid hsl(40, 85%, 60%);
 }
 
-.subject-header h2 {
-    color: #333;
-    font-size: 1.8rem;
-    font-weight: 600;
-    margin: 0;
+.btn-recursos:not(.active):hover {
+    background: hsl(40, 85%, 95%);
 }
 
-/* ========== Resources Grid ========== */
-.resources-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 2rem;
-    padding: 1rem 0;
-}
-
-/* Resource Card */
-.resource-card {
-    background: white;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    transition: all 0.3s ease;
-    display: flex;
-    flex-direction: column;
-}
-
-.resource-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-}
-
-/* Resource Image with Overlay */
-.resource-image {
-    width: 100%;
-    height: 200px;
-    background-size: cover;
-    background-position: center;
-    position: relative;
-    display: flex;
-    align-items: flex-start;
-    padding: 1rem;
-}
-
-.resource-overlay {
-    width: 100%;
-}
-
-.resource-class-label {
-    display: inline-block;
-    background: white;
-    color: #333;
-    padding: 0.4rem 1rem;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-}
-
-/* Resource Footer with Actions */
-.resource-footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1rem 1.2rem;
-    background: white;
-    gap: 0.8rem;
-}
-
-.btn-download {
-    flex: 1;
-    padding: 0.7rem 1.5rem;
-    background: linear-gradient(135deg, #f5b342 0%, #f39c12 100%);
+.btn-recursos.active {
+    background: linear-gradient(135deg, hsl(40, 85%, 60%) 0%, hsl(40, 85%, 50%) 100%);
     color: white;
-    border: none;
-    border-radius: 25px;
-    font-weight: 600;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-decoration: none;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 8px rgba(243, 156, 18, 0.3);
+    box-shadow: 0 3px 10px rgba(243, 156, 18, 0.3);
 }
 
-.btn-download:hover {
+.btn-recursos.active:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(243, 156, 18, 0.4);
 }
 
-.btn-download.btn-disabled {
+/* Period buttons specific sizing */
+.resources_category .period-btn {
+    padding: 0.55rem 1rem;
+    font-size: 0.85rem;
+}
+
+/* Subject header with back arrow */
+.recursos_category .subject-section > .flex.gap-2 {
+    margin-bottom: 2rem;
+    align-items: center;
+}
+
+.recursos_category .subject-section > .flex.gap-2 a {
+    color: #333;
+    font-size: 2rem;
+    transition: color 0.3s ease;
+    display: flex;
+    align-items: center;
+}
+
+.recursos_category .subject-section > .flex.gap-2 a:hover {
+    color: hsl(40, 85%, 60%);
+}
+
+.recursos_category .subject-section > .flex.gap-2 h3 {
+    font-size: 1.6rem;
+    color: #333;
+    margin: 0;
+}
+
+/* ========== Resources Grid (Vertical Layout) ========== */
+.recursos_category .resources-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    width: 100%;
+    margin-top: 1rem;
+}
+
+/* Resource card using horizontal layout */
+.recursos_category .exam.resource {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: row;
+    height: 140px;
+    max-width: 100%;
+}
+
+.recursos_category .exam.resource:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+/* Exam content horizontal */
+.recursos_category .exam.resource .exam_content {
+    width: 100%;
+    flex-direction: row;
+    align-items: stretch;
+}
+
+/* Resource image takes left side */
+.recursos_category .exam.resource .img_evaluaciones {
+    position: relative;
+    width: 240px;
+    min-width: 240px;
+    height: 100%;
+    flex-shrink: 0;
+}
+
+.recursos_category .exam.resource .img_evaluaciones img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Resource overlay for class label */
+.recursos_category .resource-overlay {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: auto;
+    z-index: 2;
+}
+
+.recursos_category .resource-class-label {
+    display: inline-block;
+    background: white;
+    color: #333;
+    padding: 0.3rem 0.8rem;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Resource text content - right side */
+.recursos_category .exam.resource .text-content {
+    flex: 1;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.recursos_category .exam.resource .text-content .d-flex {
+    width: 100%;
+    max-width: 450px;
+    gap: 1rem;
+    align-items: center;
+}
+
+/* Resource action buttons */
+.btn-download-resource {
+    flex: 1;
+    padding: 0.6rem 1.5rem;
+    background: linear-gradient(135deg, hsl(40, 85%, 60%) 0%, hsl(40, 85%, 50%) 100%);
+    color: white;
+    border: none;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    text-align: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(243, 156, 18, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    max-width: 200px;
+}
+
+.btn-download-resource:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 3px 10px rgba(243, 156, 18, 0.4);
+    color: white;
+    text-decoration: none;
+}
+
+.btn-download-resource.btn-disabled {
     background: #bdc3c7;
     cursor: not-allowed;
     box-shadow: none;
 }
 
-.btn-download.btn-disabled:hover {
+.btn-download-resource.btn-disabled:hover {
     transform: none;
 }
 
-.btn-delete-icon {
-    width: 40px;
-    height: 40px;
-    background: #f5b342;
+.btn-delete-resource {
+    width: 36px;
+    height: 36px;
+    background: hsl(40, 85%, 60%);
     color: white;
     border: none;
     border-radius: 50%;
     cursor: pointer;
     transition: all 0.3s ease;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: 1rem;
+    font-size: 0.9rem;
     flex-shrink: 0;
 }
 
-.btn-delete-icon:hover {
+.btn-delete-resource:hover {
     background: #e74c3c;
     transform: scale(1.1);
 }
 
 /* Empty States */
 .empty-resources {
-    grid-column: 1 / -1;
+    width: 100%;
     text-align: center;
-    padding: 3rem;
+    padding: 3rem 2rem;
     background: white;
     border-radius: 12px;
     color: #999;
+}
+
+.empty-resources i {
+    display: block;
+    margin-bottom: 1rem;
+    font-size: 3rem;
+}
+
+.empty-resources p {
+    font-size: 1rem;
+    margin: 0;
 }
 
 .empty-state {
@@ -282,7 +281,7 @@
 }
 
 .empty-state-icon {
-    font-size: 5rem;
+    font-size: 4rem;
     color: #ddd;
     margin-bottom: 1.5rem;
 }
@@ -299,13 +298,72 @@
 }
 
 /* Period Content Display */
-.period-content {
+.recursos_category .period-content {
     display: none;
 }
 
-.period-content[style*="display: grid"],
-.period-content[style*="display:grid"] {
-    display: grid !important;
+.recursos_category .period-content[style*="display: none"] {
+    display: none !important;
+}
+
+.recursos_category .period-content:not([style*="display: none"]) {
+    display: flex !important;
+    flex-direction: column;
+}
+
+/* Sidebar styles for resources */
+.resources_category .menu_aside {
+    background-color: hsl(40, 85%, 60%);
+    position: fixed;
+    right: 20px;
+    top: 110px;
+    border-radius: 10px;
+    padding: 15px 12px;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.resources_category .menu_aside .aside_list {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.resources_category .menu_aside .aside_list li {
+    list-style: none;
+    width: 100%;
+}
+
+.resources_category .menu_aside .aside_list li a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 8px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.resources_category .menu_aside .aside_list li a.active,
+.resources_category .menu_aside .aside_list li a:hover {
+    background-color: hsl(40, 85%, 50%);
+}
+
+.resources_category .menu_aside .aside_list img {
+    display: block;
+    filter: invert(90%) sepia(2%) saturate(0%) hue-rotate(180deg) brightness(105%) contrast(90%);
+    opacity: 0.9;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+    max-width: 100%;
+}
+
+.resources_category .menu_aside .aside_list li a:hover img {
+    transform: scale(1.05);
+    opacity: 1;
 }
 
 /* Alerts */
@@ -320,75 +378,101 @@
 
 /* ========== Responsive Design ========== */
 @media (max-width: 1200px) {
-    .resources-grid {
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-        gap: 1.5rem;
+    .recursos_category .exam.resource .img_evaluaciones {
+        width: 220px;
+        min-width: 220px;
+    }
+    
+    .resources_category .menu_aside {
+        right: 15px;
+        top: 100px;
+        padding: 12px 10px;
     }
 }
 
 @media (max-width: 992px) {
-    .resources-sidebar {
-        width: 280px;
+    .recursos_category .data_categoty {
         padding: 1.5rem 1rem;
     }
     
-    .resources-main-content {
+    .recursos_category .specialities_category {
         padding: 1.5rem 2rem;
     }
     
-    .resources-grid {
-        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-        gap: 1.5rem;
+    .recursos_category .exam.resource {
+        height: 130px;
+    }
+    
+    .recursos_category .exam.resource .img_evaluaciones {
+        width: 200px;
+        min-width: 200px;
+    }
+    
+    .recursos_category .exam.resource .text-content {
+        padding: 0 1.5rem;
+    }
+    
+    .recursos_category .exam.resource .text-content .d-flex {
+        max-width: 350px;
     }
 }
 
 @media (max-width: 768px) {
-    .container_category {
-        flex-direction: column;
-    }
-    
-    .resources-sidebar {
-        width: 100%;
-        padding: 1.5rem;
-    }
-    
-    .period-buttons {
+    .recursos_category .btns {
         flex-direction: row;
         flex-wrap: wrap;
     }
     
-    .period-btn {
+    .recursos_category .period-btn {
         flex: 1 1 45%;
     }
     
-    .resources-main-content {
-        padding: 1.5rem;
+    .recursos_category .exam.resource {
+        flex-direction: column;
+        height: auto;
     }
     
-    .resources-grid {
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-        gap: 1.5rem;
+    .recursos_category .exam.resource .exam_content {
+        flex-direction: column;
     }
     
-    .subject-header {
-        padding: 1rem 1.5rem;
+    .recursos_category .exam.resource .img_evaluaciones {
+        width: 100%;
+        min-width: 100%;
+        height: 180px;
     }
     
-    .subject-header h2 {
-        font-size: 1.5rem;
+    .recursos_category .exam.resource .text-content {
+        padding: 1.2rem 1.5rem;
+    }
+    
+    .recursos_category .exam.resource .text-content .d-flex {
+        max-width: 100%;
+    }
+    
+    .resources_category .menu_aside {
+        right: 10px;
+        top: 70px;
+        padding: 10px 8px;
+    }
+    
+    .resources_category .menu_aside .aside_list img {
+        width: 36px;
+        height: 36px;
     }
 }
 
 @media (max-width: 480px) {
-    .resources-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .period-btn {
+    .recursos_category .period-btn {
         flex: 1 1 100%;
     }
     
-    .subject-header {
-        gap: 1rem;
+    .recursos_category .exam.resource .text-content .d-flex {
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+    
+    .btn-download-resource {
+        width: 100%;
     }
 }

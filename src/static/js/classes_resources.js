@@ -204,30 +204,11 @@ function filterClasses(searchTerm) {
 
 // Period loading functionality removed - no longer needed
 
-// Initialize add class/resource buttons
-function initializeAddButtons() {
-    // Add Class buttons
-    const addClassButtons = document.querySelectorAll('.add-class-btn');
-    addClassButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const courseId = this.getAttribute('data-course-id');
-            const subjectId = this.getAttribute('data-subject-id');
-            const subjectName = this.getAttribute('data-subject-name');
-            openCreateClassModal(courseId, subjectId, subjectName);
-        });
-    });
-    
-    // Add Resource buttons
-    const addResourceButtons = document.querySelectorAll('.add-resource-btn');
-    addResourceButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const courseId = this.getAttribute('data-course-id');
-            const subjectId = this.getAttribute('data-subject-id');
-            const subjectName = this.getAttribute('data-subject-name');
-            openCreateResourceModal(courseId, subjectId, subjectName);
-        });
-    });
-}
+// Initialize add class/resource buttons - REMOVED
+// Now using direct navigation links instead of modal buttons
+// function initializeAddButtons() {
+//     // Functionality removed - buttons now navigate directly to respective views
+// }
 
 // Open Create Class Modal
 function openCreateClassModal(courseId, subjectId, subjectName) {
@@ -319,7 +300,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeExpandButtons();
     initializeClassActions();
     initializeAutoCloseAlerts();
-    initializeAddButtons();
+    // initializeAddButtons(); // Removed - now using direct navigation links
     initializeFileInputs();
     initializeModalBackgroundClose();
 });

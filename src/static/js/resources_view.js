@@ -26,10 +26,10 @@ function initializePeriodSelector() {
             });
 
             // Show selected period content
-            const selectedContent = document.querySelector(`.period-content[data-period="${period}"]`);
-            if (selectedContent) {
-                selectedContent.style.display = 'grid';
-            }
+            const selectedContents = document.querySelectorAll(`.period-content[data-period="${period}"]`);
+            selectedContents.forEach(content => {
+                content.style.display = 'flex';
+            });
         });
     });
 }
