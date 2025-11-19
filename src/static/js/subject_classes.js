@@ -64,7 +64,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // Edit class buttons
     const editButtons = document.querySelectorAll('.btn-edit');
     editButtons.forEach(button => {
-        button.addEventListener('click', function() {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
             const classId = this.getAttribute('data-class-id');
             openEditClassModal(classId);
         });
@@ -73,7 +74,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // Delete class buttons
     const deleteButtons = document.querySelectorAll('.btn-delete');
     deleteButtons.forEach(button => {
-        button.addEventListener('click', function() {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
             const classId = this.getAttribute('data-class-id');
             openDeleteConfirmationModal(classId);
         });
@@ -142,19 +144,40 @@ function openEditClassModal(classId) {
     const modal = document.getElementById('editClassModal');
     const form = document.getElementById('editClassForm');
     
-    // Find the class card
-    const classCard = document.querySelector(`[data-class-id="${classId}"]`).closest('.class-card');
+    // Find the class exam container
+    const editButton = document.querySelector(`.btn-edit[data-class-id="${classId}"]`);
+    const examContainer = editButton ? editButton.closest('.exam') : null;
     
-    if (!classCard) {
-        console.error('Class card not found');
+    if (!examContainer) {
+        console.error('Class container not found');
         return;
     }
     
     // Extract class data from the card
-    const classNumber = classCard.querySelector('.class-title').textContent.replace('Clase ', '');
-    const title = classCard.querySelector('.class-description-title').textContent;
-    const description = classCard.querySelector('.class-description').textContent;
-    const coverImage = classCard.querySelector('.class-image');
+    const titleElement = examContainer.querySelector('.title');
+    const titleText = titleElement ? titleElement.textContent : '';
+    
+    // Extract class number from "Clase X - Subject"
+    const classNumberMatch = titleText.match(/Clase\s+(\d+)/);
+    const classNumber = classNumberMatch ? classNumberMatch[1] : '';
+    
+    // Extract title and description from the paragraph
+    const paragraph = examContainer.querySelector('.text-content p');
+    let title = '';
+    let description = '';
+    
+    if (paragraph) {
+        const strongElement = paragraph.querySelector('strong');
+        title = strongElement ? strongElement.textContent.trim() : '';
+        
+        // Get text after the strong element
+        const fullText = paragraph.textContent;
+        const titleWithDash = strongElement ? strongElement.textContent + ' - ' : '';
+        description = fullText.replace(titleWithDash, '').trim();
+    }
+    
+    // Get cover image
+    const coverImage = examContainer.querySelector('.img_evaluaciones img');
     
     // Get the current period from the visible container
     const activePeriod = document.querySelector('.period-btn.active').getAttribute('data-period');
@@ -180,7 +203,7 @@ function openEditClassModal(classId) {
     const currentCoverPreview = document.getElementById('current_cover_preview');
     const currentCoverImage = document.getElementById('current_cover_image');
     
-    if (coverImage && !classCard.querySelector('.default-image')) {
+    if (coverImage && coverImage.src) {
         currentCoverImage.src = coverImage.src;
         currentCoverPreview.style.display = 'block';
     } else {

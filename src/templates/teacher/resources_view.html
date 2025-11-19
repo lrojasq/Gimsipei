@@ -3,129 +3,165 @@
 {% block title %}Recursos{% endblock %}
 
 {% block extra_css %}
-<link href="{{ url_for('static', filename='css/menu.css') }}" rel="stylesheet">
-<link href="{{ url_for('static', filename='css/category.css') }}" rel="stylesheet">
-<link href="{{ url_for('static', filename='css/admin.css') }}" rel="stylesheet">
-<link href="{{ url_for('static', filename='css/resources_view.css') }}" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="{{ url_for('static', filename='css/menu.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/category.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/admin.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/classes_resources.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/resources_view.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 {% endblock %}
 
 {% block content %}
-{% block menu %}{% endblock %}
+    {% block menu %}{% endblock %}
 
-{% with messages = get_flashed_messages(with_categories=true) %}
-{% if messages %}
-{% for category, message in messages %}
-<div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-    <i class="fas fa-{% if category == 'success' %}check-circle{% elif category == 'danger' %}exclamation-triangle{% else %}info-circle{% endif %} me-2"></i>
-    {{ message }}
-    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-</div>
-{% endfor %}
-{% endif %}
-{% endwith %}
-
-<div class="container_category flex admin_category">
-    <!-- Left Sidebar with Teacher Info and Periods -->
-    <div class="resources-sidebar">
-        <!-- Resources Icon and Title -->
-        <div class="sidebar-header">
-            <img src="{{ url_for('static', filename='images/svg/recursos.svg') }}" alt="Recursos" class="sidebar-icon">
-            <h3>Recursos</h3>
-        </div>
-
-        <!-- Teacher Info -->
-        <div class="teacher-info">
-            <p class="teacher-name">{{ user.full_name or user.username }}</p>
-            <p class="teacher-id">{{ user.document }}</p>
-            <p class="teacher-grade">Grado 10</p>
-        </div>
-
-        <!-- Period Selector -->
-        <div class="period-buttons">
-            <button class="period-btn active" data-period="1">PERIODO 1</button>
-            <button class="period-btn" data-period="2">PERIODO 2</button>
-            <button class="period-btn" data-period="3">PERIODO 3</button>
-            <button class="period-btn" data-period="4">PERIODO 4</button>
-        </div>
-
-        <!-- Add Button -->
-        <button class="btn-add-resource" onclick="openCreateResourceModal()">
-            AÑADIR
-        </button>
-    </div>
-
-    <!-- Main Content Area -->
-    <div class="resources-main-content">
-        {% if subjects and subjects|length > 0 %}
-        {% for subject in subjects %}
-        <div class="subject-section" data-subject-id="{{ subject.subject_id }}">
-            <!-- Subject Header -->
-            <div class="subject-header">
-                <h2>{{ subject.subject_name }}</h2>
-            </div>
-
-            <!-- Resources Grid by Period -->
-            {% for period in [1, 2, 3, 4] %}
-            <div class="resources-grid period-content" data-period="{{ period }}" style="{% if period != 1 %}display: none;{% endif %}">
-                {% set period_resources = subject.periods[period] %}
-                {% if period_resources and period_resources|length > 0 %}
-                {% for resource in period_resources %}
-                <div class="resource-card">
-                    <div class="resource-image" style="background-image: url('{% if resource.cover_image %}{{ resource.cover_image }}{% else %}{{ url_for('static', filename='images/default-resource.jpg') }}{% endif %}');">
-                        <div class="resource-overlay">
-                            <span class="resource-class-label">CLASE- {{ resource.class_number }}</span>
-                        </div>
-                    </div>
-                    <div class="resource-footer">
-                        {% if resource.file_url %}
-                        <a href="{{ resource.file_url }}" target="_blank" download class="btn-download">
-                            DESCARGAR
-                        </a>
-                        {% elif resource.link %}
-                        <a href="{{ resource.link }}" target="_blank" class="btn-download">
-                            DESCARGAR
-                        </a>
-                        {% else %}
-                        <button class="btn-download btn-disabled" disabled>
-                            DESCARGAR
-                        </button>
-                        {% endif %}
-                        <form method="POST" action="{{ url_for('resources.delete_resource', resource_id=resource.id) }}" style="display: inline;" onsubmit="return confirm('¿Estás seguro de eliminar este recurso?');">
-                            <button type="submit" class="btn-delete-icon" title="Eliminar recurso">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </form>
-                    </div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    <i class="fas fa-{% if category == 'success' %}check-circle{% elif category == 'danger' %}exclamation-triangle{% else %}info-circle{% endif %} me-2"></i>
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
-                {% endfor %}
-                {% else %}
-                <div class="empty-resources">
-                    <p>No hay recursos para este período</p>
-                </div>
-                {% endif %}
-            </div>
             {% endfor %}
-        </div>
-        {% endfor %}
-        {% else %}
-        <div class="empty-state">
-            <div class="empty-state-icon">
-                <i class="fas fa-folder-open"></i>
-            </div>
-            <h3>No tienes recursos disponibles</h3>
-            <p>Comienza creando recursos para tus clases</p>
-        </div>
         {% endif %}
+    {% endwith %}
+
+    <div class="container_category flex admin_category resources_category">
+        <!-- Left Sidebar with Teacher Info and Periods -->
+        <div class="data_categoty flex flex-column">
+            <!-- Resources Icon and Title -->
+            <div class="title flex">
+                <img src="{{ url_for('static', filename='images/svg/recursos.svg') }}" 
+                     alt="Recursos" 
+                     class="sidebar-icon">
+                <h1>Recursos</h1>
+            </div>
+
+            <!-- Teacher Info -->
+            {% if user %}
+                <p>{{ user.full_name or user.username }}</p>
+                <div class="data_grade_category flex flex-column">
+                    <p>{{ user.document }}</p>
+                    <p>Grado 10</p>
+                </div>
+            {% else %}
+                <p>Sin información de usuario</p>
+            {% endif %}
+
+            <!-- Period Selector and Add Button -->
+            <div class="flex flex-column gap-5">
+                <div class="btns flex flex-column">
+                    <button class="btn btn-recursos period-btn active" data-period="1">PERIODO 1</button>
+                    <button class="btn btn-recursos period-btn" data-period="2">PERIODO 2</button>
+                    <button class="btn btn-recursos period-btn" data-period="3">PERIODO 3</button>
+                    <button class="btn btn-recursos period-btn" data-period="4">PERIODO 4</button>
+                </div>
+                <button class="btn btn-recursos active" onclick="openCreateResourceModal()">AÑADIR</button>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="specialities_category exams flex flex-column recursos_category">
+            {% if subjects and subjects|length > 0 %}
+                {% for subject in subjects %}
+                    <div class="subject-section" data-subject-id="{{ subject.subject_id }}">
+                        <!-- Subject Header -->
+                        <div class="flex gap-2">
+                            <a href="{{ url_for('classes.teacher_classes_view') }}">
+                                <i class="bi bi-arrow-left-short"></i>
+                            </a>
+                            <h3 class="font-weight-bold">{{ subject.subject_name }}</h3>
+                        </div>
+
+                        <!-- Resources Grid by Period -->
+                        {% for period in [1, 2, 3, 4] %}
+                            <div class="resources-grid period-content" 
+                                 data-period="{{ period }}" 
+                                 style="{% if period != 1 %}display: none;{% endif %}">
+                                {% set period_resources = subject.periods[period] %}
+                                {% if period_resources and period_resources|length > 0 %}
+                                    {% for resource in period_resources %}
+                                        <div class="exam flex resource">
+                                            <div class="exam_content flex">
+                                                <div class="img_evaluaciones evaluaciones_bg">
+                                                    {% if resource.cover_image %}
+                                                        <img width="100%" 
+                                                             height="100%" 
+                                                             src="{{ resource.cover_image }}" 
+                                                             alt="Recurso {{ resource.class_number }}">
+                                                    {% else %}
+                                                        <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: hsl(40, 85%, 60%);">
+                                                            <i class="fas fa-folder-open" style="font-size: 3rem; color: rgba(255, 255, 255, 0.7);"></i>
+                                                        </div>
+                                                    {% endif %}
+                                                    <div class="resource-overlay">
+                                                        <span class="resource-class-label">CLASE- {{ resource.class_number }}</span>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="text-content flex flex-column">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        {% if resource.file_url %}
+                                                            <a href="{{ resource.file_url }}" 
+                                                               target="_blank" 
+                                                               download 
+                                                               class="btn-download-resource">
+                                                                DESCARGAR
+                                                            </a>
+                                                        {% elif resource.link %}
+                                                            <a href="{{ resource.link }}" 
+                                                               target="_blank" 
+                                                               class="btn-download-resource">
+                                                                DESCARGAR
+                                                            </a>
+                                                        {% else %}
+                                                            <button class="btn-download-resource btn-disabled" disabled>
+                                                                DESCARGAR
+                                                            </button>
+                                                        {% endif %}
+                                                        
+                                                        <form method="POST" 
+                                                              action="{{ url_for('resources.delete_resource', resource_id=resource.id) }}" 
+                                                              style="display: inline; margin: 0;" 
+                                                              onsubmit="return confirm('¿Estás seguro de eliminar este recurso?');">
+                                                            <button type="submit" 
+                                                                    class="btn-delete-resource" 
+                                                                    title="Eliminar recurso">
+                                                                <i class="fas fa-trash"></i>
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <div class="empty-resources" style="text-align: center; padding: 2rem;">
+                                        <i class="fas fa-folder-open" style="font-size: 3rem; color: #bdc3c7;"></i>
+                                        <p>No hay recursos para este período</p>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <div class="empty-state-icon">
+                        <i class="fas fa-folder-open"></i>
+                    </div>
+                    <h3>No tienes recursos disponibles</h3>
+                    <p>Comienza creando recursos para tus clases</p>
+                </div>
+            {% endif %}
+        </div>
+
+        {% include "sidebar_aside.html" %}
     </div>
 
-    <!-- Right Sidebar Menu Component -->
-    {% include "sidebar_aside.html" %}
-</div>
+    <!-- Modal for creating resource -->
+    {% include "teacher/create_resource_modal.html" %}
 
-<!-- Modal for creating resource -->
-{% include "teacher/create_resource_modal.html" %}
-
-<!-- Custom JS -->
-<script src="{{ url_for('static', filename='js/resources_view.js') }}"></script>
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='js/resources_view.js') }}"></script>
 {% endblock %}
