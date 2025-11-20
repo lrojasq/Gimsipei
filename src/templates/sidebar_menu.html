@@ -53,43 +53,34 @@
         <div class="flex container_boxs_menu">
             <a href="{{ url_for('classes.teacher_classes_view') }}">
                 <div class="box-menu clases-hover">
-                    <img src="{{ url_for('static', filename='images/svg/clases.svg') }}" alt="Clases y recursos"
-                        style="width: 80px; height: 80px;">
+                    <img src="{{ url_for('static', filename='images/iconos/class.png') }}" alt="Clases y recursos"
+                        style="width: 60px; height: 70px;">
                     <p>Clases y recursos</p>
                     <div class="barra barra-clases"></div>
                 </div>
             </a>
             <a href="{{ url_for('admin.evaluaciones') }}">
                 <div class="box-menu evaluaciones-hover">
-                    <img src="{{ url_for('static', filename='images/svg/evaluaciones.svg') }}" alt="Evaluaciones"
-                        style="width: 80px; height: 60px;">
+                    <img src="{{ url_for('static', filename='images/iconos/library.png') }}" alt="Evaluaciones"
+                        style="width: 60px; height: 70px;">
                     <p>Evaluaciones</p>
                     <div class="barra barra-evaluaciones"></div>
                 </div>
             </a>
             <a href="{{ url_for('admin.libros') }}">
                 <div class="box-menu libros-hover">
-                    <img src="{{ url_for('static', filename='images/svg/libros.svg') }}" alt="Libros"
-                        style="width: 80px; height: 60px;">
+                    <img src="{{ url_for('static', filename='images/iconos/text.png') }}" alt="Libros"
+                        style="width: 70px; height: 60px;">
                     <p>Libros</p>
                     <div class="barra barra-libros"></div>
                 </div>
             </a>
             <a href="{{ url_for('admin.calificaciones') }}">
                 <div class="box-menu calificaciones-hover">
-                    <img src="{{ url_for('static', filename='images/svg/calificaciones.svg') }}" alt="Calificaciones"
-                        style="width: 80px; height: 60px;">
+                    <img src="{{ url_for('static', filename='images/iconos/evaluations.png') }}" alt="Calificaciones"
+                        style="width: 60px; height: 70px;">
                     <p>Calificaciones</p>
                     <div class="barra barra-calificaciones"></div>
-                </div>
-            </a>
-            
-            <a href="{{ url_for('admin.calificaciones') }}">
-                <div class="box-menu recursos-hover">
-                    <img src="{{ url_for('static', filename='images/svg/calificaciones.svg') }}" alt="recursos"
-                        style="width: 80px; height: 60px;">
-                    <p>Recursos</p>
-                    <div class="barra barra-recursos"></div>
                 </div>
             </a>
         </div>

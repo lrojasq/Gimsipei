@@ -363,7 +363,7 @@
     margin-top: 1rem;
 }
 
-.period-btn {
+/* .period-btn {
     min-width: 150px;
     padding: 0.875rem 2rem;
     font-size: 1rem;
@@ -394,7 +394,7 @@
 .period-btn.active:hover {
     background: hsl(190, 65%, 45%);
     border-color: hsl(190, 65%, 45%);
-}
+} */
 
 /* Empty State */
 .classes-table tbody tr.empty-state-row {
@@ -683,7 +683,7 @@ a.add-link-btn:hover {
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 10000;
+    z-index: 9999999;
     backdrop-filter: blur(2px);
 }
 

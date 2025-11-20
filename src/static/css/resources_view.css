@@ -8,9 +8,6 @@
 .resources_category .title {
     align-items: center;
     gap: 1rem;
-    padding-bottom: 1.5rem;
-    border-bottom: 1px solid #e0e0e0;
-    margin-bottom: 1.5rem;
 }
 
 .resources_category .title h1 {
@@ -39,48 +36,35 @@
 
 /* Recursos button styles */
 .btn-recursos {
-    padding: 0.6rem 1.2rem;
-    font-size: 0.9rem;
-    border-radius: 8px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    border: none;
+    color: var(--recursos);
+    background-color: var(--light-color);
+    border-color: var(--recursos);
 }
 
-.btn-recursos:not(.active) {
-    background: white;
-    color: hsl(40, 85%, 60%);
-    border: 2px solid hsl(40, 85%, 60%);
-}
-
-.btn-recursos:not(.active):hover {
-    background: hsl(40, 85%, 95%);
+.btn-recursos:hover {
+    background-color: var(--recursos);
+    color: var(--light-color);
 }
 
 .btn-recursos.active {
-    background: linear-gradient(135deg, hsl(40, 85%, 60%) 0%, hsl(40, 85%, 50%) 100%);
-    color: white;
-    box-shadow: 0 3px 10px rgba(243, 156, 18, 0.3);
-}
-
-.btn-recursos.active:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(243, 156, 18, 0.4);
+    background-color: var(--recursos);
+    color: var(--light-color);
 }
 
 /* Period buttons specific sizing */
-.resources_category .period-btn {
+/* .resources_category .period-btn {
     padding: 0.55rem 1rem;
     font-size: 0.85rem;
-}
+} */
 
 /* Subject header with back arrow */
 .recursos_category .subject-section > .flex.gap-2 {
     margin-bottom: 2rem;
     align-items: center;
+}
+.subject-section {
+    width: 100%;
+    padding: 2rem;
 }
 
 .recursos_category .subject-section > .flex.gap-2 a {
@@ -112,16 +96,11 @@
 
 /* Resource card using horizontal layout */
 .recursos_category .exam.resource {
-    background: white;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    transition: all 0.3s ease;
-    display: flex;
-    flex-direction: row;
-    height: 140px;
-    max-width: 100%;
+    width: 30%;
+    height: 180px;
 }
+
+
 
 .recursos_category .exam.resource:hover {
     transform: translateY(-2px);
@@ -130,18 +109,17 @@
 
 /* Exam content horizontal */
 .recursos_category .exam.resource .exam_content {
+    display: flex;
+    flex-direction: column;
     width: 100%;
-    flex-direction: row;
-    align-items: stretch;
+    height: 100%;
 }
-
 /* Resource image takes left side */
 .recursos_category .exam.resource .img_evaluaciones {
     position: relative;
-    width: 240px;
-    min-width: 240px;
-    height: 100%;
-    flex-shrink: 0;
+    width: 100%;
+    height: 60%;
+    background-color: var(--recursos);
 }
 
 .recursos_category .exam.resource .img_evaluaciones img {
@@ -150,6 +128,20 @@
     object-fit: cover;
 }
 
+.text-content::before {
+    content: "";
+    width:  80%;
+    height:4px;
+    background-color: var(--recursos);
+    border-radius: 15px;
+    margin-bottom: 0.5rem;
+    display: block;
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: -10px;
+    margin: auto;
+}
 /* Resource overlay for class label */
 .recursos_category .resource-overlay {
     position: absolute;
@@ -174,8 +166,7 @@
 
 /* Resource text content - right side */
 .recursos_category .exam.resource .text-content {
-    flex: 1;
-    padding: 0 2rem;
+    padding: 0.5rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -191,7 +182,7 @@
 /* Resource action buttons */
 .btn-download-resource {
     flex: 1;
-    padding: 0.6rem 1.5rem;
+    padding: 0.3rem;
     background: linear-gradient(135deg, hsl(40, 85%, 60%) 0%, hsl(40, 85%, 50%) 100%);
     color: white;
     border: none;
@@ -210,6 +201,7 @@
     letter-spacing: 0.5px;
     white-space: nowrap;
     max-width: 200px;
+    margin: 0 auto;
 }
 
 .btn-download-resource:hover {
@@ -307,8 +299,9 @@
 }
 
 .recursos_category .period-content:not([style*="display: none"]) {
-    display: flex !important;
-    flex-direction: column;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
 }
 
 /* Sidebar styles for resources */

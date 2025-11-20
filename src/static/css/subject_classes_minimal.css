@@ -5,6 +5,9 @@
     width: 100%;
 }
 
+.specialities_category{
+    width: 80%;
+}
 /* Empty period state */
 .empty-period {
     text-align: center;

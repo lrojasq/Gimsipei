@@ -12,20 +12,19 @@
 {% endblock %}
 
 {% block content %}
-{% block menu %}{% endblock %}
+    {% block menu %}{% endblock %}
 
-{% with messages = get_flashed_messages(with_categories=true) %}
-{% if messages %}
-{% for category, message in messages %}
-<div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-    <i
-        class="fas fa-{% if category == 'success' %}check-circle{% elif category == 'danger' %}exclamation-triangle{% else %}info-circle{% endif %} me-2"></i>
-    {{ message }}
-    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-</div>
-{% endfor %}
-{% endif %}
-{% endwith %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    <i class="fas fa-{% if category == 'success' %}check-circle{% elif category == 'danger' %}exclamation-triangle{% else %}info-circle{% endif %} me-2"></i>
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
 
     <div class="container_category flex clases_category" 
          data-course-id="{{ course.id }}" 
@@ -86,7 +85,7 @@
         <!-- fin Perfil -->
 
         <!-- Inicio Clases -->
-        <div class="specialities_category exams flex flex-column clases_category">
+        <div class="specialities_category exams flex flex-column clases_category gap-4">
             <div class="flex gap-2">
                 <a href="{{ url_for('classes.teacher_classes_view') }}">
                     <i class="bi bi-arrow-left-short"></i>
@@ -96,7 +95,7 @@
 
             <!-- Classes Grid for each period -->
             {% for period in [1, 2, 3, 4] %}
-                <div class="period-classes-container" 
+                <div class="period-classes-container gap-2 flex flex-column" 
                      data-period="{{ period }}" 
                      style="{% if period != 1 %}display: none;{% endif %}">
                     
@@ -155,16 +154,11 @@
 
         {% include "sidebar_aside.html" %}
     </div>
-    <!-- fin Perfil -->
 
-    <!-- Inicio Clases -->
-    <div class="specialities_category exams flex flex-column clases_category">
-        <div class="flex gap-2">
-            <a href="#">
-                <i class="bi bi-arrow-left-short"></i>
-            </a>
-            <h3 class="font-weight-bold"> Matematicas</h3>
-        </div>
+    <!-- Modales -->
+    {% include "teacher/create_class_modal.html" %}
+    {% include "teacher/edit_class_modal.html" %}
+    {% include "delete_confirmation_modal.html" %}
 
     <!-- Custom JS -->
     <script src="{{ url_for('static', filename='js/subject_classes.js') }}"></script>

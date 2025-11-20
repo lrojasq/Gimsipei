@@ -11,6 +11,7 @@
     justify-content: center;
 }
 
+
 /* ========== Left Sidebar ========== */
 .classes-sidebar {
     width: 320px;
@@ -86,7 +87,7 @@
     gap: 0.8rem;
 }
 
-.period-btn {
+/* .period-btn {
     width: 100%;
     padding: 0.65rem 1.2rem;
     background: white;
@@ -111,7 +112,7 @@
     color: white;
     border-color: hsl(190, 65%, 55%);
     box-shadow: 0 4px 15px rgba(25, 201, 188, 0.4);
-}
+} */
 
 /* Add Button */
 .btn-add-class {
@@ -370,7 +371,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 9999;
+    z-index: 9999999;
     animation: fadeIn 0.3s ease;
 }
 

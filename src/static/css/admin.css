@@ -210,7 +210,8 @@
     color: var(--admin);
     text-transform: uppercase;
 }
-.container_category.flex.recursos_category {
+.container_category.flex.recursos_category,
+.container_category.flex.clases_category {
     justify-content: start;
 }
 
@@ -222,7 +223,7 @@
 }
 .content-admin.flex.flex-column h2{
     color:#5f6161;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.2rem;
 }
 .form-crear.flex {
     width: 100%;
@@ -268,6 +269,10 @@ form.form-admin.flex.flex-column h1{
 }
 .specialities_category:has(.content-admin){
     background-color: white;
+}
+.specialities_category:has(.content-admin)::-webkit-scrollbar-thumb {
+    background: var(--clases);
+    border-radius: 5px;
 }
 .container_datos_personales{
     background: url(../images/menu-principal/backgroun.jpg);
@@ -446,7 +451,7 @@ form.form-admin.flex.flex-column h1{
 }
 
 .menu_aside .aside_list {
-    gap: 5px;
+    gap: 0px;
 }
 
 .menu_aside .aside_list li {
@@ -463,7 +468,6 @@ form.form-admin.flex.flex-column h1{
 
 .menu_aside .aside_list img {
     display: block;
-    filter: invert(90%) sepia(2%) saturate(0%) hue-rotate(180deg) brightness(105%) contrast(90%);
     opacity: 0.9;
     transition: transform .2s ease, opacity .2s ease;
     max-width: 100%;
