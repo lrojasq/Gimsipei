@@ -21,7 +21,6 @@ class Resource(Base):
     cover_image = Column(String(255), nullable=True)
     period = Column(Integer, nullable=False)
     file_url = Column(String(255), nullable=True)
-    link = Column(String(255), nullable=True)
     resource_type = Column(Enum(ResourceType), nullable=False)
     created_by = Column(Integer, ForeignKey("users.id"), nullable=True)
     created_at = Column(DateTime, default=datetime.now(timezone.utc))

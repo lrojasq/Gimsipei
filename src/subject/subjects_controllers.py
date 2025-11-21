@@ -9,7 +9,6 @@ from .service import (
     create_subject_service,
     delete_subject_service,
     get_course_by_id_service,
-    get_subject_service,
     get_teachers_for_form_service,
     get_available_subject_names,
     update_subject_service,
