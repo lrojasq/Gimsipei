@@ -40,7 +40,6 @@ def get_resources_by_class_service(class_id: int) -> Tuple[List[dict], int]:
                     "cover_image": resource.cover_image,
                     "period": resource.period,
                     "file_url": resource.file_url,
-                    "link": resource.link,
                     "resource_type": resource.resource_type.value,
                     "created_at": resource.created_at.isoformat(),
                 }
@@ -107,7 +106,6 @@ def get_resources_by_teacher_service(teacher_id: int) -> Tuple[Optional[dict], i
                         "period": resource.period,
                         "class_number": class_info.class_number if class_info else None,
                         "file_url": resource.file_url,
-                        "link": resource.link,
                         "resource_type": resource.resource_type.value,
                     }
                 )
@@ -143,7 +141,6 @@ def get_resource_service(
             "cover_image": resource.cover_image,
             "period": resource.period,
             "file_url": resource.file_url,
-            "link": resource.link,
             "resource_type": resource.resource_type.value,
             "created_by": resource.created_by,
             "created_at": resource.created_at.isoformat(),
@@ -153,8 +150,45 @@ def get_resource_service(
         db.close()
 
 
+def get_resource_file_path_service(
+    resource_id: int,
+) -> Tuple[Optional[str], Optional[str], int]:
+    """
+    Obtener la ruta del archivo de un recurso para descarga
+    """
+    db = SessionLocal()
+    try:
+        resource = db.query(Resource).filter(Resource.id == resource_id).first()
+        if not resource:
+            return None, None, 404
+
+        if not resource.file_url:
+            return None, None, 404
+
+        # Construir la ruta completa del archivo
+        file_path = os.path.join("src", resource.file_url.lstrip("/"))
+
+        # Verificar que el archivo existe
+        if not os.path.exists(file_path):
+            return None, None, 404
+
+        # Obtener el nombre del archivo original
+        filename = os.path.basename(file_path)
+        if resource.title:
+            # Usar el título como nombre base y mantener la extensión del archivo
+            file_ext = os.path.splitext(filename)[1]
+            filename = f"{resource.title}{file_ext}"
+
+        return file_path, filename, 200
+    finally:
+        db.close()
+
+
 def create_resource_service(
-    data: dict, cover_file=None, resource_file=None, created_by_user_id=None
+    data: dict,
+    cover_file=None,
+    resource_file=None,
+    created_by_user_id=None,
 ) -> Tuple[Optional[dict], int]:
     """Crear un nuevo recurso"""
     db = SessionLocal()
@@ -186,25 +220,21 @@ def create_resource_service(
 
         # Procesar archivo de recurso si existe
         file_url = None
-        resource_type = ResourceType.LINK
+        resource_type = ResourceType.FILE
+
         if resource_file and resource_file.filename:
             filename = secure_filename(resource_file.filename)
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             filename = f"{timestamp}_{filename}"
 
-            # Crear directorio si no existe
+            # Guardar archivo (todos los tipos van al mismo lugar)
             upload_folder = os.path.join(
                 "src", "static", "uploads", "resources", "files"
             )
             os.makedirs(upload_folder, exist_ok=True)
-
-            # Guardar archivo
             file_path = os.path.join(upload_folder, filename)
             resource_file.save(file_path)
             file_url = f"/static/uploads/resources/files/{filename}"
-            resource_type = ResourceType.FILE
-        elif data.get("link"):
-            resource_type = ResourceType.LINK
 
         # Crear el recurso
         new_resource = Resource(
@@ -213,7 +243,6 @@ def create_resource_service(
             cover_image=cover_image_path,
             period=data["period"],
             file_url=file_url,
-            link=data.get("link"),
             resource_type=resource_type,
             created_by=created_by_user_id,
         )
@@ -262,8 +291,6 @@ def update_resource_service(
             resource.title = data["title"]
         if "period" in data and data["period"]:
             resource.period = data["period"]
-        if "link" in data:
-            resource.link = data["link"]
 
         # Procesar nueva portada si existe
         if cover_file and cover_file.filename:
@@ -286,11 +313,17 @@ def update_resource_service(
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             filename = f"{timestamp}_{filename}"
 
+            # Eliminar archivo anterior si existe
+            if resource.file_url:
+                old_file_path = os.path.join("src", resource.file_url.lstrip("/"))
+                if os.path.exists(old_file_path):
+                    os.remove(old_file_path)
+
+            # Guardar nuevo archivo
             upload_folder = os.path.join(
                 "src", "static", "uploads", "resources", "files"
             )
             os.makedirs(upload_folder, exist_ok=True)
-
             file_path = os.path.join(upload_folder, filename)
             resource_file.save(file_path)
             resource.file_url = f"/static/uploads/resources/files/{filename}"

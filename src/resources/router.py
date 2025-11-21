@@ -1,9 +1,13 @@
 from flask import Blueprint, request
+from flask_jwt_extended import jwt_required
+from src.utils.decorator_role_required import role_required
+from src.models.user import UserRole
 
 from .controllers import (
     resources_view_controller,
     create_resource_controller,
     delete_resource_controller,
+    download_resource_controller,
     get_resources_by_class_api_controller,
     get_resource_api_controller,
     create_resource_api_controller,
@@ -16,21 +20,35 @@ resources_bp = Blueprint("resources", __name__, url_prefix="/resources")
 
 # ========== HTML View Routes ==========
 @resources_bp.route("", methods=["GET"])
+@jwt_required()
+@role_required(UserRole.TEACHER)
 def resources_view():
     """Vista principal de recursos"""
     return resources_view_controller(request)
 
 
 @resources_bp.route("/create", methods=["GET", "POST"])
+@jwt_required()
+@role_required(UserRole.TEACHER)
 def create_resource():
     """Crear nuevo recurso"""
     return create_resource_controller(request)
 
 
 @resources_bp.route("/<int:resource_id>/delete", methods=["POST"])
+@jwt_required()
+@role_required(UserRole.TEACHER)
 def delete_resource(resource_id):
     """Eliminar recurso"""
     return delete_resource_controller(resource_id, request)
+
+
+@resources_bp.route("/<int:resource_id>/download", methods=["GET"])
+@jwt_required()
+@role_required([UserRole.TEACHER, UserRole.STUDENT])
+def download_resource(resource_id):
+    """Descargar archivo del recurso"""
+    return download_resource_controller(resource_id, request)
 
 
 # ========== API Routes ==========

@@ -9,14 +9,12 @@ class ResourceCreateSchema(BaseModel):
     period: conint(ge=1, le=4)
     resource_type: str = "file"  # "file" or "link"
     file_url: Optional[str] = None
-    link: Optional[str] = None
 
 
 class ResourceUpdateSchema(BaseModel):
     title: Optional[constr(min_length=1, max_length=200)] = None
     period: Optional[conint(ge=1, le=4)] = None
     file_url: Optional[str] = None
-    link: Optional[str] = None
 
 
 class ResourceResponseSchema(BaseModel):
@@ -26,7 +24,6 @@ class ResourceResponseSchema(BaseModel):
     cover_image: Optional[str]
     period: int
     file_url: Optional[str]
-    link: Optional[str]
     resource_type: str
     created_by: Optional[int]
     created_at: datetime

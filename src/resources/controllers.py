@@ -1,13 +1,22 @@
-from flask import Request, Response, render_template, redirect, url_for, flash
+from flask import (
+    Request,
+    Response,
+    render_template,
+    redirect,
+    url_for,
+    flash,
+    send_file,
+)
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from typing import Tuple, Optional
 from pydantic import ValidationError
+import os
 
-from .validation import (
-    ResourceCreateSchema,
-    ResourceUpdateSchema,
-    ResourceResponseSchema,
-)
+# from .validation import (
+#     ResourceCreateSchema,
+#     ResourceUpdateSchema,
+#     ResourceResponseSchema,
+# )
 from .service import (
     get_resources_by_class_service,
     get_resources_by_teacher_service,
@@ -15,6 +24,7 @@ from .service import (
     create_resource_service,
     update_resource_service,
     delete_resource_service,
+    get_resource_file_path_service,
 )
 from src.utils.api_response import ApiResponse
 from src.models.user import UserRole
@@ -23,10 +33,7 @@ from src.database.database import SessionLocal
 from src.models.user import User
 
 
-# ========== HTML View Controllers ==========
-@jwt_required()
-@role_required([UserRole.TEACHER, UserRole.ADMIN])
-def resources_view_controller(request: Request):
+def resources_view_controller(_: Request):
     """Vista principal de recursos para profesores"""
     try:
         current_user_id = get_jwt_identity()
@@ -46,22 +53,28 @@ def resources_view_controller(request: Request):
             flash("Error al cargar los recursos", "error")
             return redirect(url_for("admin.dashboard"))
 
+        # Convert the User object to a dictionary with role as string
+        user_dict = {
+            "id": user.id,
+            "username": user.username,
+            "document": user.document,
+            "full_name": user.full_name,
+            "role": user.role.value if hasattr(user.role, "value") else str(user.role),
+        }
+
         return render_template(
             "teacher/resources_view.html",
-            user=user,
+            user=user_dict,
             subjects=resources_data.get("subjects", []),
             accion_logout=True,
         )
-    except Exception as e:
-        print(f"Error en resources_view_controller: {str(e)}")
+    except Exception:
         flash("Error al cargar la vista de recursos", "error")
         return redirect(url_for("admin.dashboard"))
     finally:
         db.close()
 
 
-@jwt_required()
-@role_required([UserRole.TEACHER, UserRole.ADMIN])
 def create_resource_controller(request: Request):
     """Crear un nuevo recurso"""
     try:
@@ -73,7 +86,6 @@ def create_resource_controller(request: Request):
                 "class_id": request.form.get("class_id"),
                 "title": request.form.get("title"),
                 "period": request.form.get("period"),
-                "link": request.form.get("link", ""),
             }
 
             # Obtener archivos
@@ -95,18 +107,15 @@ def create_resource_controller(request: Request):
 
             return redirect(url_for("resources.resources_view"))
 
-    except Exception as e:
-        print(f"Error en create_resource_controller: {str(e)}")
+    except Exception:
         flash("Error al crear el recurso", "error")
         return redirect(url_for("resources.resources_view"))
 
 
-@jwt_required()
-@role_required([UserRole.TEACHER, UserRole.ADMIN])
 def delete_resource_controller(resource_id: int, request: Request):
     """Eliminar un recurso"""
     try:
-        result, status_code = delete_resource_service(resource_id, request)
+        _, status_code = delete_resource_service(resource_id, request)
 
         if status_code == 200:
             flash("Recurso eliminado exitosamente", "success")
@@ -114,9 +123,33 @@ def delete_resource_controller(resource_id: int, request: Request):
             flash("Error al eliminar el recurso", "error")
 
         return redirect(url_for("resources.resources_view"))
-    except Exception as e:
-        print(f"Error en delete_resource_controller: {str(e)}")
+    except Exception:
         flash("Error al eliminar el recurso", "error")
+        return redirect(url_for("resources.resources_view"))
+
+
+def download_resource_controller(resource_id: int, _: Request):
+    """Descargar el archivo de un recurso"""
+    try:
+        file_path, filename, status_code = get_resource_file_path_service(resource_id)
+
+        if status_code == 404:
+            flash("Recurso o archivo no encontrado", "error")
+            return redirect(url_for("resources.resources_view"))
+
+        if not file_path or not os.path.exists(file_path):
+            flash("El archivo no existe", "error")
+            return redirect(url_for("resources.resources_view"))
+
+        # Enviar el archivo con headers
+        return send_file(
+            file_path,
+            as_attachment=True,
+            download_name=filename,
+            mimetype="application/octet-stream",
+        )
+    except Exception:
+        flash("Error al descargar el archivo", "error")
         return redirect(url_for("resources.resources_view"))
 
 
@@ -175,7 +208,6 @@ def create_resource_api_controller(
             "class_id": int(request.form.get("class_id")),
             "title": request.form.get("title"),
             "period": int(request.form.get("period")),
-            "link": request.form.get("link", ""),
         }
 
         # Obtener archivos
@@ -225,8 +257,6 @@ def update_resource_api_controller(
             data["title"] = request.form.get("title")
         if request.form.get("period"):
             data["period"] = int(request.form.get("period"))
-        if request.form.get("link"):
-            data["link"] = request.form.get("link")
 
         # Obtener archivos
         cover_file = request.files.get("cover_image")
@@ -264,7 +294,7 @@ def delete_resource_api_controller(
 ) -> Response | Tuple[Optional[dict], int]:
     """API para eliminar un recurso"""
     try:
-        result, status_code = delete_resource_service(resource_id, request)
+        _, status_code = delete_resource_service(resource_id, request)
 
         if status_code == 200:
             return ApiResponse.success(message="Recurso eliminado exitosamente")
