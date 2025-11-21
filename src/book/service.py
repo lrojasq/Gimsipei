@@ -1,151 +1,248 @@
-from .validation import BookCreateSchema, BookUpdateSchema
+from typing import Tuple, Optional
+from datetime import datetime
+import os
+from werkzeug.utils import secure_filename
+
 from ..models.book import Book
 from ..database.database import SessionLocal
-from ..utils.file_utils import save_file, delete_file, update_file
 
 
 def book_to_dict(book):
+    """Convertir objeto Book a diccionario"""
     return {
         "id": book.id,
         "title": book.title,
         "author": book.author,
-        "description": book.description,
+        "description": book.description or "",
         "file_path": book.file_path,
         "cover_image": book.cover_image,
         "target_audience": book.target_audience,
     }
 
 
-def create_book_service(data: BookCreateSchema, file, cover_image):
+def create_book_service(
+    data: dict, file=None, cover_image=None, created_by_user_id=None
+) -> Tuple[Optional[dict], int]:
+    """Crear un nuevo libro"""
     db = SessionLocal()
     file_path = None
     cover_path = None
 
     try:
-        # Save the main file
-        file_path = save_file(file, "book")
+        # Procesar archivo del libro si existe
+        if file and file.filename:
+            filename = secure_filename(file.filename)
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            filename = f"{timestamp}_{filename}"
 
-        # Save the cover image if it exists
-        if cover_image:
-            cover_path = save_file(cover_image, "cover")
+            upload_folder = os.path.join("src", "static", "uploads", "books")
+            os.makedirs(upload_folder, exist_ok=True)
+            file_path = os.path.join(upload_folder, filename)
+            file.save(file_path)
+            file_path = f"/static/uploads/books/{filename}"
 
-        # Create the record in the database
+        # Procesar imagen de portada si existe
+        if cover_image and cover_image.filename:
+            filename = secure_filename(cover_image.filename)
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            filename = f"{timestamp}_{filename}"
+
+            upload_folder = os.path.join("src", "static", "uploads", "books", "covers")
+            os.makedirs(upload_folder, exist_ok=True)
+            cover_path = os.path.join(upload_folder, filename)
+            cover_image.save(cover_path)
+            cover_path = f"/static/uploads/books/covers/{filename}"
+
+        # Crear el registro en la base de datos
         book = Book(
-            title=data.title,
-            author=data.author,
-            description=data.description,
+            title=data.get("title"),
+            author=data.get("author"),
+            description=data.get("description", ""),
             file_path=file_path,
             cover_image=cover_path,
-            target_audience=data.target_audience,
+            target_audience=data.get("target_audience", "STUDENT"),
         )
         db.add(book)
         db.commit()
         db.refresh(book)
-        return book_to_dict(book)
+
+        return {
+            "message": "Libro creado exitosamente",
+            "book": book_to_dict(book),
+        }, 201
     except Exception as e:
         db.rollback()
-        # Clean up files if an error occurred
-        if file_path:
-            delete_file(file_path)
-        if cover_path:
-            delete_file(cover_path)
-        raise e
+        # Limpiar archivos si ocurrió un error
+        if file_path and os.path.exists(file_path.lstrip("/")):
+            try:
+                os.remove(os.path.join("src", file_path.lstrip("/")))
+            except Exception:
+                pass
+        if cover_path and os.path.exists(cover_path.lstrip("/")):
+            try:
+                os.remove(os.path.join("src", cover_path.lstrip("/")))
+            except Exception:
+                pass
+        import traceback
+
+        traceback.print_exc()
+        return {"error": f"Error al crear el libro: {str(e)}"}, 500
     finally:
         db.close()
 
 
-def get_books_service(target_audience=None):
+def get_books_service(target_audience=None) -> Tuple[Optional[list], int]:
+    """Obtener todos los libros, opcionalmente filtrados por audiencia"""
     db = SessionLocal()
     try:
         query = db.query(Book)
         if target_audience:
             query = query.filter(Book.target_audience == target_audience)
         books = query.all()
-        return [book_to_dict(b) for b in books]
+        return [book_to_dict(b) for b in books], 200
     finally:
         db.close()
 
 
-def get_book_service(book_id: int):
+def get_book_service(book_id: int) -> Tuple[Optional[dict], int]:
+    """Obtener un libro específico"""
     db = SessionLocal()
     try:
         book = db.query(Book).filter(Book.id == book_id).first()
         if not book:
-            return None
-        return book_to_dict(book)
+            return None, 404
+        return book_to_dict(book), 200
     finally:
         db.close()
 
 
 def update_book_service(
-    book_id: int, data: BookUpdateSchema, file=None, cover_image=None
-):
+    book_id: int, data: dict, file=None, cover_image=None
+) -> Tuple[Optional[dict], int]:
+    """Actualizar un libro"""
     db = SessionLocal()
     try:
         book = db.query(Book).filter(Book.id == book_id).first()
         if not book:
-            return None
+            return {"error": "Libro no encontrado"}, 404
 
-        # Update text fields
-        if data.title is not None:
-            book.title = data.title
-        if data.author is not None:
-            book.author = data.author
-        if data.description is not None:
-            book.description = data.description
-        if data.target_audience is not None:
-            book.target_audience = data.target_audience
+        # Actualizar campos de texto
+        if data.get("title") is not None:
+            book.title = data["title"]
+        if data.get("author") is not None:
+            book.author = data["author"]
+        if data.get("description") is not None:
+            book.description = data["description"]
+        if data.get("target_audience") is not None:
+            book.target_audience = data["target_audience"]
 
-        # Update the book file if a new one is provided
-        if file:
-            book.file_path = update_file(book.file_path, file, "book")
+        # Actualizar archivo del libro si se proporciona uno nuevo
+        if file and file.filename:
+            # Eliminar archivo anterior si existe
+            if book.file_path:
+                old_path = os.path.join("src", book.file_path.lstrip("/"))
+                if os.path.exists(old_path):
+                    try:
+                        os.remove(old_path)
+                    except Exception:
+                        pass
 
-        # Update the cover image if a new one is provided
-        if cover_image:
-            book.cover_image = update_file(book.cover_image, cover_image, "cover")
+            # Guardar nuevo archivo
+            filename = secure_filename(file.filename)
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            filename = f"{timestamp}_{filename}"
+            upload_folder = os.path.join("src", "static", "uploads", "books")
+            os.makedirs(upload_folder, exist_ok=True)
+            file_path = os.path.join(upload_folder, filename)
+            file.save(file_path)
+            book.file_path = f"/static/uploads/books/{filename}"
+
+        # Actualizar imagen de portada si se proporciona una nueva
+        if cover_image and cover_image.filename:
+            # Eliminar imagen anterior si existe
+            if book.cover_image:
+                old_path = os.path.join("src", book.cover_image.lstrip("/"))
+                if os.path.exists(old_path):
+                    try:
+                        os.remove(old_path)
+                    except Exception:
+                        pass
+
+            # Guardar nueva imagen
+            filename = secure_filename(cover_image.filename)
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            filename = f"{timestamp}_{filename}"
+            upload_folder = os.path.join("src", "static", "uploads", "books", "covers")
+            os.makedirs(upload_folder, exist_ok=True)
+            cover_path = os.path.join(upload_folder, filename)
+            cover_image.save(cover_path)
+            book.cover_image = f"/static/uploads/books/covers/{filename}"
 
         db.commit()
         db.refresh(book)
-        return book_to_dict(book)
+        return {
+            "message": "Libro actualizado exitosamente",
+            "book": book_to_dict(book),
+        }, 200
+    except Exception as e:
+        db.rollback()
+        import traceback
+
+        traceback.print_exc()
+        return {"error": f"Error al actualizar el libro: {str(e)}"}, 500
     finally:
         db.close()
 
 
-def delete_book_service(book_id: int):
+def delete_book_service(book_id: int) -> Tuple[Optional[dict], int]:
+    """Eliminar un libro"""
     db = SessionLocal()
     try:
         book = db.query(Book).filter(Book.id == book_id).first()
         if not book:
-            return {"error": "Libro no encontrado"}
+            return {"error": "Libro no encontrado"}, 404
 
-        # Save file paths before deleting the record
+        # Guardar rutas de archivos antes de eliminar el registro
         file_path = book.file_path
         cover_image_path = book.cover_image
 
-        # Delete the record from the database
+        # Eliminar el registro de la base de datos
         db.delete(book)
         db.commit()
 
-        # Delete physical files
+        # Eliminar archivos físicos
         files_deleted = []
 
-        # Delete the book file
-        if delete_file(file_path):
-            files_deleted.append("libro")
+        # Eliminar archivo del libro
+        if file_path:
+            full_path = os.path.join("src", file_path.lstrip("/"))
+            if os.path.exists(full_path):
+                try:
+                    os.remove(full_path)
+                    files_deleted.append("libro")
+                except Exception as e:
+                    print(f"Error al eliminar archivo: {str(e)}")
 
-        # Delete the cover image
-        if delete_file(cover_image_path):
-            files_deleted.append("portada")
+        # Eliminar imagen de portada
+        if cover_image_path:
+            full_path = os.path.join("src", cover_image_path.lstrip("/"))
+            if os.path.exists(full_path):
+                try:
+                    os.remove(full_path)
+                    files_deleted.append("portada")
+                except Exception as e:
+                    print(f"Error al eliminar imagen: {str(e)}")
 
-        # Build the response message
-        if files_deleted:
-            return {
-                "detail": f"Libro eliminado. Archivos eliminados: {', '.join(files_deleted)}"
-            }
-        else:
-            return {
-                "detail": "Libro eliminado de la base de datos. No se encontraron archivos físicos."
-            }
+        return {
+            "message": "Libro eliminado exitosamente",
+            "files_deleted": files_deleted,
+        }, 200
 
+    except Exception as e:
+        db.rollback()
+        import traceback
+
+        traceback.print_exc()
+        return {"error": f"Error al eliminar el libro: {str(e)}"}, 500
     finally:
         db.close()
