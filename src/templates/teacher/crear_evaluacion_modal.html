@@ -1,0 +1,354 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<style>
+    :root {
+        --evaluaciones: #f48d53;
+        --evaluaciones-active: #e55d1a;
+    }
+
+    #formModalEvaluation {
+        z-index: 999999;
+    }
+
+    /* Fondo global del modal */
+    .modal-content {
+        background-color: var(--evaluaciones) !important;
+    }
+
+    /* Botones */
+    .btn-primary,
+    .btn-success,
+    .btn-secondary {
+        background-color: var(--evaluaciones) !important;
+        border-color: var(--evaluaciones) !important;
+        color: white !important;
+    }
+
+    .btn-primary:hover,
+    .btn-success:hover,
+    .btn-secondary:hover {
+        background-color: #e77d44 !important;
+        border-color: #e77d44 !important;
+    }
+
+    .btn-outline-primary {
+        color: white !important;
+        border-color: white !important;
+    }
+
+    .btn-outline-primary:hover {
+        background-color: white !important;
+        color: gray !important;
+    }
+
+    /* Campos de texto */
+    .form-control,
+    .form-select {
+        border-color: var(--evaluaciones-active);
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: var(--evaluaciones-active);
+        box-shadow: 0 0 0 0.25rem rgba(196, 87, 43, 0.3);
+    }
+
+    .step {
+        min-height: 270px;
+    }
+
+    .modal-content .progress-bar {
+        background-color: var(--evaluaciones-active);
+    }
+
+    #formModalEvaluation .file-upload-group {
+        position: relative;
+    }
+
+    #formModalEvaluation .file-upload-label {
+        display: block;
+        width: 100%;
+        padding: 1rem 1.25rem;
+        background-color: var(--evaluaciones-active);
+        color: white;
+        font-size: 1rem;
+        font-weight: 500;
+        border-radius: 8px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    #formModalEvaluation .file-upload-label:hover {
+        background-color: var(--evaluaciones-active);
+    }
+
+    #formModalEvaluation input[type="file"] {
+        display: none;
+    }
+
+    #formModalEvaluation .file-name {
+        display: block;
+        margin-top: 0.5rem;
+        font-size: 0.875rem;
+        color: hsl(0, 0%, 45%);
+    }
+</style>
+
+<!-- BOTÓN PARA ABRIR EL MODAL -->
+<div class="container text-center mt-4">
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#formModalEvaluation">
+        Crear Formulario
+    </button>
+</div>
+
+<!-- MODAL COMPLETO -->
+<div class="modal fade" id="formModalEvaluation" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <!-- CABECERA -->
+            <div class="modal-header text-white" style="background:#e77236;">
+                <h5 class="modal-title">Crear Formulario</h5>
+                <button class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- CUERPO DEL MODAL -->
+            <div class="modal-body">
+
+                <!-- STEP 0: INFO GENERAL -->
+                <div id="step0" class="step">
+                    <h5>Información General</h5>
+
+                    <input id="titulo" class="form-control mb-3" placeholder="Título" oninput="validateFormInfo()" />
+
+                    <div class="form-group file-upload-group">
+                        <label for="img_evaluaciones" class="file-upload-label">
+                            <i class="fas fa-upload"></i> AGREGAR PORTADA
+                        </label>
+                        <input type="file" name="img_evaluaciones" id="img_evaluaciones" required accept="image/*"
+                            onchange="document.getElementById('img_evaluaciones_name').textContent = this.files[0]?.name || ''">
+                        <span class="file-name" id="img_evaluaciones_name"></span>
+                    </div>
+
+                    <textarea id="descripcion" class="form-control mb-3" placeholder="Descripción" rows="3"
+                        oninput="validateFormInfo()"></textarea>
+
+                    <select id="periodo" class="form-select mb-3" onchange="validateFormInfo()">
+                        <option value="">Seleccione un periodo</option>
+                        <option value="Enero-Abril">PERIODO 1</option>
+                        <option value="Mayo-Agosto">PERIODO 2</option>
+                        <option value="Septiembre-Diciembre">PERIODO 3</option>
+                        <option value="Anual">PERIODO 4</option>
+                    </select>
+                </div>
+
+                <!-- CONTENEDOR DE LAS 10 PREGUNTAS -->
+                <div id="questionsContainer"></div>
+
+                <div class="progress mt-3">
+                    <div id="progressBar" class="progress-bar" style="width:0%"></div>
+                </div>
+            </div>
+
+            <!-- PIE DEL MODAL -->
+            <div class="modal-footer d-flex justify-content-between">
+                <button class="btn btn-secondary" id="prevBtn" onclick="prevStep()" style="display:none;">←
+                    Anterior</button>
+                <button class="btn btn-primary" id="nextBtn" onclick="nextStep()" disabled>Siguiente →</button>
+                <button class="btn btn-success" id="finishBtn" onclick="finishForm()" style="display:none;"
+                    disabled>Finalizar</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    /* ----- CONTROL DE PASOS ----- */
+    let currentStep = 0;
+    const totalSteps = 11; // 1 info + 10 preguntas
+
+    /* ----- MODELO DE PREGUNTAS ----- */
+    const questions = Array.from({ length: 10 }).map(() => ({
+        text: "",
+        type: "open",
+        options: [],
+        answer: "",
+    }));
+
+    const container = document.getElementById("questionsContainer");
+
+    /* ----- Generar letras A,B,C... ----- */
+    function optionLetter(index) {
+        return String.fromCharCode(65 + index);
+    }
+
+    /* ----- CREAR LAS 10 PREGUNTAS DINÁMICAS ----- */
+    questions.forEach((q, i) => {
+        const step = document.createElement("div");
+        step.id = "step" + (i + 1);
+        step.classList.add("step");
+        step.style.display = "none";
+
+        step.innerHTML = `
+      <h5>Pregunta ${i + 1}</h5>
+
+      <input
+        class="form-control mb-3"
+        placeholder="Escriba la pregunta"
+        oninput="questions[${i}].text=this.value; validateQuestion(${i})"
+      />
+
+      <select
+        class="form-select mb-3"
+        onchange="questions[${i}].type=this.value; toggleOptions(${i}); validateQuestion(${i})"
+      >
+        <option value="open">Respuesta abierta</option>
+        <option value="multi">Opción múltiple</option>
+      </select>
+
+      <div id="optionsBox${i}" style="display:none;">
+        <h6>Opciones</h6>
+        <div id="optList${i}"></div>
+
+        <button class="btn btn-outline-primary btn-sm mt-2" onclick="addOption(${i})">
+          + Añadir opción
+        </button>
+      </div>
+
+      <input
+        class="form-control mt-3"
+        placeholder="Respuesta Correcta"
+        oninput="questions[${i}].answer=this.value; validateQuestion(${i})"
+      />
+
+    `;
+
+        container.appendChild(step);
+    });
+
+    /* ----- MOSTRAR/OCULTAR OPCIONES ----- */
+    function toggleOptions(i) {
+        const box = document.getElementById("optionsBox" + i);
+        box.style.display = questions[i].type === "multi" ? "block" : "none";
+        questions[i].options = [];
+        document.getElementById("optList" + i).innerHTML = "";
+    }
+
+    /* ----- AGREGAR OPCIONES CON LETRA ----- */
+    function addOption(i) {
+        const val = prompt("Escriba la opción:");
+        if (!val) return;
+
+        questions[i].options.push(val);
+
+        const list = document.getElementById("optList" + i);
+        const letter = optionLetter(questions[i].options.length - 1);
+
+        const item = document.createElement("div");
+        item.className = "border p-2 my-1 rounded bg-light";
+        item.innerHTML = `<strong>${letter})</strong> ${val}`;
+
+        list.appendChild(item);
+
+        validateQuestion(i);
+    }
+
+    /* ----- VALIDAR INFO GENERAL ----- */
+    function validateFormInfo() {
+        const valid =
+            document.getElementById("titulo").value.trim() &&
+            document.getElementById("descripcion").value.trim() &&
+            document.getElementById("periodo").value.trim();
+
+        document.getElementById("nextBtn").disabled = !valid;
+    }
+
+    /* ----- VALIDAR UNA PREGUNTA INDIVIDUAL ----- */
+    function validateQuestion(i) {
+        const q = questions[i];
+
+        const textOk = q.text.trim().length > 0;
+        const answerOk = q.answer.trim().length > 0;
+        let valid = textOk && answerOk;
+
+        if (q.type === "multi") {
+            const letters = q.options.map((_, idx) =>
+                optionLetter(idx).toUpperCase()
+            );
+            const userAnswer = q.answer.trim().toUpperCase();
+
+            valid =
+                valid &&
+                q.options.length >= 2 &&
+                (q.options.includes(q.answer.trim()) || letters.includes(userAnswer));
+        }
+
+        document.getElementById("nextBtn").disabled = !valid;
+
+        if (i === 9) {
+            document.getElementById("finishBtn").disabled =
+                !questions.every(isQuestionValid);
+        }
+    }
+
+    function isQuestionValid(q) {
+        let base = q.text.trim() && q.answer.trim();
+        if (q.type === "multi") {
+            const letters = q.options.map((_, idx) => optionLetter(idx));
+            return base && q.options.length >= 2 &&
+                (q.options.includes(q.answer) ||
+                    letters.includes(q.answer.toUpperCase()));
+        }
+        return base;
+    }
+
+    /* ----- STEP SIGUIENTE ----- */
+    function nextStep() {
+        document.getElementById("step" + currentStep).style.display = "none";
+        currentStep++;
+        document.getElementById("step" + currentStep).style.display = "block";
+
+        updateUI();
+        if (currentStep > 0 && currentStep <= 10) {
+            validateQuestion(currentStep - 1);
+        }
+    }
+
+    /* ----- STEP ANTERIOR ----- */
+    function prevStep() {
+        document.getElementById("step" + currentStep).style.display = "none";
+        currentStep--;
+        document.getElementById("step" + currentStep).style.display = "block";
+
+        updateUI();
+    }
+
+    /* ----- ACTUALIZAR UI ----- */
+    function updateUI() {
+        const prev = document.getElementById("prevBtn");
+        const next = document.getElementById("nextBtn");
+        const fin = document.getElementById("finishBtn");
+
+        prev.style.display = currentStep === 0 ? "none" : "inline-block";
+        next.style.display = currentStep === 10 ? "none" : "inline-block";
+        fin.style.display = currentStep === 10 ? "inline-block" : "none";
+
+        document.getElementById("progressBar").style.width =
+            (currentStep / 10) * 100 + "%";
+    }
+
+    /* ----- FINALIZAR FORMULARIO ----- */
+    function finishForm() {
+        console.log("Formulario completo:", {
+            titulo: document.getElementById("titulo").value,
+            descripcion: document.getElementById("descripcion").value,
+            periodo: document.getElementById("periodo").value,
+            preguntas: questions,
+        });
+
+        alert("Formulario completado. Revisa la consola.");
+    }
+</script>

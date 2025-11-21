@@ -678,6 +678,9 @@ hr.libros_br {
 #registroModalQuiz .form-control:valid {
     border-color: var(--evaluaciones-active)
 }
+.container_category.flex.evaluaciones_category{
+    gap: 0;
+}
 
 @media (max-width:1600px) {
     .specialities_category.cursos.grades.flex.flex-column ,
