@@ -72,18 +72,17 @@
     </div>
 
     <!-- Inicio Libros Grid -->
-    <div class="specialities_category flex flex-column">
+    <div class="specialities_category flex flex-column books">
         <!-- Search Bar -->
         <div class="search-bar" style="width: 100%; margin-bottom: 1.5rem;">
             <div style="position: relative; width: 100%;">
-                <input type="text" id="searchBooks" placeholder="Buscar" 
-                       style="width: 100%; padding: 0.75rem 1rem 0.75rem 2.5rem; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem;">
+                <input type="text" id="searchBooks" placeholder="Buscar" >
                 <i class="fas fa-search" style="position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); color: #999;"></i>
             </div>
         </div>
 
         <!-- Books Grid -->
-        <div class="books" style="display: flex; flex-wrap: wrap; align-items: start; justify-content: flex-start; width: 100%;">
+         <div class="books_content d-flex">
             {% if books and books|length > 0 %}
             {% for book in books %}
             <div class="book flex flex-column" data-book-title="{{ book.title|lower }}" data-book-author="{{ book.author|lower }}" data-book-audience="{{ book.target_audience }}">

@@ -496,6 +496,7 @@ form.form-admin.flex.flex-column h1{
         right: 10px;
         top: 70px;
         padding: 10px 8px;
+        display: none!important;
     }
     .menu_aside .aside_list img { width: 36px; height: 36px; }
 }
