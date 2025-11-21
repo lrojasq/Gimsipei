@@ -8,94 +8,23 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeViewLinks();
 });
 
-// Función genérica para mostrar modal de confirmación de eliminación
-function showDeleteConfirmationModal(actionUrl) {
-    const modal = document.getElementById('deleteConfirmationModal');
-    const form = document.getElementById('deleteConfirmationForm');
-    
-    if (!modal || !form) {
-        console.error('Modal o formulario de confirmación no encontrado');
-        return;
-    }
-    
-    // Establecer la acción del formulario
-    form.action = actionUrl;
-    
-    // Mostrar modal
-    modal.classList.add('show');
-    modal.style.display = 'flex';
-    modal.removeAttribute('aria-hidden');
-    modal.setAttribute('aria-modal', 'true');
-    modal.setAttribute('role', 'dialog');
-}
-
-// Inicializar listeners del modal (cerrar)
-function initializeDeleteModalListeners() {
-    setTimeout(function() {
-        const modal = document.getElementById('deleteConfirmationModal');
-        if (!modal) return;
-        
-        const closeModalBtns = modal.querySelectorAll('.close-modal');
-        const bgBack = modal.querySelector('.bg-back');
-        
-        // Función para cerrar el modal
-        function closeModal() {
-            modal.classList.remove('show');
-            modal.style.display = 'none';
-            modal.setAttribute('aria-hidden', 'true');
-            modal.removeAttribute('aria-modal');
-            modal.removeAttribute('role');
-        }
-        
-        // Listeners para los botones de cerrar
-        closeModalBtns.forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                closeModal();
-            });
-        });
-            
-        // Listener para el fondo
-        if (bgBack) {
-            bgBack.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                closeModal();
-            });
-        }
-    }, 200);
-}
-
-// Delete Student Modal Functionality
+// Delete Student Modal
 function initializeDeleteModal() {
-    setTimeout(function() {
-        const deleteButtons = document.querySelectorAll('.delete-student');
+    initializeDeleteButtons('.delete-student', function(button) {
+        const studentId = button.getAttribute('data-student-id');
         
-        // Abrir modal desde los botones de eliminar
-        deleteButtons.forEach(button => {
-            button.addEventListener('click', function(e) {
-                e.preventDefault();
-                const studentId = this.getAttribute('data-student-id');
-                
-                // Obtener el course_id de la URL actual
-                const urlParts = window.location.pathname.split('/');
-                const courseIdIndex = urlParts.indexOf('courses');
-                const courseId = courseIdIndex !== -1 && urlParts[courseIdIndex + 1] ? urlParts[courseIdIndex + 1] : null;
-                
-                if (!courseId) {
-                    console.error('No se pudo obtener el ID del curso');
-                    return;
-                }
-                
-                // Construir la URL de eliminación
-                const deleteUrl = `/users/courses/${courseId}/students/${studentId}/delete`;
-                
-                // Mostrar modal de confirmación con la URL
-                showDeleteConfirmationModal(deleteUrl);
-            });
-        });
-    }, 100);
+        // Obtener el course_id de la URL actual
+        const urlParts = window.location.pathname.split('/');
+        const courseIdIndex = urlParts.indexOf('courses');
+        const courseId = courseIdIndex !== -1 && urlParts[courseIdIndex + 1] ? urlParts[courseIdIndex + 1] : null;
+        
+        if (!courseId) {
+            console.error('No se pudo obtener el ID del curso');
+            return null;
+        }
+        
+        return `/users/courses/${courseId}/students/${studentId}/delete`;
+    });
 }
 
 // Auto Close Alerts
@@ -142,7 +71,7 @@ function initializeCreateStudentButton() {
     }
 }
 
-// Initialize View Links (Tareas y Evaluaciones) - Solo para estilos
+// Initialize View Links (Tareas y Evaluaciones)
 function initializeViewLinks() {
     // Los enlaces ahora son directos en HTML, solo necesitamos asegurar estilos
     const viewLinks = document.querySelectorAll('.view-link-btn');
@@ -221,7 +150,6 @@ function showToast(message, type = 'info') {
 
 // Export functions for global use
 window.studentsManagement = {
-    showDeleteConfirmationModal,
     showToast
 };
 

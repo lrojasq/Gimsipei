@@ -255,28 +255,14 @@ function initializeAllForms() {
     });
 }
 
-// Keep only UI helpers available if needed globally
-// Delete Subject Modal Functionality
+// Delete Subject Modal 
 function initializeDeleteSubjectModal() {
-    setTimeout(function() {
-        const deleteButtons = document.querySelectorAll('.open-delete-subject-modal');
-        
-        // Abrir modal desde los botones de eliminar
-        deleteButtons.forEach(button => {
-            button.addEventListener('click', function(e) {
-                e.preventDefault();
-                const courseId = this.getAttribute('data-course-id');
-                const subjectId = this.getAttribute('data-subject-id');
-                const teacherId = this.getAttribute('data-teacher-id');
-                
-                // Construir la URL de eliminación
-                const deleteUrl = `/courses/${courseId}/subjects/${subjectId}/${teacherId}/remove`;
-                
-                // Mostrar modal de confirmación con la URL
-                showDeleteConfirmationModal(deleteUrl);
-            });
-        });
-    }, 100);
+    initializeDeleteButtons('.open-delete-subject-modal', function(button) {
+        const courseId = button.getAttribute('data-course-id');
+        const subjectId = button.getAttribute('data-subject-id');
+        const teacherId = button.getAttribute('data-teacher-id');
+        return `/courses/${courseId}/subjects/${subjectId}/${teacherId}/remove`;
+    });
 }
 
 // Función global para cerrar modales (legacy - mantener para compatibilidad)
@@ -622,64 +608,7 @@ function initializeEditSubjectModal() {
     }, 100);
 }
 
-// Función genérica para mostrar modal de confirmación de eliminación
-function showDeleteConfirmationModal(actionUrl) {
-    const modal = document.getElementById('deleteConfirmationModal');
-    const form = document.getElementById('deleteConfirmationForm');
-    
-    if (!modal || !form) {
-        console.error('Modal o formulario de confirmación no encontrado');
-        return;
-    }
-    
-    // Establecer la acción del formulario
-    form.action = actionUrl;
-    
-    // Mostrar modal
-    modal.classList.add('show');
-    modal.style.display = 'flex';
-    modal.removeAttribute('aria-hidden');
-    modal.setAttribute('aria-modal', 'true');
-    modal.setAttribute('role', 'dialog');
-}
-
-// Inicializar listeners del modal (cerrar)
-function initializeDeleteModalListeners() {
-    setTimeout(function() {
-        const modal = document.getElementById('deleteConfirmationModal');
-        if (!modal) return;
-        
-        const closeModalBtns = modal.querySelectorAll('.close-modal');
-        const bgBack = modal.querySelector('.bg-back');
-        
-        // Función para cerrar el modal
-        function closeModal() {
-            modal.classList.remove('show');
-            modal.style.display = 'none';
-            modal.setAttribute('aria-hidden', 'true');
-            modal.removeAttribute('aria-modal');
-            modal.removeAttribute('role');
-        }
-        
-        // Listeners para los botones de cerrar
-        closeModalBtns.forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                closeModal();
-            });
-        });
-        
-        // Listener para el fondo
-        if (bgBack) {
-            bgBack.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                closeModal();
-            });
-        }
-    }, 200);
-}
+// Delete modal functions are now in delete_modal.js
 
 window.coursesManagement = {
     showToast,

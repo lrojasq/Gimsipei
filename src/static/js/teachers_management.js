@@ -77,84 +77,13 @@ function validateField(field) {
     }
 }
 
-// Función genérica para mostrar modal de confirmación de eliminación
-function showDeleteConfirmationModal(actionUrl) {
-    const modal = document.getElementById('deleteConfirmationModal');
-    const form = document.getElementById('deleteConfirmationForm');
-    
-    if (!modal || !form) {
-        console.error('Modal o formulario de confirmación no encontrado');
-        return;
-    }
-    
-    // Establecer la acción del formulario
-    form.action = actionUrl;
-    
-    // Mostrar modal
-    modal.classList.add('show');
-    modal.style.display = 'flex';
-    modal.removeAttribute('aria-hidden');
-    modal.setAttribute('aria-modal', 'true');
-    modal.setAttribute('role', 'dialog');
-}
 
-// Inicializar listeners del modal (cerrar)
-function initializeDeleteModalListeners() {
-    setTimeout(function() {
-        const modal = document.getElementById('deleteConfirmationModal');
-        if (!modal) return;
-        
-        const closeModalBtns = modal.querySelectorAll('.close-modal');
-        const bgBack = modal.querySelector('.bg-back');
-        
-        // Función para cerrar el modal
-        function closeModal() {
-            modal.classList.remove('show');
-            modal.style.display = 'none';
-            modal.setAttribute('aria-hidden', 'true');
-            modal.removeAttribute('aria-modal');
-            modal.removeAttribute('role');
-        }
-        
-        // Listeners para los botones de cerrar
-        closeModalBtns.forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                closeModal();
-            });
-        });
-            
-        // Listener para el fondo
-        if (bgBack) {
-            bgBack.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                closeModal();
-            });
-        }
-    }, 200);
-}
-
-// Delete Teacher Modal Functionality
+// Delete Teacher Modal
 function initializeDeleteModal() {
-    setTimeout(function() {
-        const deleteButtons = document.querySelectorAll('.open-delete-teacher-modal');
-        
-        // Abrir modal desde los botones de eliminar
-        deleteButtons.forEach(button => {
-            button.addEventListener('click', function(e) {
-                e.preventDefault();
-                const teacherId = this.getAttribute('data-teacher-id');
-                
-                // Construir la URL de eliminación
-                const deleteUrl = `/users/teachers/${teacherId}/delete`;
-                
-                // Mostrar modal de confirmación con la URL
-                showDeleteConfirmationModal(deleteUrl);
-        });
-        });
-    }, 100);
+    initializeDeleteButtons('.open-delete-teacher-modal', function(button) {
+        const teacherId = button.getAttribute('data-teacher-id');
+        return `/users/teachers/${teacherId}/delete`;
+    });
 }
 
 // Auto Close Alerts

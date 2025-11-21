@@ -3,6 +3,9 @@
 document.addEventListener('DOMContentLoaded', function() {
     initializePeriodSelector();
     initializeResourceModal();
+    initializeAddFirstResourceButtons();
+    initializeDeleteModalListeners();
+    initializeDeleteResourceModal();
 });
 
 // Period Selector Functionality
@@ -35,7 +38,7 @@ function initializePeriodSelector() {
 }
 
 // Resource Modal Functions
-function openCreateResourceModal(subjectId) {
+function openCreateResourceModal(subjectId, period = null) {
     const modal = document.getElementById('createResourceModal');
     if (modal) {
         modal.style.display = 'flex';
@@ -44,6 +47,23 @@ function openCreateResourceModal(subjectId) {
         const subjectIdInput = document.getElementById('resource_subject_id');
         if (subjectIdInput && subjectId) {
             subjectIdInput.value = subjectId;
+        }
+        
+        // Set period if provided
+        if (period) {
+            const periodSelect = document.querySelector('#createResourceModal select[name="period"]');
+            if (periodSelect) {
+                periodSelect.value = period;
+            }
+        } else {
+            // Use currently active period
+            const activeBtn = document.querySelector('.period-btn.active');
+            if (activeBtn) {
+                const periodSelect = document.querySelector('#createResourceModal select[name="period"]');
+                if (periodSelect) {
+                    periodSelect.value = activeBtn.getAttribute('data-period');
+                }
+            }
         }
     }
 }
@@ -57,8 +77,26 @@ function closeCreateResourceModal() {
         const form = document.getElementById('createResourceForm');
         if (form) {
             form.reset();
+            // Reset file name displays
+            const fileNameDisplays = document.querySelectorAll('.file-name');
+            fileNameDisplays.forEach(display => {
+                display.textContent = '';
+            });
         }
     }
+}
+
+// Initialize "Add First Resource" buttons
+function initializeAddFirstResourceButtons() {
+    const addFirstResourceBtns = document.querySelectorAll('.btn-add-first-resource');
+    
+    addFirstResourceBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const period = this.getAttribute('data-period');
+            const subjectId = this.getAttribute('data-subject-id');
+            openCreateResourceModal(subjectId, period);
+        });
+    });
 }
 
 function initializeResourceModal() {
@@ -84,11 +122,31 @@ function initializeResourceModal() {
         });
     }
 
+    // Resource file input display name
+    const resourceFileInput = document.getElementById('resource_file');
+    if (resourceFileInput) {
+        resourceFileInput.addEventListener('change', function() {
+            const fileName = this.files[0] ? this.files[0].name : '';
+            const fileNameDisplay = document.getElementById('resource_file_name');
+            if (fileNameDisplay) {
+                fileNameDisplay.textContent = fileName;
+            }
+        });
+    }
+
     // Handle ESC key to close modal
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
             closeCreateResourceModal();
         }
+    });
+}
+
+// Delete Resource Modal Functionality
+function initializeDeleteResourceModal() {
+    initializeDeleteButtons('.open-delete-resource-modal', function(button) {
+        const resourceId = button.getAttribute('data-resource-id');
+        return `/resources/delete/${resourceId}`;
     });
 }
 
