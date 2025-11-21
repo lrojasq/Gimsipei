@@ -57,23 +57,10 @@ def dashboard_controller(_: Request) -> Response:
         return redirect(url_for("auth.login"))
 
 
-# Son temporales, se deben cambiar a sus respectivos modulos
-# @jwt_required()
-# @role_required([UserRole.ADMIN, UserRole.TEACHER, UserRole.STUDENT])
-# def materias_controller(request: Request) -> Response:
-#     return render_template("category/materias.html", accion_logout=True)
-
-
 @jwt_required()
 @role_required([UserRole.ADMIN, UserRole.TEACHER, UserRole.STUDENT])
 def evaluaciones_controller(request: Request) -> Response:
     return render_template("category/evaluaciones.html", accion_logout=True)
-
-
-@jwt_required()
-@role_required([UserRole.ADMIN, UserRole.TEACHER, UserRole.STUDENT])
-def libros_controller(request: Request) -> Response:
-    return render_template("category/libros.html", accion_logout=True)
 
 
 @jwt_required()
