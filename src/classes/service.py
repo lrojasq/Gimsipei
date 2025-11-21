@@ -694,7 +694,6 @@ def get_classes_by_subject_service(course_id: int, subject_id: int):
         result = {
             "course": {
                 "id": course.id,
-                "name": course.name,
                 "academic_year": course.academic_year,
             },
             "subject": {"id": subject.id, "name": subject.name},
