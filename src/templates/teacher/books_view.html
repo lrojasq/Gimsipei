@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+
+{% block title %}Libros{% endblock %}
+
+{% block extra_css %}
+    <link href="{{ url_for('static', filename='css/menu.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/category.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/admin.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/subject_classes.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/classes_resources.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+{% endblock %}
+
+{% block content %}
+{% block menu %}{% endblock %}
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category, message in messages %}
+<div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+    <i
+        class="fas fa-{% if category == 'success' %}check-circle{% elif category == 'danger' %}exclamation-triangle{% else %}info-circle{% endif %} me-2"></i>
+    {{ message }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+</div>
+{% endfor %}
+{% endif %}
+{% endwith %}
+
+<div class="container_category flex libros_category">
+    <!-- Inicio Perfil -->
+    <div class="data_categoty flex flex-column">
+        <div class="title flex">
+            <img src="{{ url_for('static', filename='images/svg/libros.svg') }}" alt="Libros" style="width: 60px; height: 50px;">
+            <h1>Libros</h1>
+        </div>
+
+        <!-- Teacher Info -->
+        {% if user %}
+        <p>{{ user.full_name or user.username }}</p>
+        <div class="data_grade_category flex flex-column">
+            <p>{{ user.document }}</p>
+            <p>Docente</p>
+        </div>
+        {% else %}
+        <p>Sin información de usuario</p>
+        {% endif %}
+
+            <!-- Filter Section -->
+            <div class="filter flex flex-column">
+                <select name="alfabetico" id="filter_alfabetico">
+                    <option value="">- Alfabético -</option>
+                    <option value="asc">A-Z</option>
+                    <option value="desc">Z-A</option>
+                </select>
+                <select name="genero" id="filter_genero">
+                    <option value="">- Género -</option>
+                    <option value="STUDENT">Estudiantes</option>
+                    <option value="TEACHER">Docentes</option>
+                </select>
+                {% if subjects and subjects|length > 0 %}
+                <select name="clase" id="filter_clase">
+                    <option value="">- Clase -</option>
+                    {% for subject in subjects %}
+                    <option value="{{ subject.id }}">{{ subject.name }}</option>
+                    {% endfor %}
+                </select>
+                {% endif %}
+                <button class="btn btn-libros" id="addBookBtn">AÑADIR LIBRO</button>
+                <button class="btn btn-libros" id="removeFiltersBtn">Remover filtro</button>
+            </div>
+    </div>
+
+    <!-- Inicio Libros Grid -->
+    <div class="specialities_category flex flex-column">
+        <!-- Search Bar -->
+        <div class="search-bar" style="width: 100%; margin-bottom: 1.5rem;">
+            <div style="position: relative; width: 100%;">
+                <input type="text" id="searchBooks" placeholder="Buscar" 
+                       style="width: 100%; padding: 0.75rem 1rem 0.75rem 2.5rem; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem;">
+                <i class="fas fa-search" style="position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); color: #999;"></i>
+            </div>
+        </div>
+
+        <!-- Books Grid -->
+        <div class="books" style="display: flex; flex-wrap: wrap; align-items: start; justify-content: flex-start; width: 100%;">
+            {% if books and books|length > 0 %}
+            {% for book in books %}
+            <div class="book flex flex-column" data-book-title="{{ book.title|lower }}" data-book-author="{{ book.author|lower }}" data-book-audience="{{ book.target_audience }}">
+                {% if book.cover_image %}
+                <img width="100%" height="100%" src="{{ book.cover_image }}" alt="{{ book.title }}">
+                {% else %}
+                <div
+                    style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #ea6ef4; min-height: 200px;">
+                    <i class="fas fa-book" style="font-size: 3rem; color: rgba(255, 255, 255, 0.7);"></i>
+                </div>
+                {% endif %}
+                <div class="title_speciality flex flex-column">
+                    {{ book.title }}
+                    <hr class="libros_br" />
+                    ePub
+                    <a href="#" class="open-delete-book-modal" data-book-id="{{ book.id }}"
+                        title="Eliminar" style="margin-top: 0.5rem; color: #dc3545; cursor: pointer; align-self: flex-end;">
+                        <i class="fas fa-trash"></i>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="empty-books" style="width: 100%; text-align: center; padding: 3rem;">
+                <i class="fas fa-book-open" style="font-size: 4rem; color: #bdc3c7; margin-bottom: 1rem;"></i>
+                <p style="color: #999; font-size: 1.1rem; margin-bottom: 1.5rem;">No hay libros disponibles</p>
+                <button class="btn btn-libros active btn-add-first-book">
+                    Crear primer libro
+                </button>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    {% include "sidebar_aside.html" %}
+</div>
+
+<!-- Crear Libro Modal -->
+{% include "teacher/create_book_modal.html" %}
+
+<!-- Confirmación de Eliminación -->
+{% include "delete_confirmation_modal.html" %}
+
+<!-- Custom JS -->
+<script src="{{ url_for('static', filename='js/delete_modal.js') }}"></script>
+<script src="{{ url_for('static', filename='js/books_view.js') }}"></script>
+{% endblock %}

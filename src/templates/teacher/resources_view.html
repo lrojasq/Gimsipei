@@ -76,7 +76,7 @@
                 <p>{{ user.full_name or user.username }}</p>
                 <div class="data_grade_category flex flex-column">
                     <p>{{ user.document }}</p>
-                    <p>Grado 10</p>
+                    <p>Docente</p>
                 </div>
             {% else %}
                 <p>Sin información de usuario</p>
@@ -136,15 +136,7 @@
                                                 <div class="text-content flex flex-column">
                                                     <div class="d-flex justify-content-between align-items-center">
                                                         {% if resource.file_url %}
-                                                            <a href="{{ resource.file_url }}" 
-                                                               target="_blank" 
-                                                               download 
-                                                               class="btn-download-resource">
-                                                                DESCARGAR
-                                                            </a>
-                                                        {% elif resource.link %}
-                                                            <a href="{{ resource.link }}" 
-                                                               target="_blank" 
+                                                            <a href="{{ url_for('resources.download_resource', resource_id=resource.id) }}" 
                                                                class="btn-download-resource">
                                                                 DESCARGAR
                                                             </a>
@@ -154,16 +146,12 @@
                                                             </button>
                                                         {% endif %}
                                                         
-                                                        <form method="POST" 
-                                                              action="{{ url_for('resources.delete_resource', resource_id=resource.id) }}" 
-                                                              style="display: inline; margin: 0;" 
-                                                              onsubmit="return confirm('¿Estás seguro de eliminar este recurso?');">
-                                                            <button type="submit" 
-                                                                    class="btn-delete-resource" 
-                                                                    title="Eliminar recurso">
-                                                                <i class="fas fa-trash"></i>
-                                                            </button>
-                                                        </form>
+                                                        <a href="#" 
+                                                           class="btn-delete-resource open-delete-resource-modal"
+                                                           data-resource-id="{{ resource.id }}"
+                                                           title="Eliminar recurso">
+                                                            <i class="fas fa-trash"></i>
+                                                        </a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -173,6 +161,11 @@
                                     <div class="empty-resources" style="text-align: center; padding: 2rem;">
                                         <i class="fas fa-folder-open" style="font-size: 3rem; color: #bdc3c7;"></i>
                                         <p>No hay recursos para este período</p>
+                                        <button class="btn btn-recursos active btn-add-first-resource" 
+                                                data-period="{{ period }}"
+                                                data-subject-id="{{ subject.subject_id }}">
+                                            Crear primer recurso
+                                        </button>
                                     </div>
                                 {% endif %}
                             </div>
@@ -196,6 +189,10 @@
     <!-- Modal for creating resource -->
     {% include "teacher/create_resource_modal.html" %}
 
+    <!-- Modal de Confirmación de Eliminación -->
+    {% include "delete_confirmation_modal.html" %}
+
     <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='js/delete_modal.js') }}"></script>
     <script src="{{ url_for('static', filename='js/resources_view.js') }}"></script>
 {% endblock %}

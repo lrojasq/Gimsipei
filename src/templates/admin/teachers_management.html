@@ -13,15 +13,16 @@
 {% block menu %}{% endblock %}
 
 {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-        {% for category, message in messages %}
-            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-                <i class="fas fa-{% if category == 'success' %}check-circle{% elif category == 'danger' %}exclamation-triangle{% else %}info-circle{% endif %} me-2"></i>
-                {{ message }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        {% endfor %}
-    {% endif %}
+{% if messages %}
+{% for category, message in messages %}
+<div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+    <i
+        class="fas fa-{% if category == 'success' %}check-circle{% elif category == 'danger' %}exclamation-triangle{% else %}info-circle{% endif %} me-2"></i>
+    {{ message }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+</div>
+{% endfor %}
+{% endif %}
 {% endwith %}
 
 <div class="container_category flex admin_category teachers_management">
@@ -42,15 +43,14 @@
                 {% for teacher in teachers %}
                 <li class="flex ">
                     <div class="data">
-                                <span>{{ teacher.full_name }}</span>
-                                <span>{{ teacher.document }}</span>
+                        <span>{{ teacher.full_name }}</span>
+                        <span>{{ teacher.document }}</span>
                     </div>
                     <span class="flex actions">
                         <a href="{{ url_for('users.edit_teacher', teacher_id=teacher.id) }}" class=""><i
                                 class="fas fa-edit"></i> </a>
-                        <a href="#" class="open-delete-teacher-modal"
-                           data-teacher-id="{{ teacher.id }}"
-                           data-teacher-name="{{ teacher.full_name or teacher.username }}">
+                        <a href="#" class="open-delete-teacher-modal" data-teacher-id="{{ teacher.id }}"
+                            data-teacher-name="{{ teacher.full_name or teacher.username }}">
                             <i class="fas fa-trash"></i>
                         </a>
                     </span>
@@ -72,5 +72,6 @@
 {% include "delete_confirmation_modal.html" %}
 
 <!-- Custom JS -->
+<script src="{{ url_for('static', filename='js/delete_modal.js') }}"></script>
 <script src="{{ url_for('static', filename='js/teachers_management.js') }}"></script>
 {% endblock %}

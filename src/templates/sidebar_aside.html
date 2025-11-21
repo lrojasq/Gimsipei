@@ -28,47 +28,46 @@
                 </a>
             </li>
             <li>
-                <a href="{{ url_for('classes.teacher_classes_view') }}" title="Mis Clases y recursos">
+                <a href="{{ url_for('classes.teacher_classes_view') }}" title="Clases y recursos">
                     <img src="{{ url_for('static', filename='images/iconos/class.png') }}" alt="Clases y recursos"
-                         style="width: 50px; height: 50px;">
-                </a>
-            </li>
-            <!-- Resources -->
-            <li>
-                <a href="{{ url_for('resources.resources_view') }}" title="Recursos">
-                    <img src="{{ url_for('static', filename='images/iconos/resources.png') }}" alt="Recursos"
-                         style="width: 50px; height: 50px;">
+                        style="width: 50px; height: 50px;">
                 </a>
             </li>
             <li>
-                <a href="{{ url_for('admin.evaluaciones') }}" title="Mis Evaluaciones">
+                <a href="{{ url_for('admin.evaluaciones') }}" title="Evaluaciones">
                     <img src="{{ url_for('static', filename='images/iconos/library.png') }}" alt="Evaluaciones"
-                         style="width: 50px; height: 50px;">
+                        style="width: 50px; height: 50px;">
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('books.books_view') }}" title="Libros">
+                    <img src="{{ url_for('static', filename='images/iconos/text.png') }}" alt="Libros"
+                        style="width: 50px; height: 50px;">
                 </a>
             </li>
             <li>
                 <a href="{{ url_for('admin.calificaciones') }}" title="Calificaciones">
                     <img src="{{ url_for('static', filename='images/iconos/evaluations.png') }}" alt="Calificaciones"
-                         style="width: 50px; height: 50px;">
+                        style="width: 50px; height: 50px;">
                 </a>
             </li>
         {% elif user.role == "student" %}
             <li>
-                <a href="{{ url_for('admin.libros') }}" title="Mis Libros">
+                <a href="{{ url_for('books.books_view') }}" title="Mis Libros">
                     <img src="{{ url_for('static', filename='images/iconos/text.png') }}" alt="Libros"
-                         style="width: 50px; height: 50px;">
+                        style="width: 50px; height: 50px;">
                 </a>
             </li>
             <li>
                 <a href="{{ url_for('admin.evaluaciones') }}" title="Mis Evaluaciones">
                     <img src="{{ url_for('static', filename='images/iconos/library.png') }}" alt="Evaluaciones"
-                         style="width: 50px; height: 50px;">
+                        style="width: 50px; height: 50px;">
                 </a>
             </li>
             <li>
                 <a href="{{ url_for('admin.calificaciones') }}" title="Mis Calificaciones">
                     <img src="{{ url_for('static', filename='images/iconos/evaluations.png') }}" alt="Calificaciones"
-                         style="width: 50px; height: 50px;">
+                        style="width: 50px; height: 50px;">
                 </a>
             </li>
         {% endif %}
