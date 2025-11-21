@@ -227,15 +227,44 @@
 
     /* ----- AGREGAR OPCIONES ----- */
     function addOption(i) {
-        const val = prompt("Escriba la opción:");
-        if (!val) return;
-        const q = questions[i];
-        const index = Object.keys(q.options).length;
-        const letter = optionLetter(index);
-        q.options[letter] = val;
-        refreshOptionList(i);
-        refreshAnswerSelect(i);
-        validateQuestion(i);
+        const container = document.getElementById("optList" + i);
+
+        // Crear contenedor del input temporal
+        const inputContainer = document.createElement("div");
+        inputContainer.className = "d-flex mb-2";
+
+        const input = document.createElement("input");
+        input.type = "text";
+        input.className = "form-control me-2";
+        input.placeholder = "Escriba la opción";
+
+        const btnAdd = document.createElement("button");
+        btnAdd.type = "button";
+        btnAdd.className = "btn btn-sm btn-success";
+        btnAdd.textContent = "Agregar";
+
+        // Evento del botón Agregar
+        btnAdd.onclick = () => {
+            const val = input.value.trim();
+            if (!val) return;
+
+            const q = questions[i];
+            const index = Object.keys(q.options).length;
+            const letter = optionLetter(index);
+            q.options[letter] = val;
+
+            refreshOptionList(i);
+            refreshAnswerSelect(i);
+            validateQuestion(i);
+
+            inputContainer.remove(); // eliminar el input temporal
+        };
+
+        inputContainer.appendChild(input);
+        inputContainer.appendChild(btnAdd);
+        container.appendChild(inputContainer);
+
+        input.focus();
     }
 
     /* ----- VALIDAR INFO GENERAL ----- */
@@ -358,6 +387,7 @@
         const periodo = document.getElementById("periodo").value;
         const imgFile = document.getElementById("img_evaluaciones").files[0]; // archivo seleccionado
 
+        debugger
         const formData = new FormData();
         formData.append("titulo", titulo);
         formData.append("descripcion", descripcion);
