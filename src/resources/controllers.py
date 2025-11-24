@@ -59,6 +59,7 @@ def resources_view_controller(_: Request):
             "username": user.username,
             "document": user.document,
             "full_name": user.full_name,
+            "avatar": getattr(user, "avatar", None),
             "role": user.role.value if hasattr(user.role, "value") else str(user.role),
         }
 
@@ -82,10 +83,18 @@ def create_resource_controller(request: Request):
 
         if request.method == "POST":
             # Obtener datos del formulario
+            class_number = request.form.get("class_id")
+            title = request.form.get("title")
+            period = request.form.get("period")
+            course_id = request.form.get("course_id")
+            subject_id = request.form.get("subject_id")
+
             data = {
-                "class_id": request.form.get("class_id"),
-                "title": request.form.get("title"),
-                "period": request.form.get("period"),
+                "class_id": class_number,
+                "course_id": course_id,
+                "subject_id": subject_id,
+                "title": title,
+                "period": period,
             }
 
             # Obtener archivos
@@ -103,7 +112,8 @@ def create_resource_controller(request: Request):
             if status_code == 201:
                 flash("Recurso creado exitosamente", "success")
             else:
-                flash(result.get("error", "Error al crear el recurso"), "error")
+                error_msg = result.get("error", "Error al crear el recurso")
+                flash(error_msg, "error")
 
             return redirect(url_for("resources.resources_view"))
 
