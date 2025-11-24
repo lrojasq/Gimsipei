@@ -33,6 +33,7 @@ def get_users_service(
                 username=user.username,
                 document=user.document,
                 full_name=user.full_name,
+                avatar=getattr(user, "avatar", None),
                 role=user.role.value,
                 is_active=bool(user.is_active),
             )
@@ -56,6 +57,7 @@ def get_user_service(
                 username=user.username,
                 document=user.document,
                 full_name=user.full_name,
+                avatar=getattr(user, "avatar", None),
                 role=user.role.value,
                 is_active=bool(user.is_active),
             ),
@@ -78,11 +80,14 @@ def create_user_service(
         if db.query(User).filter(User.document == data.document).first():
             return None, 400
 
+        avatar_filename = data.avatar or "buho.png"
+
         user = User(
             username=data.username,
             document=data.document,
             hashed_password=generate_password_hash(data.password),
             full_name=data.full_name,
+            avatar=avatar_filename,
             role=data.role,
         )
 
@@ -96,6 +101,7 @@ def create_user_service(
             username=user.username,
             document=user.document,
             full_name=user.full_name,
+            avatar=getattr(user, "avatar", None),
             role=user.role.value,
             is_active=bool(user.is_active),
         )
@@ -144,6 +150,9 @@ def update_user_service(
         if data.full_name is not None:
             user.full_name = data.full_name
 
+        if data.avatar is not None:
+            user.avatar = data.avatar
+
         if data.role is not None:
             user.role = data.role
 
@@ -159,6 +168,7 @@ def update_user_service(
                 username=user.username,
                 document=user.document,
                 full_name=user.full_name,
+                avatar=getattr(user, "avatar", None),
                 role=user.role.value,
                 is_active=bool(user.is_active),
             ),

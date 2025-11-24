@@ -5,6 +5,7 @@ from .controllers import (
     create_user_controller,
     update_user_controller,
     delete_user_controller,
+    profile_view_controller,
 )
 from .teachers_controllers import (
     teachers_management_controller,
@@ -21,6 +22,11 @@ from .students_controllers import (
 )
 
 users_bp = Blueprint("users", __name__, url_prefix="/users")
+
+
+@users_bp.route("/profile", methods=["GET", "POST"])
+def profile():
+    return profile_view_controller(request)
 
 
 @users_bp.route("", methods=["GET"])

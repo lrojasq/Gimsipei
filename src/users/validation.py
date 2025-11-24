@@ -8,6 +8,7 @@ class UserCreateSchema(BaseModel):
     document: constr(min_length=1, max_length=20)
     password: constr(min_length=6)
     full_name: Optional[constr(max_length=100)] = None
+    avatar: Optional[str] = None
     role: UserRole
 
 
@@ -18,6 +19,7 @@ class StudentCreateSchema(BaseModel):
     document: constr(min_length=1, max_length=20)
     password: constr(min_length=6)
     full_name: Optional[constr(max_length=100)] = None
+    avatar: Optional[str] = None
     course_id: Optional[int] = None
 
     @validator("course_id", pre=True)
@@ -41,6 +43,7 @@ class StudentCreateSchema(BaseModel):
             document=self.document,
             password=self.password,
             full_name=self.full_name,
+            avatar=self.avatar,
             role=UserRole.STUDENT,
         )
 
@@ -50,6 +53,7 @@ class UserUpdateSchema(BaseModel):
     document: Optional[constr(min_length=1, max_length=20)] = None
     password: Optional[constr(min_length=6)] = None
     full_name: Optional[constr(max_length=100)] = None
+    avatar: Optional[str] = None
     role: Optional[UserRole] = None
     is_active: Optional[bool] = None
 
@@ -59,6 +63,7 @@ class UserResponseSchema(BaseModel):
     username: str
     document: Optional[str]
     full_name: Optional[str]
+    avatar: Optional[str] = None
     role: str
     is_active: bool
 
