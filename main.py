@@ -1,6 +1,6 @@
-from flask import Flask, jsonify, redirect, url_for
+from flask import Flask, jsonify, redirect, url_for, request, flash
 from flask_cors import CORS
-from flask_jwt_extended import JWTManager
+from flask_jwt_extended import JWTManager, unset_jwt_cookies
 from flask_migrate import Migrate
 from src.routes import register_blueprints
 from src.database.database import Base
@@ -30,6 +30,80 @@ def init_routes():
 @app.route("/")
 def index():
     return redirect(url_for("auth.login"))
+
+
+@jwt.unauthorized_loader
+def handle_unauthorized(reason: str):
+    """
+    Se ejecuta cuando no se envía ningún token o falta el encabezado/cookie.
+    - Si es una petición AJAX (fetch desde JS), respondemos JSON 401.
+    - Para el resto, limpiamos cookies y redirigimos al login.
+    """
+    if request.headers.get("X-Requested-With") == "XMLHttpRequest":
+        return (
+            jsonify(
+                {
+                    "error": "authorization_required",
+                    "message": "Autenticación requerida.",
+                }
+            ),
+            401,
+        )
+
+    flash(
+        "Tu sesión ha expirado o no estás autenticado. Inicia sesión nuevamente.",
+        "warning",
+    )
+    response = redirect(url_for("auth.login"))
+    unset_jwt_cookies(response)
+    return response
+
+
+@jwt.expired_token_loader
+def handle_expired_token(jwt_header, jwt_payload):
+    """
+    Se ejecuta cuando el token JWT ha expirado.
+    - Si es una petición AJAX, respondemos JSON 401.
+    - Para el resto, limpiamos cookies y redirigimos al login.
+    """
+    if request.headers.get("X-Requested-With") == "XMLHttpRequest":
+        return (
+            jsonify(
+                {
+                    "error": "token_expired",
+                    "message": "Tu sesión ha expirado. Vuelve a iniciar sesión.",
+                }
+            ),
+            401,
+        )
+
+    flash("Tu sesión ha expirado. Por favor inicia sesión de nuevo.", "warning")
+    response = redirect(url_for("auth.login"))
+    unset_jwt_cookies(response)
+    return response
+
+
+@jwt.invalid_token_loader
+def handle_invalid_token(reason: str):
+    """
+    Se ejecuta cuando el token es inválido (mal formado, firma incorrecta, etc.).
+    Comportamiento similar a token expirado: limpiar sesión y enviar al login.
+    """
+    if request.headers.get("X-Requested-With") == "XMLHttpRequest":
+        return (
+            jsonify(
+                {
+                    "error": "invalid_token",
+                    "message": "El token de sesión es inválido. Inicia sesión nuevamente.",
+                }
+            ),
+            401,
+        )
+
+    flash("Tu sesión no es válida. Inicia sesión nuevamente.", "warning")
+    response = redirect(url_for("auth.login"))
+    unset_jwt_cookies(response)
+    return response
 
 
 @app.errorhandler(404)
