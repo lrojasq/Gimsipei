@@ -42,54 +42,6 @@ def delete_subject_route(subject_id):
     return controllers.delete_subject_controller(subject_id)
 
 
-# Period Routes
-@class_bp.route("/periods", methods=["POST"])
-@jwt_required()
-@role_required([UserRole.ADMIN, UserRole.TEACHER])
-def create_period_route():
-    return controllers.create_period_controller()
-
-
-@class_bp.route("/periods/<int:period_id>", methods=["GET"])
-@jwt_required()
-def get_period_route(period_id):
-    return controllers.get_period_controller(period_id)
-
-
-@class_bp.route("/periods", methods=["GET"])
-@jwt_required()
-def get_all_periods_route():
-    return controllers.get_all_periods_controller()
-
-
-@class_bp.route("/periods/<int:period_id>", methods=["PUT"])
-@jwt_required()
-@role_required([UserRole.ADMIN, UserRole.TEACHER])
-def update_period_route(period_id):
-    return controllers.update_period_controller(period_id)
-
-
-@class_bp.route("/periods/<int:period_id>", methods=["DELETE"])
-@jwt_required()
-@role_required([UserRole.ADMIN, UserRole.TEACHER])
-def delete_period_route(period_id):
-    return controllers.delete_period_controller(period_id)
-
-
-@class_bp.route("/periods/<int:period_id>/lock", methods=["PUT"])
-@jwt_required()
-@role_required([UserRole.ADMIN, UserRole.TEACHER])
-def lock_period_route(period_id):
-    return controllers.lock_period_controller(period_id)
-
-
-@class_bp.route("/periods/<int:period_id>/unlock", methods=["PUT"])
-@jwt_required()
-@role_required([UserRole.ADMIN, UserRole.TEACHER])
-def unlock_period_route(period_id):
-    return controllers.unlock_period_controller(period_id)
-
-
 # HTML View Routes
 @class_bp.route("/teacher", methods=["GET"])
 @jwt_required()
@@ -146,3 +98,36 @@ def delete_class(class_id: int):
 def get_class(class_id: int):
     """Obtener datos de una clase específica"""
     return controllers.get_class_controller(class_id)
+
+
+# Student Routes
+@class_bp.route("/student", methods=["GET"])
+@jwt_required()
+@role_required(UserRole.STUDENT)
+def student_classes_view():
+    """Vista HTML de materias para estudiantes"""
+    return controllers.student_classes_view_controller()
+
+
+@class_bp.route("/student/subject/<int:course_id>/<int:subject_id>", methods=["GET"])
+@jwt_required()
+@role_required(UserRole.STUDENT)
+def student_subject_classes_view(course_id: int, subject_id: int):
+    """Vista HTML de clases de una materia para estudiantes"""
+    return controllers.student_subject_classes_view_controller(course_id, subject_id)
+
+
+@class_bp.route("/student/mark-viewed", methods=["POST"])
+@jwt_required()
+@role_required(UserRole.STUDENT)
+def mark_class_as_viewed():
+    """Marcar una clase como vista o no vista"""
+    return controllers.mark_class_as_viewed_controller()
+
+
+@class_bp.route("/student/progress/<int:course_id>/<int:subject_id>", methods=["GET"])
+@jwt_required()
+@role_required(UserRole.STUDENT)
+def get_student_progress(course_id: int, subject_id: int):
+    """Obtener progreso de clases vistas de un estudiante"""
+    return controllers.get_student_progress_controller(course_id, subject_id)

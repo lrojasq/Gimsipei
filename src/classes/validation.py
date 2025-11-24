@@ -34,35 +34,8 @@ class SubjectInDB(SubjectBase):
         orm_mode = True
 
 
-# Period Schemas
-class PeriodBase(BaseModel):
-    name: str
-    subject_id: int
-
-
-class PeriodCreate(PeriodBase):
-    pass
-
-
-class PeriodUpdate(PeriodBase):
-    name: Optional[str] = None
-    subject_id: Optional[int] = None
-    is_locked: Optional[bool] = None
-
-
-class PeriodInDB(PeriodBase):
-    id: int
-    is_locked: bool
-    created_at: datetime
-    updated_at: datetime
-
-    class Config:
-        orm_mode = True
-
-
 # Class Schemas
 class ClassBase(BaseModel):
-    period_id: int
     title: str
     description: Optional[str] = None
     class_number: int
@@ -74,7 +47,6 @@ class ClassCreate(ClassBase):
 
 
 class ClassUpdate(ClassBase):
-    period_id: Optional[int] = None
     title: Optional[str] = None
     description: Optional[str] = None
     class_number: Optional[int] = None
@@ -110,33 +82,6 @@ class ResourceUpdate(ResourceBase):
 
 
 class ResourceInDB(ResourceBase):
-    id: int
-    created_at: datetime
-    updated_at: datetime
-
-    class Config:
-        orm_mode = True
-
-
-# Assignment Schemas (Updated for Class module)
-class AssignmentBase(BaseModel):
-    class_id: int
-    title: str
-    description: Optional[str] = None
-    due_date: datetime
-
-
-class AssignmentCreate(AssignmentBase):
-    pass
-
-
-class AssignmentUpdate(AssignmentBase):
-    title: Optional[str] = None
-    description: Optional[str] = None
-    due_date: Optional[datetime] = None
-
-
-class AssignmentInDB(AssignmentBase):
     id: int
     created_at: datetime
     updated_at: datetime
