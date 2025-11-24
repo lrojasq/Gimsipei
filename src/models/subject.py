@@ -19,7 +19,6 @@ class Subject(Base):
     )
 
     # Relationships
-    periods = relationship("Period", back_populates="subject", lazy="dynamic")
     course_assignments = relationship(
         "CourseSubject", back_populates="subject", lazy="dynamic"
     )

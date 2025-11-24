@@ -23,6 +23,7 @@ class User(Base):
     document = Column(String(20), unique=True, nullable=False)
     hashed_password = Column(String(255), nullable=False)
     full_name = Column(String(100), nullable=True)
+    avatar = Column(String(255), nullable=True)
     role = Column(Enum(UserRole), nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
@@ -30,9 +31,6 @@ class User(Base):
 
     # Relationships
     documents = relationship("Document", back_populates="author", lazy="dynamic")
-    exercises = relationship("Exercise", back_populates="author", lazy="dynamic")
-    assignments = relationship("Assignment", back_populates="author", lazy="dynamic")
-    submissions = relationship("Submission", back_populates="student", lazy="dynamic")
     created_classes = relationship(
         "ClassModel", back_populates="creator", lazy="dynamic"
     )
@@ -45,4 +43,10 @@ class User(Base):
     )
     course_subject_assignments = relationship(
         "CourseSubject", back_populates="teacher", lazy="dynamic"
+    )
+    created_evaluations = relationship(
+        "Evaluation", back_populates="creator", lazy="dynamic"
+    )
+    evaluation_submissions = relationship(
+        "EvaluationSubmission", back_populates="student", lazy="dynamic"
     )
