@@ -12,9 +12,6 @@
 {% block content %}
 {% block menu %}{% endblock %}
 
-<!-- Perfil de Usuario -->
-{% include "user_profile.html" %}
-
 <div class="container_category flex admin_category">
     <!-- Flash Messages -->
     {% with messages = get_flashed_messages(with_categories=true) %}
@@ -30,6 +27,9 @@
     {% endif %}
     {% endwith %}
 
+    <!-- Perfil de Usuario -->
+    {% include "user_profile.html" %}
+
     <!-- Formulario de Edición -->
     <div class="specialities_category flex create-student-container">
         <div class="content-admin flex flex-column">
@@ -41,7 +41,8 @@
                         <h2 class="right-text">Editar Usuario</h2>
                         <div class="flex flex-form">
                             <div class="img-usuario">
-                                <i class="fa-slab-press fa-regular fa-circle-user"></i>
+                                <img src="{{ url_for('static', filename='images/avatares/' ~ (student.avatar or 'buho.png')) }}"
+                                    alt="Avatar del estudiante">
                             </div>
                             <div class="flex flex-column form-crear-content">
                                 <div class="flex input-group">

@@ -21,6 +21,7 @@ class Course(Base):
     students = relationship("CourseStudent", back_populates="course", lazy="dynamic")
     subjects = relationship("CourseSubject", back_populates="course", lazy="dynamic")
     classes = relationship("ClassModel", back_populates="course", lazy="dynamic")
+    evaluations = relationship("Evaluation", back_populates="course", lazy="dynamic")
 
     def __repr__(self):
         return (

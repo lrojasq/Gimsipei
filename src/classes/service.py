@@ -5,22 +5,14 @@ import os
 from src.models.resource import Resource
 from src.database.database import SessionLocal
 from src.models.subject import Subject
-from src.models.period import Period
 from src.models.user import User, UserRole
 from src.models.class_model import ClassModel
 from src.models.course import Course
+from src.models.class_view import ClassView
+from src.models.course_student import CourseStudent
 from src.classes.validation import (
     SubjectCreate,
     SubjectUpdate,
-    PeriodCreate,
-    PeriodUpdate,
-    # ClassCreate,
-    # ClassUpdate,
-    # ResourceCreate,
-    # ResourceUpdate,
-    # AssignmentCreate,
-    # AssignmentUpdate,
-    # ClassViewCreate
 )
 from src.courses.service import (
     COURSE_NAME_ORDER,
@@ -108,271 +100,6 @@ def delete_subject(subject_id: int, current_user_id: int):
         db.close()
 
 
-# Period Services
-def create_period(period: PeriodCreate, current_user_id: int):
-    db = SessionLocal()
-    try:
-        # Verificar permisos
-        current_user = db.query(User).filter(User.id == current_user_id).first()
-        if not current_user:
-            raise PermissionError("Usuario no encontrado")
-
-        db_period = Period(**period.dict())
-        db.add(db_period)
-        db.commit()
-        db.refresh(db_period)
-        return db_period
-    except Exception as e:
-        db.rollback()
-        raise e
-    finally:
-        db.close()
-
-
-def get_period(period_id: int):
-    db = SessionLocal()
-    try:
-        return db.query(Period).filter(Period.id == period_id).first()
-    finally:
-        db.close()
-
-
-def get_periods():
-    db = SessionLocal()
-    try:
-        return db.query(Period).all()
-    finally:
-        db.close()
-
-
-def update_period(period_id: int, period: PeriodUpdate, current_user_id: int):
-    db = SessionLocal()
-    try:
-        # Verificar permisos
-        current_user = db.query(User).filter(User.id == current_user_id).first()
-        if not current_user:
-            raise PermissionError("Usuario no encontrado")
-
-        if current_user.role.name not in [UserRole.TEACHER.name, UserRole.ADMIN.name]:
-            raise PermissionError("No autorizado para actualizar periodos")
-
-        db_period = db.query(Period).filter(Period.id == period_id).first()
-        if not db_period:
-            return None
-
-        # Si es profesor, solo puede actualizar periodos de materias asignadas a él
-        if current_user.role.name == UserRole.TEACHER.name:
-            from src.models.course_subject import CourseSubject
-
-            # Verificar si el profesor está asignado a esta materia en algún curso
-            assignment = (
-                db.query(CourseSubject)
-                .filter(
-                    CourseSubject.subject_id == db_period.subject_id,
-                    CourseSubject.teacher_id == current_user.id,
-                )
-                .first()
-            )
-            if not assignment:
-                raise PermissionError("No autorizado para actualizar este periodo")
-
-        update_data = period.dict(exclude_unset=True)
-        for key, value in update_data.items():
-            setattr(db_period, key, value)
-
-        db.add(db_period)
-        db.commit()
-        db.refresh(db_period)
-        return db_period
-    except Exception as e:
-        db.rollback()
-        raise e
-    finally:
-        db.close()
-
-
-def delete_period(period_id: int, current_user_id: int):
-    db = SessionLocal()
-    try:
-        # Verificar permisos
-        current_user = db.query(User).filter(User.id == current_user_id).first()
-        if not current_user:
-            raise PermissionError("Usuario no encontrado")
-
-        if current_user.role.name not in [UserRole.TEACHER.name, UserRole.ADMIN.name]:
-            raise PermissionError("No autorizado para eliminar periodos")
-
-        db_period = db.query(Period).filter(Period.id == period_id).first()
-        if not db_period:
-            return None
-
-        # Si es profesor, solo puede eliminar periodos de materias asignadas a él
-        if current_user.role.name == UserRole.TEACHER.name:
-            from src.models.course_subject import CourseSubject
-
-            # Verificar si el profesor está asignado a esta materia en algún curso
-            assignment = (
-                db.query(CourseSubject)
-                .filter(
-                    CourseSubject.subject_id == db_period.subject_id,
-                    CourseSubject.teacher_id == current_user.id,
-                )
-                .first()
-            )
-            if not assignment:
-                raise PermissionError("No autorizado para eliminar este periodo")
-
-        db.delete(db_period)
-        db.commit()
-        return True
-    except Exception as e:
-        db.rollback()
-        raise e
-    finally:
-        db.close()
-
-
-# # Class Services
-# def create_class(class_: ClassCreate):
-#     db = SessionLocal()
-#     try:
-#         db_class = ClassModel(**class_.dict())
-#         db.add(db_class)
-#         db.commit()
-#         db.refresh(db_class)
-#         return db_class
-#     finally:
-#         db.close()
-
-# def get_class(class_id: int):
-#     db = SessionLocal()
-#     try:
-#         return db.query(ClassModel).filter(ClassModel.id == class_id).first()
-#     finally:
-#         db.close()
-
-# def get_classes():
-#     db = SessionLocal()
-#     try:
-#         return db.query(ClassModel).all()
-#     finally:
-#         db.close()
-
-# def update_class(class_id: int, class_: ClassUpdate):
-#     db = SessionLocal()
-#     try:
-#         db_class = db.query(ClassModel).filter(ClassModel.id == class_id).first()
-#         if not db_class:
-#             return None
-
-#         for key, value in class_.dict(exclude_unset=True).items():
-#             setattr(db_class, key, value)
-
-#         db.commit()
-#         db.refresh(db_class)
-#         return db_class
-#     finally:
-#         db.close()
-
-# def delete_class(class_id: int):
-#     db = SessionLocal()
-#     try:
-#         db_class = db.query(ClassModel).filter(ClassModel.id == class_id).first()
-#         if not db_class:
-#             return None
-
-#         db.delete(db_class)
-#         db.commit()
-#         return True
-#     finally:
-#         db.close()
-
-# # Resource Services
-# def create_resource(db: Session, resource: ResourceCreate):
-#     db_resource = Resource(**resource.dict())
-#     db.add(db_resource)
-#     db.commit()
-#     db.refresh(db_resource)
-#     return db_resource
-
-# def get_resource(db: Session, resource_id: int):
-#     return db.query(Resource).filter(Resource.id == resource_id).first()
-
-# def get_resources(db: Session, skip: int = 0, limit: int = 100):
-#     return db.query(Resource).offset(skip).limit(limit).all()
-
-# def update_resource(db: Session, resource_id: int, resource: ResourceUpdate):
-#     db_resource = db.query(Resource).filter(Resource.id == resource_id).first()
-#     if db_resource:
-#         for key, value in resource.dict(exclude_unset=True).items():
-#             setattr(db_resource, key, value)
-#         db_resource.updated_at = datetime.utcnow() # Update timestamp
-#         db.add(db_resource)
-#         db.commit()
-#         db.refresh(db_resource)
-#     return db_resource
-
-# def delete_resource(db: Session, resource_id: int):
-#     db_resource = db.query(Resource).filter(Resource.id == resource_id).first()
-#     if db_resource:
-#         db.delete(db_resource)
-#         db.commit()
-#     return db_resource
-
-# # Assignment Services
-# def create_assignment(db: Session, assignment: AssignmentCreate):
-#     db_assignment = Assignment(**assignment.dict())
-#     db.add(db_assignment)
-#     db.commit()
-#     db.refresh(db_assignment)
-#     return db_assignment
-
-# def get_assignment(db: Session, assignment_id: int):
-#     return db.query(Assignment).filter(Assignment.id == assignment_id).first()
-
-# def get_assignments(db: Session, skip: int = 0, limit: int = 100):
-#     return db.query(Assignment).offset(skip).limit(limit).all()
-
-# def update_assignment(db: Session, assignment_id: int, assignment: AssignmentUpdate):
-#     db_assignment = db.query(Assignment).filter(Assignment.id == assignment_id).first()
-#     if db_assignment:
-#         for key, value in assignment.dict(exclude_unset=True).items():
-#             setattr(db_assignment, key, value)
-#         db_assignment.updated_at = datetime.utcnow() # Update timestamp
-#         db.add(db_assignment)
-#         db.commit()
-#         db.refresh(db_assignment)
-#     return db_assignment
-
-# def delete_assignment(db: Session, assignment_id: int):
-#     db_assignment = db.query(Assignment).filter(Assignment.id == assignment_id).first()
-#     if db_assignment:
-#         db.delete(db_assignment)
-#         db.commit()
-#     return db_assignment
-
-# # ClassView Services
-# def create_class_view(db: Session, class_view: ClassViewCreate):
-#     db_class_view = ClassView(**class_view.dict(), viewed_at=datetime.utcnow())
-#     db.add(db_class_view)
-#     db.commit()
-#     db.refresh(db_class_view)
-#     return db_class_view
-
-# def get_class_view(db: Session, class_view_id: int):
-#     return db.query(ClassView).filter(ClassView.id == class_view_id).first()
-
-# def get_class_views(db: Session, skip: int = 0, limit: int = 100):
-#     return db.query(ClassView).offset(skip).limit(limit).all()
-
-# def delete_class_view(db: Session, class_view_id: int):
-#     db_class_view = db.query(ClassView).filter(ClassView.id == class_view_id).first()
-#     if db_class_view:
-#         db.delete(db_class_view)
-#         db.commit()
-#     return db_class_view
-
-
 # Teacher Classes View Service
 def get_all_courses_with_subjects():
     """
@@ -424,11 +151,7 @@ def get_all_courses_with_subjects():
         courses_data.sort(key=lambda c: COURSE_NAME_ORDER.get(c["name"], 999))
 
         return courses_data, 200
-    except Exception as e:
-        import traceback
-
-        error_trace = traceback.format_exc()
-        print(f"Error en get_all_courses_with_subjects: {str(e)}\n{error_trace}")
+    except Exception:
         return [], 500
     finally:
         db.close()
@@ -515,12 +238,8 @@ def create_class_service(data: dict, cover_file=None, created_by_user_id=None):
             },
         }, 201
 
-    except Exception as e:
+    except Exception:
         db.rollback()
-        import traceback
-
-        error_trace = traceback.format_exc()
-        print(f"Error en create_class_service: {str(e)}\n{error_trace}")
         return {"error": "Error al crear la clase"}, 500
     finally:
         db.close()
@@ -613,12 +332,8 @@ def create_resource_service(data: dict, resource_file=None):
             },
         }, 201
 
-    except Exception as e:
+    except Exception:
         db.rollback()
-        import traceback
-
-        error_trace = traceback.format_exc()
-        print(f"Error en create_resource_service: {str(e)}\n{error_trace}")
         return {"error": "Error al crear el recurso"}, 500
     finally:
         db.close()
@@ -709,11 +424,7 @@ def get_classes_by_subject_service(course_id: int, subject_id: int):
 
         return result, 200
 
-    except Exception as e:
-        import traceback
-
-        error_trace = traceback.format_exc()
-        print(f"Error en get_classes_by_subject_service: {str(e)}\n{error_trace}")
+    except Exception:
         return {"error": "Error al obtener las clases"}, 500
     finally:
         db.close()
@@ -778,8 +489,8 @@ def update_class_service(class_id: int, data: dict, cover_file=None):
                 if os.path.exists(old_image_path):
                     try:
                         os.remove(old_image_path)
-                    except Exception as e:
-                        print(f"Error al eliminar imagen anterior: {str(e)}")
+                    except Exception:
+                        pass
 
             # Guardar nueva portada
             filename = secure_filename(cover_file.filename)
@@ -805,69 +516,96 @@ def update_class_service(class_id: int, data: dict, cover_file=None):
             },
         }, 200
 
-    except Exception as e:
+    except Exception:
         db.rollback()
-        import traceback
-
-        error_trace = traceback.format_exc()
-        print(f"Error en update_class_service: {str(e)}\n{error_trace}")
         return {"error": "Error al actualizar la clase"}, 500
     finally:
         db.close()
 
 
-def delete_class_service(class_id: int, current_user_id: int):
+def delete_class_service(class_id: int, user_role: str):
     """
     Elimina una clase y su imagen de portada
 
     Args:
         class_id: ID de la clase a eliminar
-        current_user_id: ID del usuario que intenta eliminar
+        user_role: Rol del usuario
 
     Returns:
         Tuple con (resultado, status_code)
     """
     db = SessionLocal()
     try:
-        # Buscar la clase
+        # Search the class
         class_to_delete = db.query(ClassModel).filter(ClassModel.id == class_id).first()
         if not class_to_delete:
             return {"error": "Clase no encontrada"}, 404
 
-        # Verificar permisos
-        current_user = db.query(User).filter(User.id == current_user_id).first()
-        if not current_user:
-            return {"error": "Usuario no encontrado"}, 404
+        # Verify permissions
+        if user_role:
+            if user_role.lower() != UserRole.TEACHER.value:
+                return {"error": "No tienes permisos para eliminar esta clase"}, 403
 
-        if (
-            current_user.role.name != UserRole.ADMIN.name
-            and class_to_delete.created_by != current_user_id
-        ):
-            return {"error": "No tienes permisos para eliminar esta clase"}, 403
+        # Save the image path before deleting the record
+        cover_image_path = class_to_delete.cover_image
 
-        # Eliminar la imagen de portada si existe
-        if class_to_delete.cover_image:
-            image_path = os.path.join("src", class_to_delete.cover_image.lstrip("/"))
-            if os.path.exists(image_path):
-                try:
-                    os.remove(image_path)
-                    print(f"Imagen eliminada: {image_path}")
-                except Exception as e:
-                    print(f"Error al eliminar imagen: {str(e)}")
+        # Delete related records first (to avoid integrity reference problems)
+        resources = db.query(Resource).filter(Resource.class_id == class_id).all()
+        for resource in resources:
+            # Delete physical files of the resource if they exist
+            if resource.cover_image:
+                resource_cover_path = os.path.join(
+                    "src", resource.cover_image.lstrip("/")
+                )
+                if os.path.exists(resource_cover_path):
+                    try:
+                        os.remove(resource_cover_path)
+                    except Exception:
+                        pass
 
-        # Eliminar la clase
+            if resource.file_url:
+                resource_file_path = os.path.join("src", resource.file_url.lstrip("/"))
+                if os.path.exists(resource_file_path):
+                    try:
+                        os.remove(resource_file_path)
+                    except Exception:
+                        pass
+
+            db.delete(resource)
+
+        # Delete associated views
+        views = db.query(ClassView).filter(ClassView.class_id == class_id).all()
+        for view in views:
+            db.delete(view)
+
+        # Delete the class from the database
         db.delete(class_to_delete)
         db.commit()
 
-        return {"message": "Clase eliminada exitosamente"}, 200
+        # Delete physical files after deleting the record
+        files_deleted = []
+
+        # Delete the cover image if it exists
+        if cover_image_path:
+            # Construir la ruta completa del archivo
+            # cover_image_path comes as "/static/uploads/classes/filename.jpg"
+            full_path = os.path.join("src", cover_image_path.lstrip("/"))
+
+            if os.path.exists(full_path):
+                try:
+                    os.remove(full_path)
+                    files_deleted.append("portada")
+                except Exception:
+                    pass
+
+        return {
+            "message": "Clase eliminada exitosamente",
+            "files_deleted": files_deleted,
+        }, 200
 
     except Exception as e:
         db.rollback()
-        import traceback
-
-        error_trace = traceback.format_exc()
-        print(f"Error en delete_class_service: {str(e)}\n{error_trace}")
-        return {"error": "Error al eliminar la clase"}, 500
+        return {"error": f"Error al eliminar la clase: {str(e)}"}, 500
     finally:
         db.close()
 
@@ -902,11 +640,310 @@ def get_class_by_id_service(class_id: int):
 
         return result, 200
 
-    except Exception as e:
-        import traceback
-
-        error_trace = traceback.format_exc()
-        print(f"Error en get_class_by_id_service: {str(e)}\n{error_trace}")
+    except Exception:
         return {"error": "Error al obtener la clase"}, 500
+    finally:
+        db.close()
+
+
+# Student Services
+def get_student_course_subjects_service(student_id: int):
+    """
+    Obtiene el curso y las materias del estudiante
+
+    Args:
+        student_id: ID del estudiante
+
+    Returns:
+        Tuple con (datos, status_code)
+    """
+    db = SessionLocal()
+    try:
+        # Get the student's enrollment
+        enrollment = (
+            db.query(CourseStudent)
+            .filter(CourseStudent.student_id == student_id)
+            .first()
+        )
+
+        if not enrollment:
+            return {"error": "Estudiante no inscrito en ningún curso"}, 404
+
+        # Get the course
+        course = db.query(Course).filter(Course.id == enrollment.course_id).first()
+        if not course:
+            return {"error": "Curso no encontrado"}, 404
+
+        # Get the course subjects with their teachers
+        course_subjects = (
+            db.query(CourseSubject)
+            .filter(
+                CourseSubject.course_id == course.id, CourseSubject.is_active.is_(True)
+            )
+            .all()
+        )
+
+        subjects_data = []
+        for cs in course_subjects:
+            subject = db.query(Subject).filter(Subject.id == cs.subject_id).first()
+            teacher = db.query(User).filter(User.id == cs.teacher_id).first()
+
+            if subject:
+                subjects_data.append(
+                    {
+                        "subject": subject,
+                        "teacher": teacher,
+                        "course_subject_id": cs.id,
+                    }
+                )
+
+        return {
+            "course": course,
+            "subjects": subjects_data,
+        }, 200
+
+    except Exception as e:
+        return {"error": f"Error al obtener las materias: {str(e)}"}, 500
+    finally:
+        db.close()
+
+
+def get_student_subject_classes_service(
+    student_id: int, course_id: int, subject_id: int
+):
+    """
+    Obtiene las clases de una materia y el progreso del estudiante
+
+    Args:
+        student_id: ID del estudiante
+        course_id: ID del curso
+        subject_id: ID de la materia
+
+    Returns:
+        Tuple con (datos, status_code)
+    """
+    db = SessionLocal()
+    try:
+        # Verify that the student is enrolled in the course
+        enrollment = (
+            db.query(CourseStudent)
+            .filter(
+                CourseStudent.student_id == student_id,
+                CourseStudent.course_id == course_id,
+            )
+            .first()
+        )
+
+        if not enrollment:
+            return {"error": "No tienes acceso a este curso"}, 403
+
+        # Get the course and subject
+        course = db.query(Course).filter(Course.id == course_id).first()
+        subject = db.query(Subject).filter(Subject.id == subject_id).first()
+
+        if not course or not subject:
+            return {"error": "Curso o materia no encontrada"}, 404
+
+        # Get all the classes of the subject
+        classes = (
+            db.query(ClassModel)
+            .filter(
+                ClassModel.course_id == course_id, ClassModel.subject_id == subject_id
+            )
+            .order_by(ClassModel.period, ClassModel.class_number)
+            .all()
+        )
+
+        # Organize classes by period
+        classes_by_period = {1: [], 2: [], 3: [], 4: []}
+        for class_item in classes:
+            period = class_item.period or 1
+            classes_by_period[period].append(class_item)
+
+        # Get the classes viewed by the student
+        viewed_classes_query = (
+            db.query(ClassView.class_id)
+            .filter(ClassView.student_id == student_id)
+            .all()
+        )
+        viewed_class_ids = set([view.class_id for view in viewed_classes_query])
+
+        # Calculate statistics
+        total_classes = len(classes)
+        viewed_classes = len(viewed_class_ids)
+        viewed_percentage = (
+            int((viewed_classes / total_classes) * 100) if total_classes > 0 else 0
+        )
+
+        return {
+            "course": course,
+            "subject": subject,
+            "classes_by_period": classes_by_period,
+            "viewed_class_ids": viewed_class_ids,
+            "viewed_classes": viewed_classes,
+            "total_classes": total_classes,
+            "viewed_percentage": viewed_percentage,
+        }, 200
+
+    except Exception as e:
+        return {"error": f"Error al obtener las clases: {str(e)}"}, 500
+    finally:
+        db.close()
+
+
+def mark_class_as_viewed_service(
+    user_id: int, class_id: int, course_id: int, subject_id: int, viewed: bool
+):
+    """
+    Marca una clase como vista o no vista para un estudiante
+
+    Args:
+        user_id: ID del usuario (estudiante)
+        class_id: ID de la clase
+        course_id: ID del curso
+        subject_id: ID de la materia
+        viewed: True para marcar como vista, False para desmarcar
+
+    Returns:
+        Tuple con diccionario de resultado y código de estado
+    """
+    db = SessionLocal()
+    try:
+        # Verificar que el usuario está inscrito en el curso
+        student_enrollment = (
+            db.query(CourseStudent)
+            .filter(
+                CourseStudent.student_id == user_id,
+                CourseStudent.course_id == course_id,
+            )
+            .first()
+        )
+
+        if not student_enrollment:
+            return {
+                "success": False,
+                "error": "Estudiante no encontrado en el curso",
+            }, 404
+
+        student_id = user_id
+
+        # Verificar que la clase existe
+        class_exists = (
+            db.query(ClassModel)
+            .filter(
+                ClassModel.id == class_id,
+                ClassModel.course_id == course_id,
+                ClassModel.subject_id == subject_id,
+            )
+            .first()
+        )
+
+        if not class_exists:
+            return {"success": False, "error": "Clase no encontrada"}, 404
+
+        if viewed:
+            # Marcar como vista (crear registro si no existe)
+            existing_view = (
+                db.query(ClassView)
+                .filter(
+                    ClassView.student_id == student_id, ClassView.class_id == class_id
+                )
+                .first()
+            )
+
+            if not existing_view:
+                new_view = ClassView(student_id=student_id, class_id=class_id)
+                db.add(new_view)
+                db.commit()
+        else:
+            # Desmarcar como vista (eliminar registro si existe)
+            existing_view = (
+                db.query(ClassView)
+                .filter(
+                    ClassView.student_id == student_id, ClassView.class_id == class_id
+                )
+                .first()
+            )
+
+            if existing_view:
+                db.delete(existing_view)
+                db.commit()
+
+        return {"success": True, "viewed": viewed}, 200
+
+    except Exception as e:
+        db.rollback()
+        return {"success": False, "error": f"Error al actualizar estado: {str(e)}"}, 500
+    finally:
+        db.close()
+
+
+def get_student_progress_service(user_id: int, course_id: int, subject_id: int):
+    """
+    Obtiene el progreso de un estudiante en una materia específica
+
+    Args:
+        user_id: ID del usuario (estudiante)
+        course_id: ID del curso
+        subject_id: ID de la materia
+
+    Returns:
+        Tuple con diccionario de resultado y código de estado
+    """
+    db = SessionLocal()
+    try:
+        # Verificar que el usuario está inscrito en el curso
+        student_enrollment = (
+            db.query(CourseStudent)
+            .filter(
+                CourseStudent.student_id == user_id,
+                CourseStudent.course_id == course_id,
+            )
+            .first()
+        )
+
+        if not student_enrollment:
+            return {
+                "success": False,
+                "error": "Estudiante no encontrado en el curso",
+            }, 404
+
+        student_id = user_id
+
+        # Obtener total de clases de la materia
+        total_classes = (
+            db.query(ClassModel)
+            .filter(
+                ClassModel.course_id == course_id, ClassModel.subject_id == subject_id
+            )
+            .count()
+        )
+
+        # Obtener clases vistas
+        viewed_classes_query = (
+            db.query(ClassView.class_id)
+            .join(ClassModel, ClassModel.id == ClassView.class_id)
+            .filter(
+                ClassView.student_id == student_id,
+                ClassModel.course_id == course_id,
+                ClassModel.subject_id == subject_id,
+            )
+            .all()
+        )
+
+        viewed_count = len(viewed_classes_query)
+        percentage = (
+            int((viewed_count / total_classes) * 100) if total_classes > 0 else 0
+        )
+
+        return {
+            "success": True,
+            "total": total_classes,
+            "viewed": viewed_count,
+            "percentage": percentage,
+        }, 200
+
+    except Exception as e:
+        return {"success": False, "error": f"Error al obtener progreso: {str(e)}"}, 500
     finally:
         db.close()

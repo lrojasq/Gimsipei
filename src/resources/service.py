@@ -3,21 +3,21 @@ from datetime import datetime
 import os
 
 from flask import Request
-from flask_jwt_extended import get_jwt_identity
+
+# from flask_jwt_extended import get_jwt_identity
 from werkzeug.utils import secure_filename
 
 from src.database.database import SessionLocal
 from src.models.resource import Resource, ResourceType
 from src.models.class_model import ClassModel
-from src.models.user import User, UserRole
 from src.models.subject import Subject
 from src.models.course_subject import CourseSubject
 
-from .validation import (
-    ResourceCreateSchema,
-    ResourceResponseSchema,
-    ResourceUpdateSchema,
-)
+# from .validation import (
+#     ResourceCreateSchema,
+#     ResourceResponseSchema,
+#     ResourceUpdateSchema,
+# )
 
 
 def get_resources_by_class_service(class_id: int) -> Tuple[List[dict], int]:
@@ -110,10 +110,16 @@ def get_resources_by_teacher_service(teacher_id: int) -> Tuple[Optional[dict], i
                     }
                 )
 
+            # Obtener el course_id de la primera clase de esta materia (si existe)
+            course_id = None
+            if classes:
+                course_id = classes[0].course_id
+
             subjects_data.append(
                 {
                     "subject_id": subject.id,
                     "subject_name": subject.name,
+                    "course_id": course_id,  # Agregar course_id
                     "periods": periods_data,
                     "total_resources": len(resources),
                 }
@@ -193,12 +199,41 @@ def create_resource_service(
     """Crear un nuevo recurso"""
     db = SessionLocal()
     try:
-        # Verificar que la clase existe
+        class_number = data.get("class_id")
+        course_id = data.get("course_id")
+        subject_id = data.get("subject_id")
+        period = data.get("period")
+
+        try:
+            class_number_int = int(class_number) if class_number else None
+            course_id_int = int(course_id) if course_id else None
+            subject_id_int = int(subject_id) if subject_id else None
+            period_int = int(period) if period else None
+        except (ValueError, TypeError):
+            return {"error": "Valores inválidos en los datos del formulario"}, 400
+
+        if not all([course_id_int, subject_id_int, class_number_int, period_int]):
+            return {
+                "error": "Faltan datos requeridos: curso, materia, número de clase y periodo"
+            }, 400
+
+        # Buscar la clase por número de clase, course_id, subject_id y period
         class_obj = (
-            db.query(ClassModel).filter(ClassModel.id == data["class_id"]).first()
+            db.query(ClassModel)
+            .filter(
+                ClassModel.course_id == course_id_int,
+                ClassModel.subject_id == subject_id_int,
+                ClassModel.class_number == class_number_int,
+                ClassModel.period == period_int,
+            )
+            .first()
         )
+
         if not class_obj:
             return {"error": "La clase especificada no existe"}, 404
+
+        # Usar el ID real de la clase encontrada
+        actual_class_id = class_obj.id
 
         # Procesar archivo de portada si existe
         cover_image_path = None
@@ -238,7 +273,7 @@ def create_resource_service(
 
         # Crear el recurso
         new_resource = Resource(
-            class_id=data["class_id"],
+            class_id=actual_class_id,
             title=data["title"],
             cover_image=cover_image_path,
             period=data["period"],
@@ -263,11 +298,7 @@ def create_resource_service(
 
     except Exception as e:
         db.rollback()
-        import traceback
-
-        error_trace = traceback.format_exc()
-        print(f"Error en create_resource_service: {str(e)}\n{error_trace}")
-        return {"error": "Error al crear el recurso"}, 500
+        return {"error": f"Error al crear el recurso: {str(e)}"}, 500
     finally:
         db.close()
 
@@ -277,7 +308,6 @@ def update_resource_service(
     data: dict,
     cover_file=None,
     resource_file=None,
-    request: Request = None,
 ) -> Tuple[Optional[dict], int]:
     """Actualizar un recurso existente"""
     db = SessionLocal()

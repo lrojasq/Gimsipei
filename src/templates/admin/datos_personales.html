@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 
-{% block title %}Iniciar Sesión{% endblock %}
+{% block title %}Perfil de usuario{% endblock %}
 {% block extra_css %}
 <link href="{{ url_for('static', filename='css/menu.css') }}" rel="stylesheet">
 <link href="{{ url_for('static', filename='css/category.css') }}" rel="stylesheet">
@@ -13,14 +13,16 @@
 
 {% block content %}
 {% block menu %}{% endblock %}
+
 <div class="container_datos_personales flex flex-column">
 
     <div class="flex">
         <div class="session flex flex-column">
-            <img src="../../static/images/avatares/raton.png" alt="">
+            <img src="{{ url_for('static', filename='images/avatares/' ~ (user.avatar or 'buho.png')) }}"
+                alt="Avatar" id="profileAvatar">
             <div class="flex flex-column ">
-                <h2>Fabian Forero Forero</h2>
-                <span>Docente</span>
+                <h2>{{ user.full_name or user.username }}</h2>
+                <span>{{ user.role }}</span>
             </div>
 
         </div>
@@ -31,94 +33,37 @@
                     <div class="data_usuario flex flex-column">
                         <div class="group flex flex-column">
                             <strong>NOMBRE</strong>
-                            <p>Fabian Forero Forero</p>
+                            <p>{{ user.full_name or '-' }}</p>
                         </div>
                         <div class="group flex flex-column">
                             <strong>USUARIO</strong>
-                            <p>FFabian</p>
+                            <p>{{ user.username }}</p>
                         </div>
                         <div class="group flex flex-column">
                             <strong>N° DE IDENTIDAD</strong>
-                            <p>100457520</p>
+                            <p>{{ user.document or '-' }}</p>
                         </div>
                     </div>
-                    <div class="container_avatares flex flex-column">
+                    <div class="container_avatares flex flex-column"
+                        data-update-url="{{ url_for('users.profile') }}"
+                        data-avatar-prefix="{{ url_for('static', filename='images/avatares/') }}">
                         <h2>¿QUIERES CAMBIAR TU AVATAR?</h2>
                         <span>selecciona uno</span>
-                        <div class="content_avatares flex">
-                            <div class="avatar">
-                                <img src="../../static/images/avatares/oveja.png" alt="">
-                            </div>
-                            <div class="avatar">
-                                <img src="../../static/images/avatares/buho.png" alt="">
-                            </div>
-                            <div class="avatar">
-                                <img src="../../static/images/avatares/hipopotamo.png" alt="">
-                            </div>
-                            <div class="avatar">
-                                <img src="../../static/images/avatares/oso-polar.png" alt="">
-                            </div>
-                            <div class="avatar">
-                                <img src="../../static/images/avatares/coati.png" alt="">
-                            </div>
 
-                            <div class="avatar">
-                                <img src="../../static/images/avatares/zorro.png" alt="">
-                            </div>
-                            <div class="avatar">
-                                <img src="../../static/images/avatares/zorillo.png" alt="">
-                            </div>
-                            <div class="avatar">
-                                <img src="../../static/images/avatares/vaca.png" alt="">
-                            </div>
-                            <div class="avatar">
-                                <img src="../../static/images/avatares/perro.png" alt="">
-                            </div>
-                            <div class="avatar">
-                                <img src="../../static/images/avatares/perro-mini.png" alt="">
-                            </div>
-                            <div class="avatar">
-                                <img src="../../static/images/avatares/elefante.png" alt="">
-                            </div>
-                            <div class="avatar">
-                                <img src="../../static/images/avatares/marrano.png" alt="">
-                            </div>
-                            <div class="avatar">
-                                <img src="../../static/images/avatares/leon.png" alt="">
-                            </div>
-                            <div class="avatar">
-                                <img src="../../static/images/avatares/mico.png" alt="">
-                            </div>
-                            <div class="avatar">
-                                <img src="../../static/images/avatares/pato.png" alt="">
-                            </div>
-                            <div class="avatar">
-                                <img src="../../static/images/avatares/oso-negro.png" alt="">
-                            </div>
-                            <div class="avatar">
-                                <img src="../../static/images/avatares/tucan.png" alt="">
-                            </div>
-                            <div class="avatar">
-                                <img src="../../static/images/avatares/raton.png" alt="">
-                            </div>
-                            <div class="avatar">
-                                <img src="../../static/images/avatares/oso-miel.png" alt="">
-                            </div>
-                            <div class="avatar">
-                                <img src="../../static/images/avatares/oveja-lana.png" alt="">
-                            </div>
-                            <div class="avatar">
-                                <img src="../../static/images/avatares/marrano-cenu.png" alt="">
-                            </div>
-                            <div class="avatar">
-                                <img src="../../static/images/avatares/tigre.png" alt="">
-                            </div>
-                            <div class="avatar">
-                                <img src="../../static/images/avatares/cohala.png" alt="">
-                            </div>
-                            <div class="avatar">
-                                <img src="../../static/images/avatares/conejo.png" alt="">
-                            </div>
+                        <div id="avatar-spinner" class="avatar-spinner">
+                            <div class="spinner"></div>
+                        </div>
+
+                        <div class="content_avatares flex">
+                            {% for avatar_filename in avatars %}
+                            <button type="button" class="avatar-btn" data-avatar="{{ avatar_filename }}">
+                                <div
+                                    class="avatar{% if user.avatar == avatar_filename %} avatar-selected{% endif %}">
+                                    <img src="{{ url_for('static', filename='images/avatares/' ~ avatar_filename) }}"
+                                        alt="Avatar {{ loop.index }}">
+                                </div>
+                            </button>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
@@ -129,6 +74,9 @@
 
     </div>
 </div>
-<!-- Fin Container -->
 
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{{ url_for('static', filename='js/profile.js') }}"></script>
 {% endblock %}

@@ -31,5 +31,4 @@ class ClassModel(Base):
     subject = relationship("Subject")
     creator = relationship("User", back_populates="created_classes")
     resources = relationship("Resource", back_populates="class_", lazy="dynamic")
-    assignments = relationship("Assignment", back_populates="class_", lazy="dynamic")
     views = relationship("ClassView", back_populates="class_", lazy="dynamic")

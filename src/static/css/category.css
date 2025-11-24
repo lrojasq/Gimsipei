@@ -481,7 +481,7 @@ hr.clases_br {
     border: 11px solid #fdebff;
     border-radius: 15px;
     padding: 7px;
-    height: 27rem;
+    height: 20rem;
 }
 
 .book img {
@@ -513,6 +513,46 @@ hr.libros_br {
     background-color: var(--libros);
     color: var(--light-color);
     border-color: var(--light-color);
+}
+
+/* Layout específico para Libros (teacher/books_view) */
+.container_category.flex.libros_category {
+    justify-content: flex-start;
+    column-gap: 2rem;
+}
+
+.libros_category .specialities_category {
+    /* Mantener proporción similar pero sin que se vaya al centro */
+    width: 80%;
+    align-items: start;
+    gap: 0px;
+}
+
+/* Ajustes específicos para vista de Libros (teacher/books_view) */
+.libros_category .search-bar.libros-search {
+    width: 100%;
+}
+
+.libros_category .libros-search-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.libros_category .libros-search-input {
+    width: 100%;
+    padding: 0.5rem 1rem 0.5rem 2.3rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 0.9rem;
+}
+
+.libros_category .libros-search-icon {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+    font-size: 0.85rem;
 }
 
 /* estilos calificaciones */

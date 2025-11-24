@@ -1,5 +1,5 @@
 from flask import Request, Response, flash, redirect, render_template, url_for
-from flask_jwt_extended import jwt_required, get_jwt
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from pydantic import ValidationError
 
 from src.models.user import UserRole
@@ -19,6 +19,7 @@ from src.subject.service import (
     get_teachers_for_form_service,
     get_available_subject_names,
 )
+from src.users.service import get_user_service
 
 
 # View to manage courses
@@ -26,8 +27,10 @@ from src.subject.service import (
 @role_required([UserRole.ADMIN])
 def courses_management_controller(_: Request) -> Response:
     """View to manage courses"""
-    user_role = get_jwt().get("role").lower()
     try:
+        current_user_id = get_jwt_identity()
+        current_user, _ = get_user_service(current_user_id, _)
+
         courses, total = get_courses_service()
         available_courses = get_available_course_names()
         teachers = get_teachers_for_form_service()
@@ -51,7 +54,7 @@ def courses_management_controller(_: Request) -> Response:
             "admin/courses_management.html",
             courses=courses_with_subjects,
             total=total,
-            user={"role": user_role},
+            user=current_user,
             available_courses=available_courses,
             teachers=teachers,
             available_subjects=available_subjects,
@@ -63,7 +66,7 @@ def courses_management_controller(_: Request) -> Response:
             "admin/courses_management.html",
             courses=[],
             total=0,
-            user={"role": user_role},
+            user=current_user,
             available_courses=[],
             teachers=[],
             available_subjects=[],

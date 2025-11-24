@@ -44,12 +44,13 @@
         <p>{{ teacher.full_name }}</p>
         <div class="data_grade_category flex flex-column">
             <p>{{ teacher.document }}</p>
-            <p>{{ course.name }}</p>
+            <p>Docente</p>
         </div>
         {% else %}
         <p>Sin docente asignado</p>
         {% endif %}
 
+        {% if user.role == "teacher" or user.role == "admin" %}
         <div class="flex flex-column gap-5">
             <div class="btns flex flex-column">
                 <button class="btn btn-clases period-btn active" data-period="1">PERIODO 1</button>
@@ -59,6 +60,7 @@
             </div>
             <button class="btn btn-clases active" id="addClassBtn">AÑADIR</button>
         </div>
+        {% endif %}
     </div>
 
     <!-- Inicio Clases -->
@@ -95,16 +97,18 @@
                         <p>
                             <strong>{{ class_item.title }}</strong> - {{ class_item.description }}
                         </p>
-                        <div class="d-flex justify-content-end btns-action">
+                        {% if user.role == "teacher" %}
+                        <div class="d-flex justify-content-end gap-2">
                             <a class="btn btn-outline-primary btn-sm btn-edit" href="#"
                                 data-class-id="{{ class_item.id }}" title="Editar">
                                 <i class="bi bi-pencil-fill"></i>
                             </a>
-                            <a class="btn btn-outline-danger btn-sm btn-delete" href="#"
+                            <a class="btn btn-outline-danger btn-sm open-delete-class-modal" href="#"
                                 data-class-id="{{ class_item.id }}" title="Eliminar">
                                 <i class="bi bi-trash3-fill"></i>
                             </a>
                         </div>
+                        {% endif %}
 
                     </div>
                 </div>
@@ -114,9 +118,11 @@
             <div class="empty-period" style="text-align: center; padding: 2rem;">
                 <i class="fas fa-folder-open" style="font-size: 3rem; color: #bdc3c7;"></i>
                 <p>No hay clases en este periodo</p>
+                {% if user.role == "teacher" %}
                 <button class="btn btn-clases active btn-add-first-class" data-period="{{ period }}">
                     Crear primera clase
                 </button>
+                {% endif %}
             </div>
             {% endif %}
         </div>
@@ -132,5 +138,6 @@
 {% include "delete_confirmation_modal.html" %}
 
 <!-- Custom JS -->
+<script src="{{ url_for('static', filename='js/delete_modal.js') }}"></script>
 <script src="{{ url_for('static', filename='js/subject_classes.js') }}"></script>
 {% endblock %}

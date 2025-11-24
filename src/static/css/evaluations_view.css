@@ -1,0 +1,42 @@
+/* Evaluations View Styles - Similar to classes_resources.css but for evaluations */
+
+/* Use existing classes_resources.css styles, this file is for evaluations-specific overrides */
+.evaluaciones_category .classes-table-wrapper::-webkit-scrollbar-thumb {
+    background: var(--evaluaciones);
+    border-radius: 5px;
+}
+
+.evaluaciones_category .course-row:hover {
+    background-color: hsl(24, 20%, 96%);
+}
+
+.evaluaciones_category .course-row.expanded {
+    background-color: hsl(24, 20%, 95%);
+}
+
+.evaluaciones_category .add-link-btn {
+    background-color: transparent;
+    color: var(--evaluaciones);
+    font-weight: bold;
+    padding: 5px 10px;
+    border: 1px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.evaluaciones_category .add-link-btn:hover {
+    background-color: transparent;
+    color: var(--evaluaciones-active);
+    text-decoration: underline;
+}
+
+/* Change expand button color to orange */
+.evaluaciones_category .expand-btn {
+    color: var(--evaluaciones);
+    border-color: var(--evaluaciones);
+}
+
+.evaluaciones_category .expand-btn:hover {
+    background-color: var(--evaluaciones);
+    color: white;
+}
+

@@ -28,64 +28,6 @@ html {
     background-color: #f6f6f6;
 }
 
-.containe.bg-image-user {
-    background-color: var(--primario);
-    background-image: url("../images/menu-principal/bg-pencil.png");
-    background-repeat: no-repeat;
-    background-size: cover;
-}
-
-.mision-tp p,
-.vision-tp p {
-    font-size: 1rem;
-}
-
-.bg-mision {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    padding: 0px 100px;
-    /* background-color: var(--primario); */
-    /* background-image: url("../images/menu-principal/bg-pencil.png");
-    background-repeat: no-repeat;
-    background-size: cover; */
-    position: relative;
-}
-
-.logo {
-    width: 300px;
-    height: 60px;
-    background-image: url("../images/logo.png");
-    background-repeat: no-repeat;
-}
-
-.mision-tp {
-    width: 50%;
-    height: auto;
-    color: #ffffff;
-    margin: 0px;
-}
-
-.bg-vision {
-    width: 100%;
-    background-color: transparent;
-    z-index: 999999;
-    border-radius: 50px 50px 0px 0px;
-    z-index: 1000;
-    position: relative;
-}
-
-.bg-vision .content-vision {
-    padding: 100px 80px 0px;
-    margin: auto;
-    width: 100%;
-}
-
-.vision-tp {
-    width: 50%;
-    color: var(--gris-claro);
-    padding: 20px;
-}
 
 .containe.bg-image-user::after {
     content: "";
@@ -112,7 +54,8 @@ html {
     position: relative;
     gap: 5rem;
 }
-.container_boxs_menu{
+
+.container_boxs_menu {
     justify-content: space-between;
     gap: 0px;
 }
@@ -138,6 +81,7 @@ html {
     fill: #fff;
     width: 80px;
 }
+
 .box-menu p {
     font-size: 16px;
 }
@@ -391,20 +335,20 @@ a {
 .mobile-header:has(+ .teachers_management) .logo,
 .mobile-header:has(+ .courses_management) .logo,
 .mobile-header:has(+ .libros_category) .logo,
-.mobile-header:has(+ .calificaciones_category) .logo ,
-.mobile-header:has(+ .evaluaciones_category) .logo ,
-.mobile-header:has(+ .clases_category) .logo, 
+.mobile-header:has(+ .calificaciones_category) .logo,
+.mobile-header:has(+ .evaluaciones_category) .logo,
+.mobile-header:has(+ .clases_category) .logo,
 .mobile-header:has(+ .admin_category) .logo,
 .mobile-header:has(+ .recursos_category) .logo {
-    background-image : url("../images/iconos/logo-gris.png");
+    background-image: url("../images/iconos/logo-gris.png");
     background-size: contain;
 }
 
 .mobile-header:has(+ .teachers_management) .hamburger-menu span,
 .mobile-header:has(+ .courses_management) .hamburger-menu span,
 .mobile-header:has(+ .libros_category) .hamburger-menu span,
-.mobile-header:has(+ .calificaciones_category) .hamburger-menu span ,
-.mobile-header:has(+ .evaluaciones_category) .hamburger-menu span ,
+.mobile-header:has(+ .calificaciones_category) .hamburger-menu span,
+.mobile-header:has(+ .evaluaciones_category) .hamburger-menu span,
 .mobile-header:has(+ .clases_category) .hamburger-menu span,
 .mobile-header:has(+ .admin_category) .hamburger-menu span,
 .mobile-header:has(+ .recursos_category) .hamburger-menu span {
@@ -414,7 +358,7 @@ a {
 .mobile-header:has(+ .teachers_management) .mobile-nav,
 .mobile-header:has(+ .courses_management) .mobile-nav,
 .mobile-header:has(+ .libros_category) .mobile-nav,
-.mobile-header:has(+ .calificaciones_category) .mobile-nav ,
+.mobile-header:has(+ .calificaciones_category) .mobile-nav,
 .mobile-header:has(+ .evaluaciones_category) .mobile-nav,
 .mobile-header:has(+ .clases_category) .mobile-nav,
 .mobile-header:has(+ .admin_category) .mobile-nav,
@@ -432,6 +376,7 @@ a {
 .mobile-header:has(+ .recursos_category) .mobile-nav a {
     color: gray;
 }
+
 .mobile-header:has(+ .teachers_management) .mobile-nav a:hover,
 .mobile-header:has(+ .courses_management) .mobile-nav a:hover,
 .mobile-header:has(+ .libros_category) .mobile-nav a:hover,
@@ -448,6 +393,7 @@ a {
     background-color: var(--evaluaciones-active);
     color: white;
 }
+
 .mobile-header:has(+ .recursos_category) .mobile-nav a:hover {
     background-color: var(--recursos-active);
     color: white;
@@ -457,6 +403,7 @@ a {
     background-color: var(--libros-active);
     color: white;
 }
+
 .mobile-header:has(+ .calificaciones_category) .mobile-nav a:hover {
     background-color: var(--calificaciones-active);
     color: white;
@@ -478,6 +425,7 @@ a {
 .mobile-header:has(+ .admin_category):after {
     background: var(--clases-active);
 }
+
 .mobile-header:has(+ .recursos_category):after {
     background: var(--recursos-active);
 }
@@ -638,3 +586,4 @@ a {
         position: absolute;
     }
 }
+

@@ -1,0 +1,63 @@
+:root {
+  --primary-color: #007bff;
+  --secondary-color: #6c757d;
+  --success-color: #28a745;
+  --danger-color: #dc3545;
+  --warning-color: #ffc107;
+  --info-color: #17a2b8;
+  --light-color: #ffffff;
+  --dark-color: #343a40;
+  --border-color: #00c2e7;
+  --gray-light: #f4f4f4;
+  --clases: #23ccc3;
+  --clases-active: #16b7ab;
+  --recursos: #f7cb52;
+  --recursos-active: #e5ab1a;
+  --evaluaciones: #f48d53;
+  --evaluaciones-active: #e55d1a;
+  --libros: #ea6ef4;
+  --libros-active: #d944ea;
+  --calificaciones: #a270f2;
+  --calificaciones-active: #6c43d1;
+  --admin: #f94e4e;
+  --admin-active: #e01e1e;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+  /* evitamos scroll nativo */
+}
+
+.section {
+  height: 100vh;
+  /* cada sección ocupa toda la pantalla */
+  display: flex;
+  align-items: start;
+  justify-content: center;
+  flex-direction: column;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+h2 {
+  font-size: 3rem;
+  margin-bottom: 20px;
+}
+
+p {
+  font-size: 1.2rem;
+  max-width: 800px;
+  text-align: left;
+}
+
+@media (max-width:1080px) {
+  body {
+    overflow: auto;
+  }
+}
+
+
