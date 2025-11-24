@@ -98,7 +98,7 @@
         <div class="specialities_category exams flex flex-column recursos_category">
             {% if subjects and subjects|length > 0 %}
                 {% for subject in subjects %}
-                    <div class="subject-section" data-subject-id="{{ subject.subject_id }}">
+                    <div class="subject-section" data-subject-id="{{ subject.subject_id }}" data-course-id="{{ subject.course_id }}">
                         <!-- Subject Header -->
                         <div class="flex gap-2">
                             <a href="{{ url_for('classes.teacher_classes_view') }}">

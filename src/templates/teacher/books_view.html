@@ -31,7 +31,8 @@
     <!-- Inicio Perfil -->
     <div class="data_categoty flex flex-column">
         <div class="title flex">
-            <img src="{{ url_for('static', filename='images/svg/libros.svg') }}" alt="Libros" style="width: 60px; height: 50px;">
+            <img src="{{ url_for('static', filename='images/svg/libros.svg') }}" alt="Libros"
+                style="width: 60px; height: 50px;">
             <h1>Libros</h1>
         </div>
 
@@ -72,21 +73,20 @@
     </div>
 
     <!-- Inicio Libros Grid -->
-    <div class="specialities_category flex flex-column">
+    <div class="specialities_category flex books books-grid">
         <!-- Search Bar -->
-        <div class="search-bar" style="width: 100%; margin-bottom: 1.5rem;">
-            <div style="position: relative; width: 100%;">
-                <input type="text" id="searchBooks" placeholder="Buscar" 
-                       style="width: 100%; padding: 0.75rem 1rem 0.75rem 2.5rem; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem;">
-                <i class="fas fa-search" style="position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); color: #999;"></i>
+        <div class="search-bar libros-search">
+            <div class="libros-search-wrapper">
+                <input type="text" id="searchBooks" placeholder="Buscar" class="libros-search-input">
+                <i class="fas fa-search libros-search-icon"></i>
             </div>
         </div>
 
         <!-- Books Grid -->
-        <div class="books" style="display: flex; flex-wrap: wrap; align-items: start; justify-content: flex-start; width: 100%;">
             {% if books and books|length > 0 %}
             {% for book in books %}
-            <div class="book flex flex-column" data-book-title="{{ book.title|lower }}" data-book-author="{{ book.author|lower }}" data-book-audience="{{ book.target_audience }}">
+        <div class="book flex flex-column" data-book-title="{{ book.title|lower }}"
+            data-book-author="{{ book.author|lower }}" data-book-audience="{{ book.target_audience }}">
                 {% if book.cover_image %}
                 <img width="100%" height="100%" src="{{ book.cover_image }}" alt="{{ book.title }}">
                 {% else %}
@@ -99,8 +99,8 @@
                     {{ book.title }}
                     <hr class="libros_br" />
                     ePub
-                    <a href="#" class="open-delete-book-modal" data-book-id="{{ book.id }}"
-                        title="Eliminar" style="margin-top: 0.5rem; color: #dc3545; cursor: pointer; align-self: flex-end;">
+                <a href="#" class="open-delete-book-modal" data-book-id="{{ book.id }}" title="Eliminar"
+                    style="margin-top: 0.5rem; color: #dc3545; cursor: pointer; align-self: flex-end;">
                         <i class="fas fa-trash"></i>
                     </a>
                 </div>
@@ -115,7 +115,6 @@
                 </button>
             </div>
             {% endif %}
-        </div>
     </div>
 
     {% include "sidebar_aside.html" %}

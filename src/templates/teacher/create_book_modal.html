@@ -11,41 +11,51 @@
             enctype="multipart/form-data">
             <input type="hidden" name="book_id" id="book_id">
 
-            <div class="form-group">
-                <input type="text" name="title" id="book_title" placeholder="TÍTULO" required maxlength="255">
+            <!-- Datos principales del libro -->
+            <div class="form-row">
+                <div class="form-group">
+                    <input type="text" name="title" id="book_title" placeholder="TÍTULO" required maxlength="255">
+                </div>
+                <div class="form-group">
+                    <input type="text" name="author" id="book_author" placeholder="AUTOR" required maxlength="255">
+                </div>
             </div>
 
             <div class="form-group">
-                <input type="text" name="author" id="book_author" placeholder="AUTOR" required maxlength="255">
-            </div>
-
-            <div class="form-group">
-                <textarea name="description" id="book_description" placeholder="DESCRIPCIÓN" rows="9"
+                <textarea name="description" id="book_description" placeholder="DESCRIPCIÓN" rows="6"
                     maxlength="1000"></textarea>
             </div>
 
-            <div class="form-group">
-                <select name="target_audience" id="book_target_audience" required>
-                    <option value="">AUDIENCIA</option>
-                    <option value="STUDENT">Estudiantes</option>
-                    <option value="TEACHER">Docentes</option>
-                </select>
+            <div class="form-row">
+                <div class="form-group">
+                    <select name="target_audience" id="book_target_audience" required>
+                        <option value="">AUDIENCIA</option>
+                        <option value="STUDENT">Estudiantes</option>
+                        <option value="TEACHER">Docentes</option>
+                    </select>
+                </div>
+                <div class="form-group modal-helper-text">
+                    Libros en formato <strong>EPUB</strong> para estudiantes y docentes del colegio.
+                </div>
             </div>
 
-            <div class="form-group file-upload-group">
-                <label for="book_file" class="file-upload-label">
-                    <i class="fas fa-upload"></i> AGREGAR LIBRO (EPUB)
-                </label>
-                <input type="file" name="book_file" id="book_file" accept=".epub">
-                <span class="file-name" id="book_file_name"></span>
-            </div>
+            <!-- Archivos -->
+            <div class="form-row">
+                <div class="form-group file-upload-group">
+                    <label for="book_file" class="file-upload-label">
+                        <i class="fas fa-upload"></i> AGREGAR LIBRO (EPUB)
+                    </label>
+                    <input type="file" name="book_file" id="book_file" accept=".epub">
+                    <span class="file-name" id="book_file_name"></span>
+                </div>
 
-            <div class="form-group file-upload-group">
-                <label for="book_cover_image" class="file-upload-label">
-                    <i class="fas fa-upload"></i> AGREGAR PORTADA
-                </label>
-                <input type="file" name="cover_image" id="book_cover_image" accept="image/*">
-                <span class="file-name" id="book_cover_image_name"></span>
+                <div class="form-group file-upload-group">
+                    <label for="book_cover_image" class="file-upload-label">
+                        <i class="fas fa-upload"></i> AGREGAR PORTADA
+                    </label>
+                    <input type="file" name="cover_image" id="book_cover_image" accept="image/*">
+                    <span class="file-name" id="book_cover_image_name"></span>
+                </div>
             </div>
 
             <div class="modal-actions">

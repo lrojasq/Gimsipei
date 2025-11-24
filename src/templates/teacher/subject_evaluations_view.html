@@ -1,7 +1,6 @@
-
 {% extends "base.html" %}
 
-{% block title %}{{ subject.name }} - Clases{% endblock %}
+{% block title %}{{ subject.name }} - Evaluaciones{% endblock %}
 
 {% block extra_css %}
 <link href="{{ url_for('static', filename='css/menu.css') }}" rel="stylesheet">
@@ -9,6 +8,8 @@
 <link href="{{ url_for('static', filename='css/admin.css') }}" rel="stylesheet">
 <link href="{{ url_for('static', filename='css/classes_resources.css') }}" rel="stylesheet">
 <link href="{{ url_for('static', filename='css/subject_classes_minimal.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/subject_evaluations.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/create_evaluation_modal.css') }}" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
@@ -30,81 +31,83 @@
 {% endif %}
 {% endwith %}
 
-<div class="container_category flex clases_category" data-course-id="{{ course.id }}"
+<div class="container_category flex evaluaciones_category" data-course-id="{{ course.id }}"
     data-subject-id="{{ subject.id }}">
 
     <!-- Inicio Perfil -->
     <div class="data_categoty flex flex-column">
         <div class="title flex">
-            <img src="{{ url_for('static', filename='images/svg/clases.svg') }}" alt="Clases" style="width: 60px; height: 50px;">
-            <h1>Clases</h1>
+            <img src="{{ url_for('static', filename='images/svg/evaluaciones.svg') }}" alt="Evaluaciones"
+                style="width: 60px; height: 50px;">
+            <h1>Evaluaciones</h1>
         </div>
 
-        {% if teacher %}
-        <p>{{ teacher.full_name }}</p>
+        {% if user %}
+        <p>{{ user.full_name }}</p>
         <div class="data_grade_category flex flex-column">
-            <p>{{ teacher.document }}</p>
+            <p>{{ user.document }}</p>
             <p>Docente</p>
         </div>
         {% else %}
         <p>Sin docente asignado</p>
         {% endif %}
 
-        {% if user.role == "teacher" or user.role == "admin" %}
+        {% if user.role == "teacher"%}
         <div class="flex flex-column gap-5">
             <div class="btns flex flex-column">
-                <button class="btn btn-clases period-btn active" data-period="1">PERIODO 1</button>
-                <button class="btn btn-clases period-btn" data-period="2">PERIODO 2</button>
-                <button class="btn btn-clases period-btn" data-period="3">PERIODO 3</button>
-                <button class="btn btn-clases period-btn" data-period="4">PERIODO 4</button>
+                <button class="btn btn-evaluaciones period-btn active" data-period="1">PERIODO 1</button>
+                <button class="btn btn-evaluaciones period-btn" data-period="2">PERIODO 2</button>
+                <button class="btn btn-evaluaciones period-btn" data-period="3">PERIODO 3</button>
+                <button class="btn btn-evaluaciones period-btn" data-period="4">PERIODO 4</button>
             </div>
-            <button class="btn btn-clases active" id="addClassBtn">AÑADIR</button>
+            <button class="btn btn-evaluaciones active" id="addEvaluationBtn">AÑADIR</button>
         </div>
         {% endif %}
     </div>
 
-    <!-- Inicio Clases -->
-    <div class="specialities_category exams flex flex-column clases_category gap-4">
+    <!-- Inicio Evaluaciones -->
+    <div class="specialities_category exams flex flex-column evaluaciones_category gap-4">
         <div class="flex gap-2">
-            <a href="{{ url_for('classes.teacher_classes_view') }}">
+            <a href="{{ url_for('evaluations.evaluations_view') }}">
                 <i class="bi bi-arrow-left-short"></i>
             </a>
             <h3 class="font-weight-bold">{{ subject.name }}</h3>
         </div>
 
-        <!-- Classes Grid for each period -->
+        <!-- Evaluations Grid for each period -->
         {% for period in [1, 2, 3, 4] %}
-        <div class="period-classes-container gap-2 flex flex-column" data-period="{{ period }}"
+        <div class="period-evaluations-container gap-2 flex flex-column" data-period="{{ period }}"
             style="{% if period != 1 %}display: none;{% endif %}">
 
-            {% if classes_by_period[period] %}
-            {% for class_item in classes_by_period[period] %}
-            <div class="exam flex class">
+            {% if evaluations_by_period[period] %}
+            {% for evaluation in evaluations_by_period[period] %}
+            <div class="exam flex evaluation">
                 <div class="exam_content flex">
                     <div class="img_evaluaciones evaluaciones_bg">
-                        {% if class_item.cover_image %}
-                        <img width="100%" height="100%" src="{{ class_item.cover_image }}" alt="{{ class_item.title }}">
+                        {% if evaluation.cover_image %}
+                        <img width="100%" height="100%" src="{{ evaluation.cover_image }}" alt="{{ evaluation.title }}">
                         {% else %}
                         <div
-                            style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: hsl(190, 65%, 55%);">
-                            <i class="fas fa-book-open" style="font-size: 3rem; color: rgba(255, 255, 255, 0.7);"></i>
+                            style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: hsl(24, 88%, 65%);">
+                            <i class="fas fa-clipboard-list"
+                                style="font-size: 3rem; color: rgba(255, 255, 255, 0.7);"></i>
                         </div>
                         {% endif %}
                     </div>
 
                     <div class="text-content flex flex-column">
-                        <h2 class="title">Clase {{ class_item.class_number }} - {{ subject.name }}</h2>
+                        <h2 class="title">Evaluación - {{ subject.name }}</h2>
                         <p>
-                            <strong>{{ class_item.title }}</strong> - {{ class_item.description }}
+                            <strong>{{ evaluation.title }}</strong> - {{ evaluation.description }}
                         </p>
                         {% if user.role == "teacher" %}
                         <div class="d-flex justify-content-end gap-2">
-                            <a class="btn btn-outline-primary btn-sm btn-edit" href="#"
-                                data-class-id="{{ class_item.id }}" title="Editar">
+                            <a class="btn btn-outline-primary btn-sm btn-edit-evaluation" href="#"
+                                data-evaluation-id="{{ evaluation.id }}" title="Editar">
                                 <i class="bi bi-pencil-fill"></i>
                             </a>
-                            <a class="btn btn-outline-danger btn-sm open-delete-class-modal" href="#"
-                                data-class-id="{{ class_item.id }}" title="Eliminar">
+                            <a class="btn btn-outline-danger btn-sm open-delete-evaluation-modal" href="#"
+                                data-evaluation-id="{{ evaluation.id }}" title="Eliminar">
                                 <i class="bi bi-trash3-fill"></i>
                             </a>
                         </div>
@@ -117,10 +120,10 @@
             {% else %}
             <div class="empty-period" style="text-align: center; padding: 2rem;">
                 <i class="fas fa-folder-open" style="font-size: 3rem; color: #bdc3c7;"></i>
-                <p>No hay clases en este periodo</p>
+                <p>No hay evaluaciones en este periodo</p>
                 {% if user.role == "teacher" %}
-                <button class="btn btn-clases active btn-add-first-class" data-period="{{ period }}">
-                    Crear primera clase
+                <button class="btn btn-evaluaciones active btn-add-first-evaluation" data-period="{{ period }}">
+                    Crear primera evaluación
                 </button>
                 {% endif %}
             </div>
@@ -133,11 +136,11 @@
 </div>
 
 <!-- Modales -->
-{% include "teacher/create_class_modal.html" %}
-{% include "teacher/edit_class_modal.html" %}
+{% include "teacher/create_evaluation_modal.html" %}
+{% include "teacher/edit_evaluation_modal.html" %}
 {% include "delete_confirmation_modal.html" %}
 
 <!-- Custom JS -->
 <script src="{{ url_for('static', filename='js/delete_modal.js') }}"></script>
-<script src="{{ url_for('static', filename='js/subject_classes.js') }}"></script>
+<script src="{{ url_for('static', filename='js/subject_evaluations.js') }}"></script>
 {% endblock %}
