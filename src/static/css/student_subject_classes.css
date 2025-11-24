@@ -1,0 +1,594 @@
+/* ========== Student Subject Classes View Styles ========== */
+
+/* Sidebar de información del estudiante */
+.student-subject-view .data_categoty {
+    width: 280px;
+    min-width: 280px;
+}
+
+.student-subject-view .data_categoty .title {
+    align-items: center;
+    gap: 1rem;
+}
+
+.student-subject-view .data_categoty .title h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+/* Espaciado entre información del usuario y botones */
+.student-subject-view .data_categoty > .flex.flex-column.gap-5 {
+    margin-top: 3rem;
+}
+
+/* Botones de periodo - más pequeños */
+.student-subject-view .period-btn {
+    width: 100%;
+    padding: 0.6rem 1rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-radius: 25px;
+    border: 2px solid #23CCC3;
+    background: white;
+    color: #23CCC3;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.student-subject-view .period-btn:hover {
+    background: #e8f8f7;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(35, 204, 195, 0.2);
+}
+
+.student-subject-view .period-btn.active {
+    background: #23CCC3;
+    color: white;
+    border-color: #23CCC3;
+    box-shadow: 0 4px 12px rgba(35, 204, 195, 0.3);
+}
+
+.student-subject-view .period-btn.active:hover {
+    background: #19a89f;
+    border-color: #19a89f;
+}
+
+.student-subject-view .data_categoty .btns {
+    width: 100%;
+    gap: 0.8rem;
+}
+
+/* Contenedor de progreso */
+.progress-container {
+    margin-bottom: 1.5rem;
+}
+
+.progress-container > p:first-child {
+    margin-bottom: 0.8rem;
+    color: #606060;
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+.progress-bar-container {
+    width: 100%;
+    background-color: #e0e0e0;
+    border-radius: 20px;
+    height: 12px;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    background-color: #23CCC3;
+    height: 100%;
+    transition: width 0.3s ease;
+    border-radius: 20px;
+}
+
+.progress-text {
+    margin-top: 0.5rem;
+    color: #606060;
+    font-size: 0.85rem;
+}
+
+/* ========== Clases Layout (Diseño Horizontal Similar a Imagen) ========== */
+.student-subject-view .period-classes-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Cards de clase - diseño horizontal */
+.student-subject-view .exam.class {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+    min-height: 140px;
+}
+
+.student-subject-view .exam.class:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.student-subject-view .exam.class .exam_content {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    flex: 1;
+    padding: 0;
+    gap: 0;
+}
+
+/* Imagen de la clase - lado izquierdo */
+.student-subject-view .exam.class .img_evaluaciones {
+    position: relative;
+    width: 180px;
+    min-width: 180px;
+    height: auto;
+    background-color: #23CCC3;
+    flex-shrink: 0;
+}
+
+.student-subject-view .exam.class .img_evaluaciones img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Overlay con etiqueta de clase */
+.student-subject-view .class-overlay {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 0.3rem 0.7rem;
+    border-radius: 6px;
+}
+
+.student-subject-view .class-label {
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+/* Contenido de texto - centro */
+.student-subject-view .exam.class .text-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 1.2rem 1.5rem;
+    gap: 0.5rem;
+    flex: 1;
+}
+
+.student-subject-view .exam.class .text-content::before {
+    display: none;
+}
+
+.student-subject-view .exam.class .class-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin: 0;
+    line-height: 1.3;
+}
+
+.student-subject-view .exam.class .class-description {
+    color: #7f8c8d;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+/* Botones de acción (ojos) - ESQUINA INFERIOR DERECHA - MUY PEQUEÑOS */
+.student-subject-view .class-actions {
+    position: absolute;
+    bottom: 0.5rem;
+    right: 0.5rem;
+    display: flex;
+    flex-direction: row;
+    gap: 0.4rem;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0;
+    min-width: auto;
+    background: transparent;
+    border: none;
+}
+
+.student-subject-view .class-actions button {
+    padding: 0.3rem;
+    border: 1.5px solid;
+    border-radius: 6px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+}
+
+/* Botón ojo turquesa - marcar como vista */
+.student-subject-view .btn-mark-viewed {
+    border-color: #23CCC3;
+    color: #23CCC3;
+}
+
+.student-subject-view .btn-mark-viewed:hover {
+    background: #23CCC3;
+    color: white;
+    transform: scale(1.05);
+}
+
+.student-subject-view .btn-mark-viewed.active {
+    background: #23CCC3;
+    color: white;
+    box-shadow: 0 1px 4px rgba(35, 204, 195, 0.3);
+}
+
+/* Botón ojo rojo - marcar como no vista */
+.student-subject-view .btn-mark-not-viewed {
+    border-color: #e74c3c;
+    color: #e74c3c;
+}
+
+.student-subject-view .btn-mark-not-viewed:hover {
+    background: #e74c3c;
+    color: white;
+    transform: scale(1.05);
+}
+
+.student-subject-view .btn-mark-not-viewed.active {
+    background: #e74c3c;
+    color: white;
+    box-shadow: 0 1px 4px rgba(231, 76, 60, 0.3);
+}
+
+/* Botones deshabilitados */
+.student-subject-view .class-actions button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* Periodo vacío */
+.empty-period {
+    text-align: center;
+    padding: 3rem 2rem;
+    background: white;
+    border-radius: 15px;
+    width: 100%;
+}
+
+.empty-period i {
+    font-size: 3.5rem;
+    color: #bdc3c7;
+    margin-bottom: 1rem;
+}
+
+.empty-period p {
+    color: #7f8c8d;
+    font-size: 1rem;
+    margin: 0;
+}
+
+/* Color del sidebar */
+.clases_category.student-subject-view .menu_aside {
+    background-color: #23CCC3;
+}
+
+/* Imagen de portada por defecto */
+.class-cover-default {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #23CCC3 0%, #19a89f 100%);
+}
+
+.class-cover-default i {
+    font-size: 3.5rem;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+/* Botón de regreso */
+.student-subject-view .flex.gap-2 a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: white;
+    border-radius: 50%;
+    color: #23CCC3;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.student-subject-view .flex.gap-2 a:hover {
+    background: #23CCC3;
+    color: white;
+    transform: translateX(-3px);
+}
+
+.student-subject-view .flex.gap-2 a i {
+    font-size: 2rem;
+}
+
+/* Título de materia */
+.student-subject-view .flex.gap-2 h3 {
+    color: #2c3e50;
+    font-size: 1.5rem;
+    margin: 0;
+    display: flex;
+    align-items: center;
+}
+
+/* Header del contenido */
+.student-subject-view .specialities_category > .flex.gap-2 {
+    padding-bottom: 1rem;
+    align-items: center;
+}
+
+/* Ajuste del contenedor principal - NO debe pasar por debajo del sidebar */
+.student-subject-view .specialities_category {
+    padding: 1.8rem 2rem;
+    width: 70%;
+    margin-right: 1rem;
+}
+
+/* ========== RESPONSIVE DESIGN (Basado en resources_view.html) ========== */
+
+/* Pantallas grandes a medianas (1200px) */
+@media (max-width: 1200px) {
+    .student-subject-view .specialities_category {
+        width: 68%;
+    }
+
+    .student-subject-view .exam.class .img_evaluaciones {
+        width: 160px;
+        min-width: 160px;
+    }
+
+    .student-subject-view .exam.class .text-content {
+        padding: 1rem 1.2rem;
+    }
+
+    .student-subject-view .class-actions {
+        bottom: 0.5rem;
+        right: 0.5rem;
+    }
+}
+
+/* Tablets y pantallas medianas (992px) */
+@media (max-width: 992px) {
+    .student-subject-view .data_categoty {
+        padding: 1.5rem 1rem;
+    }
+
+    .student-subject-view .specialities_category {
+        padding: 1.5rem 2rem;
+        width: 68%;
+    }
+
+    .student-subject-view .exam.class {
+        min-height: 130px;
+    }
+
+    .student-subject-view .exam.class .img_evaluaciones {
+        width: 150px;
+        min-width: 150px;
+    }
+
+    .student-subject-view .exam.class .text-content {
+        padding: 0.9rem 1rem;
+    }
+
+    .student-subject-view .class-title {
+        font-size: 0.95rem;
+    }
+
+    .student-subject-view .class-description {
+        font-size: 0.85rem;
+    }
+
+    .student-subject-view .class-actions {
+        bottom: 0.5rem;
+        right: 0.5rem;
+        gap: 0.3rem;
+    }
+
+    .student-subject-view .class-actions button {
+        width: 26px;
+        height: 26px;
+        min-width: 26px;
+        font-size: 0.7rem;
+    }
+}
+
+/* Tablets pequeñas y móviles grandes (768px) */
+@media (max-width: 768px) {
+    .container_category.student-subject-view {
+        flex-direction: column;
+        padding: 1rem;
+    }
+
+    .student-subject-view .data_categoty {
+        width: 100%;
+        min-width: 100%;
+        margin-bottom: 1.5rem;
+    }
+
+    .student-subject-view .data_categoty .btns {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .student-subject-view .period-btn {
+        flex: 1 1 45%;
+        min-width: 120px;
+        padding: 0.5rem 0.8rem;
+        font-size: 0.8rem;
+    }
+
+    .student-subject-view .specialities_category {
+        width: 100%;
+        margin-right: 0;
+        padding: 1.2rem 1.5rem;
+    }
+
+    .student-subject-view .exam.class {
+        flex-direction: column;
+        min-height: auto;
+    }
+
+    .student-subject-view .exam.class .exam_content {
+        flex-direction: column;
+    }
+
+    .student-subject-view .exam.class .img_evaluaciones {
+        width: 100%;
+        min-width: 100%;
+        height: 180px;
+    }
+
+    .student-subject-view .exam.class .text-content {
+        padding: 1.2rem 1.5rem;
+    }
+
+    .student-subject-view .class-actions {
+        position: static;
+        flex-direction: row;
+        width: 100%;
+        min-width: 100%;
+        border: none;
+        justify-content: flex-end;
+        align-items: center;
+        padding: 0.8rem 1rem;
+        gap: 0.5rem;
+        background: transparent;
+    }
+
+    .student-subject-view .class-actions button {
+        width: 32px;
+        height: 32px;
+        min-width: 32px;
+        font-size: 0.8rem;
+    }
+
+    .student-subject-view .flex.gap-2 h3 {
+        font-size: 1.3rem;
+    }
+
+    .student-subject-view .menu_aside {
+        display: none;
+    }
+}
+
+/* Móviles pequeños (480px) */
+@media (max-width: 480px) {
+    .student-subject-view .data_categoty .title h1 {
+        font-size: 1.3rem;
+    }
+
+    .student-subject-view .period-btn {
+        flex: 1 1 100%;
+        font-size: 0.75rem;
+        padding: 0.5rem;
+    }
+
+    .student-subject-view .specialities_category {
+        padding: 1rem;
+        width: 100%;
+        margin-right: 0;
+    }
+
+    .student-subject-view .exam.class .img_evaluaciones {
+        height: 160px;
+    }
+
+    .student-subject-view .exam.class .text-content {
+        padding: 1rem;
+    }
+
+    .student-subject-view .class-title {
+        font-size: 0.9rem;
+    }
+
+    .student-subject-view .class-description {
+        font-size: 0.8rem;
+        -webkit-line-clamp: 2;
+    }
+
+    .student-subject-view .class-actions {
+        position: static;
+        padding: 0.7rem 1rem;
+        gap: 0.6rem;
+        justify-content: flex-end;
+    }
+
+    .student-subject-view .class-actions button {
+        width: 36px;
+        height: 36px;
+        min-width: 36px;
+        font-size: 0.85rem;
+    }
+
+    .progress-container > p:first-child {
+        font-size: 0.9rem;
+    }
+
+    .progress-text {
+        font-size: 0.8rem;
+    }
+
+    .student-subject-view .flex.gap-2 h3 {
+        font-size: 1.1rem;
+    }
+
+    .student-subject-view .flex.gap-2 a {
+        width: 35px;
+        height: 35px;
+    }
+
+    .student-subject-view .flex.gap-2 a i {
+        font-size: 1.5rem;
+    }
+}

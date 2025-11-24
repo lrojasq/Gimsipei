@@ -71,14 +71,10 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Delete class buttons
-    const deleteButtons = document.querySelectorAll('.btn-delete');
-    deleteButtons.forEach(button => {
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            const classId = this.getAttribute('data-class-id');
-            openDeleteConfirmationModal(classId);
-        });
+    // Initialize delete class buttons using delete_modal.js
+    initializeDeleteButtons('.open-delete-class-modal', function(button) {
+        const classId = button.getAttribute('data-class-id');
+        return `/classes/delete/${classId}`;
     });
     
     // File upload display for create modal
@@ -108,7 +104,70 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+    
+    // Initialize delete modal listeners (from delete_modal.js)
+    initializeDeleteModalListeners();
+    
+    // Initialize loading states for forms
+    initializeLoadingStates();
 });
+
+// Loading States Functions
+function showLoadingState(button, loadingText = 'Procesando...') {
+    if (!button) return;
+    
+    button.disabled = true;
+    const originalText = button.innerHTML;
+    button.setAttribute('data-original-text', originalText);
+    button.innerHTML = `<i class="fas fa-spinner fa-spin me-2"></i>${loadingText}`;
+}
+
+function hideLoadingState(button) {
+    if (!button) return;
+    
+    const originalText = button.getAttribute('data-original-text');
+    if (originalText) {
+        button.innerHTML = originalText;
+        button.removeAttribute('data-original-text');
+    }
+    button.disabled = false;
+}
+
+// Initialize loading states for create and edit forms
+function initializeLoadingStates() {
+    // Create class form
+    const createForm = document.getElementById('createClassForm');
+    if (createForm) {
+        createForm.addEventListener('submit', function(e) {
+            const submitBtn = this.querySelector('button[type="submit"]');
+            if (submitBtn) {
+                showLoadingState(submitBtn, 'Guardando...');
+            }
+        });
+    }
+    
+    // Edit class form
+    const editForm = document.getElementById('editClassForm');
+    if (editForm) {
+        editForm.addEventListener('submit', function(e) {
+            const submitBtn = this.querySelector('button[type="submit"]');
+            if (submitBtn) {
+                showLoadingState(submitBtn, 'Actualizando...');
+            }
+        });
+    }
+    
+    // Delete confirmation form
+    const deleteForm = document.getElementById('deleteConfirmationForm');
+    if (deleteForm) {
+        deleteForm.addEventListener('submit', function(e) {
+            const submitBtn = this.querySelector('button[type="submit"]');
+            if (submitBtn) {
+                showLoadingState(submitBtn, 'Eliminando...');
+            }
+        });
+    }
+}
 
 // Open create class modal
 function openCreateClassModal(period = null) {
@@ -144,67 +203,43 @@ function openEditClassModal(classId) {
     const modal = document.getElementById('editClassModal');
     const form = document.getElementById('editClassForm');
     
-    // Find the class exam container
-    const editButton = document.querySelector(`.btn-edit[data-class-id="${classId}"]`);
-    const examContainer = editButton ? editButton.closest('.exam') : null;
-    
-    if (!examContainer) {
-        console.error('Class container not found');
+    if (!modal || !form) {
+        console.error('Edit modal or form not found');
         return;
     }
-    
-    // Extract class data from the card
-    const titleElement = examContainer.querySelector('.title');
-    const titleText = titleElement ? titleElement.textContent : '';
-    
-    // Extract class number from "Clase X - Subject"
-    const classNumberMatch = titleText.match(/Clase\s+(\d+)/);
-    const classNumber = classNumberMatch ? classNumberMatch[1] : '';
-    
-    // Extract title and description from the paragraph
-    const paragraph = examContainer.querySelector('.text-content p');
-    let title = '';
-    let description = '';
-    
-    if (paragraph) {
-        const strongElement = paragraph.querySelector('strong');
-        title = strongElement ? strongElement.textContent.trim() : '';
-        
-        // Get text after the strong element
-        const fullText = paragraph.textContent;
-        const titleWithDash = strongElement ? strongElement.textContent + ' - ' : '';
-        description = fullText.replace(titleWithDash, '').trim();
-    }
-    
-    // Get cover image
-    const coverImage = examContainer.querySelector('.img_evaluaciones img');
-    
-    // Get the current period from the visible container
-    const activePeriod = document.querySelector('.period-btn.active').getAttribute('data-period');
-    
-    // Populate form
-    document.getElementById('edit_class_id').value = classId;
-    document.getElementById('edit_class_number').value = classNumber;
-    document.getElementById('edit_class_title').value = title;
-    document.getElementById('edit_class_description').value = description;
-    document.getElementById('edit_class_period').value = activePeriod;
-    
-    // Get course_id and subject_id from the page data attributes
-    const container = document.querySelector('.container_category');
-    const courseId = container ? container.getAttribute('data-course-id') : '';
-    const subjectId = container ? container.getAttribute('data-subject-id') : '';
-    document.getElementById('edit_class_course_id').value = courseId;
-    document.getElementById('edit_class_subject_id').value = subjectId;
     
     // Set form action
     form.action = `/classes/update/${classId}`;
     
-    // Show current cover if exists
+    // Get data from server (Python handles the logic)
+    fetch(`/classes/get/${classId}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                alert('Error al cargar los datos de la clase: ' + data.error);
+                return;
+            }
+            
+            // Populate form fields
+            document.getElementById('edit_class_id').value = classId;
+            document.getElementById('edit_class_number').value = data.class_number || '';
+            document.getElementById('edit_class_title').value = data.title || '';
+            document.getElementById('edit_class_description').value = data.description || '';
+            document.getElementById('edit_class_period').value = data.period || '';
+            
+            // Get course_id and subject_id from page data attributes
+            const container = document.querySelector('.container_category');
+            const courseId = data.course_id || (container ? container.getAttribute('data-course-id') : '');
+            const subjectId = data.subject_id || (container ? container.getAttribute('data-subject-id') : '');
+            document.getElementById('edit_class_course_id').value = courseId;
+            document.getElementById('edit_class_subject_id').value = subjectId;
+            
+            // Show current cover image if exists
     const currentCoverPreview = document.getElementById('current_cover_preview');
     const currentCoverImage = document.getElementById('current_cover_image');
     
-    if (coverImage && coverImage.src) {
-        currentCoverImage.src = coverImage.src;
+            if (data.cover_image) {
+                currentCoverImage.src = data.cover_image;
         currentCoverPreview.style.display = 'block';
     } else {
         currentCoverPreview.style.display = 'none';
@@ -214,7 +249,13 @@ function openEditClassModal(classId) {
     document.getElementById('edit_class_cover').value = '';
     document.getElementById('edit_class_cover_name').textContent = '';
     
+            // Show modal
     modal.style.display = 'flex';
+        })
+        .catch(error => {
+            console.error('Error loading class data:', error);
+            alert('Error al cargar los datos de la clase');
+        });
 }
 
 // Close edit class modal
@@ -223,32 +264,13 @@ function closeEditClassModal() {
     modal.style.display = 'none';
 }
 
-// Open delete confirmation modal
-function openDeleteConfirmationModal(classId) {
-    const modal = document.getElementById('deleteConfirmationModal');
-    const form = document.getElementById('deleteConfirmationForm');
-    
-    // Set form action
-    form.action = `/classes/delete/${classId}`;
-    
-    // Show modal
-    modal.setAttribute('aria-hidden', 'false');
-    modal.style.display = 'flex';
-}
-
-// Close delete confirmation modal
-function closeDeleteModal() {
-    const modal = document.getElementById('deleteConfirmationModal');
-    modal.setAttribute('aria-hidden', 'true');
-    modal.style.display = 'none';
-}
 
 // Close modals when clicking outside
 document.addEventListener('click', function(event) {
     const createModal = document.getElementById('createClassModal');
     const editModal = document.getElementById('editClassModal');
-    const deleteModal = document.getElementById('deleteConfirmationModal');
     
+    // Check if click is on modal background (not on modal content)
     if (event.target === createModal) {
         closeCreateClassModal();
     }
@@ -257,9 +279,7 @@ document.addEventListener('click', function(event) {
         closeEditClassModal();
     }
     
-    if (event.target === deleteModal || event.target.classList.contains('close-modal')) {
-        closeDeleteModal();
-    }
+    // Delete modal is handled by delete_modal.js
 });
 
 // Close modals with Escape key
@@ -267,6 +287,6 @@ document.addEventListener('keydown', function(event) {
     if (event.key === 'Escape') {
         closeCreateClassModal();
         closeEditClassModal();
-        closeDeleteModal();
+        // Delete modal ESC handling is done by delete_modal.js
     }
 });

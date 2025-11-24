@@ -1,0 +1,156 @@
+/* Subject Evaluations View Styles - Similar to subject_classes_minimal.css */
+
+/* Contenedor principal */
+.evaluaciones_category.container_category {
+    width: 100%;
+    gap: 30px; /* Aumentado el espacio entre columnas */
+    overflow-x: hidden; /* Prevenir scroll horizontal */
+    padding-right: 100px; /* Espacio para el sidebar derecho fijo */
+    position: relative;
+}
+
+/* Columna izquierda (Perfil) */
+.evaluaciones_category .data_categoty {
+    width: 280px;
+    min-width: 280px;
+    flex-shrink: 0;
+}
+
+/* Columna central (Contenido) */
+.specialities_category.evaluaciones_category {
+    width: auto;
+    flex: 1; /* Ocupa el espacio restante */
+    min-width: 0; /* Permite que flexbox encoja el contenido si es necesario */
+    margin-right: 20px; /* Margen extra para separar del sidebar derecho */
+    max-width: 100%;
+    min-height: 85vh; /* Asegurar que el fondo gris baje más */
+    padding-bottom: 50px; /* Espacio adicional al final */
+}
+
+/* Period containers display control */
+.period-evaluations-container {
+    width: 100%;
+}
+
+/* Empty period state */
+.empty-period {
+    text-align: center;
+    padding: 3rem 2rem;
+    background: white;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.empty-period i {
+    display: block;
+    margin-bottom: 1rem;
+}
+
+.empty-period p {
+    font-size: 1.1rem;
+    color: #666;
+    margin-bottom: 1.5rem;
+}
+
+/* Evaluation card styles */
+.evaluation .exam_content {
+    width: 100%;
+    display: flex;
+    gap: 1.5rem;
+}
+
+.evaluation .img_evaluaciones {
+    width: 180px;
+    height: 120px;
+    flex-shrink: 0;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.evaluation .evaluaciones_bg {
+    background-color: var(--evaluaciones);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Sidebar Styles for evaluations */
+.evaluaciones_category .menu_aside {
+    background-color: var(--evaluaciones);
+    position: fixed;
+    right: 20px;
+    top: 110px; /* Ajustar según la altura del header */
+    z-index: 100;
+}
+
+.evaluaciones_category .menu_aside .aside_list li a.active,
+.evaluaciones_category .menu_aside .aside_list li a:hover {
+    background-color: var(--evaluaciones-active);
+}
+
+/* --- RESPONSIVIDAD --- */
+
+/* Pantallas Medianas (Tablets horizontales, Laptops pequeñas) */
+@media (max-width: 1200px) {
+    .evaluaciones_category .data_categoty {
+        width: 240px;
+        min-width: 240px;
+    }
+    
+    .evaluation .img_evaluaciones {
+        width: 150px;
+        height: 100px;
+    }
+}
+
+/* Pantallas Pequeñas (Tablets verticales) */
+@media (max-width: 992px) {
+    .evaluaciones_category.container_category {
+        flex-direction: column;
+    }
+
+    .evaluaciones_category .data_categoty {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem;
+        background: white;
+        border-radius: 10px;
+        margin-bottom: 1rem;
+    }
+
+    .evaluaciones_category .data_categoty .title {
+        margin-bottom: 0;
+    }
+
+    .evaluaciones_category .data_categoty .btns {
+        display: none; /* Ocultamos botones laterales y podríamos moverlos arriba */
+    }
+    
+    /* Mostrar botones de periodo horizontalmente si es necesario en móvil */
+    /* Esto requeriría cambios en el HTML o un script para moverlos, 
+       por ahora aseguramos que no rompan el layout */
+}
+
+/* Pantallas Muy Pequeñas (Móviles) */
+@media (max-width: 768px) {
+    .specialities_category.evaluaciones_category {
+        padding: 0;
+    }
+
+    .evaluation .exam_content {
+        flex-direction: column;
+    }
+
+    .evaluation .img_evaluaciones {
+        width: 100%;
+        height: 160px;
+        margin-bottom: 10px;
+    }
+    
+    .evaluation .text-content {
+        width: 100%;
+    }
+}

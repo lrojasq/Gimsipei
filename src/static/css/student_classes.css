@@ -1,0 +1,113 @@
+/* ========== Student Classes View Styles ========== */
+
+/* Alineación del contenedor principal */
+.student-classes-content {
+    align-items: flex-start;
+    padding-top: 0 !important;
+}
+
+/* Grid de materias */
+.subjects-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.5rem;
+    padding: 0;
+    padding-top: 0;
+    max-width: 1000px;
+    margin-top: 0;
+}
+
+/* Tarjetas de materias */
+.subject-card {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    min-height: 280px;
+}
+
+.subject-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.subject-card-image {
+    width: 100%;
+    height: 180px;
+    background: #23CCC3;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.subject-card-content {
+    padding: 1.5rem;
+    text-align: center;
+    position: relative;
+    background: white;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.subject-card-content h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #606060;
+    letter-spacing: 0.5px;
+}
+
+.subject-bar {
+    width: 100%;
+    height: 10px;
+    border-radius: 5px;
+    margin-top: 1rem;
+    background-color: #23CCC3;
+}
+
+/* Estado vacío */
+.empty-state {
+    text-align: center;
+    padding: 4rem;
+}
+
+.empty-state i {
+    font-size: 4rem;
+    color: #bdc3c7;
+}
+
+.empty-state p {
+    margin-top: 1rem;
+    color: #7f8c8d;
+}
+
+/* Color del sidebar para vista de clases de estudiantes */
+.clases_category.student-view .menu_aside {
+    background-color: #23CCC3;
+}
+
+/* ========== Responsive Design ========== */
+@media (max-width: 768px) {
+    .subjects-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        padding: 1rem;
+    }
+    
+    .subject-card {
+        min-height: 250px;
+    }
+    
+    .subject-card-image {
+        height: 150px;
+    }
+}
+

@@ -1,0 +1,227 @@
+/* Create Evaluation Modal Styles - inspired by crear_evaluacion_modal.html */
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: none; /* shown via JS as flex */
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.modal-container {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    width: 100%;
+    max-width: 650px;
+    padding: 1.75rem 2rem 1.5rem;
+    position: relative;
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 0.75rem;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--evaluaciones, #f48d53);
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.25rem;
+    color: #999;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.modal-close:hover {
+    color: var(--evaluaciones-active, #e55d1a);
+    transform: scale(1.05);
+}
+
+/* Form groups */
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group input[type="text"],
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid #dadada;
+    padding: 0.65rem 0.8rem;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-size: 0.8rem;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 90px;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    border-color: var(--evaluaciones-active, #e55d1a);
+    box-shadow: 0 0 0 0.15rem rgba(228, 141, 83, 0.25);
+}
+
+/* Custom file upload */
+.file-upload-group {
+    position: relative;
+}
+
+.file-upload-label {
+    display: block;
+    width: 100%;
+    padding: 0.9rem 1rem;
+    background-color: var(--evaluaciones-active, #e55d1a);
+    color: #ffffff;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border-radius: 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.file-upload-label i {
+    margin-right: 0.35rem;
+}
+
+.file-upload-label:hover {
+    background-color: #e77d44;
+}
+
+.file-upload-label:active {
+    transform: scale(0.98);
+}
+
+.file-upload-group input[type="file"] {
+    display: none;
+}
+
+.file-name {
+    display: block;
+    margin-top: 0.45rem;
+    font-size: 0.8rem;
+    color: #777;
+    text-align: left;
+}
+
+/* Period select */
+.period-select {
+    text-transform: uppercase;
+    font-size: 0.85rem;
+}
+
+/* Actions */
+.modal-actions {
+    margin-top: 1.25rem;
+    text-align: right;
+}
+
+.btn-submit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.6rem 2.2rem;
+    border-radius: 999px;
+    border: none;
+    background-color: var(--evaluaciones, #f48d53);
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+}
+
+.btn-submit:hover {
+    background-color: var(--evaluaciones-active, #e55d1a);
+    box-shadow: 0 6px 16px rgba(228, 141, 83, 0.4);
+}
+
+.btn-submit:active {
+    transform: translateY(1px) scale(0.99);
+}
+
+/* Questions step navigation */
+.questions-navigation {
+    margin-top: 0.5rem;
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    font-size: 0.8rem;
+    color: #777;
+}
+
+.questions-step-label {
+    flex: 1;
+    text-align: center;
+    font-weight: 500;
+}
+
+.btn-step {
+    border-radius: 999px;
+    border: 1px solid #ddd;
+    background-color: #f7f7f7;
+    color: #555;
+    padding: 0.3rem 0.9rem;
+    font-size: 0.8rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-step:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+.btn-step:not(:disabled):hover {
+    border-color: var(--evaluaciones, #f48d53);
+    color: var(--evaluaciones, #f48d53);
+}
+
+.questions-container .question-item {
+    /* por defecto controlado por JS para mostrar solo una */
+}
+
+/* Small screens */
+@media (max-width: 576px) {
+    .modal-container {
+        margin: 0 1rem;
+        padding: 1.25rem 1.5rem 1.25rem;
+    }
+
+    .modal-header h3 {
+        font-size: 1.1rem;
+    }
+}
+
