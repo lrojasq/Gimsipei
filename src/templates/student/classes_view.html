@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}Clases | Estudiante{% endblock %}
+
+{% block extra_css %}
+<link href="{{ url_for('static', filename='css/menu.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/category.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/admin.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/classes_resources.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/student_classes.css') }}" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+{% endblock %}
+
+{% block content %}
+{% block menu %}{% endblock %}
+
+<div class="container_category flex clases_category student-view">
+    <!-- Perfil de Usuario -->
+    <div class="data_categoty flex flex-column">
+        <div class="title flex">
+            <img src="{{ url_for('static', filename='images/svg/clases.svg') }}" alt="Clases"
+                style="width: 60px; height: 50px;">
+            <h1>Clases</h1>
+        </div>
+
+        <p>{{ user.full_name }}</p>
+        <div class="data_grade_category flex flex-column">
+            <p>{{ user.document }}</p>
+            <p>Grado {{ course.name if course else 'N/A' }}</p>
+        </div>
+    </div>
+
+    <!-- Materias del curso -->
+    <div class="specialities_category flex flex-column student-classes-content">
+        {% if subjects %}
+        <div class="subjects-grid">
+            {% for subject_data in subjects %}
+            <a href="{{ url_for('classes.student_subject_classes_view', course_id=course.id, subject_id=subject_data.subject.id) }}"
+                class="subject-card">
+                <div class="subject-card-image">
+                    <!-- Área de imagen turquesa -->
+                </div>
+                <div class="subject-card-content">
+                    <h3>{{ subject_data.subject.name }}</h3>
+                    <div class="subject-bar"></div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state" style="text-align: center; padding: 4rem;">
+            <i class="fas fa-folder-open" style="font-size: 4rem; color: #bdc3c7;"></i>
+            <p style="margin-top: 1rem; color: #7f8c8d;">No hay materias disponibles en tu curso</p>
+        </div>
+        {% endif %}
+    </div>
+
+    {% include "sidebar_aside.html" %}
+</div>
+{% endblock %}
