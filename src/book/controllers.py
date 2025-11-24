@@ -96,6 +96,7 @@ def books_view_controller(_: Request):
             "username": user.username,
             "document": user.document,
             "full_name": user.full_name,
+            "avatar": getattr(user, "avatar", None),
             "role": user.role.value if hasattr(user.role, "value") else str(user.role),
         }
 
@@ -270,6 +271,7 @@ def read_book_controller(book_id: int, _: Request):
             "username": user.username,
             "document": user.document,
             "full_name": user.full_name,
+            "avatar": getattr(user, "avatar", None),
             "role": user.role.value if hasattr(user.role, "value") else str(user.role),
         }
 

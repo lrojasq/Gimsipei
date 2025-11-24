@@ -28,6 +28,7 @@ def dashboard_controller(_: Request) -> Response:
                     "id": user.id,
                     "full_name": user.full_name,
                     "document": user.document,
+                    "avatar": getattr(user, "avatar", None),
                     "role": user_role,
                 },
                 accion_logout=True,
@@ -43,6 +44,7 @@ def dashboard_controller(_: Request) -> Response:
                     "id": user.id,
                     "full_name": user.full_name,
                     "document": user.document,
+                    "avatar": getattr(user, "avatar", None),
                     "role": user_role,
                 },
                 courses=courses_list,
@@ -51,7 +53,17 @@ def dashboard_controller(_: Request) -> Response:
 
         # User is student
         else:
-            return render_template("about_us.html", accion_logout=True)
+            return render_template(
+                "student/dashboard.html",
+                user={
+                    "id": user.id,
+                    "full_name": user.full_name,
+                    "document": user.document,
+                    "avatar": getattr(user, "avatar", None),
+                    "role": user_role,
+                },
+                accion_logout=True,
+            )
     except Exception:
         flash("Error al obtener el dashboard", "danger")
         return redirect(url_for("auth.login"))
