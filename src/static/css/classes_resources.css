@@ -608,6 +608,9 @@
     border-bottom: 1px solid hsl(0, 0%, 90%);
     transition: background-color 0.2s ease;
 }
+.admin_category .grades .subject-row-expanded{
+    justify-content: end;
+}
 
 .subject-row-expanded:hover {
     background-color: hsl(0, 0%, 95%);
