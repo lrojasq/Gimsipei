@@ -40,3 +40,7 @@
     color: white;
 }
 
+.subject-row-expanded{
+    justify-content: space-between;
+    text-align: left;
+}

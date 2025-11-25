@@ -98,12 +98,12 @@
                             <strong>{{ class_item.title }}</strong> - {{ class_item.description }}
                         </p>
                         {% if user.role == "teacher" %}
-                        <div class="d-flex justify-content-end gap-2">
+                        <div class="d-flex justify-content-end btns_actions">
                             <a class="btn btn-outline-primary btn-sm btn-edit" href="#"
                                 data-class-id="{{ class_item.id }}" title="Editar">
                                 <i class="bi bi-pencil-fill"></i>
                             </a>
-                            <a class="btn btn-outline-danger btn-sm open-delete-class-modal" href="#"
+                            <a class="btn btn-outline-danger btn-sm btn_delete open-delete-class-modal" href="#"
                                 data-class-id="{{ class_item.id }}" title="Eliminar">
                                 <i class="bi bi-trash3-fill"></i>
                             </a>

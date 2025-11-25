@@ -101,12 +101,12 @@
                             <strong>{{ evaluation.title }}</strong> - {{ evaluation.description }}
                         </p>
                         {% if user.role == "teacher" %}
-                        <div class="d-flex justify-content-end gap-2">
-                            <a class="btn btn-outline-primary btn-sm btn-edit-evaluation" href="#"
+                        <div class="d-flex justify-content-end btns_actions">
+                            <a class="btn btn-outline-primary btn-sm btn-edit btn-edit-evaluation" href="#"
                                 data-evaluation-id="{{ evaluation.id }}" title="Editar">
                                 <i class="bi bi-pencil-fill"></i>
                             </a>
-                            <a class="btn btn-outline-danger btn-sm open-delete-evaluation-modal" href="#"
+                            <a class="btn btn-outline-danger btn-sm btn_delete open-delete-evaluation-modal" href="#"
                                 data-evaluation-id="{{ evaluation.id }}" title="Eliminar">
                                 <i class="bi bi-trash3-fill"></i>
                             </a>

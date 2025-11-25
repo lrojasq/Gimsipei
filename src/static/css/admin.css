@@ -105,6 +105,10 @@
 }
 .admin_category{
     justify-content: start;
+
+}
+.admin_category .specialities_category:has(.content-admin){
+    width: 80%;
 }
 .admin_category .add {
     width: 100%;
@@ -242,8 +246,7 @@ form.form-admin.flex.flex-column h1{
     color: #fff;
 }
 .img-usuario img{
-    width: 100px;
-    height: 100px;
+    width: 100%;
     border-radius: 50%;
     object-fit: cover;
 }
@@ -283,11 +286,11 @@ form.form-admin.flex.flex-column h1{
 .container_datos_personales{
     background: url(../images/menu-principal/backgroun.jpg);
     background-repeat: no-repeat;
-    border-radius: 50px;
+    border-radius: 50px 50px 0 0;
     padding: 3rem;
     background-position: center;
     margin: 30px auto 0;
-    min-height: calc(100vh - 140px);
+    width: 100%;
 }
 
 
