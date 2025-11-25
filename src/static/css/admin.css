@@ -103,7 +103,8 @@
 .list-materias li .actions a {
     color: #606060;
 }
-.admin_category{
+.admin_category,
+.dashboard_category{
     justify-content: start;
 
 }
