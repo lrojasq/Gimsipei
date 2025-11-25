@@ -108,7 +108,7 @@
     justify-content: start;
 
 }
-.admin_category .specialities_category:has(.content-admin){
+.dashboard_category .specialities_category:has(.content-admin){
     width: 80%;
 }
 .admin_category .add {
