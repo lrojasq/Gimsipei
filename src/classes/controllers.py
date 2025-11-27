@@ -224,12 +224,9 @@ def update_class_controller(class_id: int):
         cover_file = request.files.get("cover_image")
         result, status_code = service.update_class_service(class_id, data, cover_file)
 
-        if status_code == 200:
-            flash(result["message"], "success")
-        else:
-            flash(result.get("error", "Error al actualizar la clase"), "danger")
+        flash(result["message"], "success") if status_code == 200 else flash(result.get("error", "Error al actualizar la clase"), "danger")
 
-        # Redirigir a la vista anterior (obtener de referrer o default)
+        # Redirigir a la vista de clases por período
         course_id = request.form.get("course_id")
         subject_id = request.form.get("subject_id")
 
@@ -371,3 +368,273 @@ def get_student_progress_controller(course_id: int, subject_id: int):
         return jsonify(result), status_code
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
+
+
+# Class Detail View Controllers
+def class_detail_view_controller(class_id: int):
+    """Redirige a la vista de detalle según el rol del usuario"""
+    try:
+        user_role = get_jwt().get("role")
+
+        if user_role == "student":
+            return redirect(
+                url_for("classes.student_class_detail_view", class_id=class_id)
+            )
+        elif user_role == "teacher":
+            return redirect(
+                url_for("classes.teacher_class_detail_view", class_id=class_id)
+            )
+        else:
+            flash("No tienes permiso para ver esta clase", "danger")
+            return redirect(url_for("admin.dashboard"))
+    except Exception as e:
+        flash(f"Error al cargar la clase: {str(e)}", "danger")
+        return redirect(url_for("admin.dashboard"))
+
+
+def student_class_detail_view_controller(class_id: int):
+    """Vista detallada de una clase para estudiantes"""
+    try:
+        current_user_id = get_jwt_identity()
+        current_user, _ = get_user_service(current_user_id, request)
+
+        # Obtener detalle de la clase
+        data, status_code = service.get_class_detail_service(
+            class_id, user_id=current_user_id, user_role="student"
+        )
+
+        if status_code != 200:
+            flash(data.get("error", "Error al cargar la clase"), "danger")
+            return redirect(url_for("classes.student_classes_view"))
+
+        return render_template(
+            "student/class_detail_view.html",
+            class_data=data["class"],
+            course=data["course"],
+            subject=data["subject"],
+            contents=data["contents"],
+            assignments=data["assignments"],
+            user=current_user,
+            accion_logout=True,
+        )
+    except Exception as e:
+        flash(f"Error al cargar la clase: {str(e)}", "danger")
+        return redirect(url_for("classes.student_classes_view"))
+
+
+def teacher_class_detail_view_controller(class_id: int):
+    """Vista detallada de una clase para profesores"""
+    try:
+        current_user_id = get_jwt_identity()
+        current_user, _ = get_user_service(current_user_id, request)
+
+        # Obtener detalle de la clase
+        data, status_code = service.get_class_detail_service(
+            class_id, user_id=current_user_id, user_role="teacher"
+        )
+
+        if status_code != 200:
+            flash(data.get("error", "Error al cargar la clase"), "danger")
+            return redirect(url_for("classes.teacher_classes_view"))
+
+        return render_template(
+            "teacher/class_detail_view.html",
+            class_data=data["class"],
+            course=data["course"],
+            subject=data["subject"],
+            contents=data["contents"],
+            assignments=data["assignments"],
+            user=current_user,
+            accion_logout=True,
+        )
+    except Exception as e:
+        flash(f"Error al cargar la clase: {str(e)}", "danger")
+        return redirect(url_for("classes.teacher_classes_view"))
+
+
+# Class Content Controllers
+def create_class_content_controller():
+    """Controlador para crear contenido de una clase"""
+    try:
+        data = {
+            "class_id": request.form.get("class_id"),
+            "content_order": request.form.get("content_order", 1),
+            "section_title": request.form.get("section_title"),
+            "content_text": request.form.get("content_text"),
+        }
+
+        image_file = request.files.get("content_image")
+        result, status_code = service.create_class_content_service(data, image_file)
+
+        if status_code == 201:
+            flash(result["message"], "success")
+        else:
+            flash(result.get("error", "Error al crear contenido"), "danger")
+
+        # Redirigir a la vista de detalle de la clase
+        class_id = request.form.get("class_id")
+        return redirect(url_for("classes.teacher_class_detail_view", class_id=class_id))
+
+    except Exception as e:
+        flash(f"Error al crear contenido: {str(e)}", "danger")
+        return redirect(url_for("classes.teacher_classes_view"))
+
+
+def update_class_content_controller(content_id: int):
+    """Controlador para actualizar contenido de una clase"""
+    try:
+        data = {
+            "section_title": request.form.get("section_title"),
+            "content_text": request.form.get("content_text"),
+            "content_order": request.form.get("content_order"),
+        }
+
+        image_file = request.files.get("content_image")
+        result, status_code = service.update_class_content_service(
+            content_id, data, image_file
+        )
+
+        if status_code == 200:
+            flash(result["message"], "success")
+        else:
+            flash(result.get("error", "Error al actualizar contenido"), "danger")
+
+        # Redirigir a la vista de detalle de la clase
+        class_id = request.form.get("class_id")
+        return redirect(url_for("classes.teacher_class_detail_view", class_id=class_id))
+
+    except Exception as e:
+        flash(f"Error al actualizar contenido: {str(e)}", "danger")
+        return redirect(url_for("classes.teacher_classes_view"))
+
+
+def delete_class_content_controller(content_id: int):
+    """Controlador para eliminar contenido de una clase"""
+    try:
+        result, status_code = service.delete_class_content_service(content_id)
+
+        if status_code == 200:
+            flash(result["message"], "success")
+        else:
+            flash(result.get("error", "Error al eliminar contenido"), "danger")
+
+        return redirect(request.referrer or url_for("classes.teacher_classes_view"))
+
+    except Exception as e:
+        flash(f"Error al eliminar contenido: {str(e)}", "danger")
+        return redirect(url_for("classes.teacher_classes_view"))
+
+
+# Assignment Controllers
+def create_assignment_controller():
+    """Controlador para crear una tarea"""
+    try:
+        current_user_id = get_jwt_identity()
+
+        data = {
+            "class_id": request.form.get("class_id"),
+            "title": request.form.get("title"),
+            "description": request.form.get("description"),
+            "due_date": request.form.get("due_date"),
+            "max_score": request.form.get("max_score", 100),
+        }
+
+        result, status_code = service.create_assignment_service(data, current_user_id)
+
+        if status_code == 201:
+            flash(result["message"], "success")
+        else:
+            flash(result.get("error", "Error al crear tarea"), "danger")
+
+        # Redirigir a la vista de detalle de la clase
+        class_id = request.form.get("class_id")
+        return redirect(url_for("classes.teacher_class_detail_view", class_id=class_id))
+
+    except Exception as e:
+        flash(f"Error al crear tarea: {str(e)}", "danger")
+        return redirect(url_for("classes.teacher_classes_view"))
+
+
+def update_assignment_controller(assignment_id: int):
+    """Controlador para actualizar una tarea"""
+    try:
+        data = {
+            "title": request.form.get("title"),
+            "description": request.form.get("description"),
+            "due_date": request.form.get("due_date"),
+            "max_score": request.form.get("max_score", 100),
+        }
+
+        result, status_code = service.update_assignment_service(assignment_id, data)
+
+        if status_code == 200:
+            flash(result["message"], "success")
+            class_id = result.get("class_id")
+
+            if class_id:
+                return redirect(
+                    url_for("classes.teacher_class_detail_view", class_id=class_id)
+                )
+            else:
+                return redirect(url_for("classes.teacher_classes_view"))
+        else:
+            flash(result.get("error", "Error al actualizar tarea"), "danger")
+            return redirect(url_for("classes.teacher_classes_view"))
+
+    except Exception as e:
+        flash(f"Error al actualizar tarea: {str(e)}", "danger")
+        return redirect(url_for("classes.teacher_classes_view"))
+
+
+def delete_assignment_controller(assignment_id: int):
+    """Controlador para eliminar una tarea"""
+    try:
+        # Primero obtener el class_id antes de eliminar
+        result, status_code = service.delete_assignment_service(assignment_id)
+
+        if status_code == 200:
+            flash(result["message"], "success")
+            class_id = result.get("class_id")
+
+            if class_id:
+                return redirect(
+                    url_for("classes.teacher_class_detail_view", class_id=class_id)
+                )
+            else:
+                return redirect(url_for("classes.teacher_classes_view"))
+        else:
+            flash(result.get("error", "Error al eliminar tarea"), "danger")
+            return redirect(url_for("classes.teacher_classes_view"))
+
+    except Exception as e:
+        flash(f"Error al eliminar tarea: {str(e)}", "danger")
+        return redirect(url_for("classes.teacher_classes_view"))
+
+
+def submit_assignment_controller():
+    """Controlador para enviar una tarea como estudiante"""
+    try:
+        current_user_id = get_jwt_identity()
+
+        data = {
+            "assignment_id": request.form.get("assignment_id"),
+            "submission_text": request.form.get("submission_text"),
+        }
+
+        file = request.files.get("submission_file")
+        result, status_code = service.submit_assignment_service(
+            data, current_user_id, file
+        )
+
+        if status_code == 201:
+            flash(result["message"], "success")
+        else:
+            flash(result.get("error", "Error al enviar tarea"), "danger")
+
+        # Redirigir a la vista de detalle de la clase
+        class_id = request.form.get("class_id")
+        return redirect(url_for("classes.student_class_detail_view", class_id=class_id))
+
+    except Exception as e:
+        flash(f"Error al enviar tarea: {str(e)}", "danger")
+        return redirect(url_for("classes.student_classes_view"))

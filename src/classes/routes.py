@@ -131,3 +131,85 @@ def mark_class_as_viewed():
 def get_student_progress(course_id: int, subject_id: int):
     """Obtener progreso de clases vistas de un estudiante"""
     return controllers.get_student_progress_controller(course_id, subject_id)
+
+
+# Class Detail View Routes
+@class_bp.route("/detail/<int:class_id>", methods=["GET"])
+@jwt_required()
+def class_detail_view(class_id: int):
+    """Vista detallada de una clase (redirige según rol)"""
+    return controllers.class_detail_view_controller(class_id)
+
+
+@class_bp.route("/student/detail/<int:class_id>", methods=["GET"])
+@jwt_required()
+@role_required(UserRole.STUDENT)
+def student_class_detail_view(class_id: int):
+    """Vista detallada de una clase para estudiantes"""
+    return controllers.student_class_detail_view_controller(class_id)
+
+
+@class_bp.route("/teacher/detail/<int:class_id>", methods=["GET"])
+@jwt_required()
+@role_required(UserRole.TEACHER)
+def teacher_class_detail_view(class_id: int):
+    """Vista detallada de una clase para profesores"""
+    return controllers.teacher_class_detail_view_controller(class_id)
+
+
+# Class Content Routes
+@class_bp.route("/content/create", methods=["POST"])
+@jwt_required()
+@role_required(UserRole.TEACHER)
+def create_class_content():
+    """Crear contenido para una clase"""
+    return controllers.create_class_content_controller()
+
+
+@class_bp.route("/content/update/<int:content_id>", methods=["POST"])
+@jwt_required()
+@role_required(UserRole.TEACHER)
+def update_class_content(content_id: int):
+    """Actualizar contenido de una clase"""
+    return controllers.update_class_content_controller(content_id)
+
+
+@class_bp.route("/content/delete/<int:content_id>", methods=["POST"])
+@jwt_required()
+@role_required(UserRole.TEACHER)
+def delete_class_content(content_id: int):
+    """Eliminar contenido de una clase"""
+    return controllers.delete_class_content_controller(content_id)
+
+
+# Assignment Routes
+@class_bp.route("/assignment/create", methods=["POST"])
+@jwt_required()
+@role_required(UserRole.TEACHER)
+def create_assignment():
+    """Crear tarea para una clase"""
+    return controllers.create_assignment_controller()
+
+
+@class_bp.route("/assignment/update/<int:assignment_id>", methods=["POST"])
+@jwt_required()
+@role_required(UserRole.TEACHER)
+def update_assignment(assignment_id: int):
+    """Actualizar una tarea"""
+    return controllers.update_assignment_controller(assignment_id)
+
+
+@class_bp.route("/assignment/delete/<int:assignment_id>", methods=["POST"])
+@jwt_required()
+@role_required(UserRole.TEACHER)
+def delete_assignment(assignment_id: int):
+    """Eliminar una tarea"""
+    return controllers.delete_assignment_controller(assignment_id)
+
+
+@class_bp.route("/assignment/submit", methods=["POST"])
+@jwt_required()
+@role_required(UserRole.STUDENT)
+def submit_assignment():
+    """Enviar tarea como estudiante"""
+    return controllers.submit_assignment_controller()

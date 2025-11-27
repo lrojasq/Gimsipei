@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from werkzeug.utils import secure_filename
 import os
 
@@ -10,6 +10,9 @@ from src.models.class_model import ClassModel
 from src.models.course import Course
 from src.models.class_view import ClassView
 from src.models.course_student import CourseStudent
+from src.models.class_content import ClassContent
+from src.models.assignment import Assignment
+from src.models.assignment_submission import AssignmentSubmission
 from src.classes.validation import (
     SubjectCreate,
     SubjectUpdate,
@@ -450,7 +453,7 @@ def update_class_service(class_id: int, data: dict, cover_file=None):
             return {"error": "Clase no encontrada"}, 404
 
         # Actualizar campos básicos
-        if "class_number" in data:
+        if "class_number" in data and data["class_number"]:
             # Verificar que no exista otra clase con el mismo número
             existing = (
                 db.query(ClassModel)
@@ -476,7 +479,7 @@ def update_class_service(class_id: int, data: dict, cover_file=None):
         if "description" in data:
             class_to_update.description = data["description"]
 
-        if "period" in data:
+        if "period" in data and data["period"]:
             class_to_update.period = data["period"]
 
         # Procesar nueva portada si existe
@@ -550,6 +553,44 @@ def delete_class_service(class_id: int, user_role: str):
         cover_image_path = class_to_delete.cover_image
 
         # Delete related records first (to avoid integrity reference problems)
+        assignments = db.query(Assignment).filter(Assignment.class_id == class_id).all()
+        for assignment in assignments:
+            # Delete submissions first
+            submissions = (
+                db.query(AssignmentSubmission)
+                .filter(AssignmentSubmission.assignment_id == assignment.id)
+                .all()
+            )
+            for submission in submissions:
+                if submission.file_url:
+                    submission_file_path = os.path.join(
+                        "src", submission.file_url.lstrip("/")
+                    )
+                    if os.path.exists(submission_file_path):
+                        try:
+                            os.remove(submission_file_path)
+                        except Exception:
+                            pass
+                db.delete(submission)
+            db.delete(assignment)
+
+        # Delete class contents
+        contents = (
+            db.query(ClassContent).filter(ClassContent.class_id == class_id).all()
+        )
+        for content in contents:
+            if content.content_image:
+                content_image_path = os.path.join(
+                    "src", content.content_image.lstrip("/")
+                )
+                if os.path.exists(content_image_path):
+                    try:
+                        os.remove(content_image_path)
+                    except Exception:
+                        pass
+            db.delete(content)
+
+        # Delete resources
         resources = db.query(Resource).filter(Resource.class_id == class_id).all()
         for resource in resources:
             # Delete physical files of the resource if they exist
@@ -760,10 +801,15 @@ def get_student_subject_classes_service(
             period = class_item.period or 1
             classes_by_period[period].append(class_item)
 
-        # Get the classes viewed by the student
+        # Get the classes viewed by the student for this specific subject/course
         viewed_classes_query = (
             db.query(ClassView.class_id)
-            .filter(ClassView.student_id == student_id)
+            .join(ClassModel, ClassModel.id == ClassView.class_id)
+            .filter(
+                ClassView.student_id == student_id,
+                ClassModel.course_id == course_id,
+                ClassModel.subject_id == subject_id,
+            )
             .all()
         )
         viewed_class_ids = set([view.class_id for view in viewed_classes_query])
@@ -945,5 +991,410 @@ def get_student_progress_service(user_id: int, course_id: int, subject_id: int):
 
     except Exception as e:
         return {"success": False, "error": f"Error al obtener progreso: {str(e)}"}, 500
+    finally:
+        db.close()
+
+
+# Class Detail Services
+def get_class_detail_service(class_id: int, user_id: int = None, user_role: str = None):
+    """
+    Obtiene el detalle completo de una clase incluyendo contenido y tareas
+
+    Args:
+        class_id: ID de la clase
+        user_id: ID del usuario (opcional, para estudiantes)
+        user_role: Rol del usuario (opcional)
+
+    Returns:
+        Tuple con diccionario de datos y código de estado
+    """
+    db = SessionLocal()
+    try:
+        # Obtener la clase
+        class_item = db.query(ClassModel).filter(ClassModel.id == class_id).first()
+        if not class_item:
+            return {"error": "Clase no encontrada"}, 404
+
+        # Obtener contenido ordenado
+        contents = (
+            db.query(ClassContent)
+            .filter(ClassContent.class_id == class_id)
+            .order_by(ClassContent.content_order)
+            .all()
+        )
+
+        # Obtener tareas activas
+        assignments = (
+            db.query(Assignment)
+            .filter(Assignment.class_id == class_id, Assignment.is_active.is_(True))
+            .all()
+        )
+
+        # Obtener información del curso y materia
+        course = db.query(Course).filter(Course.id == class_item.course_id).first()
+        subject = db.query(Subject).filter(Subject.id == class_item.subject_id).first()
+
+        # Si es estudiante, verificar si ya envió las tareas
+        submitted_assignment_ids = []
+        if user_id and user_role == "student":
+            submissions = (
+                db.query(AssignmentSubmission.assignment_id)
+                .filter(AssignmentSubmission.student_id == user_id)
+                .all()
+            )
+            submitted_assignment_ids = [s[0] for s in submissions]
+
+        return {
+            "class": {
+                "id": class_item.id,
+                "title": class_item.title,
+                "description": class_item.description,
+                "class_number": class_item.class_number,
+                "cover_image": class_item.cover_image,
+                "period": class_item.period,
+                "course_id": class_item.course_id,
+                "subject_id": class_item.subject_id,
+            },
+            "course": {
+                "id": course.id,
+                "name": course.name,
+            }
+            if course
+            else None,
+            "subject": {
+                "id": subject.id,
+                "name": subject.name,
+            }
+            if subject
+            else None,
+            "contents": [
+                {
+                    "id": content.id,
+                    "section_title": content.section_title,
+                    "content_text": content.content_text,
+                    "content_image": content.content_image,
+                    "content_order": content.content_order,
+                }
+                for content in contents
+            ],
+            "assignments": [
+                {
+                    "id": assignment.id,
+                    "title": assignment.title,
+                    "description": assignment.description,
+                    "due_date": assignment.due_date.isoformat()
+                    if assignment.due_date
+                    else None,
+                    "max_score": assignment.max_score,
+                    "submitted": assignment.id in submitted_assignment_ids,
+                }
+                for assignment in assignments
+            ],
+        }, 200
+
+    except Exception as e:
+        return {"error": f"Error al obtener detalle de clase: {str(e)}"}, 500
+    finally:
+        db.close()
+
+
+# Class Content Services
+def create_class_content_service(data: dict, image_file=None):
+    """
+    Crea contenido para una clase
+
+    Args:
+        data: Diccionario con datos del contenido
+        image_file: Archivo de imagen (opcional)
+
+    Returns:
+        Tuple con diccionario de resultado y código de estado
+    """
+    db = SessionLocal()
+    try:
+        # Subir imagen si existe
+        image_url = None
+        if image_file and image_file.filename:
+            filename = secure_filename(image_file.filename)
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            filename = f"{timestamp}_{filename}"
+
+            upload_folder = os.path.join("src", "static", "uploads", "class_content")
+            os.makedirs(upload_folder, exist_ok=True)
+
+            filepath = os.path.join(upload_folder, filename)
+            image_file.save(filepath)
+            image_url = f"/static/uploads/class_content/{filename}"
+
+        # Crear contenido
+        content = ClassContent(
+            class_id=data.get("class_id"),
+            content_order=data.get("content_order", 1),
+            section_title=data.get("section_title"),
+            content_text=data.get("content_text"),
+            content_image=image_url,
+        )
+
+        db.add(content)
+        db.commit()
+        db.refresh(content)
+
+        return {"message": "Contenido creado exitosamente", "id": content.id}, 201
+
+    except Exception as e:
+        db.rollback()
+        return {"error": f"Error al crear contenido: {str(e)}"}, 500
+    finally:
+        db.close()
+
+
+def update_class_content_service(content_id: int, data: dict, image_file=None):
+    """
+    Actualiza contenido de una clase
+    """
+    db = SessionLocal()
+    try:
+        content = db.query(ClassContent).filter(ClassContent.id == content_id).first()
+
+        if not content:
+            return {"error": "Contenido no encontrado"}, 404
+
+        # Actualizar imagen si se proporciona
+        if image_file and image_file.filename:
+            filename = secure_filename(image_file.filename)
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            filename = f"{timestamp}_{filename}"
+
+            upload_folder = os.path.join("src", "static", "uploads", "class_content")
+            os.makedirs(upload_folder, exist_ok=True)
+
+            filepath = os.path.join(upload_folder, filename)
+            image_file.save(filepath)
+            content.content_image = f"/static/uploads/class_content/{filename}"
+
+        # Actualizar otros campos
+        if "section_title" in data:
+            content.section_title = data["section_title"]
+        if "content_text" in data:
+            content.content_text = data["content_text"]
+        if "content_order" in data:
+            content.content_order = data["content_order"]
+
+        db.commit()
+
+        return {"message": "Contenido actualizado exitosamente"}, 200
+
+    except Exception as e:
+        db.rollback()
+        return {"error": f"Error al actualizar contenido: {str(e)}"}, 500
+    finally:
+        db.close()
+
+
+def delete_class_content_service(content_id: int):
+    """
+    Elimina contenido de una clase
+    """
+    db = SessionLocal()
+    try:
+        content = db.query(ClassContent).filter(ClassContent.id == content_id).first()
+
+        if not content:
+            return {"error": "Contenido no encontrado"}, 404
+
+        db.delete(content)
+        db.commit()
+
+        return {"message": "Contenido eliminado exitosamente"}, 200
+
+    except Exception as e:
+        db.rollback()
+        return {"error": f"Error al eliminar contenido: {str(e)}"}, 500
+    finally:
+        db.close()
+
+
+# Assignment Services
+def create_assignment_service(data: dict, created_by: int):
+    """
+    Crea una tarea para una clase
+    """
+    db = SessionLocal()
+    try:
+        assignment = Assignment(
+            class_id=data.get("class_id"),
+            title=data.get("title"),
+            description=data.get("description"),
+            due_date=datetime.fromisoformat(data["due_date"])
+            if data.get("due_date")
+            else None,
+            max_score=data.get("max_score", 100),
+            created_by=created_by,
+        )
+
+        db.add(assignment)
+        db.commit()
+        db.refresh(assignment)
+
+        return {"message": "Tarea creada exitosamente", "id": assignment.id}, 201
+
+    except Exception as e:
+        db.rollback()
+        return {"error": f"Error al crear tarea: {str(e)}"}, 500
+    finally:
+        db.close()
+
+
+def update_assignment_service(assignment_id: int, data: dict):
+    """
+    Actualiza una tarea existente
+    """
+    db = SessionLocal()
+    try:
+        # Obtener la tarea
+        assignment = db.query(Assignment).filter(Assignment.id == assignment_id).first()
+
+        if not assignment:
+            return {"error": "Tarea no encontrada"}, 404
+
+        # Guardar el class_id para redirigir
+        class_id = assignment.class_id
+
+        # Actualizar campos
+        if data.get("title"):
+            assignment.title = data["title"]
+
+        if data.get("description") is not None:
+            assignment.description = data["description"]
+
+        if data.get("due_date"):
+            assignment.due_date = datetime.fromisoformat(data["due_date"])
+
+        if data.get("max_score"):
+            assignment.max_score = data["max_score"]
+
+        assignment.updated_at = datetime.now(timezone.utc)
+
+        db.commit()
+        db.refresh(assignment)
+
+        return {"message": "Tarea actualizada exitosamente", "class_id": class_id}, 200
+
+    except Exception as e:
+        db.rollback()
+        return {"error": f"Error al actualizar tarea: {str(e)}"}, 500
+    finally:
+        db.close()
+
+
+def delete_assignment_service(assignment_id: int):
+    """
+    Elimina una tarea y todas sus entregas asociadas
+    """
+    db = SessionLocal()
+    try:
+        # Obtener la tarea
+        assignment = db.query(Assignment).filter(Assignment.id == assignment_id).first()
+
+        if not assignment:
+            return {"error": "Tarea no encontrada"}, 404
+
+        # Guardar el class_id antes de eliminar
+        class_id = assignment.class_id
+
+        # Obtener las entregas asociadas para eliminar archivos
+        submissions = (
+            db.query(AssignmentSubmission)
+            .filter(AssignmentSubmission.assignment_id == assignment_id)
+            .all()
+        )
+
+        # Eliminar archivos de entregas
+        for submission in submissions:
+            if submission.file_url:
+                file_path = os.path.join("src", submission.file_url.lstrip("/"))
+                if os.path.exists(file_path):
+                    try:
+                        os.remove(file_path)
+                    except Exception as e:
+                        print(f"Error al eliminar archivo: {e}")
+
+        # Eliminar entregas (se eliminan automáticamente por CASCADE, pero lo hacemos explícitamente)
+        for submission in submissions:
+            db.delete(submission)
+
+        # Eliminar la tarea
+        db.delete(assignment)
+        db.commit()
+
+        return {"message": "Tarea eliminada exitosamente", "class_id": class_id}, 200
+
+    except Exception as e:
+        db.rollback()
+        return {"error": f"Error al eliminar tarea: {str(e)}"}, 500
+    finally:
+        db.close()
+
+
+def submit_assignment_service(data: dict, student_id: int, file=None):
+    """
+    Envía una tarea como estudiante
+    """
+    db = SessionLocal()
+    try:
+        # Verificar que la tarea existe
+        assignment = (
+            db.query(Assignment)
+            .filter(Assignment.id == data.get("assignment_id"))
+            .first()
+        )
+
+        if not assignment:
+            return {"error": "Tarea no encontrada"}, 404
+
+        # Verificar si ya existe una entrega
+        existing_submission = (
+            db.query(AssignmentSubmission)
+            .filter(
+                AssignmentSubmission.assignment_id == data.get("assignment_id"),
+                AssignmentSubmission.student_id == student_id,
+            )
+            .first()
+        )
+
+        if existing_submission:
+            return {"error": "Ya has enviado esta tarea"}, 400
+
+        # Subir archivo si existe
+        file_url = None
+        if file and file.filename:
+            filename = secure_filename(file.filename)
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            filename = f"{timestamp}_{filename}"
+
+            upload_folder = os.path.join("src", "static", "uploads", "assignments")
+            os.makedirs(upload_folder, exist_ok=True)
+
+            filepath = os.path.join(upload_folder, filename)
+            file.save(filepath)
+            file_url = f"/static/uploads/assignments/{filename}"
+
+        # Crear entrega
+        submission = AssignmentSubmission(
+            assignment_id=data.get("assignment_id"),
+            student_id=student_id,
+            submission_text=data.get("submission_text"),
+            file_url=file_url,
+        )
+
+        db.add(submission)
+        db.commit()
+        db.refresh(submission)
+
+        return {"message": "Tarea enviada exitosamente", "id": submission.id}, 201
+
+    except Exception as e:
+        db.rollback()
+        return {"error": f"Error al enviar tarea: {str(e)}"}, 500
     finally:
         db.close()
