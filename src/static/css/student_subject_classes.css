@@ -63,21 +63,24 @@
 /* Contenedor de progreso */
 .progress-container {
     margin-bottom: 1.5rem;
+    width: 30%;
 }
 
 .progress-container > p:first-child {
     margin-bottom: 0.8rem;
     color: #606060;
-    font-size: 0.95rem;
+    font-size: 0.8rem;
     font-weight: 500;
+    margin: 0px;
 }
 
 .progress-bar-container {
     width: 100%;
     background-color: #e0e0e0;
     border-radius: 20px;
-    height: 12px;
+    height: 15px;
     overflow: hidden;
+    border: 3px solid #e5e5e5;
 }
 
 .progress-bar-fill {
@@ -218,7 +221,7 @@
     right: 0.5rem;
     display: flex;
     flex-direction: row;
-    gap: 0.4rem;
+    gap: 0rem;
     align-items: center;
     justify-content: flex-end;
     padding: 0;
@@ -228,9 +231,7 @@
 }
 
 .student-subject-view .class-actions button {
-    padding: 0.3rem;
-    border: 1.5px solid;
-    border-radius: 6px;
+    padding: 0.5rem 1.3rem;
     background: white;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -246,37 +247,45 @@
 /* Botón ojo turquesa - marcar como vista */
 .student-subject-view .btn-mark-viewed {
     border-color: #23CCC3;
+    border: 1px solid #23CCC3;
     color: #23CCC3;
+    border-radius: 5px 0px 0px 5px;
 }
 
 .student-subject-view .btn-mark-viewed:hover {
     background: #23CCC3;
     color: white;
     transform: scale(1.05);
+    border: none;
 }
 
 .student-subject-view .btn-mark-viewed.active {
     background: #23CCC3;
     color: white;
     box-shadow: 0 1px 4px rgba(35, 204, 195, 0.3);
+    border: none;
 }
 
 /* Botón ojo rojo - marcar como no vista */
 .student-subject-view .btn-mark-not-viewed {
     border-color: #e74c3c;
     color: #e74c3c;
+    border-radius: 0px 5px 5px 0px;
+    border: 1px solid #e74c3c;
 }
 
 .student-subject-view .btn-mark-not-viewed:hover {
     background: #e74c3c;
     color: white;
     transform: scale(1.05);
+    border: none;
 }
 
 .student-subject-view .btn-mark-not-viewed.active {
     background: #e74c3c;
     color: white;
     box-shadow: 0 1px 4px rgba(231, 76, 60, 0.3);
+    border: none;
 }
 
 /* Botones deshabilitados */
@@ -328,7 +337,7 @@
 }
 
 /* Botón de regreso */
-.student-subject-view .flex.gap-2 a {
+/* .student-subject-view .flex.gap-2 a {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -350,7 +359,7 @@
 
 .student-subject-view .flex.gap-2 a i {
     font-size: 2rem;
-}
+} */
 
 /* Título de materia */
 .student-subject-view .flex.gap-2 h3 {
