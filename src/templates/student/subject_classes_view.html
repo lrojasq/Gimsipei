@@ -69,7 +69,9 @@
 
             {% if classes_by_period[period] %}
             {% for class_item in classes_by_period[period] %}
-            <div class="exam flex class" data-class-id="{{ class_item.id }}">
+            <div class="exam flex class" data-class-id="{{ class_item.id }}" 
+                 style="cursor: pointer;"
+                 onclick="window.location.href='{{ url_for('classes.student_class_detail_view', class_id=class_item.id) }}'">
                 <div class="exam_content flex">
                     <div class="img_evaluaciones evaluaciones_bg">
                         {% if class_item.cover_image %}
@@ -93,7 +95,7 @@
                 </div>
                 
                 <!-- Botones de acción -->
-                <div class="class-actions">
+                <div class="class-actions" onclick="event.stopPropagation()">
                     <button class="btn-mark-viewed {% if class_item.id in viewed_class_ids %}active{% endif %}" 
                             data-class-id="{{ class_item.id }}"
                             title="Marcar como vista">
