@@ -1,0 +1,343 @@
+:root {
+    --blanco: #ffffff;
+    --primario: #3BBAE4;
+    --gris-claro: #606060;
+    --azul-oscuro: #12A3DD;
+    --barra-ginsipei: #1CC3EA;
+    --barra-clases: #23CCC3;
+    --barra-recursos: #F7CB52;
+    --barra-evaluaciones: #F48D53;
+    --barra-libros: #EA6EF4;
+    --barra-calificaciones: #A270F2;
+}
+
+.containe {
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--azul-oscuro)!important;
+}
+
+.bg-mision {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 86vh;
+    background-color: var(--primario);
+    background-image: url("../images/menu-principal/bg-pencil.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.logo {
+    width: 300px;
+    height: 60px;
+
+    margin-left: 50px;
+    margin-top: 50px;
+    background-image: url("../images/logo.png");
+    background-repeat: no-repeat;
+}
+
+.bg-vision {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: #f6f6f6;
+    border-radius: 50px 50px 0px 0px;
+    z-index: 1000;
+    padding: 20px 100px;
+    margin-top: 0rem;
+}
+.vision-tp {
+    width: 70%;
+    color: var(--gris-claro);
+    text-align: left;
+}
+
+.bg-lateral {
+    position: relative;
+    position: relative;
+    width: 29%;
+    height: 100%;
+    background-image: url(../images/menu-principal/bg-rigth.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    float: right;
+    margin-top: -910px;
+    z-index: 1;
+}
+
+.containe.bg-image-user {
+    background-color: var(--primario);
+    background-image: url("../images/menu-principal/bg-pencil.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.mision-tp p,
+.vision-tp p {
+    font-size: 1.6rem;
+    max-width: 100%;
+}
+
+.bg-mision {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 0px 100px;
+    /* background-color: var(--primario); */
+    /* background-image: url("../images/menu-principal/bg-pencil.png");
+    background-repeat: no-repeat;
+    background-size: cover; */
+    position: relative;
+}
+
+.logo {
+    width: 300px;
+    height: 60px;
+    background-image: url("../images/logo.png");
+    background-repeat: no-repeat;
+}
+
+.mision-tp {
+    width: 50%;
+    height: auto;
+    color: #ffffff;
+    margin: 0px;
+    text-align: left;
+    height: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+
+.bg-vision .content-vision {
+    padding: 100px 80px 0px;
+    margin: auto;
+    width: 100%;
+}
+
+
+.bg-vision .menu {
+    position: relative;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 30px;
+    width: 100%;
+}
+
+.box-menu {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 5px;
+    width: 120px;
+    height: 158px;
+
+    border-radius: 15px;
+    background-color: var(--azul-oscuro);
+}
+
+.box-menu {
+    color: var(--blanco);
+}
+
+/* botones menu*/
+
+
+.barra-gimsipei,
+.barra-clases,
+.barra-recursos,
+.barra-evaluaciones,
+.barra-libros,
+.barra-calificaciones {
+    position: absolute;
+    width: 129px;
+    height: 13px;
+
+    margin-top: 200px;
+    border-radius: 5px;
+}
+
+.gimsipei {
+    width: 68px;
+    height: 88px;
+
+    background-image: url("../images/menu-principal/gimsipei.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.gimsipei-hover:hover {
+    background-color: var(--barra-ginsipei);
+}
+
+.clases {
+    width: 77px;
+    height: 77px;
+
+    background-image: url("../images/menu-principal/clases.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.clases-hover:hover {
+    background-color: var(--barra-clases);
+}
+
+.recursos {
+    width: 88px;
+    height: 88px;
+
+    background-image: url("../images/menu-principal/recursos.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.recursos-hover:hover {
+    background-color: var(--barra-recursos);
+}
+
+.evaluaciones {
+    width: 68px;
+    height: 88px;
+
+    background-image: url("../images/menu-principal/Evaluaciones.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.evaluaciones-hover:hover {
+    background-color: var(--barra-evaluaciones);
+}
+
+.libros {
+    width: 110px;
+    height: 73px;
+
+    background-image: url("../images/menu-principal/libros.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin-left: -10px;
+}
+
+.libros-hover:hover {
+    background-color: var(--barra-libros);
+}
+
+.calificaciones {
+    width: 68px;
+    height: 88px;
+
+    background-image: url("../images/menu-principal/calificaciones.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.calificaciones-hover:hover {
+    background-color: var(--barra-calificaciones);
+}
+
+.barra-gimsipei {
+    background-color: var(--barra-ginsipei);
+}
+
+.barra-clases {
+    background-color: var(--barra-clases);
+}
+
+.barra-recursos {
+    background-color: var(--barra-recursos);
+}
+
+.barra-evaluaciones {
+    background-color: var(--barra-evaluaciones);
+}
+
+.barra-libros {
+    background-color: var(--barra-libros);
+}
+
+.barra-calificaciones {
+    background-color: var(--barra-calificaciones);
+}
+
+html,
+body {
+    position: relative;
+    height: 100%;
+}
+
+body {
+    background: #000;
+    font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+}
+
+.swiper {
+    width: 100%;
+    height: 100%;
+}
+
+.swiper-slide {
+    text-align: center;
+    font-size: 18px;
+    background-image: url(../images/menu-principal/bg-pencil.png);
+    background-color: #3bbae4;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.swiper-slide img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+@media (max-width: 576px) {
+    .containe {
+        width: 100%;
+    }
+
+    .html {
+        background-color: #f6f6f6;
+    }
+
+    .bg-vision {
+        width: 97%;
+        height: 90vh;
+        border-radius: 15px;
+    }
+
+    .menu {
+        margin-top: 60px;
+    }
+
+    .bg-lateral {
+        display: none;
+    }
+
+    .mision-tp,
+    .vision-tp {
+        width: 90%;
+        margin-left: 10px;
+        text-align: justify;
+    }
+
+    .bg-mision {
+        width: 97%;
+        height: 80vh;
+    }
+}

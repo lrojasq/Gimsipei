@@ -225,7 +225,7 @@ hr.clases_br {
     background-color: var(--clases);
 }
 
-.menu_aside:has(+ .clases_category){
+.menu_aside:has(+ .clases_category) {
     background-color: var(--clases);
 }
 
@@ -319,6 +319,7 @@ hr.clases_br {
 
 .exam {
     width: 100%;
+    height: 200px;
 }
 
 
@@ -334,20 +335,21 @@ hr.clases_br {
     width: 80%;
     height: 100%;
 }
-.class .exam_content{
+
+.class .exam_content {
     width: 100%;
 }
 
 .evaluaciones_bg {
     background-color: var(--evaluaciones);
 }
+
 .class .evaluaciones_bg {
     background-color: var(--clases);
 }
 
 .img_evaluaciones {
     width: 100px;
-    height: 100%;
     width: 20%;
 }
 
@@ -433,6 +435,12 @@ hr.clases_br {
 }
 
 /* estilos libros */
+.specialities_category.flex.flex-column.books {
+    flex-wrap: nowrap;
+    width: 79%;
+    gap: 0;
+}
+
 .books {
     /* gap: 1rem; */
     align-items: start;
@@ -442,12 +450,20 @@ hr.clases_br {
     position: relative;
 }
 
+.books input#searchBooks {
+    width: 300px;
+    padding: 0.75rem 1rem 0.75rem 2.5rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 38px;
+    font-size: 1rem;
+}
+
 .books::before {
     content: "";
     width: 9px;
     height: 90%;
     background-color: #fdebff;
-    border-radius: 15px;
+    border-radius: 2px;
     margin-bottom: 0.5rem;
     position: absolute;
     left: 0px;
@@ -457,7 +473,7 @@ hr.clases_br {
 }
 
 .book {
-    max-width: 20%;
+    width: 23%;
     flex-wrap: nowrap;
     gap: 0px;
     background-color: var(--light-color);
@@ -465,11 +481,13 @@ hr.clases_br {
     border: 11px solid #fdebff;
     border-radius: 15px;
     padding: 7px;
+    height: 370px;
 }
 
 .book img {
     width: 100%;
-    height: 100%;
+    height: 70%;
+    object-fit: cover;
     background-color: var(--libros);
 }
 
@@ -506,13 +524,14 @@ hr.libros_br {
 
 .libros_category .specialities_category {
     /* Mantener proporción similar pero sin que se vaya al centro */
-    width: 70%;
+    width: 80%;
+    align-items: start;
+    gap: 1rem;
 }
 
 /* Ajustes específicos para vista de Libros (teacher/books_view) */
 .libros_category .search-bar.libros-search {
     width: 100%;
-    margin-bottom: 1rem;
 }
 
 .libros_category .libros-search-wrapper {
@@ -606,7 +625,7 @@ hr.libros_br {
     background-color: var(--calificaciones);
     color: var(--light-color);
 }
-  
+
 
 .btn-clases {
     color: var(--clases);
@@ -717,12 +736,41 @@ hr.libros_br {
 #registroModalQuiz .form-control:valid {
     border-color: var(--evaluaciones-active)
 }
-.container_category.flex.evaluaciones_category{
+
+.container_category.flex.evaluaciones_category {
     gap: 0;
 }
 
+.books_content.d-flex {
+    width: 100%;
+    justify-content: start;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.container_category.flex.libros_category {
+    justify-content: start;
+    gap: 3rem;
+}   
+.btns_actions a.btn{
+    padding: 0.3rem 1rem;
+    border-radius: 3px;
+    font-weight: bold;
+    border: none;
+    font-size: 9px;
+}
+.btn-edit{
+    background-color: var(--clases);
+    color: #fff;
+}
+.btn_delete{
+    background-color: var(--admin-active);
+    color: #fff;
+}
+
 @media (max-width:1600px) {
-    .specialities_category.cursos.grades.flex.flex-column ,
+
+    .specialities_category.cursos.grades.flex.flex-column,
     .specialities_category {
         max-height: 80vh;
     }
@@ -731,10 +779,11 @@ hr.libros_br {
 @media (max-width:1024px) {
     .data_categoty {
         text-align: center;
+        padding: 0rem 1rem;
     }
 
     .menu_aside {
-        display: none;
+        display: none !important;
     }
 
     .container_category {
@@ -771,6 +820,32 @@ hr.libros_br {
     #registroModalAsignature .modal-dialog.modal-dialog-centered,
     #registroModalQuiz .modal-dialog.modal-dialog-centered {
         max-width: 90%;
+    }
+
+    .container_category.flex.libros_category {
+        flex-direction: column !important;
+        max-width: 100%;
+        flex-wrap: nowrap;
+    }
+
+    .specialities_category.flex.flex-column.books {
+        flex-direction: column !important;
+        height: auto;
+        max-height: unset;
+        position: relative;
+        overflow: visible;
+    }
+
+    .book {
+        max-width: 45%;
+        width: 45%;
+    }
+    .libros_category .data_categoty p,
+    .libros_category .data_grade_category{
+        display: none;
+    }
+    .books input#searchBooks {
+        width: 100%;
     }
 }
 

@@ -1,73 +1,113 @@
 {% extends "base.html" %}
 
-{% block title %}Dashboard | Estudiante{% endblock %}
 
+{% block title %}Iniciar Sesión{% endblock %}
 {% block extra_css %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/menu.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/student_dashboard.css') }}">
+<!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/menu.css') }}"> -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard_students.css') }}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
 {% endblock %}
+
 
 {% block content %}
 {% block menu %}{% endblock %}
 
-<div class="student-dashboard-container">
-    <!-- Sección de Misión -->
-    <div class="mission-section">
-        <div class="mission-content">
-            <h2>MISIÓN</h2>
-            <p>El Gimnasio Psicopedagógico integral "Gimsipei" es una institución de carácter privado, autónoma fundada
-                para formar integralmente a los niños, bajo parámetros de la práctica de valores y responsabilidad
-                social. Buscamos la excelencia académica e impartimos a nuestros estudiantes una formación basada en el
-                crecimiento humano, el desarrollo de la creatividad y capacidad de razonamiento.</p>
+<div class="containe slider_dashboard_student">
+
+
+    <div class="swiper mySwiper">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">
+                <div class="bg-mision">
+                    <div class="mision-tp">
+                        <h2>MISIÓN</h2>
+                        <p>El Gimnasio Psicopedagógico integral “Gimsipei” es
+                            una institución de carácter privado, autónoma
+                            fundada para formar integralmente a los niños, bajo
+                            parámetros de la práctica de valores y
+                            responsabilidad social. Buscamos la excelencia
+                            académica e impartimos a nuestros estudiantes una
+                            formación basada en el crecimiento humano, el
+                            desarrollo de la creatividad y capacidad de
+                            razonamiento.</p>
+                    </div>
+
+                </div>
+            </div>
+            <div class="swiper-slide">
+                <div class="bg-vision">
+                    <div class="vision-tp">
+                        <h2>Visión</h2>
+                        <p>Ser reconocidos por la alta calidad humana por la
+                            integridad de la propuesta educativa, centrada en la
+                            formación del ser y el desarrollo de competencias que
+                            responden a altos estándares de calidad, mediante
+                            procesos pedagógicos que reconoce la individualidad
+                            y promueven la autonomía del estudiante y por el
+                            profesionalismo y empeño de todo su personal
+                            docente que labora para que los estudiantes sean
+                            personas felices, ciudadanos respetables y ejemplos
+                            en la sociedad.</p>
+
+                    </div>
+                    <div class="menu">
+                        <a href="#">
+                            <div class="box-menu gimsipei-hover">
+                                <div class="gimsipei"></div>
+                                <p>Gimsipei</p>
+                                <div class="barra-gimsipei"></div>
+                            </div>
+
+                        </a>
+                        <a href="#">
+                            <div class="box-menu clases-hover">
+                                <div class="clases"></div>
+                                <p>Clases</p>
+                                <div class="barra-clases"></div>
+                            </div>
+                        </a>
+                        <a href="#">
+                            <div class="box-menu recursos-hover">
+                                <div class="recursos"></div>
+                                <p>Recursos</p>
+                                <div class="barra-recursos"></div>
+                            </div>
+                        </a>
+                        <a href="#">
+                            <div class="box-menu evaluaciones-hover">
+                                <div class="evaluaciones"></div>
+                                <p>Evaluaciones</p>
+                                <div class="barra-evaluaciones"></div>
+                            </div>
+                        </a>
+                        <a href="#">
+                            <div class="box-menu libros-hover">
+                                <div class="libros"></div>
+                                <p>Libros</p>
+                                <div class="barra-libros"></div>
+                            </div>
+                        </a>
+                        <a href="#">
+                            <div class="box-menu calificaciones-hover">
+                                <div class="calificaciones"></div>
+                                <p>Calificaciones</p>
+                                <div class="barra-calificaciones"></div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+    <div class="swiper-pagination"></div>
 
-    <!-- Sección de Visión y Módulos -->
-    <div class="vision-modules-section">
-        <div class="vision-content">
-            <h2>VISIÓN</h2>
-            <p>Ser reconocidos por la alta calidad humana por la integridad de la propuesta educativa, centrada en la
-                formación del ser y el desarrollo de competencias que responden a altos estándares de calidad, mediante
-                procesos pedagógicos que reconoce la individualidad y promueven la autonomía del estudiante y por el
-                profesionalismo y empeño de todo su personal docente que labora para que los estudiantes sean personas
-                felices, ciudadanos respetables y ejemplos en la sociedad.</p>
-        </div>
 
-        <!-- Módulos de navegación -->
-        <div class="modules-grid">
-            <a href="{{ url_for('classes.student_classes_view') }}" class="module-box clases-module">
-                <div class="module-icon clases-icon"></div>
-                <p>Clases</p>
-                <div class="module-bar clases-bar"></div>
-            </a>
 
-            <div class="module-box recursos-module">
-                <div class="module-icon recursos-icon"></div>
-                <p>Recursos</p>
-                <div class="module-bar recursos-bar"></div>
-            </div>
+    <div class="bg-lateral"></div>
 
-            <div class="module-box evaluaciones-module">
-                <div class="module-icon evaluaciones-icon"></div>
-                <p>Evaluaciones</p>
-                <div class="module-bar evaluaciones-bar"></div>
-            </div>
 
-            <div class="module-box libros-module">
-                <div class="module-icon libros-icon"></div>
-                <p>Libros</p>
-                <div class="module-bar libros-bar"></div>
-            </div>
-
-            <div class="module-box calificaciones-module">
-                <div class="module-icon calificaciones-icon"></div>
-                <p>Calificaciones</p>
-                <div class="module-bar calificaciones-bar"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Elemento decorativo lateral -->
-    <div class="lateral-decoration"></div>
-</div>
+</div><!-- container-fluid bg-index -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script src="../../static/js/main.js"></script>
 {% endblock %}

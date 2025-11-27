@@ -49,6 +49,23 @@ document.addEventListener('DOMContentLoaded', function () {
     setupPasswordToggle('#password', '#togglePassword');
     setupPasswordToggle('#confirm_password', '#toggleConfirmPassword');
 });
+// SLIDER ADMIN
+
+if(document.querySelector('.mySwiper')){
+    var swiper = new Swiper(".mySwiper", {
+
+    direction: "vertical",   // 👈 scroll vertical
+    mousewheel: {
+        releaseOnEdges: true,  // permite salir al final si quieres
+    },
+    speed: 600,              // velocidad de transición
+    scrollbar: {
+        el: ".swiper-scrollbar",
+        draggable: true,
+    },
+});
+}
+
 
 
 // Menú hamburguesa - solo si existe el elemento

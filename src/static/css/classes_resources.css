@@ -608,6 +608,9 @@
     border-bottom: 1px solid hsl(0, 0%, 90%);
     transition: background-color 0.2s ease;
 }
+.admin_category .grades .subject-row-expanded{
+    justify-content: end;
+}
 
 .subject-row-expanded:hover {
     background-color: hsl(0, 0%, 95%);
@@ -618,7 +621,7 @@
 }
 
 .subject-row-expanded .empty-cell {
-    width: 20%;
+    width: 10%;
 }
 
 .subject-row-expanded .subject-name-cell {
@@ -635,7 +638,8 @@
     width: 22.5%; 
     text-align: center;
 }
-.subject-row-expanded .subject-action-cell:has(button){
+.subject-row-expanded .subject-action-cell:has(button),
+.subject-row-expanded .subject-action-cell:has(a){
     text-align: left;
 }
 .add-link-btn,
@@ -1176,6 +1180,24 @@ a.add-link-btn:hover {
     background-color: #d944ea;
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(234, 110, 244, 0.3);
+}
+.btns-action .btn {
+    color: white;
+    border: none;
+}
+
+.btns-action .btn-edit {
+    background: var(--clases);
+    border-radius: 5px 0px 0px 5px;
+}
+
+.d-flex.justify-content-end.btns-action {
+    gap: 0px;
+}
+
+.btns-action .btn-delete {
+    background: var(--admin);
+    border-radius: 0px 5px 5px 0px;
 }
 
 /* Modal Responsive */

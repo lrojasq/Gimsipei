@@ -20,7 +20,7 @@
   --calificaciones: #a270f2;
   --calificaciones-active: #6c43d1;
   --admin: #f94e4e;
-  --admin-active: #e01e1e;
+  --admin-active: #e01e1e;.
 }
 
 html,
@@ -28,10 +28,14 @@ body {
   margin: 0;
   padding: 0;
   height: 100%;
-  overflow: hidden;
+  /* overflow: hidden; */
   /* evitamos scroll nativo */
 }
 
+body:has(.slider_dashboard_student) {
+  overflow: hidden;
+  /* evitamos scroll nativo */
+}
 .section {
   height: 100vh;
   /* cada sección ocupa toda la pantalla */
