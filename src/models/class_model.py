@@ -18,7 +18,6 @@ class ClassModel(Base):
     cover_image = Column(String(255), nullable=True)
     created_by = Column(Integer, ForeignKey("users.id"), nullable=False)
     period = Column(Integer, nullable=False)
-    period = Column(Integer, nullable=False)
     created_at = Column(DateTime, default=datetime.now(timezone.utc))
     updated_at = Column(
         DateTime,
@@ -32,3 +31,5 @@ class ClassModel(Base):
     creator = relationship("User", back_populates="created_classes")
     resources = relationship("Resource", back_populates="class_", lazy="dynamic")
     views = relationship("ClassView", back_populates="class_", lazy="dynamic")
+    contents = relationship("ClassContent", back_populates="class_", lazy="dynamic")
+    assignments = relationship("Assignment", back_populates="class_", lazy="dynamic")

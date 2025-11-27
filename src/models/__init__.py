@@ -4,6 +4,9 @@ from .document import Document
 from .subject import Subject
 from .class_model import ClassModel
 from .class_view import ClassView
+from .class_content import ClassContent
+from .assignment import Assignment
+from .assignment_submission import AssignmentSubmission
 from .resource import Resource
 from .book import Book
 from .course import Course
@@ -22,6 +25,9 @@ __all__ = [
     "Subject",
     "ClassModel",
     "ClassView",
+    "ClassContent",
+    "Assignment",
+    "AssignmentSubmission",
     "Resource",
     "Book",
     "Course",
