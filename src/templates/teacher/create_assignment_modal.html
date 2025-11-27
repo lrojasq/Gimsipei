@@ -1,0 +1,46 @@
+<!-- Modal: Crear Tarea -->
+<div class="modal-overlay" id="assignmentModal" style="display: none;">
+    <div class="modal-container">
+        <div class="modal-header modal-header-clases">
+            <h3>CREAR TAREA</h3>
+            <button class="modal-close" onclick="closeAssignmentModal()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <form id="assignmentForm" method="POST" action="{{ url_for('classes.create_assignment') }}">
+            <input type="hidden" name="class_id" value="{{ class_data.id }}">
+            <input type="hidden" name="assignment_id" id="assignment_id">
+
+            <div class="form-group">
+                <label for="assignment_title">TÍTULO DE LA TAREA *</label>
+                <input type="text" name="title" id="assignment_title"
+                    placeholder="Ej: Resolver ejercicios de factorización" required maxlength="200">
+            </div>
+
+            <div class="form-group">
+                <label for="assignment_description">DESCRIPCIÓN</label>
+                <textarea name="description" id="assignment_description"
+                    placeholder="Describe qué debe hacer el estudiante..." rows="4"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="due_date">FECHA Y HORA LÍMITE</label>
+                <input type="datetime-local" name="due_date" id="due_date">
+                <small style="color: #999;">Si no asignas fecha, la tarea no tendrá límite de tiempo.</small>
+            </div>
+
+            <div class="form-group">
+                <label for="max_score">PUNTAJE MÁXIMO *</label>
+                <input type="number" name="max_score" id="max_score" placeholder="100" min="1" max="1000" value="100"
+                    required>
+            </div>
+
+            <div class="modal-actions">
+                <button type="button" class="btn-cancel" onclick="closeAssignmentModal()">CANCELAR</button>
+                <button type="submit" class="btn-submit" id="assignmentSubmitBtn">
+                    <i class="fas fa-check"></i> CREAR TAREA
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

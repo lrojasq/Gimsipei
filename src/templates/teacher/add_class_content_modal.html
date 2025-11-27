@@ -1,0 +1,59 @@
+<!-- Modal: Agregar/Editar Contenido de Clase -->
+<div class="modal-overlay" id="contentModal" style="display: none;">
+    <div class="modal-container modal-large">
+        <div class="modal-header modal-header-clases">
+            <h3 id="contentModalTitle">AGREGAR CONTENIDO</h3>
+            <button class="modal-close" onclick="closeContentModal()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <form id="contentForm" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="class_id" value="{{ class_data.id }}">
+            <input type="hidden" name="content_id" id="content_id">
+
+            <div class="form-group">
+                <label for="section_title">TÍTULO DE LA SECCIÓN (Opcional)</label>
+                <input type="text" name="section_title" id="section_title" placeholder="Ej: Cómo funciona:"
+                    maxlength="200">
+            </div>
+
+            <div class="form-group">
+                <label for="content_text">CONTENIDO *</label>
+                <textarea name="content_text" id="content_text" placeholder="Escribe el contenido de esta sección..."
+                    rows="8" required></textarea>
+                <small style="color: #999;">Puedes usar texto simple. Los saltos de línea se respetarán.</small>
+            </div>
+
+            <div class="form-group">
+                <label for="content_order">ORDEN DE APARICIÓN *</label>
+                <input type="number" name="content_order" id="content_order" placeholder="1, 2, 3..." min="1" value="1"
+                    required>
+                <small style="color: #999;">Define el orden en que aparecerá este contenido en la clase.</small>
+            </div>
+
+            <div class="form-group file-upload-group">
+                <label for="content_image" class="file-upload-label">
+                    <i class="fas fa-upload"></i> AGREGAR IMAGEN (Opcional)
+                </label>
+                <input type="file" name="content_image" id="content_image" accept="image/*">
+                <span class="file-name" id="content_image_name"></span>
+
+                <!-- Mostrar imagen actual al editar -->
+                <div id="current_image_preview" style="display: none; margin-top: 1rem;">
+                    <p style="color: #666; font-size: 0.9rem; margin-bottom: 0.5rem;">Imagen actual:</p>
+                    <img id="current_image_display" src="" alt="Imagen actual"
+                        style="max-width: 200px; max-height: 150px; border-radius: 8px; border: 2px solid #ddd;">
+                    <p style="color: #999; font-size: 0.85rem; margin-top: 0.5rem;">Si subes una nueva imagen, esta se
+                        reemplazará.</p>
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button type="button" class="btn-cancel" onclick="closeContentModal()">CANCELAR</button>
+                <button type="submit" class="btn-submit" id="contentSubmitBtn">
+                    <i class="fas fa-save"></i> GUARDAR
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

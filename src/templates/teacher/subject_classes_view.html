@@ -50,7 +50,7 @@
         <p>Sin docente asignado</p>
         {% endif %}
 
-        {% if user.role == "teacher" or user.role == "admin" %}
+        {% if user.role == "teacher" %}
         <div class="flex flex-column gap-5">
             <div class="btns flex flex-column">
                 <button class="btn btn-clases period-btn active" data-period="1">PERIODO 1</button>
@@ -79,7 +79,9 @@
 
             {% if classes_by_period[period] %}
             {% for class_item in classes_by_period[period] %}
-            <div class="exam flex class">
+            <div class="exam flex class" data-class-id="{{ class_item.id }}" 
+                 style="cursor: pointer;" 
+                 onclick="window.location.href='{{ url_for('classes.teacher_class_detail_view', class_id=class_item.id) }}'">
                 <div class="exam_content flex">
                     <div class="img_evaluaciones evaluaciones_bg">
                         {% if class_item.cover_image %}
@@ -100,11 +102,13 @@
                         {% if user.role == "teacher" %}
                         <div class="d-flex justify-content-end gap-2">
                             <a class="btn btn-outline-primary btn-sm btn-edit" href="#"
-                                data-class-id="{{ class_item.id }}" title="Editar">
+                                data-class-id="{{ class_item.id }}" title="Editar"
+                                onclick="event.stopPropagation()">
                                 <i class="bi bi-pencil-fill"></i>
                             </a>
                             <a class="btn btn-outline-danger btn-sm open-delete-class-modal" href="#"
-                                data-class-id="{{ class_item.id }}" title="Eliminar">
+                                data-class-id="{{ class_item.id }}" title="Eliminar"
+                                onclick="event.stopPropagation()">
                                 <i class="bi bi-trash3-fill"></i>
                             </a>
                         </div>
