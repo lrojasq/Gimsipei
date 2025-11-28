@@ -19,18 +19,21 @@
 <div class="container_category flex clases_category class-detail-view teacher-view" data-class-id="{{ class_data.id }}">
     
     <!-- Sidebar Izquierdo -->
-    <div class="teacher-sidebar-left">
+    <!-- <div class="teacher-sidebar-left">
         <div class="sidebar-header">
-            <button class="btn-back-sidebar" onclick="window.history.back()">
-                <i class="fas fa-arrow-left"></i> VOLVER
+           <button onclick="window.history.back()" class="btn-back-icon">
+                    <i class="fas fa-chevron-left"></i>
             </button>
         </div>
-    </div>
+    </div> -->
 
     <!-- Contenido Principal -->
     <div class="teacher-main-content">
         <!-- Detalles de la clase -->
         <div class="class-details-header">
+            <button onclick="window.history.back()" class="btn-back-icon">
+                    <i class="fas fa-chevron-left"></i>
+            </button>
             <div class="details-title-section">
                 <h3 class="details-label">DETALLES DE LA CLASE:</h3>
                 <h1 class="class-title">{{ class_data.title }}</h1>
@@ -62,12 +65,12 @@
                         {% else %}
                         <h4>Contenido {{ loop.index }}</h4>
                         {% endif %}
-                        <div class="content-item-actions">
-                            <button class="btn-icon-small" onclick="editContent({{ content.id }})" title="Editar">
-                                <i class="fas fa-edit"></i>
+                        <div class="content-item-actions btns_actions">
+                            <button class="btn-icon-small btn-edit" onclick="editContent({{ content.id }})" title="Editar">
+                                <i class="bi bi-pencil-fill"></i>
                             </button>
-                            <button class="btn-icon-small btn-delete-small" onclick="deleteContent({{ content.id }})" title="Eliminar">
-                                <i class="fas fa-trash"></i>
+                            <button class="btn-icon-small btn-delete-small btn_delete" onclick="deleteContent({{ content.id }})" title="Eliminar">
+                                <i class="bi bi-trash3-fill"></i>
                             </button>
                         </div>
                     </div>
@@ -126,12 +129,12 @@
                         <span><i class="fas fa-star"></i> Puntaje máximo: {{ assignment.max_score }}</span>
                     </div>
 
-                    <div class="task-item-actions">
-                        <button class="btn-icon-small btn-edit-small" onclick="editAssignment({{ assignment.id }})" title="Editar tarea">
-                            <i class="fas fa-edit"></i>
+                    <div class="task-item-actions btns_actions">
+                        <button class="btn-icon-small btn-edit" onclick="editAssignment({{ assignment.id }})" title="Editar tarea">
+                            <i class="bi bi-pencil-fill"></i>
                         </button>
-                        <button class="btn-icon-small btn-delete-small" onclick="deleteAssignment({{ assignment.id }})" title="Eliminar tarea">
-                            <i class="fas fa-trash"></i>
+                        <button class="btn-icon-small btn-delete-small btn_delete" onclick="deleteAssignment({{ assignment.id }})" title="Eliminar tarea">
+                            <i class="bi bi-trash3-fill"></i>
                         </button>
                     </div>
                 </div>

@@ -88,12 +88,6 @@
 .evaluaciones_category .menu_aside .aside_list li a:hover {
     background-color: var(--evaluaciones-active);
 }
-i.bi.bi-arrow-left-short {
-    padding: 0.3rem 0.4rem;
-    font-size: 21px;
-    border: 1px solid;
-    border-radius: 50px;
-}
 
 /* --- RESPONSIVIDAD --- */
 

@@ -44,23 +44,26 @@
 
     <!-- Clases -->
     <div class="specialities_category exams flex flex-column clases_category gap-4">
-        <div class="flex gap-2" style="align-items: center;">
-            <a href="{{ url_for('classes.student_classes_view') }}">
-                <i class="bi bi-arrow-left-short"></i>
-            </a>
-            <h3 class="font-weight-bold" style="margin: 0;">{{ subject.name }}</h3>
+        <div class="d-flex gap-4 w-100 align-items-center justify-content-between">
+            <div class="flex gap-2" style="align-items: center;">
+                <a href="{{ url_for('classes.student_classes_view') }}">
+                    <i class="bi bi-arrow-left-short"></i>
+                </a>
+                <h3 class="font-weight-bold" style="margin: 0;">{{ subject.name }}</h3>
+            </div>
+
+            <!-- Porcentaje de clases vistas -->
+            {% if total_classes > 0 %}
+            <div class="progress-container">
+                <p>Porcentaje de clases vistas</p>
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" style="width: {{ viewed_percentage }}%;"></div>
+                </div>
+                <p class="progress-text">{{ viewed_classes }} de {{ total_classes }} clases vistas</p>
+            </div>
+            {% endif %}
         </div>
 
-        <!-- Porcentaje de clases vistas -->
-        {% if total_classes > 0 %}
-        <div class="progress-container">
-            <p>Porcentaje de clases vistas</p>
-            <div class="progress-bar-container">
-                <div class="progress-bar-fill" style="width: {{ viewed_percentage }}%;"></div>
-            </div>
-            <p class="progress-text">{{ viewed_classes }} de {{ total_classes }} clases vistas</p>
-        </div>
-        {% endif %}
 
         <!-- Classes Grid for each period -->
         {% for period in [1, 2, 3, 4] %}
@@ -69,9 +72,8 @@
 
             {% if classes_by_period[period] %}
             {% for class_item in classes_by_period[period] %}
-            <div class="exam flex class" data-class-id="{{ class_item.id }}" 
-                 style="cursor: pointer;"
-                 onclick="window.location.href='{{ url_for('classes.student_class_detail_view', class_id=class_item.id) }}'">
+            <div class="exam flex class" data-class-id="{{ class_item.id }}" style="cursor: pointer;"
+                onclick="window.location.href='{{ url_for('classes.student_class_detail_view', class_id=class_item.id) }}'">
                 <div class="exam_content flex">
                     <div class="img_evaluaciones evaluaciones_bg">
                         {% if class_item.cover_image %}
@@ -81,7 +83,7 @@
                             <i class="fas fa-book-open"></i>
                         </div>
                         {% endif %}
-                        
+
                         <!-- Overlay con número de clase -->
                         <div class="class-overlay">
                             <span class="class-label">CLASE {{ class_item.class_number }}</span>
@@ -93,18 +95,16 @@
                         <p class="class-description">{{ class_item.description }}</p>
                     </div>
                 </div>
-                
+
                 <!-- Botones de acción -->
                 <div class="class-actions" onclick="event.stopPropagation()">
-                    <button class="btn-mark-viewed {% if class_item.id in viewed_class_ids %}active{% endif %}" 
-                            data-class-id="{{ class_item.id }}"
-                            title="Marcar como vista">
+                    <button class="btn-mark-viewed {% if class_item.id in viewed_class_ids %}active{% endif %}"
+                        data-class-id="{{ class_item.id }}" title="Marcar como vista">
                         <i class="fas fa-eye"></i>
                     </button>
-                    
-                    <button class="btn-mark-not-viewed {% if class_item.id not in viewed_class_ids %}active{% endif %}" 
-                            data-class-id="{{ class_item.id }}"
-                            title="Marcar como no vista">
+
+                    <button class="btn-mark-not-viewed {% if class_item.id not in viewed_class_ids %}active{% endif %}"
+                        data-class-id="{{ class_item.id }}" title="Marcar como no vista">
                         <i class="fas fa-eye-slash"></i>
                     </button>
                 </div>

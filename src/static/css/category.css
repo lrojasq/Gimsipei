@@ -418,7 +418,7 @@ hr.clases_br {
 .btn-evaluaciones {
     color: var(--evaluaciones);
     border-color: var(--evaluaciones);
-    width: 100%;
+    width: 15rem;
     text-align: center;
     margin-top: 1rem;
 }
@@ -527,6 +527,8 @@ hr.libros_br {
     width: 80%;
     align-items: start;
     gap: 1rem;
+    height: auto;
+    max-height: max-content;
 }
 
 /* Ajustes específicos para vista de Libros (teacher/books_view) */
@@ -751,21 +753,166 @@ hr.libros_br {
 .container_category.flex.libros_category {
     justify-content: start;
     gap: 3rem;
+}
+.btns_actions {
+    display: flex;
+    gap: 0px;
 }   
 .btns_actions a.btn{
     padding: 0.3rem 1rem;
     border-radius: 3px;
     font-weight: bold;
     border: none;
+    transition: all 0.3s ease;
     font-size: 9px;
 }
-.btn-edit{
+.btns_actions .btn-edit{
     background-color: var(--clases);
     color: #fff;
+    border-radius: 5px 0px 0px 5px!important;
 }
-.btn_delete{
+.btns_actions .btn-edit:hover{
+    background-color: var(--clases-active);
+    color: #fff;
+}
+.btns_actions .btn_delete {
+    background-color: var(--admin);
+    color: #fff;
+    border-radius: 0px 5px 5px 0px!important;
+}
+.btns_actions .btn_delete:hover {
     background-color: var(--admin-active);
     color: #fff;
+}
+
+.specialities_category.class-detail-content {
+    width: 90%;
+    margin: auto;
+}
+
+
+/* MODAL DELETE */
+.modal.modal_delete {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10000;
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal.modal_delete[aria-hidden="false"] {
+    display: flex;
+}
+
+.modal.modal_delete .bg-back {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(2px);
+}
+
+.modal.modal_delete .container {
+    position: relative;
+    z-index: 10001;
+    background: white;
+    border-radius: 20px;
+    padding: 3rem 2.5rem;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    animation: slideUp 0.3s ease;
+}
+
+.modal.modal_delete .delete-icon {
+    font-size: 4rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal.modal_delete .delete-icon i {
+    width: 80px;
+    height: 80px;
+    background: #ffe0e0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+}
+
+.modal.modal_delete .delete-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #333;
+    margin: 0 0 1rem 0;
+}
+
+.modal.modal_delete .delete-warning {
+    font-size: 1rem;
+    color: #666;
+    margin: 0 0 2rem 0;
+    text-align: center;
+}
+
+.modal.modal_delete .delete-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.modal.modal_delete .btn {
+    /* padding: 0.9rem 2rem; */
+    border: none;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 130px;
+}
+
+.modal.modal_delete .btn-cancel {
+    background:var(--admin);
+    color: white;
+}
+
+.modal.modal_delete .btn-cancel:hover {
+    background: var(--admin-active);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.modal.modal_delete .btn-delete {
+    background: var(--clases);
+    color: white;
+}
+
+.modal.modal_delete .btn-delete:hover {
+    background: var(--clases-active);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.modal.modal_delete .btn{
+        border: none;
+    border-radius: 18px;
+    font-weight: 100;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 12rem;
+    padding: 0px;
+    height: 29px;
 }
 
 @media (max-width:1600px) {

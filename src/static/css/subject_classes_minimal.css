@@ -79,110 +79,18 @@
   }
 }
 
-.modal.modal_delete .delete-icon {
-  font-size: 4rem;
-  margin-bottom: 1.5rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.modal.modal_delete .delete-icon i {
-  width: 80px;
-  height: 80px;
-  background: #ffe0e0;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 2.5rem;
-}
-
-.modal.modal_delete .delete-title {
-  font-size: 1.4rem;
-  font-weight: 700;
-  color: #333;
-  margin: 0 0 1rem 0;
-}
-
-.modal.modal_delete .delete-warning {
-  font-size: 1rem;
-  color: #666;
-  margin: 0 0 2rem 0;
-}
-
-.modal.modal_delete .delete-buttons {
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-}
-
-.modal.modal_delete .btn {
-  padding: 0.9rem 2rem;
-  border: none;
-  border-radius: 10px;
-  font-weight: 700;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  min-width: 130px;
-}
-
-.modal.modal_delete .btn-cancel {
-  background: #e0e0e0;
-  color: #666;
-}
-
-.modal.modal_delete .btn-cancel:hover {
-  background: #d0d0d0;
-  transform: translateY(-2px);
-}
-
-.modal.modal_delete .btn-delete {
-  background: #e74c3c;
-  color: white;
-}
-
-.modal.modal_delete .btn-delete:hover {
-  background: #c0392b;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
-}
-
-.modal.modal_delete .btn-delete:disabled {
-  cursor: not-allowed;
-  opacity: 0.8;
-  transform: none;
-}
-
-.modal.modal_delete .btn-delete .btn-spinner {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.modal.modal_delete .btn-delete .btn-spinner i {
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
 
 /* Sidebar Styles */
 .admin_category .menu_aside,
 .clases_category .menu_aside {
   background-color: hsl(190, 65%, 55%);
 }
-
-.admin_category .menu_aside .aside_list li a.active,
-.admin_category .menu_aside .aside_list li a:hover,
 .clases_category .menu_aside .aside_list li a.active,
 .clases_category .menu_aside .aside_list li a:hover {
-  background-color: hsl(190, 65%, 45%);
+    background-color:var(--clases-active);
+}
+.admin_category .menu_aside .aside_list li a.active,
+.admin_category .menu_aside .aside_list li a:hover
+{
+    background-color: hsl(190, 65%, 45%);
 }

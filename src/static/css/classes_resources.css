@@ -687,7 +687,7 @@ a.add-link-btn:hover {
     display: none;
     align-items: center;
     justify-content: center;
-    z-index: 9999999;
+    z-index: 999999;
     backdrop-filter: blur(2px);
 }
 
@@ -1191,13 +1191,15 @@ a.add-link-btn:hover {
     border-radius: 5px 0px 0px 5px;
 }
 
-.d-flex.justify-content-end.btns-action {
-    gap: 0px;
-}
+
 
 .btns-action .btn-delete {
     background: var(--admin);
     border-radius: 0px 5px 5px 0px;
+}
+
+.d-flex.justify-content-end.btns-action {
+    gap: 0px;
 }
 
 /* Modal Responsive */
