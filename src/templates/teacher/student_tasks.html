@@ -66,15 +66,18 @@
                         {% for class_item in subject.classes %}
                         <tr class="subject-content-row class-row" data-subject-id="{{ subject.subject_id }}" style="display: none;">
                             <td class="class-indent"></td>
-                            <td class="class-name-cell">Clase {{ class_item.class_number }}</td>
+                            <td class="class-name-cell">{{ class_item.title if class_item.title else 'Clase ' ~ class_item.class_number }}</td>
                             <td class="class-date-cell">{{ class_item.date }}</td>
                             <td class="class-actions-cell">
-                                <a href="#" class="download-link" data-class-id="{{ class_item.id }}">
-                                    Descargar
+                                <a href="{{ url_for('courses.download_assignment_submission', course_id=course.id, student_id=student.id, assignment_id=class_item.id) }}" 
+                                   class="download-link" 
+                                   title="Descargar"
+                                   target="_blank">
+                                    <i class="fas fa-download"></i>
                                 </a>
-                                <button class="delete-class-btn" 
-                                        data-class-id="{{ class_item.id }}"
-                                        data-class-title="Clase {{ class_item.class_number }}" 
+                                <button class="action-btn delete-assignment" 
+                                        data-assignment-id="{{ class_item.id }}"
+                                        data-assignment-title="{{ class_item.title if class_item.title else 'Clase ' ~ class_item.class_number }}" 
                                         title="Eliminar">
                                     <i class="fas fa-trash"></i>
                                 </button>
@@ -84,7 +87,7 @@
                     {% else %}
                         <tr class="subject-content-row" data-subject-id="{{ subject.subject_id }}" style="display: none;">
                             <td colspan="4" class="empty-classes-cell">
-                                <p>No hay clases registradas para esta asignatura.</p>
+                                <p>No hay entregas registradas para esta asignatura.</p>
                             </td>
                         </tr>
                     {% endif %}
@@ -105,6 +108,10 @@
     {% include "sidebar_aside.html" %}
 </div>
 
+<!-- Modal de Confirmación de Eliminación -->
+{% include "delete_confirmation_modal.html" %}
+
 <!-- Custom JS -->
+<script src="{{ url_for('static', filename='js/delete_modal.js') }}"></script>
 <script src="{{ url_for('static', filename='js/student_tasks.js') }}"></script>
 {% endblock %}
