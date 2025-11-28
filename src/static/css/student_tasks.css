@@ -2,294 +2,464 @@
 
 /* Course Grade Indicator */
 .course-grade-indicator {
-    width: 70px;
-    height: 70px;
-    background: hsl(190, 65%, 55%);
-    border: 2px solid hsl(190, 65%, 55%);
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 20px;
-    flex-shrink: 0;
+  width: 70px;
+  height: 70px;
+  background: hsl(190, 65%, 55%);
+  border: 2px solid hsl(190, 65%, 55%);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20px;
+  flex-shrink: 0;
 }
 
 .grade-number {
-    font-size: 2rem;
-    font-weight: 700;
-    color: hsl(0, 0%, 100%);
+  font-size: 2rem;
+  font-weight: 700;
+  color: hsl(0, 0%, 100%);
 }
 
 /* Header Students */
 .header-students {
-    display: flex;
-    align-items: center;
-    margin-bottom: 30px;
-    padding: 0 0 20px 0;
-    border-bottom: 2px solid hsl(0, 0%, 88%);
+  display: flex;
+  align-items: center;
+  margin-bottom: 30px;
+  padding: 0 0 20px 0;
+  border-bottom: 2px solid hsl(0, 0%, 88%);
 }
 
 .course-title {
-    flex: 1;
+  flex: 1;
 }
 
 .course-title h2 {
-    margin: 0;
-    font-size: 1.75rem;
-    font-weight: 600;
-    color: hsl(0, 0%, 25%);
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: hsl(0, 0%, 25%);
 }
 
 /* Tasks Table Wrapper */
 .tasks-table-wrapper {
-    width: 100%;
-    background: white;
-    border-radius: 8px;
-    overflow: hidden;
-    margin-bottom: 20px;
+  width: 100%;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Tasks Table */
 .tasks-table {
-    width: 100%;
-    border-collapse: collapse;
-    background: white;
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
 }
 
 .tasks-table thead {
-    background: white;
+  background: white;
 }
 
 .tasks-table thead tr {
-    border-bottom: 2px solid hsl(0, 0%, 88%);
+  border-bottom: 2px solid hsl(0, 0%, 88%);
 }
 
 .tasks-table thead th {
-    text-align: left;
-    padding: 1rem;
-    color: hsl(0, 0%, 25%);
-    font-weight: 600;
-    font-size: 1.125rem;
-    background: white;
+  text-align: left;
+  padding: 1rem;
+  color: hsl(0, 0%, 35%);
+  font-weight: 600;
+  font-size: 1rem;
+  background: white;
 }
 
 .tasks-table tbody tr {
-    border-bottom: 1px solid hsl(0, 0%, 88%);
+  border-bottom: 1px solid hsl(0, 0%, 92%);
 }
 
 /* Subject Row */
 .subject-row {
-    cursor: pointer;
-    transition: background-color 0.2s ease;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  background-color: hsl(190, 60%, 98%);
 }
 
 .subject-row:hover {
-    background-color: hsl(0, 0%, 96%);
+  background-color: hsl(190, 60%, 95%);
 }
 
 .subject-header {
-    padding: 0 !important;
+  padding: 0 !important;
 }
 
 .subject-header-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem;
-    width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  width: 100%;
 }
 
 .subject-name {
-    font-weight: 600;
-    color: hsl(0, 0%, 25%);
-    font-size: 1rem;
+  font-weight: 600;
+  color: hsl(0, 0%, 25%);
+  font-size: 1rem;
 }
 
 .toggle-subject {
-    color: hsl(0, 0%, 45%);
-    transition: transform 0.3s ease;
-    cursor: pointer;
+  color: hsl(190, 65%, 55%);
+  transition: transform 0.3s ease;
+  cursor: pointer;
+  font-size: 1.1rem;
 }
 
 .subject-row.expanded .toggle-subject {
-    transform: rotate(180deg);
+  transform: rotate(180deg);
 }
 
 /* Subject Content Row */
 .subject-content-row {
-    background-color: hsl(0, 0%, 98%);
+  background-color: hsl(0, 0%, 100%);
 }
 
 .subject-content-row.class-row {
-    background-color: hsl(0, 0%, 98%);
+  background-color: hsl(0, 0%, 100%);
 }
 
 .class-indent {
-    width: 40px;
-    padding: 0.75rem 1rem;
-    border-bottom: 1px solid hsl(0, 0%, 92%);
+  width: 40px;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid hsl(0, 0%, 92%);
 }
 
 .class-name-cell {
-    padding: 0.75rem 1rem;
-    color: hsl(0, 0%, 25%);
-    font-size: 0.95rem;
-    border-bottom: 1px solid hsl(0, 0%, 92%);
+  padding: 0.75rem 1rem;
+  color: hsl(0, 0%, 25%);
+  font-size: 0.95rem;
+  border-bottom: 1px solid hsl(0, 0%, 92%);
 }
 
 .class-date-cell {
-    padding: 0.75rem 1rem;
-    color: hsl(190, 65%, 55%);
-    font-size: 0.95rem;
-    font-weight: 500;
-    border-bottom: 1px solid hsl(0, 0%, 92%);
+  padding: 0.75rem 1rem;
+  color: hsl(190, 65%, 55%);
+  font-size: 0.95rem;
+  font-weight: 500;
+  border-bottom: 1px solid hsl(0, 0%, 92%);
 }
 
 .class-actions-cell {
-    padding: 0.75rem 1rem;
-    border-bottom: 1px solid hsl(0, 0%, 92%);
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid hsl(0, 0%, 92%);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
 .class-row:last-child .class-indent,
 .class-row:last-child .class-name-cell,
 .class-row:last-child .class-date-cell,
 .class-row:last-child .class-actions-cell {
-    border-bottom: none;
+  border-bottom: none;
 }
 
 .empty-classes-cell {
-    padding: 1rem;
-    text-align: center;
-}
-
-.class-actions-cell {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
+  padding: 1rem;
+  text-align: center;
+  background-color: hsl(0, 0%, 100%);
 }
 
 .download-link {
-    color: hsl(190, 65%, 55%);
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 0.95rem;
-    transition: color 0.2s ease;
+  color: hsl(190, 65%, 55%);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: color 0.2s ease, transform 0.2s ease;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
 }
 
 .download-link:hover {
-    color: hsl(190, 65%, 45%);
-    text-decoration: underline;
+  color: hsl(190, 65%, 45%);
+  transform: scale(1.1);
+  background-color: hsl(190, 60%, 95%);
 }
 
+.download-link i {
+  font-size: 1.1rem;
+}
+
+/* Botón de eliminar assignment */
+.action-btn.delete-assignment {
+  background: none;
+  border: none;
+  color: hsl(0, 60%, 55%);
+  cursor: pointer;
+  padding: 0.35rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  width: 34px;
+  height: 34px;
+  border-radius: 6px;
+  background-color: hsl(0, 70%, 96%);
+}
+
+.action-btn.delete-assignment:hover {
+  color: hsl(0, 70%, 45%);
+  background-color: hsl(0, 70%, 90%);
+  transform: scale(1.05);
+}
+
+.action-btn.delete-assignment i {
+  font-size: 1rem;
+}
+
+/* Compatibilidad con clase antigua */
 .delete-class-btn {
-    background: none;
-    border: none;
-    color: hsl(0, 0%, 45%);
-    cursor: pointer;
-    padding: 0.25rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s ease;
-    width: 32px;
-    height: 32px;
-    border-radius: 4px;
+  background: none;
+  border: none;
+  color: hsl(0, 60%, 55%);
+  cursor: pointer;
+  padding: 0.35rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  width: 34px;
+  height: 34px;
+  border-radius: 6px;
+  background-color: hsl(0, 70%, 96%);
 }
 
 .delete-class-btn:hover {
-    color: hsl(0, 70%, 60%);
-    background-color: hsl(0, 70%, 96%);
+  color: hsl(0, 70%, 45%);
+  background-color: hsl(0, 70%, 90%);
+  transform: scale(1.05);
 }
 
 .delete-class-btn i {
-    font-size: 1rem;
+  font-size: 1rem;
 }
 
 .empty-classes-cell p {
-    color: hsl(0, 0%, 45%);
-    font-size: 0.95rem;
-    margin: 0;
+  color: hsl(0, 0%, 45%);
+  font-size: 0.95rem;
+  margin: 0;
 }
 
 /* Empty State */
 .tasks-table tbody tr.empty-state-row {
-    border: none;
+  border: none;
+  background-color: white;
 }
 
 .tasks-table tbody tr.empty-state-row:hover {
-    background-color: white;
+  background-color: white;
 }
 
 .tasks-table tbody .empty-state-cell {
-    text-align: center;
-    padding: 3rem 1rem;
+  text-align: center;
+  padding: 3rem 1rem;
+  background-color: white;
 }
 
 .tasks-table tbody .empty-state-cell p {
-    color: hsl(0, 0%, 45%);
-    font-size: 1rem;
-    margin: 0;
+  color: hsl(0, 0%, 45%);
+  font-size: 1rem;
+  margin: 0;
 }
 
 /* Sidebar */
 .admin_category .menu_aside {
-    background-color: hsl(190, 65%, 55%);
+  background-color: hsl(190, 65%, 55%);
 }
 
 .admin_category .menu_aside .aside_list li a.active,
 .admin_category .menu_aside .aside_list li a:hover {
-    background-color: hsl(190, 65%, 45%);
+  background-color: hsl(190, 65%, 45%);
 }
 
 /* Alert Styles */
 .alert {
-    border: none;
-    border-radius: 15px;
-    padding: 1rem 1.5rem;
-    margin-bottom: 1.5rem;
-    font-weight: 500;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border: none;
+  border-radius: 15px;
+  padding: 1rem 1.5rem;
+  margin-bottom: 1.5rem;
+  font-weight: 500;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .alert-success {
-    background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
-    color: #155724;
+  background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+  color: #155724;
 }
 
 .alert-danger {
-    background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
-    color: #721c24;
+  background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+  color: #721c24;
 }
 
 .alert-info {
-    background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
-    color: #0c5460;
+  background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
+  color: #0c5460;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-    .header-students {
-        flex-direction: column;
-        align-items: flex-start;
-    }
+  .header-students {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 
-    .course-grade-indicator {
-        margin-bottom: 15px;
-        margin-right: 0;
-    }
+  .course-grade-indicator {
+    margin-bottom: 15px;
+    margin-right: 0;
+  }
 
-    .tasks-table-wrapper {
-        overflow-x: auto;
-    }
+  .tasks-table-wrapper {
+    overflow-x: auto;
+  }
 
-    .tasks-table {
-        min-width: 600px;
-    }
+  .tasks-table {
+    min-width: 600px;
+  }
 
-    .tasks-table thead th,
-    .tasks-table tbody td {
-        padding: 0.75rem 0.5rem;
-        font-size: 0.9rem;
-    }
+  .tasks-table thead th,
+  .tasks-table tbody td {
+    padding: 0.75rem 0.5rem;
+    font-size: 0.9rem;
+  }
 }
 
+/* Modal de Eliminación */
+.modal.modal_delete {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10000;
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal.modal_delete[aria-hidden="false"],
+.modal.modal_delete.show {
+  display: flex;
+}
+
+.modal.modal_delete .bg-back {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(2px);
+  z-index: 9999;
+}
+
+.modal.modal_delete .container {
+  position: relative;
+  z-index: 10001;
+  background: white;
+  border-radius: 20px;
+  padding: 3rem 2.5rem;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal.modal_delete .delete-icon {
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal.modal_delete .delete-icon i {
+  width: 80px;
+  height: 80px;
+  background: #ffe0e0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  color: #d30909;
+}
+
+.modal.modal_delete .delete-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #333;
+  margin: 0 0 1rem 0;
+}
+
+.modal.modal_delete .delete-warning {
+  font-size: 1rem;
+  color: #666;
+  margin: 0 0 2rem 0;
+}
+
+.modal.modal_delete .delete-buttons {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+}
+
+.modal.modal_delete .btn {
+  padding: 0.75rem 2rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.modal.modal_delete .btn-cancel {
+  background-color: #e8e8e8;
+  color: #666;
+}
+
+.modal.modal_delete .btn-cancel:hover {
+  background-color: #d0d0d0;
+  color: #333;
+  transform: translateY(-2px);
+}
+
+.modal.modal_delete .btn-delete {
+  background-color: #d30909;
+  color: white;
+}
+
+.modal.modal_delete .btn-delete:hover {
+  background-color: #b30707;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(211, 9, 9, 0.3);
+}
