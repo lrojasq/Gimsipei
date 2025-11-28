@@ -85,6 +85,9 @@
 .clases_category .menu_aside {
   background-color: hsl(190, 65%, 55%);
 }
+.clases_category .menu_aside{
+    background-color: var(--clases);
+}
 .clases_category .menu_aside .aside_list li a.active,
 .clases_category .menu_aside .aside_list li a:hover {
     background-color:var(--clases-active);
