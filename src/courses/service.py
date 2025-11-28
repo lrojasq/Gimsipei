@@ -1,16 +1,20 @@
-from typing import List, Optional, Tuple
+import os
 from datetime import datetime
+from pathlib import Path
+from typing import List, Optional, Tuple
 
 from flask import Request
 from flask_jwt_extended import get_jwt_identity
 
 from src.database.database import SessionLocal
+from src.models.assignment import Assignment
+from src.models.assignment_submission import AssignmentSubmission
+from src.models.class_model import ClassModel
 from src.models.course import Course
 from src.models.course_student import CourseStudent
 from src.models.course_subject import CourseSubject
-from src.models.user import User, UserRole
 from src.models.subject import Subject
-from src.models.class_model import ClassModel
+from src.models.user import User, UserRole
 
 from .validation import (
     CourseCreateSchema,
@@ -104,6 +108,8 @@ def get_all_courses_for_dashboard() -> List[dict]:
                 }
             )
 
+        # Ordenar cursos en orden descendente
+        courses_list.sort(key=lambda x: x["grade_number"], reverse=False)
         return courses_list
     finally:
         db.close()
@@ -516,7 +522,7 @@ def remove_subject_from_course_service(
 def get_student_tasks_service(
     course_id: int, student_id: int
 ) -> Tuple[Optional[dict], List[dict], int]:
-    """Obtener tareas/clases de un estudiante en un curso, agrupadas por asignatura"""
+    """Obtener tareas/asignaciones de un estudiante en un curso, agrupadas por asignatura"""
     db = SessionLocal()
     try:
         # Verificar que el curso existe
@@ -540,7 +546,7 @@ def get_student_tasks_service(
         if not course_student:
             return None, [], 404
 
-        # Obtener todas las materias del curso (aunque no tengan clases)
+        # Obtener todas las materias del curso (aunque no tengan asignaciones)
         course_subjects = (
             db.query(CourseSubject, Subject)
             .join(Subject, CourseSubject.subject_id == Subject.id)
@@ -558,47 +564,42 @@ def get_student_tasks_service(
                 "classes": [],
             }
 
-        # Obtener todas las clases del curso y agregarlas a las materias correspondientes
-        classes = (
-            db.query(ClassModel, Subject)
+        # Obtener todas las asignaciones (tareas) enviadas por el estudiante
+        submissions = (
+            db.query(
+                AssignmentSubmission,
+                Assignment,
+                ClassModel,
+                Subject,
+            )
+            .join(Assignment, AssignmentSubmission.assignment_id == Assignment.id)
+            .join(ClassModel, Assignment.class_id == ClassModel.id)
             .join(Subject, ClassModel.subject_id == Subject.id)
-            .filter(ClassModel.course_id == course_id)
-            .order_by(Subject.name, ClassModel.class_number)
+            .filter(
+                ClassModel.course_id == course_id,
+                AssignmentSubmission.student_id == student_id,
+            )
+            .order_by(Subject.name, Assignment.title)
             .all()
         )
 
-        # Agrupar clases por asignatura
-        for class_model, subject in classes:
+        # Agrupar asignaciones por asignatura
+        for submission, assignment, class_model, subject in submissions:
             if subject.id in subjects_dict:
                 subjects_dict[subject.id]["classes"].append(
                     {
-                        "id": class_model.id,
-                        "title": class_model.title,
+                        "id": assignment.id,
+                        "title": assignment.title,
                         "class_number": class_model.class_number,
-                        "date": class_model.date.strftime("%d-%m-%y")
-                        if class_model.date
+                        "date": submission.submitted_at.strftime("%d-%m-%y")
+                        if submission.submitted_at
                         else "",
-                        "description": class_model.description,
+                        "description": assignment.description,
                     }
                 )
 
-        # Si no hay clases reales, agregar clases de ejemplo para cada materia
-        if not classes:
-            from datetime import datetime
-
-            example_date = datetime.now().strftime("%d-%m-%y")
-            for subject_id, subject_data in subjects_dict.items():
-                # Agregar 3 clases de ejemplo por materia
-                for i in range(1, 4):
-                    subject_data["classes"].append(
-                        {
-                            "id": f"example_{subject_id}_{i}",
-                            "title": f"Clase de ejemplo {i}",
-                            "class_number": i,
-                            "date": example_date,
-                            "description": "Clase de ejemplo",
-                        }
-                    )
+        # Si no hay asignaciones, no agregar datos de ejemplo
+        # Solo mostrar un mensaje en la vista
 
         # Convert to ordered list
         subjects_list = list(subjects_dict.values())
@@ -624,5 +625,92 @@ def get_student_tasks_service(
         error_trace = traceback.format_exc()
         print(f"Error en get_student_tasks_service: {str(e)}\n{error_trace}")
         return None, [], 500
+    finally:
+        db.close()
+
+
+def download_assignment_submission_service(
+    course_id: int, student_id: int, assignment_id: int
+) -> Tuple[Optional[dict], int]:
+    """Obtener el archivo de una entrega de asignación"""
+    db = SessionLocal()
+    try:
+        # Verificar que la entrega existe
+        submission = (
+            db.query(AssignmentSubmission)
+            .join(Assignment, AssignmentSubmission.assignment_id == Assignment.id)
+            .join(ClassModel, Assignment.class_id == ClassModel.id)
+            .filter(
+                AssignmentSubmission.student_id == student_id,
+                AssignmentSubmission.assignment_id == assignment_id,
+                ClassModel.course_id == course_id,
+            )
+            .first()
+        )
+
+        if not submission or not submission.file_url:
+            return None, 404
+
+        # Retornar la ruta del archivo y su información
+        return {
+            "file_url": submission.file_url,
+            "submission_text": submission.submission_text,
+            "student_id": submission.student_id,
+            "assignment_id": submission.assignment_id,
+        }, 200
+    except Exception as e:
+        print(f"Error en download_assignment_submission_service: {str(e)}")
+        return None, 500
+    finally:
+        db.close()
+
+
+def delete_assignment_submission_service(
+    course_id: int, student_id: int, assignment_id: int
+) -> Tuple[Optional[dict], int]:
+    """Eliminar una entrega de asignación (archivo y registro)"""
+    db = SessionLocal()
+    try:
+        # Verificar que la entrega existe
+        submission = (
+            db.query(AssignmentSubmission)
+            .join(Assignment, AssignmentSubmission.assignment_id == Assignment.id)
+            .join(ClassModel, Assignment.class_id == ClassModel.id)
+            .filter(
+                AssignmentSubmission.student_id == student_id,
+                AssignmentSubmission.assignment_id == assignment_id,
+                ClassModel.course_id == course_id,
+            )
+            .first()
+        )
+
+        if not submission:
+            return None, 404
+
+        # Obtener la ruta del archivo antes de eliminar el registro
+        file_url = submission.file_url
+
+        # Eliminar el archivo físico si existe
+        if file_url:
+            try:
+                # Construir la ruta completa del archivo
+                # Asumiendo que file_url es una ruta relativa como "uploads/assignments/..."
+                file_path = Path("src/static") / file_url.lstrip("/")
+
+                if file_path.exists():
+                    os.remove(file_path)
+            except Exception as e:
+                print(f"Error al eliminar archivo físico: {str(e)}")
+                # Continuar incluso si no se puede eliminar el archivo
+
+        # Eliminar el registro de la base de datos
+        db.delete(submission)
+        db.commit()
+
+        return {"message": "Entrega eliminada exitosamente"}, 200
+    except Exception as e:
+        db.rollback()
+        print(f"Error en delete_assignment_submission_service: {str(e)}")
+        return None, 500
     finally:
         db.close()

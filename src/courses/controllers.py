@@ -1,26 +1,32 @@
-from flask import Request, Response
+from pathlib import Path
+from typing import Optional, Tuple
+
+from flask import Request, Response, flash, redirect, send_file, url_for
 from flask_jwt_extended import jwt_required
-from typing import Tuple, Optional
+from pydantic import ValidationError
+
+from src.models.user import UserRole
+from src.utils.api_response import ApiResponse
+from src.utils.decorator_role_required import role_required
+
+from .service import (
+    add_subject_to_course_service,
+    create_course_service,
+    delete_assignment_submission_service,
+    delete_course_service,
+    download_assignment_submission_service,
+    get_course_service,
+    get_course_subjects_service,
+    get_courses_service,
+    remove_subject_from_course_service,
+    update_course_service,
+)
 from .validation import (
     CourseCreateSchema,
-    CourseUpdateSchema,
     CourseResponseSchema,
     CourseSubjectSchema,
+    CourseUpdateSchema,
 )
-from .service import (
-    get_courses_service,
-    get_course_service,
-    create_course_service,
-    update_course_service,
-    delete_course_service,
-    get_course_subjects_service,
-    add_subject_to_course_service,
-    remove_subject_from_course_service,
-)
-from pydantic import ValidationError
-from src.utils.api_response import ApiResponse
-from src.models.user import UserRole
-from src.utils.decorator_role_required import role_required
 
 
 # API Controllers para AJAX
@@ -255,4 +261,114 @@ def remove_subject_from_course_api_controller(
     except Exception as e:
         return ApiResponse.error(
             message="Error interno del servidor", details=str(e), status_code=500
+        )
+
+
+@jwt_required()
+@role_required([UserRole.ADMIN, UserRole.TEACHER])
+def download_assignment_submission_controller(
+    course_id: int, student_id: int, assignment_id: int, _: Request
+) -> Response:
+    """Controller para descargar una entrega de asignación"""
+    try:
+        submission_data, status_code = download_assignment_submission_service(
+            course_id, student_id, assignment_id
+        )
+
+        if status_code == 404:
+            flash("Entrega no encontrada o sin archivo adjunto", "warning")
+            return redirect(
+                url_for(
+                    "users.student_tasks", course_id=course_id, student_id=student_id
+                )
+            )
+
+        if status_code != 200 or not submission_data:
+            flash("Error al obtener la entrega", "danger")
+            return redirect(
+                url_for(
+                    "users.student_tasks", course_id=course_id, student_id=student_id
+                )
+            )
+
+        # Construir la ruta completa del archivo
+        file_url = submission_data.get("file_url")
+
+        if not file_url:
+            flash("Esta entrega no tiene archivo adjunto", "warning")
+            return redirect(
+                url_for(
+                    "users.student_tasks", course_id=course_id, student_id=student_id
+                )
+            )
+
+        # La URL viene en formato /static/uploads/assignments/filename
+        # Construir la ruta del archivo
+        clean_url = file_url.lstrip("/")
+        file_path = Path("src") / clean_url
+
+        if not file_path.exists():
+            flash("Archivo no encontrado en el servidor", "danger")
+            return redirect(
+                url_for(
+                    "users.student_tasks", course_id=course_id, student_id=student_id
+                )
+            )
+
+        # Obtener el nombre original del archivo
+        original_filename = file_path.name
+        if "_" in original_filename and original_filename[:8].isdigit():
+            # Formato: 20241127_123456_archivo.pdf -> archivo.pdf
+            parts = original_filename.split("_", 2)
+            if len(parts) >= 3:
+                original_filename = parts[2]
+
+        # Descargar el archivo con su nombre original
+        response = send_file(
+            str(file_path),
+            as_attachment=True,
+            download_name=original_filename,
+            mimetype="application/octet-stream",
+        )
+
+        # Añadir cabeceras adicionales para forzar descarga
+        response.headers["Content-Disposition"] = (
+            f'attachment; filename="{original_filename}"'
+        )
+        response.headers["X-Content-Type-Options"] = "nosniff"
+
+        return response
+    except Exception as e:
+        flash(f"Error al descargar el archivo: {str(e)}", "danger")
+        return redirect(
+            url_for("users.student_tasks", course_id=course_id, student_id=student_id)
+        )
+
+
+@jwt_required()
+@role_required([UserRole.ADMIN, UserRole.TEACHER])
+def delete_assignment_submission_controller(
+    course_id: int, student_id: int, assignment_id: int, _: Request
+) -> Response:
+    """Controller para eliminar una entrega de asignación"""
+    try:
+        _, status_code = delete_assignment_submission_service(
+            course_id, student_id, assignment_id
+        )
+
+        if status_code == 404:
+            flash("Entrega no encontrada", "danger")
+        elif status_code == 200:
+            flash("Entrega eliminada exitosamente", "success")
+        else:
+            flash("Error al eliminar la entrega", "danger")
+
+        # Redirigir de vuelta a la página de tareas del estudiante
+        return redirect(
+            url_for("users.student_tasks", course_id=course_id, student_id=student_id)
+        )
+    except Exception as e:
+        flash(f"Error al eliminar la entrega: {str(e)}", "danger")
+        return redirect(
+            url_for("users.student_tasks", course_id=course_id, student_id=student_id)
         )
