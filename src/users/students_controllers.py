@@ -228,7 +228,6 @@ def edit_student_controller(
         try:
             # Obtener datos del estudiante primero para fallback en caso de error
             student_data, _ = get_user_service(student_id, request)
-
             data = request.form.to_dict()
 
             # Remover campo de contraseña vacío para hacerlo opcional
@@ -332,10 +331,6 @@ def student_tasks_controller(
             course_id, student_id
         )
 
-        print(
-            f"DEBUG: status_code={status_code}, data={data is not None}, subjects_list length={len(subjects_list) if subjects_list else 0}"
-        )
-
         if status_code == 404 or not data:
             flash("Curso o estudiante no encontrado", "danger")
             return redirect(url_for("users.course_students", course_id=course_id))
@@ -351,9 +346,6 @@ def student_tasks_controller(
         if not subjects_list:
             flash("Este curso no tiene materias asignadas", "info")
 
-        print(
-            f"DEBUG: Renderizando template con {len(subjects_list) if subjects_list else 0} materias"
-        )
         return render_template(
             "teacher/student_tasks.html",
             user=current_user,
@@ -363,7 +355,5 @@ def student_tasks_controller(
             accion_logout=True,
         )
     except Exception as e:
-        error_trace = traceback.format_exc()
         flash(f"Error al cargar las tareas: {str(e)}", "danger")
-        print(f"Error en student_tasks_controller: {error_trace}")  # Para debugging
         return redirect(url_for("users.course_students", course_id=course_id))
