@@ -15,11 +15,11 @@
     <!-- Ocultamos el bloque de menú por defecto del base para posicionarlo manualmente -->
     {% block menu %}{% endblock %}
 
-    <div class="container_category flex clases_category class-detail-view" 
-         data-class-id="{{ class_data.id }}" 
+    <div class="container_category flex clases_category class-detail-view"
+         data-class-id="{{ class_data.id }}"
          data-course-id="{{ course.id }}"
          data-subject-id="{{ subject.id }}">
-        
+
         <!-- Contenido Principal -->
         <div class="specialities_category class-detail-content">
             <div class="content-header">
@@ -37,20 +37,22 @@
                             {% if content.section_title %}
                                 <h3>{{ content.section_title }}</h3>
                             {% endif %}
-                            
-                            {% if content.content_text %}
-                                <div class="section-text">
-                                    {{ content.content_text | safe }}
-                                </div>
-                            {% endif %}
 
-                            {% if content.content_image %}
-                                <div style="margin: 1rem 0;">
-                                    <img src="{{ content.content_image }}" 
-                                         alt="{{ content.section_title or 'Imagen de contenido' }}" 
-                                         style="max-width: 350px; height: 180px; border-radius: 8px; object-fit: cover;">
-                                </div>
-                            {% endif %}
+                            <div class="d-flex gap-5 justify-content-between align-items-center">
+                                {% if content.content_text %}
+                                    <div class="section-text">
+                                        {{ content.content_text | safe }}
+                                    </div>
+                                {% endif %}
+
+                                {% if content.content_image %}
+                                    <div style="margin: 1rem 0;">
+                                        <img src="{{ content.content_image }}"
+                                             alt="{{ content.section_title or 'Imagen de contenido' }}"
+                                             style="max-width: 350px; height: 180px; border-radius: 8px; object-fit: cover;">
+                                    </div>
+                                {% endif %}
+                            </div>
                         {% endfor %}
                     {% else %}
                         <!-- Sin contenido creado por el docente -->
@@ -66,9 +68,18 @@
                             <h3>Tareas para esta clase</h3>
                             <div style="display: flex; flex-direction: column; gap: 1rem;">
                                 {% for assignment in assignments %}
-                                    <div style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 12px; padding: 1.25rem; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border-left: 4px solid #007bff;">
-                                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
-                                            <h4 style="margin: 0; color: #333; font-size: 1.1rem;">{{ assignment.title }}</h4>
+                                    <div style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); 
+                                                border-radius: 12px; 
+                                                padding: 1.25rem; 
+                                                box-shadow: 0 2px 8px rgba(0,0,0,0.08); 
+                                                border-left: 4px solid #007bff;">
+                                        <div style="display: flex; 
+                                                    justify-content: space-between; 
+                                                    align-items: center; 
+                                                    margin-bottom: 0.75rem;">
+                                            <h4 style="margin: 0; color: #333; font-size: 1.1rem;">
+                                                {{ assignment.title }}
+                                            </h4>
                                             <div style="display: flex; gap: 0.5rem; color: #6c757d;">
                                                 <i class="fas fa-book-open"></i>
                                                 <i class="fas fa-calendar-alt"></i>
@@ -76,17 +87,31 @@
                                         </div>
 
                                         {% if assignment.description %}
-                                            <p style="color: #555; margin-bottom: 0.75rem; font-size: 0.95rem;">{{ assignment.description }}</p>
+                                            <p style="color: #555; margin-bottom: 0.75rem; font-size: 0.95rem;">
+                                                {{ assignment.description }}
+                                            </p>
                                         {% endif %}
 
-                                        <div style="display: flex; gap: 1.5rem; font-size: 0.85rem; color: #666; margin-bottom: 1rem;">
+                                        <div style="display: flex; 
+                                                    gap: 1.5rem; 
+                                                    font-size: 0.85rem; 
+                                                    color: #666; 
+                                                    margin-bottom: 1rem;">
                                             {% if assignment.due_date %}
-                                                <span><i class="far fa-calendar"></i> Fecha límite: {{ assignment.due_date[:10] }}</span>
+                                                <span>
+                                                    <i class="far fa-calendar"></i> 
+                                                    Fecha límite: {{ assignment.due_date[:10] }}
+                                                </span>
                                             {% endif %}
-                                            <span><i class="fas fa-star"></i> Puntaje Maximo: {{ assignment.max_score }}</span>
+                                            <span>
+                                                <i class="fas fa-star"></i> 
+                                                Puntaje Maximo: {{ assignment.max_score }}
+                                            </span>
                                         </div>
 
-                                        <button class="btn-task" style="padding: 0.5rem 1rem; font-size: 0.85rem;" onclick="openSubmitModal({{ assignment.id }}, '{{ assignment.title }}')">
+                                        <button class="btn-task"
+                                                style="padding: 0.5rem 1rem; font-size: 0.85rem;"
+                                                onclick="openSubmitModal({{ assignment.id }}, '{{ assignment.title }}')">
                                             <i class="fas fa-upload"></i> ADJUNTAR TAREA
                                         </button>
                                     </div>
