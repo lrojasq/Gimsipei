@@ -1,11 +1,12 @@
-from flask import Flask, jsonify, redirect, url_for, request, flash
+from flask import Flask, flash, jsonify, redirect, request, url_for
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager, unset_jwt_cookies
 from flask_migrate import Migrate
-from src.routes import register_blueprints
+
+from config import Config
 from src.database.database import Base
 from src.models import *
-from config import Config
+from src.routes import register_blueprints
 
 # Initialize Flask app
 app = Flask(__name__, template_folder="src/templates", static_folder="src/static")
