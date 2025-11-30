@@ -285,7 +285,7 @@ def student_classes_view_controller():
 
         if status_code != 200:
             flash(data.get("error", "Error al cargar las materias"), "danger")
-            return redirect(url_for("admin.dashboard"))
+            return redirect(url_for("users.dashboard"))
 
         return render_template(
             "student/classes_view.html",
@@ -296,7 +296,7 @@ def student_classes_view_controller():
         )
     except Exception as e:
         flash(f"Error al cargar las materias: {str(e)}", "danger")
-        return redirect(url_for("admin.dashboard"))
+        return redirect(url_for("users.dashboard"))
 
 
 def student_subject_classes_view_controller(course_id: int, subject_id: int):
@@ -386,10 +386,10 @@ def class_detail_view_controller(class_id: int):
             )
         else:
             flash("No tienes permiso para ver esta clase", "danger")
-            return redirect(url_for("admin.dashboard"))
+            return redirect(url_for("users.dashboard"))
     except Exception as e:
         flash(f"Error al cargar la clase: {str(e)}", "danger")
-        return redirect(url_for("admin.dashboard"))
+        return redirect(url_for("users.dashboard"))
 
 
 def student_class_detail_view_controller(class_id: int):

@@ -81,7 +81,7 @@ def login_user_service(
             }, 200
 
         # Redirigir al dashboard
-        response = make_response(redirect(url_for("admin.dashboard")))
+        response = make_response(redirect(url_for("users.dashboard")))
 
         set_access_cookies(response, access_token)
         flash(f"Bienvenido, {user.username}!", "success")

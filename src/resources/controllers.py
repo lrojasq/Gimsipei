@@ -44,14 +44,14 @@ def resources_view_controller(_: Request):
 
         if not user:
             flash("Usuario no encontrado", "error")
-            return redirect(url_for("admin.dashboard"))
+            return redirect(url_for("users.dashboard"))
 
         # Obtener recursos organizados por materia
         resources_data, status_code = get_resources_by_teacher_service(current_user_id)
 
         if status_code != 200:
             flash("Error al cargar los recursos", "error")
-            return redirect(url_for("admin.dashboard"))
+            return redirect(url_for("users.dashboard"))
 
         # Convert the User object to a dictionary with role as string
         user_dict = {
@@ -71,7 +71,7 @@ def resources_view_controller(_: Request):
         )
     except Exception:
         flash("Error al cargar la vista de recursos", "error")
-        return redirect(url_for("admin.dashboard"))
+        return redirect(url_for("users.dashboard"))
     finally:
         db.close()
 
