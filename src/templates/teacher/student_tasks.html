@@ -12,18 +12,7 @@
 {% block content %}
 {% block menu %}{% endblock %}
 
-{% with messages = get_flashed_messages(with_categories=true) %}
-{% if messages %}
-{% for category, message in messages %}
-<div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-    <i
-        class="fas fa-{% if category == 'success' %}check-circle{% elif category == 'danger' %}exclamation-triangle{% else %}info-circle{% endif %} me-2"></i>
-    {{ message }}
-    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-</div>
-{% endfor %}
-{% endif %}
-{% endwith %}
+{% include "flash_messages.html" %}
 
 <div class="container_category flex admin_category">
     <!-- Inicio Tareas del Estudiante -->
@@ -63,33 +52,32 @@
                     </tr>
                     <!-- Filas de clases (ocultas por defecto) -->
                     {% if subject.classes %}
-                        {% for class_item in subject.classes %}
-                        <tr class="subject-content-row class-row" data-subject-id="{{ subject.subject_id }}" style="display: none;">
-                            <td class="class-indent"></td>
-                            <td class="class-name-cell">{{ class_item.title if class_item.title else 'Clase ' ~ class_item.class_number }}</td>
-                            <td class="class-date-cell">{{ class_item.date }}</td>
-                            <td class="class-actions-cell">
-                                <a href="{{ url_for('courses.download_assignment_submission', course_id=course.id, student_id=student.id, assignment_id=class_item.id) }}" 
-                                   class="download-link" 
-                                   title="Descargar"
-                                   target="_blank">
-                                    <i class="fas fa-download"></i>
-                                </a>
-                                <button class="action-btn delete-assignment" 
-                                        data-assignment-id="{{ class_item.id }}"
-                                        data-assignment-title="{{ class_item.title if class_item.title else 'Clase ' ~ class_item.class_number }}" 
-                                        title="Eliminar">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </td>
-                        </tr>
-                        {% endfor %}
+                    {% for class_item in subject.classes %}
+                    <tr class="subject-content-row class-row" data-subject-id="{{ subject.subject_id }}"
+                        style="display: none;">
+                        <td class="class-indent"></td>
+                        <td class="class-name-cell">{{ class_item.title if class_item.title else 'Clase ' ~
+                            class_item.class_number }}</td>
+                        <td class="class-date-cell">{{ class_item.date }}</td>
+                        <td class="class-actions-cell">
+                            <a href="{{ url_for('courses.download_assignment_submission', course_id=course.id, student_id=student.id, assignment_id=class_item.id) }}"
+                                class="download-link" title="Descargar" target="_blank">
+                                <i class="fas fa-download"></i>
+                            </a>
+                            <button class="action-btn delete-assignment" data-assignment-id="{{ class_item.id }}"
+                                data-assignment-title="{{ class_item.title if class_item.title else 'Clase ' ~ class_item.class_number }}"
+                                title="Eliminar">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
                     {% else %}
-                        <tr class="subject-content-row" data-subject-id="{{ subject.subject_id }}" style="display: none;">
-                            <td colspan="4" class="empty-classes-cell">
-                                <p>No hay entregas registradas para esta asignatura.</p>
-                            </td>
-                        </tr>
+                    <tr class="subject-content-row" data-subject-id="{{ subject.subject_id }}" style="display: none;">
+                        <td colspan="4" class="empty-classes-cell">
+                            <p>No hay entregas registradas para esta asignatura.</p>
+                        </td>
+                    </tr>
                     {% endif %}
                     {% endfor %}
                     {% else %}

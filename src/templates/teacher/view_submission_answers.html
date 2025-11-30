@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+
+{% block title %}Respuestas de {{ student.full_name }} | {{ evaluation.title }}{% endblock %}
+
+{% block extra_css %}
+<link href="{{ url_for('static', filename='css/menu.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/category.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/admin.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/view_submission_answers.css') }}" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+{% endblock %}
+
+{% block content %}
+{% block menu %}{% endblock %}
+
+{% include "flash_messages.html" %}
+
+<div class="container_category flex admin_category view-submission-answers">
+    <div class="specialities_category flex flex-column">
+        <!-- Contenedor principal con diseño de cuadro blanco -->
+        <div class="submission-container">
+            <!-- Header de la evaluación -->
+            <div class="submission-header">
+                <a href="{{ url_for('users.student_evaluations', course_id=course.id, student_id=student.id) }}"
+                    class="back-link">
+                    <i class="fas fa-chevron-left"></i>
+                </a>
+                <div class="header-content">
+                    <h1 class="submission-title"><strong>{{ evaluation.title }}</strong> - {{ subject.name }}</h1>
+                    <p class="student-name">Estudiante: {{ student.full_name }}</p>
+                </div>
+                <div class="score-display-static">
+                    <span class="score-label">Nota:</span>
+                    <span class="score-value">{{ '%.1f'|format(submission.score) if submission.score
+                        is not none else '0.0' }}</span>
+                </div>
+            </div>
+
+            <!-- Resumen -->
+            <div class="submission-summary">
+                <div class="summary-item">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Correctas: <strong>{{ submission.correct_answers or 0 }}</strong> / {{ total_questions
+                        }}</span>
+                </div>
+                <div class="summary-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Enviada: <strong>{{ submission.submitted_at.strftime('%d/%m/%Y %H:%M') if
+                            submission.submitted_at else 'No enviada' }}</strong></span>
+                </div>
+            </div>
+
+            <hr class="divider">
+
+            <!-- Contenedor de preguntas con scroll -->
+            <div class="questions-container">
+                {% if questions and questions|length > 0 %}
+                    {% for question in questions %}
+                        {% set answer = answers_dict.get(question.id) %}
+                        <div
+                            class="question-card {% if answer and answer.is_correct %}correct{% elif answer %}incorrect{% endif %}">
+                            <div class="question-header">
+                                <span class="question-number">{{ loop.index }}</span>
+                                <p class="question-text">
+                                    {{ question.question_text }}
+                                    {% if question.question_type.value == 'multi' %}
+                                        <em class="question-type"> - Selección múltiple</em>
+                                    {% else %}
+                                        <em class="question-type"> - Respuesta abierta</em>
+                                    {% endif %}
+                                </p>
+                                {% if answer %}
+                                    <span class="answer-status {% if answer.is_correct %}correct{% else %}incorrect{% endif %}">
+                                        <i class="fas fa-{% if answer.is_correct %}check{% else %}times{% endif %}"></i>
+                                    </span>
+                                {% endif %}
+                            </div>
+
+                            {% if question.question_type.value == 'multi' %}
+                                <!-- Opciones múltiples -->
+                                <div class="question-options">
+                                    {% for option in question.options|sort(attribute='display_order') %}
+                                        {% set is_student_answer = answer and answer.answer_text == option.option_letter %}
+                                        {% set is_correct_answer = option.option_letter == question.correct_answer %}
+                                        <div
+                                            class="option-item {% if is_student_answer %}student-selected{% endif %} {% if is_correct_answer %}correct-answer{% endif %}">
+                                            <span class="option-letter">{{ option.option_letter }}</span>
+                                            <span class="option-text">{{ option.option_text }}</span>
+                                            {% if is_student_answer %}
+                                                <span class="option-badge student">Respuesta del estudiante</span>
+                                            {% endif %}
+                                            {% if is_correct_answer %}
+                                                <span class="option-badge correct">Respuesta correcta</span>
+                                            {% endif %}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <!-- Respuesta abierta -->
+                                <div class="open-answer-section">
+                                    <div class="answer-block student-answer">
+                                        <span class="answer-label">Respuesta del estudiante:</span>
+                                        <div class="answer-content">
+                                            {{ answer.answer_text if answer and answer.answer_text else 'No respondió' }}
+                                        </div>
+                                    </div>
+                                    {% if question.correct_answer %}
+                                        <div class="answer-block correct-answer">
+                                            <span class="answer-label">Respuesta correcta/esperada:</span>
+                                            <div class="answer-content">
+                                                {{ question.correct_answer }}
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="no-questions">
+                        <i class="fas fa-clipboard-question"></i>
+                        <p>Esta evaluación no tiene preguntas configuradas.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    {% include "sidebar_aside.html" %}
+</div>
+
+{% endblock %}

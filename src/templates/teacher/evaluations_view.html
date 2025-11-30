@@ -13,18 +13,7 @@
 {% block content %}
 {% block menu %}{% endblock %}
 
-{% with messages = get_flashed_messages(with_categories=true) %}
-{% if messages %}
-{% for category, message in messages %}
-<div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-    <i
-        class="fas fa-{% if category == 'success' %}check-circle{% elif category == 'danger' %}exclamation-triangle{% else %}info-circle{% endif %} me-2"></i>
-    {{ message }}
-    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-</div>
-{% endfor %}
-{% endif %}
-{% endwith %}
+{% include "flash_messages.html" %}
 
 <div class="container_category flex evaluaciones_category">
     <!-- Inicio Evaluaciones -->
@@ -52,52 +41,52 @@
                 </thead>
                 <tbody>
                     {% if courses %}
-                    {% for course in courses %}
-                    <tr class="course-row" data-course-id="{{ course.id }}">
-                        <td class="course-name-cell" colspan="3">
-                            <div class="course-header">
-                                <span class="course-name">{{ course.name }}</span>
-                                <button class="expand-btn" data-course-id="{{ course.id }}" aria-label="Expandir curso"
-                                    title="Ver materias del curso">
-                                    <i class="fas fa-chevron-down"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    <!-- Fila expandible con las materias del curso -->
-                    <tr class="expandable-row" data-course-id="{{ course.id }}" style="display: none;">
-                        <td colspan="3" class="expanded-content-cell">
-                            <div class="subjects-list">
-                                {% if course.subjects %}
-                                {% for subject in course.subjects %}
-                                <div class="subject-row-expanded">
-                                    <div class="empty-cell"></div>
-                                    <div class="subject-name-cell">
-                                        <span class="subject-name">{{ subject.name }}</span>
+                        {% for course in courses %}
+                            <tr class="course-row" data-course-id="{{ course.id }}">
+                                <td class="course-name-cell" colspan="3">
+                                    <div class="course-header">
+                                        <span class="course-name">{{ course.name }}</span>
+                                        <button class="expand-btn" data-course-id="{{ course.id }}" aria-label="Expandir curso"
+                                            title="Ver materias del curso">
+                                            <i class="fas fa-chevron-down"></i>
+                                        </button>
                                     </div>
-                                    <div class="subject-action-cell">
-                                        <a href="{{ url_for('evaluations.subject_evaluations_view', course_id=course.id, subject_id=subject.id) }}"
-                                            class="add-link-btn" title="Ir a evaluaciones">
-                                            Ir
-                                        </a>
+                                </td>
+                            </tr>
+                            <!-- Fila expandible con las materias del curso -->
+                            <tr class="expandable-row" data-course-id="{{ course.id }}" style="display: none;">
+                                <td colspan="3" class="expanded-content-cell">
+                                    <div class="subjects-list">
+                                        {% if course.subjects %}
+                                            {% for subject in course.subjects %}
+                                                <div class="subject-row-expanded">
+                                                    <div class="empty-cell"></div>
+                                                    <div class="subject-name-cell">
+                                                        <span class="subject-name">{{ subject.name }}</span>
+                                                    </div>
+                                                    <div class="subject-action-cell">
+                                                        <a href="{{ url_for('evaluations.subject_evaluations_view', course_id=course.id, subject_id=subject.id) }}"
+                                                            class="add-link-btn" title="Ir a evaluaciones">
+                                                            Ir
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        {% else %}
+                                            <div class="empty-subjects">
+                                                <p>No hay materias asignadas a este curso</p>
+                                            </div>
+                                        {% endif %}
                                     </div>
-                                </div>
-                                {% endfor %}
-                                {% else %}
-                                <div class="empty-subjects">
-                                    <p>No hay materias asignadas a este curso</p>
-                                </div>
-                                {% endif %}
-                            </div>
-                        </td>
-                    </tr>
-                    {% endfor %}
+                                </td>
+                            </tr>
+                        {% endfor %}
                     {% else %}
-                    <tr class="empty-state-row">
-                        <td colspan="3" class="empty-state-cell">
-                            <p>No hay cursos disponibles.</p>
-                        </td>
-                    </tr>
+                        <tr class="empty-state-row">
+                            <td colspan="3" class="empty-state-cell">
+                                <p>No hay cursos disponibles.</p>
+                            </td>
+                        </tr>
                     {% endif %}
                 </tbody>
             </table>
