@@ -10,7 +10,7 @@ from flask import (
     request as flask_request,
     jsonify,
 )
-from flask_jwt_extended import get_jwt_identity, jwt_required
+from flask_jwt_extended import get_jwt, get_jwt_identity, jwt_required
 from pydantic import ValidationError
 
 from src.database.database import SessionLocal
@@ -18,6 +18,7 @@ from src.models.user import User, UserRole
 from src.utils.api_response import ApiResponse
 from src.utils.decorator_role_required import role_required
 from src.utils.normalize_role_field import normalize_role_field
+from src.courses.service import get_all_courses_for_dashboard
 
 from .service import (
     create_user_service,
@@ -285,4 +286,66 @@ def profile_view_controller(request: Request) -> Response:
         )
     except Exception:
         flash("Error al cargar el perfil", "danger")
-        return redirect(url_for("admin.dashboard"))
+        return redirect(url_for("users.dashboard"))
+
+
+@jwt_required()
+@role_required([UserRole.ADMIN, UserRole.TEACHER, UserRole.STUDENT])
+def dashboard_controller(_: Request) -> Response:
+    user_id = get_jwt_identity()
+    user_role = get_jwt().get("role")
+
+    try:
+        # Obtener información del usuario
+        user, status_code = get_user_service(user_id, _)
+        if status_code != 200 or not user:
+            flash("Usuario no encontrado", "danger")
+            return redirect(url_for("auth.login"))
+
+        # User is admin
+        if user_role == "ADMIN":
+            return render_template(
+                "admin/dashboard.html",
+                user={
+                    "id": user.id,
+                    "full_name": user.full_name,
+                    "document": user.document,
+                    "avatar": getattr(user, "avatar", None),
+                    "role": user_role,
+                },
+                accion_logout=True,
+            )
+
+        # User is teacher
+        elif user_role == "TEACHER":
+            courses_list = get_all_courses_for_dashboard()
+
+            return render_template(
+                "admin/dashboard.html",
+                user={
+                    "id": user.id,
+                    "full_name": user.full_name,
+                    "document": user.document,
+                    "avatar": getattr(user, "avatar", None),
+                    "role": user_role,
+                },
+                courses=courses_list,
+                accion_logout=True,
+            )
+
+        # User is student
+        else:
+            return render_template(
+                "student/dashboard.html",
+                user={
+                    "id": user.id,
+                    "full_name": user.full_name,
+                    "document": user.document,
+                    "avatar": getattr(user, "avatar", None),
+                    "role": user_role,
+                },
+                accion_logout=True,
+            )
+    except Exception:
+        flash("Error al obtener el dashboard", "danger")
+        return redirect(url_for("auth.login"))

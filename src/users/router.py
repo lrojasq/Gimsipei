@@ -6,6 +6,7 @@ from .controllers import (
     update_user_controller,
     delete_user_controller,
     profile_view_controller,
+    dashboard_controller,
 )
 from .teachers_controllers import (
     teachers_management_controller,
@@ -19,9 +20,15 @@ from .students_controllers import (
     edit_student_controller,
     delete_student_controller,
     student_tasks_controller,
+    student_evaluations_controller,
 )
 
 users_bp = Blueprint("users", __name__, url_prefix="/users")
+
+
+@users_bp.route("/dashboard", methods=["GET"])
+def dashboard():
+    return dashboard_controller(request)
 
 
 @users_bp.route("/profile", methods=["GET", "POST"])
@@ -105,3 +112,10 @@ def delete_student(course_id, student_id):
 )
 def student_tasks(course_id, student_id):
     return student_tasks_controller(course_id, student_id, request)
+
+
+@users_bp.route(
+    "/courses/<int:course_id>/students/<int:student_id>/evaluations", methods=["GET"]
+)
+def student_evaluations(course_id, student_id):
+    return student_evaluations_controller(course_id, student_id, request)
