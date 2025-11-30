@@ -12,25 +12,7 @@
 {% block content %}
 {% block menu %}{% endblock %}
 
-{# Flash Messages #}
-{% with messages = get_flashed_messages(with_categories=true) %}
-{% if messages %}
-{% for category, message in messages %}
-<div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-    <i class="fas fa-
-                        {% if category == 'success' %}
-                            check-circle
-                        {% elif category == 'danger' %}
-                            exclamation-triangle
-                        {% else %}
-                            info-circle
-                        {% endif %} me-2"></i>
-    {{ message }}
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-</div>
-{% endfor %}
-{% endif %}
-{% endwith %}
+{% include "flash_messages.html" %}
 
 <div class="container_category flex admin_category courses_management">
     {# Inicio Cursos #}
