@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block title %}Evaluaciones | Estudiante{% endblock %}
+
+{% block extra_css %}
+<link href="{{ url_for('static', filename='css/menu.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/category.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/admin.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/student_evaluations.css') }}" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+{% endblock %}
+
+{% block content %}
+{% block menu %}{% endblock %}
+
+{% include "flash_messages.html" %}
+
+<div class="container_category flex evaluaciones_category student-evaluations">
+    <!-- Panel izquierdo - Información del estudiante y filtros -->
+    <div class="data_categoty flex flex-column">
+        <div class="title flex">
+            <img src="{{ url_for('static', filename='images/svg/evaluaciones.svg') }}" alt="Evaluaciones"
+                style="width: 60px; height: 50px;">
+            <h1>Evaluaciones</h1>
+        </div>
+
+        <p class="student-name">{{ user.full_name }}</p>
+        <div class="data_grade_category flex flex-column">
+            <p>{{ user.document }}</p>
+            <p>Grado {{ course.name if course else 'N/A' }}</p>
+        </div>
+
+        <!-- Botones de filtro -->
+        <div class="filter-buttons">
+            <button type="button" 
+                    class="btn-filter {% if filter_type == 'pending' %}active{% endif %}"
+                    data-url="{{ url_for('evaluations.student_evaluations_view', filter='pending') }}"
+                    onclick="navigateFilter(this, '{{ filter_type }}', 'pending')">
+                POR HACER
+            </button>
+            <button type="button" 
+                    class="btn-filter btn-filter-outline {% if filter_type == 'completed' %}active{% endif %}"
+                    data-url="{{ url_for('evaluations.student_evaluations_view', filter='completed') }}"
+                    onclick="navigateFilter(this, '{{ filter_type }}', 'completed')">
+                REALIZADAS
+            </button>
+        </div>
+    </div>
+
+    <!-- Panel central - Lista de evaluaciones -->
+    <div class="specialities_category exams flex flex-column evaluations-content" id="evaluationsContent">
+        {% if evaluations and evaluations|length > 0 %}
+            <div class="evaluations-list">
+                {% for eval in evaluations %}
+                <div class="exam flex evaluation-card" 
+                     {% if filter_type == 'pending' %}
+                        onclick="window.location.href='{{ url_for('evaluations.student_take_evaluation', evaluation_id=eval.id) }}'"
+                     {% endif %}>
+                    <div class="exam_content flex">
+                        <div class="img_evaluaciones evaluaciones_bg">
+                            {% if eval.cover_image %}
+                                <img width="100%" height="100%" src="{{ eval.cover_image }}" alt="{{ eval.title }}">
+                            {% else %}
+                                <div class="evaluation-placeholder">
+                                    <i class="fas fa-clipboard-list"></i>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="text-content flex flex-column">
+                            <h2 class="title">{{ eval.title }} - {{ eval.subject_name }}</h2>
+                            <p>
+                                <strong>{{ eval.description[:80] if eval.description else 'Sin descripción' }}{% if eval.description and eval.description|length > 80 %}...{% endif %}</strong>
+                                {% if eval.description and eval.description|length > 80 %}
+                                 - {{ eval.description[80:200] }}{% if eval.description|length > 200 %}...{% endif %}
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                    {% if filter_type == 'completed' %}
+                    <div class="nota flex flex-column">
+                        <span class="flex">{{ '%.1f'|format(eval.score) if eval.score is not none else '-' }}</span>
+                        <hr />
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <p class="empty-message">
+                    {% if filter_type == 'pending' %}
+                        No hay evaluaciones disponibles para su usuario
+                    {% else %}
+                        No hay evaluaciones realizadas
+                    {% endif %}
+                </p>
+            </div>
+        {% endif %}
+    </div>
+
+    {% include "sidebar_aside.html" %}
+</div>
+
+<script>
+function navigateFilter(btn, currentFilter, targetFilter) {
+    // Si ya estamos en ese filtro, no hacer nada
+    if (currentFilter === targetFilter) return;
+    
+    // Marcar botón como activo inmediatamente
+    document.querySelectorAll('.btn-filter').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    
+    // Mostrar loading en el contenido
+    const content = document.getElementById('evaluationsContent');
+    if (content) {
+        content.style.opacity = '0.5';
+        content.style.pointerEvents = 'none';
+    }
+    
+    // Navegar
+    window.location.href = btn.dataset.url;
+}
+</script>
+{% endblock %}
