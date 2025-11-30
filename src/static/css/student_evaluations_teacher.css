@@ -1,0 +1,731 @@
+/* Student Evaluations Teacher View - Basado en student_tasks.css */
+
+:root {
+  --evaluaciones: #f48d53;
+  --evaluaciones-active: #e55d1a;
+  --evaluaciones-light: #fff5f0;
+}
+
+/* Course Grade Indicator - Color evaluaciones */
+.student-evaluations-teacher .course-grade-indicator {
+  width: 70px;
+  height: 70px;
+  background: var(--evaluaciones);
+  border: 2px solid var(--evaluaciones);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20px;
+  flex-shrink: 0;
+}
+
+.student-evaluations-teacher .grade-number {
+  font-size: 2rem;
+  font-weight: 700;
+  color: hsl(0, 0%, 100%);
+}
+
+/* Header Students */
+.student-evaluations-teacher .header-students {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30px;
+  padding: 0 0 20px 0;
+  border-bottom: 2px solid var(--evaluaciones);
+}
+
+.student-evaluations-teacher .course-title {
+  flex: 1;
+}
+
+.student-evaluations-teacher .course-title h2 {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: hsl(0, 0%, 25%);
+}
+
+/* Evaluations Table Wrapper */
+.evaluations-table-wrapper {
+  width: 100%;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Evaluations Table */
+.evaluations-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+}
+
+.evaluations-table thead {
+  background: white;
+}
+
+.evaluations-table thead tr {
+  border-bottom: 2px solid hsl(0, 0%, 88%);
+}
+
+.evaluations-table thead th {
+  text-align: left;
+  padding: 1rem;
+  color: hsl(0, 0%, 35%);
+  font-weight: 600;
+  font-size: 1rem;
+  background: white;
+}
+
+.evaluations-table tbody tr {
+  border-bottom: 1px solid hsl(0, 0%, 92%);
+}
+
+/* Subject Row */
+.student-evaluations-teacher .subject-row {
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  background-color: var(--evaluaciones-light);
+}
+
+.student-evaluations-teacher .subject-row:hover {
+  background-color: rgba(244, 141, 83, 0.15);
+}
+
+.subject-header {
+  padding: 0 !important;
+}
+
+.subject-header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  width: 100%;
+}
+
+.subject-name {
+  font-weight: 600;
+  color: hsl(0, 0%, 25%);
+  font-size: 1rem;
+}
+
+.student-evaluations-teacher .toggle-subject {
+  color: var(--evaluaciones);
+  transition: transform 0.3s ease;
+  cursor: pointer;
+  font-size: 1.1rem;
+}
+
+.student-evaluations-teacher .subject-row.expanded .toggle-subject {
+  transform: rotate(180deg);
+}
+
+/* Subject Content Row */
+.subject-content-row {
+  background-color: hsl(0, 0%, 100%);
+}
+
+.subject-content-row.evaluation-row {
+  background-color: hsl(0, 0%, 100%);
+}
+
+.eval-indent {
+  width: 40px;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid hsl(0, 0%, 92%);
+}
+
+.eval-name-cell {
+  padding: 0.75rem 1rem;
+  color: hsl(0, 0%, 25%);
+  font-size: 0.95rem;
+  border-bottom: 1px solid hsl(0, 0%, 92%);
+}
+
+.eval-date-cell {
+  padding: 0.75rem 1rem;
+  color: var(--evaluaciones);
+  font-size: 0.95rem;
+  font-weight: 500;
+  border-bottom: 1px solid hsl(0, 0%, 92%);
+}
+
+.eval-score-cell {
+  padding: 0.75rem 1rem;
+  color: var(--evaluaciones);
+  font-size: 1.1rem;
+  font-weight: 700;
+  border-bottom: 1px solid hsl(0, 0%, 92%);
+}
+
+.eval-actions-cell {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid hsl(0, 0%, 92%);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* View Link */
+.view-link {
+  color: var(--evaluaciones);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: color 0.2s ease;
+}
+
+.view-link:hover {
+  color: var(--evaluaciones-active);
+  text-decoration: underline;
+}
+
+/* Action Buttons */
+.student-evaluations-teacher .action-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  background-color: hsl(0, 0%, 95%);
+  color: hsl(0, 0%, 50%);
+}
+
+.student-evaluations-teacher .action-btn:hover {
+  background-color: hsl(0, 0%, 90%);
+  color: hsl(0, 0%, 30%);
+}
+
+.student-evaluations-teacher .action-btn.reset-evaluation:hover {
+  background-color: rgba(244, 141, 83, 0.15);
+  color: var(--evaluaciones);
+}
+
+.student-evaluations-teacher .action-btn.delete-evaluation-submission:hover {
+  background-color: hsl(0, 80%, 95%);
+  color: hsl(0, 70%, 50%);
+}
+
+.student-evaluations-teacher .action-btn i {
+  font-size: 0.85rem;
+}
+
+/* Empty States */
+.empty-evaluations-cell {
+  padding: 2rem 1rem;
+  text-align: center;
+  background-color: hsl(0, 0%, 98%);
+}
+
+.empty-evaluations-cell p {
+  color: hsl(0, 0%, 50%);
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.empty-state-row {
+  background-color: hsl(0, 0%, 100%);
+}
+
+.empty-state-cell {
+  padding: 3rem 1rem;
+  text-align: center;
+}
+
+.empty-state-cell p {
+  color: hsl(0, 0%, 50%);
+  font-size: 1rem;
+  margin: 0;
+}
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.modal-container {
+  background: white;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  animation: modalSlideIn 0.3s ease;
+  overflow: hidden;
+}
+
+@keyframes modalSlideIn {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  background: linear-gradient(135deg, #23ccc3 0%, #12a3dd 100%);
+  color: white;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: white;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: white;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+.modal-close:hover {
+  opacity: 1;
+}
+
+.modal-body {
+  padding: 1.5rem;
+}
+
+.modal-body p {
+  margin: 0 0 1rem 0;
+  color: #555;
+  line-height: 1.5;
+}
+
+.modal-body p:last-child {
+  margin-bottom: 0;
+}
+
+/* Form group dentro de modales */
+.modal-container .form-group {
+  padding: 1rem 1.5rem;
+}
+
+.modal-container .form-group:first-of-type {
+  padding-top: 1.5rem;
+}
+
+.modal-container .form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #666;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.modal-container .form-group input[type="number"],
+.modal-container .form-group input[type="text"] {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.2s ease;
+}
+
+.modal-container .form-group input:focus {
+  outline: none;
+  border-color: var(--evaluaciones);
+}
+
+.modal-container .form-group small {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+}
+
+/* Modal actions - botones */
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding: 1rem 1.5rem 1.5rem;
+}
+
+.modal-actions .btn-cancel {
+  padding: 0.75rem 1.5rem;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  background: white;
+  color: #666;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.modal-actions .btn-cancel:hover {
+  background: #f5f5f5;
+  border-color: #ccc;
+}
+
+.modal-actions .btn-submit {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.warning-text {
+  background-color: #fff3cd;
+  border: 1px solid #ffc107;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  color: #856404;
+  font-size: 0.9rem;
+}
+
+.warning-text i {
+  margin-right: 0.5rem;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #eee;
+}
+
+.btn-cancel {
+  padding: 0.6rem 1.25rem;
+  border: 1px solid #ddd;
+  border-radius: 25px;
+  background: white;
+  color: #666;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-cancel:hover {
+  background: #f5f5f5;
+}
+
+.btn-confirm {
+  padding: 0.6rem 1.25rem;
+  border: none;
+  border-radius: 25px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-reset {
+  background: var(--evaluaciones);
+  color: white;
+}
+
+.btn-reset:hover {
+  background: var(--evaluaciones-active);
+}
+
+.btn-reset:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.btn-spinner {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Sidebar color */
+.student-evaluations-teacher .menu_aside {
+  background-color: var(--evaluaciones);
+}
+
+.student-evaluations-teacher .menu_aside .aside_list li a.active,
+.student-evaluations-teacher .menu_aside .aside_list li a:hover {
+  background-color: var(--evaluaciones-active);
+}
+
+/* Score editable */
+.score-editable {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  color: var(--evaluaciones-active);
+  font-weight: 600;
+}
+
+.score-editable:hover {
+  background-color: var(--evaluaciones-light);
+}
+
+.score-editable .score-edit-icon {
+  font-size: 0.75rem;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  color: var(--evaluaciones);
+}
+
+.score-editable:hover .score-edit-icon {
+  opacity: 1;
+}
+
+/* Modal edit score input */
+.score-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.score-input-group label {
+  font-size: 0.95rem;
+  color: #333;
+  font-weight: 500;
+}
+
+.score-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 1.5rem;
+  text-align: center;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.score-input:focus {
+  border-color: var(--evaluaciones);
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .student-evaluations-teacher .header-students {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .student-evaluations-teacher .course-grade-indicator {
+    margin-right: 0;
+  }
+
+  .evaluations-table {
+    font-size: 0.9rem;
+  }
+
+  .eval-actions-cell {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 768px) {
+  .evaluations-table thead {
+    display: none;
+  }
+
+  .evaluations-table tbody tr {
+    display: block;
+    margin-bottom: 1rem;
+    border: 1px solid #eee;
+    border-radius: 8px;
+  }
+
+  .evaluations-table tbody td {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .evaluations-table tbody td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #666;
+  }
+
+  .subject-header {
+    border-radius: 8px 8px 0 0;
+  }
+
+  .eval-indent {
+    display: none;
+  }
+
+  .modal-container {
+    width: 95%;
+    margin: 1rem;
+  }
+}
+
+/* ===========================================
+   Celda de nota editable
+   =========================================== */
+.eval-score-cell.editable-score {
+  cursor: pointer;
+  color: var(--evaluaciones);
+  font-weight: 600;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.eval-score-cell.editable-score:hover {
+  color: var(--evaluaciones-active);
+  background-color: var(--evaluaciones-light);
+}
+
+.eval-score-cell.editable-score::after {
+  content: "✎";
+  font-size: 0.7rem;
+  margin-left: 0.3rem;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.eval-score-cell.editable-score:hover::after {
+  opacity: 1;
+}
+
+/* ===========================================
+   Modales de Evaluaciones - Header Naranja
+   =========================================== */
+.modal-header-evaluaciones {
+  background: var(--evaluaciones) !important;
+  background: linear-gradient(
+    135deg,
+    var(--evaluaciones) 0%,
+    var(--evaluaciones-active) 100%
+  ) !important;
+}
+
+.btn-submit-evaluaciones {
+  background: var(--evaluaciones) !important;
+  background: linear-gradient(
+    135deg,
+    var(--evaluaciones) 0%,
+    var(--evaluaciones-active) 100%
+  ) !important;
+}
+
+.btn-submit-evaluaciones:hover {
+  background: var(--evaluaciones-active) !important;
+}
+
+/* Estilos para modal de reinicio */
+.reset-warning-icon {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.reset-warning-icon i {
+  font-size: 3rem;
+  color: var(--evaluaciones);
+}
+
+.reset-warning-text {
+  text-align: center;
+  font-size: 1.1rem;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.reset-warning-text strong {
+  color: var(--evaluaciones-active);
+}
+
+.reset-info-text {
+  background-color: var(--evaluaciones-light);
+  padding: 1rem;
+  border-radius: 8px;
+  border-left: 4px solid var(--evaluaciones);
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.reset-info-text i {
+  color: var(--evaluaciones);
+  margin-right: 0.5rem;
+}
+
+/* Estilos para modal de editar nota */
+.modal-info-text {
+  background-color: #f8f9fa;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  color: #333;
+  font-weight: 500;
+  margin: 0;
+}
+
+/* Toast de notificación */
+.toast-notification {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #333;
+  color: white;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  z-index: 10001;
+  animation: slideInRight 0.3s ease;
+}
+
+.toast-notification.success {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+}
+
+.toast-notification.error {
+  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}

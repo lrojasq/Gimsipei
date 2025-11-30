@@ -150,3 +150,12 @@ function initializeDeleteButtons(buttonSelector, getDeleteUrl) {
     });
   }, 100);
 }
+
+// Inicializar listeners cuando el DOM esté listo
+if (document.readyState === 'loading') {
+  document.addEventListener("DOMContentLoaded", function() {
+    initializeDeleteModalListeners();
+  });
+} else {
+  initializeDeleteModalListeners();
+}
