@@ -942,7 +942,7 @@ form#deleteConfirmationForm {
     font-weight: lighter;
 }
 
-.modal.modal_delete .container .delete-buttons .btn-delete {
+/* .modal.modal_delete .container .delete-buttons .btn-delete {
     background-color: var(--teal);
     color: #ffffff;
 
@@ -953,4 +953,4 @@ form#deleteConfirmationForm {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(25, 201, 188, 0.3);
     opacity: 0.95;
-}
+} */

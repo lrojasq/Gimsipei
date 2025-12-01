@@ -7,6 +7,7 @@
 <link href="{{ url_for('static', filename='css/category.css') }}" rel="stylesheet">
 <link href="{{ url_for('static', filename='css/admin.css') }}" rel="stylesheet">
 <link href="{{ url_for('static', filename='css/students_management.css') }}" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 {% endblock %}
 
 {% block content %}
@@ -18,7 +19,7 @@
     <!-- Inicio Estudiantes -->
     <div class="specialities_category cursos grades flex flex-column">
         <!-- Header con número de grado y título -->
-        <div class="flex header-students">
+        <div class="flex header-students w-100">
             <div class="course-grade-indicator">
                 <span class="grade-number">{{ course.grade_number }}</span>
             </div>
@@ -58,19 +59,19 @@
                                     </a>
                                 </td>
                                 <td>
-                                    <div class="actions-buttons">
-                                        <button class="action-btn edit-student" 
+                                    <div class="btns_actions">
+                                        <button class="action-btn edit-student btn-edit" 
                                                 data-student-id="{{ student.id }}" 
                                                 title="Editar"
                                                 aria-label="Editar estudiante">
-                                            <i class="fas fa-edit"></i>
+                                            <i class="bi bi-pencil-fill"></i>
                                         </button>
-                                        <button class="action-btn delete-student" 
+                                        <button class="action-btn delete-student btn_delete" 
                                                 data-student-id="{{ student.id }}"
                                                 data-student-name="{{ student.full_name }}"
                                                 title="Eliminar"
                                                 aria-label="Eliminar estudiante">
-                                            <i class="fas fa-trash"></i>
+                                            <i class="bi bi-trash3-fill"></i>
                                         </button>
                                     </div>
                                 </td>

@@ -188,12 +188,12 @@
 }
 
 .action-btn i {
-  font-size: 1.25rem;
-  width: 20px;
+  font-size: 0.8rem;
+  /* width: 20px;
   height: 20px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: center; */
 }
 
 /* Add Button */
@@ -290,7 +290,7 @@
 }
 
 /* Modal de Eliminación elegante*/
-.modal.modal_delete {
+/* .modal.modal_delete {
   position: fixed;
   top: 0;
   left: 0;
@@ -429,7 +429,7 @@
 
 .modal.modal_delete .container .delete-buttons .btn-delete .btn-spinner i {
   animation: spin 1s linear infinite;
-}
+} */
 
 @keyframes spin {
   from {

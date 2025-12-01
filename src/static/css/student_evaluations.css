@@ -118,7 +118,7 @@
 }
 
 /* Tarjeta de evaluación - Similar al docente */
-.student-evaluations .exam.evaluation-card {
+/* .student-evaluations .exam.evaluation-card {
   display: flex;
   background-color: white;
   border-radius: 12px;
@@ -133,7 +133,7 @@
 .student-evaluations .exam.evaluation-card:hover {
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   transform: translateY(-2px);
-}
+} */
 
 .student-evaluations .exam_content {
   flex: 1;
@@ -180,13 +180,13 @@
   color: rgba(255, 255, 255, 0.7);
 }
 
-.student-evaluations .text-content {
+/* .student-evaluations .text-content {
   flex: 1;
   padding: 1rem 1rem 1rem 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
-}
+} */
 
 .student-evaluations .text-content .title {
   font-size: 1.15rem;
@@ -207,37 +207,19 @@
 }
 
 /* Nota para evaluaciones completadas */
-.student-evaluations .nota {
-  min-width: 100px;
+/* .student-evaluations .nota {
   width: auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 1rem;
-  border-left: 1px solid #eee;
-  background-color: #fafafa;
-  border-radius: 0 12px 12px 0;
-}
+} */
 
 .student-evaluations .nota span {
-  font-size: 2rem;
+  /* font-size: 2rem; */
   font-weight: 700;
-  color: #333;
+  /* color: #333;
   background-color: transparent;
   height: auto;
-  width: auto;
+  width: auto; */
 }
 
-.student-evaluations .nota hr {
-  width: 60px;
-  height: 4px;
-  border-radius: 10px;
-  border: none;
-  background-color: var(--evaluaciones);
-  margin: 0;
-}
 
 /* Estado vacío */
 .student-evaluations .empty-state {

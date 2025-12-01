@@ -88,6 +88,10 @@ h1 {
     max-height: 90vh;
     overflow: auto;
 }
+.specialities_category.exam_category{
+    width: 90%;
+    margin: auto;
+}
 
 .specialities_category:has(form) {
     padding: 0px;
@@ -741,6 +745,9 @@ hr.libros_br {
 
 .container_category.flex.evaluaciones_category {
     gap: 0;
+}
+.container_category.flex.evaluaciones_category .specialities_category {
+    width: 90%;
 }
 
 .books_content.d-flex {

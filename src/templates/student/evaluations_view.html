@@ -51,7 +51,7 @@
     <!-- Panel central - Lista de evaluaciones -->
     <div class="specialities_category exams flex flex-column evaluations-content" id="evaluationsContent">
         {% if evaluations and evaluations|length > 0 %}
-            <div class="evaluations-list">
+            <div class="evaluations-list w-100">
                 {% for eval in evaluations %}
                 <div class="exam flex evaluation-card" 
                      {% if filter_type == 'pending' %}

@@ -14,11 +14,11 @@
 
 {% include "flash_messages.html" %}
 
-<div class="container_category flex admin_category student-evaluations-teacher">
+<div class="container_category flex evaluaciones_category student-evaluations-teacher">
     <!-- Inicio Evaluaciones del Estudiante -->
     <div class="specialities_category cursos grades flex flex-column">
         <!-- Header con número de grado y título -->
-        <div class="flex header-students">
+        <div class="flex header-students w-100">
             <div class="course-grade-indicator">
                 <span class="grade-number">{{ course.grade_number }}</span>
             </div>
@@ -69,15 +69,15 @@
                                             title="Clic para editar nota">
                                             {{ '%.1f'|format(eval_item.score) if eval_item.score is not none else '-' }}
                                         </td>
-                                        <td class="eval-actions-cell">
+                                        <td class="eval-actions-cell btns_actions">
                                             <a href="{{ url_for('evaluations.view_submission_answers', submission_id=eval_item.submission_id) }}" class="view-link" title="Ver detalles">Ver</a>
-                                            <button class="action-btn reset-evaluation"
+                                            <button class="action-btn reset-evaluation btn-edit btn"
                                                 data-submission-id="{{ eval_item.submission_id }}"
                                                 data-evaluation-title="{{ eval_item.title }}"
                                                 data-student-name="{{ student.full_name }}" title="Reiniciar evaluación">
                                                 <i class="fas fa-redo"></i>
                                             </button>
-                                            <button class="action-btn delete-evaluation-submission"
+                                            <button class="action-btn delete-evaluation-submission btn_delete btn"
                                                 data-submission-id="{{ eval_item.submission_id }}"
                                                 data-evaluation-title="{{ eval_item.title }}" title="Eliminar envío">
                                                 <i class="fas fa-trash"></i>
