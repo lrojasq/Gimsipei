@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+
+{% block title %}{{ evaluation.title }} | Evaluación{% endblock %}
+
+{% block extra_css %}
+<link href="{{ url_for('static', filename='css/menu.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/category.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/admin.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/student_take_evaluation.css') }}" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+{% endblock %}
+
+{% block content %}
+{% block menu %}{% endblock %}
+
+{% include "flash_messages.html" %}
+
+<div class="container_category flex evaluaciones_category">
+    <div class="specialities_category">
+        <!-- Contenedor principal con diseño de cuadro blanco -->
+        <div class="evaluation-container">
+            <!-- Header de la evaluación -->
+            <div class="evaluation-header">
+                <a href="{{ url_for('evaluations.student_evaluations_view') }}" class="back-link">
+                    <i class="fas fa-chevron-left"></i>
+                </a>
+                <h1 class="evaluation-title"><strong>Evaluación {{ subject.name }}</strong> - {{ evaluation.title }}</h1>
+            </div>
+
+            <!-- Instrucciones -->
+            <div class="evaluation-instructions">
+                <p><strong>Instrucciones:</strong> Responda todas las preguntas a continuación.</p>
+            </div>
+
+            <hr class="divider">
+
+            <!-- Formulario de la evaluación -->
+            <form id="evaluationForm" method="POST" action="{{ url_for('evaluations.student_submit_evaluation', evaluation_id=evaluation.id) }}">
+                <!-- Contenedor de preguntas con scroll -->
+                <div class="evaluation-questions-container">
+                    {% if questions and questions|length > 0 %}
+                        {% for question in questions %}
+                            <div class="question-card" data-question-id="{{ question.id }}">
+                                <div class="question-header">
+                                    <span class="question-number">{{ loop.index }}</span>
+                                    <p class="question-text">
+                                        {{ question.question_text }}
+                                        {% if question.question_type == 'multi' %}
+                                            <em style="color: #888; font-size: 0.9em;"> - Seleccione la opción correcta</em>
+                                        {% else %}
+                                            <em style="color: #888; font-size: 0.9em;"> - Respuesta abierta</em>
+                                        {% endif %}
+                                    </p>
+                                </div>
+
+                                {% if question.question_type == 'multi' %}
+                                    <!-- Opciones múltiples -->
+                                    <div class="question-options">
+                                        {% for option in question.options|sort(attribute='display_order') %}
+                                            <label class="option-label">
+                                                <input type="radio" 
+                                                    name="question_{{ question.id }}" 
+                                                    value="{{ option.option_letter }}"
+                                                    required>
+                                                <span class="radio-custom"></span>
+                                                <span class="option-text">{{ option.option_letter }}. {{ option.option_text }}</span>
+                                            </label>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    <!-- Respuesta abierta -->
+                                    <div class="open-answer-container">
+                                        <textarea name="question_{{ question.id }}" 
+                                                class="open-answer-textarea"
+                                                placeholder="Escriba su respuesta aquí..."
+                                                rows="4"
+                                                required></textarea>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="no-questions">
+                            <i class="fas fa-clipboard-question"></i>
+                            <p>Esta evaluación no tiene preguntas configuradas.</p>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Botón de envío -->
+                <div class="submit-section">
+                    <button type="submit" class="btn-submit-evaluation" id="submitEvaluationBtn">
+                        <span class="btn-text">
+                            <i class="fas fa-paper-plane"></i> ENVIAR EVALUACIÓN
+                        </span>
+                        <span class="btn-spinner">
+                            <span class="spinner-border spinner-border-sm"></span>
+                            ENVIANDO...
+                        </span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {% include "sidebar_aside.html" %}
+</div>
+
+<!-- Modal de confirmación -->
+<div class="confirmation-modal-overlay" id="confirmationModal">
+    <div class="confirmation-modal">
+        <div class="confirmation-modal-icon">
+            <i class="fas fa-paper-plane"></i>
+        </div>
+        <h3>¿Enviar evaluación?</h3>
+        <p>Una vez enviada no podrás modificar tus respuestas. ¿Estás seguro de que deseas continuar?</p>
+        <div class="confirmation-modal-actions">
+            <button type="button" class="btn-cancel-modal" id="cancelModalBtn">Cancelar</button>
+            <button type="button" class="btn-confirm-modal" id="confirmModalBtn">Sí, enviar</button>
+        </div>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/student_take_evaluation.js') }}"></script>
+{% endblock %}

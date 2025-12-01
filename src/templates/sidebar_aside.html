@@ -3,7 +3,7 @@
     <ul class="aside_list flex flex-column">
         {% if user.role == "admin" %}
         <li>
-            <a href="{{ url_for('admin.dashboard') }}" title="Inicio">
+            <a href="{{ url_for('users.dashboard') }}" title="Inicio">
                 <img src="{{ url_for('static', filename='images/iconos/home.png') }}" alt="Inicio"
                     style="width: 50px; height: 50px;">
             </a>
@@ -22,7 +22,7 @@
         </li>
         {% elif user.role == "teacher" %}
         <li>
-            <a href="{{ url_for('admin.dashboard') }}" title="Inicio">
+            <a href="{{ url_for('users.dashboard') }}" title="Inicio">
                 <img src="{{ url_for('static', filename='images/iconos/home.png') }}" alt="Inicio"
                     style="width: 50px; height: 50px;">
             </a>
@@ -53,7 +53,7 @@
         </li>
         {% elif user.role == "student" or user.role == "STUDENT" %}
         <li>
-            <a href="{{ url_for('admin.dashboard') }}" title="Inicio">
+            <a href="{{ url_for('users.dashboard') }}" title="Inicio">
                 <img src="{{ url_for('static', filename='images/iconos/home.png') }}" alt="Inicio"
                     style="width: 50px; height: 50px;">
             </a>
@@ -65,7 +65,7 @@
             </a>
         </li>
         <li>
-            <a href="{{ url_for('evaluations.evaluations_view') }}" title="Evaluaciones">
+            <a href="{{ url_for('evaluations.student_evaluations_view') }}" title="Evaluaciones">
                 <img src="{{ url_for('static', filename='images/iconos/library.png') }}" alt="Evaluaciones"
                     style="width: 50px; height: 50px;">
             </a>

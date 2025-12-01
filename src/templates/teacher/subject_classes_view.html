@@ -1,4 +1,3 @@
-
 {% extends "base.html" %}
 
 {% block title %}{{ subject.name }} - Clases{% endblock %}
@@ -17,18 +16,7 @@
 {% block content %}
 {% block menu %}{% endblock %}
 
-{% with messages = get_flashed_messages(with_categories=true) %}
-{% if messages %}
-{% for category, message in messages %}
-<div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-    <i
-        class="fas fa-{% if category == 'success' %}check-circle{% elif category == 'danger' %}exclamation-triangle{% else %}info-circle{% endif %} me-2"></i>
-    {{ message }}
-    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-</div>
-{% endfor %}
-{% endif %}
-{% endwith %}
+{% include "flash_messages.html" %}
 
 <div class="container_category flex clases_category" data-course-id="{{ course.id }}"
     data-subject-id="{{ subject.id }}">
@@ -36,7 +24,8 @@
     <!-- Inicio Perfil -->
     <div class="data_categoty flex flex-column">
         <div class="title flex">
-            <img src="{{ url_for('static', filename='images/svg/clases.svg') }}" alt="Clases" style="width: 60px; height: 50px;">
+            <img src="{{ url_for('static', filename='images/svg/clases.svg') }}" alt="Clases"
+                style="width: 60px; height: 50px;">
             <h1>Clases</h1>
         </div>
 
@@ -79,9 +68,8 @@
 
             {% if classes_by_period[period] %}
             {% for class_item in classes_by_period[period] %}
-            <div class="exam flex class" data-class-id="{{ class_item.id }}" 
-                 style="cursor: pointer;" 
-                 onclick="window.location.href='{{ url_for('classes.teacher_class_detail_view', class_id=class_item.id) }}'">
+            <div class="exam flex class" data-class-id="{{ class_item.id }}" style="cursor: pointer;"
+                onclick="window.location.href='{{ url_for('classes.teacher_class_detail_view', class_id=class_item.id) }}'">
                 <div class="exam_content flex">
                     <div class="img_evaluaciones evaluaciones_bg">
                         {% if class_item.cover_image %}
@@ -102,8 +90,7 @@
                         {% if user.role == "teacher" %}
                         <div class="d-flex justify-content-end btns_actions">
                             <a class="btn btn-outline-primary btn-sm btn-edit" href="#"
-                                data-class-id="{{ class_item.id }}" title="Editar"
-                                onclick="event.stopPropagation()">
+                                data-class-id="{{ class_item.id }}" title="Editar" onclick="event.stopPropagation()">
                                 <i class="bi bi-pencil-fill"></i>
                             </a>
                             <a class="btn btn-outline-danger btn-sm btn_delete open-delete-class-modal" href="#"

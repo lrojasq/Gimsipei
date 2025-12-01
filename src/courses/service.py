@@ -15,6 +15,8 @@ from src.models.course_student import CourseStudent
 from src.models.course_subject import CourseSubject
 from src.models.subject import Subject
 from src.models.user import User, UserRole
+from src.models.evaluation import Evaluation
+from src.models.evaluation_submission import EvaluationSubmission
 
 from .validation import (
     CourseCreateSchema,
@@ -712,5 +714,108 @@ def delete_assignment_submission_service(
         db.rollback()
         print(f"Error en delete_assignment_submission_service: {str(e)}")
         return None, 500
+    finally:
+        db.close()
+
+
+def get_student_evaluations_service(
+    course_id: int, student_id: int
+) -> Tuple[Optional[dict], List[dict], int]:
+    """Obtener evaluaciones de un estudiante en un curso, agrupadas por asignatura"""
+    db = SessionLocal()
+    try:
+        # Verificar que el curso existe
+        course = db.query(Course).filter(Course.id == course_id).first()
+        if not course:
+            return None, [], 404
+
+        # Verificar que el estudiante existe y está inscrito en el curso
+        student = db.query(User).filter(User.id == student_id).first()
+        if not student:
+            return None, [], 404
+
+        course_student = (
+            db.query(CourseStudent)
+            .filter(
+                CourseStudent.course_id == course_id,
+                CourseStudent.student_id == student_id,
+            )
+            .first()
+        )
+        if not course_student:
+            return None, [], 404
+
+        # Obtener todas las materias del curso
+        course_subjects = (
+            db.query(CourseSubject, Subject)
+            .join(Subject, CourseSubject.subject_id == Subject.id)
+            .filter(CourseSubject.course_id == course_id)
+            .order_by(Subject.name)
+            .all()
+        )
+
+        # Crear diccionario con todas las materias del curso
+        subjects_dict = {}
+        for _, subject in course_subjects:
+            subjects_dict[subject.id] = {
+                "subject_id": subject.id,
+                "subject_name": subject.name,
+                "evaluations": [],
+            }
+
+        # Obtener todas las evaluaciones enviadas por el estudiante
+        submissions = (
+            db.query(
+                EvaluationSubmission,
+                Evaluation,
+                Subject,
+            )
+            .join(Evaluation, EvaluationSubmission.evaluation_id == Evaluation.id)
+            .join(Subject, Evaluation.subject_id == Subject.id)
+            .filter(
+                Evaluation.course_id == course_id,
+                EvaluationSubmission.student_id == student_id,
+                EvaluationSubmission.is_completed.is_(True),
+            )
+            .order_by(Subject.name, Evaluation.title)
+            .all()
+        )
+
+        # Agrupar evaluaciones por asignatura
+        for submission, evaluation, subject in submissions:
+            if subject.id in subjects_dict:
+                subjects_dict[subject.id]["evaluations"].append(
+                    {
+                        "submission_id": submission.id,
+                        "evaluation_id": evaluation.id,
+                        "title": evaluation.title,
+                        "description": evaluation.description,
+                        "score": submission.score,
+                        "correct_answers": submission.correct_answers,
+                        "total_questions": submission.total_questions,
+                        "submitted_at": submission.submitted_at,
+                    }
+                )
+
+        # Convert to ordered list
+        subjects_list = list(subjects_dict.values())
+
+        # Preparar datos del curso y estudiante
+        course_data = {
+            "id": course.id,
+            "name": course.name,
+            "academic_year": course.academic_year,
+            "grade_number": get_grade_number_from_course_name(course.name),
+        }
+
+        student_data = {
+            "id": student.id,
+            "full_name": student.full_name or student.username,
+            "document": student.document,
+        }
+
+        return {"course": course_data, "student": student_data}, subjects_list, 200
+    except Exception:
+        return None, [], 500
     finally:
         db.close()

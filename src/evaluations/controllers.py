@@ -28,6 +28,11 @@ from src.database.database import SessionLocal
 from src.models.user import User
 from src.models.subject import Subject
 from src.models.course import Course
+from src.models.evaluation import Evaluation
+from src.models.evaluation_question import EvaluationQuestion, QuestionType
+from src.models.evaluation_submission import EvaluationSubmission
+from src.models.course_student import CourseStudent
+from src.models.evaluation_submission_answer import EvaluationSubmissionAnswer
 
 
 # ========== HTML View Controllers ==========
@@ -42,14 +47,14 @@ def evaluations_view_controller(_: Request):
 
         if not user:
             flash("Usuario no encontrado", "error")
-            return redirect(url_for("admin.dashboard"))
+            return redirect(url_for("users.dashboard"))
 
         # Obtener todos los cursos con sus materias
         courses, status_code = get_all_courses_with_subjects_for_evaluations()
 
         if status_code != 200:
             flash("Error al cargar los cursos", "error")
-            return redirect(url_for("admin.dashboard"))
+            return redirect(url_for("users.dashboard"))
 
         # Convert the User object to a dictionary with role as string
         user_dict = {
@@ -69,7 +74,7 @@ def evaluations_view_controller(_: Request):
         )
     except Exception:
         flash("Error al cargar la vista de evaluaciones", "error")
-        return redirect(url_for("admin.dashboard"))
+        return redirect(url_for("users.dashboard"))
     finally:
         db.close()
 
@@ -363,3 +368,547 @@ def get_evaluation_api_controller(
         return ApiResponse.error(
             message="Error al obtener la evaluación", details=str(e), status_code=500
         )
+
+
+def student_evaluations_view_controller(filter_type: str, _: Request):
+    """Vista de evaluaciones para estudiantes"""
+    db = SessionLocal()
+    try:
+        current_user_id = get_jwt_identity()
+        user = db.query(User).filter(User.id == current_user_id).first()
+
+        if not user:
+            flash("Usuario no encontrado", "error")
+            return redirect(url_for("users.dashboard"))
+
+        # Obtener el curso del estudiante
+        course_student = (
+            db.query(CourseStudent)
+            .filter(CourseStudent.student_id == current_user_id)
+            .first()
+        )
+
+        course = None
+        if course_student:
+            course = (
+                db.query(Course).filter(Course.id == course_student.course_id).first()
+            )
+
+        # Convert the User object to a dictionary
+        user_dict = {
+            "id": user.id,
+            "username": user.username,
+            "document": user.document,
+            "full_name": user.full_name,
+            "avatar": getattr(user, "avatar", None),
+            "role": user.role.value if hasattr(user.role, "value") else str(user.role),
+        }
+
+        evaluations = []
+
+        if course:
+            if filter_type == "completed":
+                # Evaluaciones completadas (con submission)
+                submissions = (
+                    db.query(EvaluationSubmission)
+                    .filter(
+                        EvaluationSubmission.student_id == current_user_id,
+                        EvaluationSubmission.is_completed.is_(True),
+                    )
+                    .all()
+                )
+
+                for submission in submissions:
+                    eval_obj = submission.evaluation
+                    if eval_obj and eval_obj.course_id == course.id:
+                        evaluations.append(
+                            {
+                                "id": eval_obj.id,
+                                "title": eval_obj.title,
+                                "description": eval_obj.description,
+                                "cover_image": eval_obj.cover_image,
+                                "subject_name": eval_obj.subject.name
+                                if eval_obj.subject
+                                else "",
+                                "score": submission.score,
+                                "submitted_at": submission.submitted_at,
+                            }
+                        )
+            else:
+                # Evaluaciones pendientes (sin submission o no completadas)
+                # Obtener todas las evaluaciones del curso del estudiante
+                all_evaluations = (
+                    db.query(Evaluation).filter(Evaluation.course_id == course.id).all()
+                )
+
+                # Obtener IDs de evaluaciones ya completadas
+                completed_ids = (
+                    db.query(EvaluationSubmission.evaluation_id)
+                    .filter(
+                        EvaluationSubmission.student_id == current_user_id,
+                        EvaluationSubmission.is_completed.is_(True),
+                    )
+                    .all()
+                )
+                completed_ids = [id[0] for id in completed_ids]
+
+                for eval_obj in all_evaluations:
+                    if eval_obj.id not in completed_ids:
+                        evaluations.append(
+                            {
+                                "id": eval_obj.id,
+                                "title": eval_obj.title,
+                                "description": eval_obj.description,
+                                "cover_image": eval_obj.cover_image,
+                                "subject_name": eval_obj.subject.name
+                                if eval_obj.subject
+                                else "",
+                                "score": None,
+                            }
+                        )
+
+        return render_template(
+            "student/evaluations_view.html",
+            user=user_dict,
+            course=course,
+            evaluations=evaluations,
+            filter_type=filter_type,
+            accion_logout=True,
+        )
+    except Exception as e:
+        flash(f"Error al cargar las evaluaciones: {str(e)}", "error")
+        return redirect(url_for("users.dashboard"))
+    finally:
+        db.close()
+
+
+def student_take_evaluation_controller(evaluation_id: int, _: Request):
+    """Vista para que el estudiante resuelva una evaluación"""
+    db = SessionLocal()
+    try:
+        current_user_id = get_jwt_identity()
+        user = db.query(User).filter(User.id == current_user_id).first()
+
+        if not user:
+            flash("Usuario no encontrado", "error")
+            return redirect(url_for("users.dashboard"))
+
+        # Obtener la evaluación
+        evaluation = db.query(Evaluation).filter(Evaluation.id == evaluation_id).first()
+
+        if not evaluation:
+            flash("Evaluación no encontrada", "error")
+            return redirect(url_for("evaluations.student_evaluations_view"))
+
+        # Verificar si ya completó esta evaluación
+        existing_submission = (
+            db.query(EvaluationSubmission)
+            .filter(
+                EvaluationSubmission.evaluation_id == evaluation_id,
+                EvaluationSubmission.student_id == current_user_id,
+                EvaluationSubmission.is_completed.is_(True),
+            )
+            .first()
+        )
+
+        if existing_submission:
+            flash("Ya has completado esta evaluación", "warning")
+            return redirect(url_for("evaluations.student_evaluations_view"))
+
+        # Obtener las preguntas de la evaluación
+        questions = (
+            db.query(EvaluationQuestion)
+            .filter(EvaluationQuestion.evaluation_id == evaluation_id)
+            .order_by(EvaluationQuestion.question_number)
+            .all()
+        )
+
+        # Obtener la materia
+        subject = db.query(Subject).filter(Subject.id == evaluation.subject_id).first()
+
+        # Convert the User object to a dictionary
+        user_dict = {
+            "id": user.id,
+            "username": user.username,
+            "document": user.document,
+            "full_name": user.full_name,
+            "avatar": getattr(user, "avatar", None),
+            "role": user.role.value if hasattr(user.role, "value") else str(user.role),
+        }
+
+        return render_template(
+            "student/take_evaluation.html",
+            user=user_dict,
+            evaluation=evaluation,
+            subject=subject,
+            questions=questions,
+            accion_logout=True,
+        )
+    except Exception as e:
+        flash(f"Error al cargar la evaluación: {str(e)}", "error")
+        return redirect(url_for("evaluations.student_evaluations_view"))
+    finally:
+        db.close()
+
+
+def student_submit_evaluation_controller(evaluation_id: int, request: Request):
+    """Procesar el envío de respuestas de una evaluación"""
+    db = SessionLocal()
+    try:
+        current_user_id = get_jwt_identity()
+        evaluation = db.query(Evaluation).filter(Evaluation.id == evaluation_id).first()
+
+        if not evaluation:
+            flash("Evaluación no encontrada", "error")
+            return redirect(url_for("evaluations.student_evaluations_view"))
+
+        # Verificar si ya completó esta evaluación
+        existing_submission = (
+            db.query(EvaluationSubmission)
+            .filter(
+                EvaluationSubmission.evaluation_id == evaluation_id,
+                EvaluationSubmission.student_id == current_user_id,
+                EvaluationSubmission.is_completed.is_(True),
+            )
+            .first()
+        )
+
+        if existing_submission:
+            flash("Ya has completado esta evaluación", "warning")
+            return redirect(url_for("evaluations.student_evaluations_view"))
+
+        # Obtener las preguntas
+        questions = (
+            db.query(EvaluationQuestion)
+            .filter(EvaluationQuestion.evaluation_id == evaluation_id)
+            .all()
+        )
+
+        if not questions:
+            flash("La evaluación no tiene preguntas", "error")
+            return redirect(url_for("evaluations.student_evaluations_view"))
+
+        # Crear o actualizar la submission
+        submission = (
+            db.query(EvaluationSubmission)
+            .filter(
+                EvaluationSubmission.evaluation_id == evaluation_id,
+                EvaluationSubmission.student_id == current_user_id,
+            )
+            .first()
+        )
+
+        if not submission:
+            submission = EvaluationSubmission(
+                evaluation_id=evaluation_id,
+                student_id=current_user_id,
+                total_questions=len(questions),
+                is_completed=False,
+            )
+            db.add(submission)
+            db.flush()
+
+        # Procesar las respuestas
+        correct_count = 0
+        total_questions = len(questions)
+
+        for question in questions:
+            answer_key = f"question_{question.id}"
+            answer_value = request.form.get(answer_key, "").strip()
+
+            # Crear la respuesta
+            answer = EvaluationSubmissionAnswer(
+                submission_id=submission.id,
+                question_id=question.id,
+                answer_text=answer_value,
+            )
+
+            # Verificar si es correcta según el tipo de pregunta
+            if (
+                question.question_type == QuestionType.MULTIPLE_CHOICE
+                or question.question_type == "multi"
+            ):
+                # Opción múltiple: verificar contra la respuesta correcta
+                if (
+                    question.correct_answer
+                    and answer_value.upper() == question.correct_answer.upper()
+                ):
+                    answer.is_correct = True
+                    correct_count += 1
+                else:
+                    answer.is_correct = False
+            else:
+                # Pregunta abierta: si respondió algo, cuenta como correcta
+                if answer_value:
+                    answer.is_correct = True
+                    correct_count += 1
+                else:
+                    answer.is_correct = False
+
+            db.add(answer)
+
+        # Calcular puntaje: 5.0 / total_preguntas * preguntas_correctas
+        # Fórmula: (correctas / total) * 5.0
+        score = (correct_count / total_questions) * 5.0 if total_questions > 0 else 0.0
+
+        # Actualizar submission
+        submission.correct_answers = correct_count
+        submission.score = round(score, 1)  # Redondear a 1 decimal
+        submission.is_completed = True
+
+        db.commit()
+
+        flash("Evaluación enviada exitosamente", "success")
+        return redirect(
+            url_for("evaluations.student_evaluations_view", filter="completed")
+        )
+
+    except Exception as e:
+        db.rollback()
+        flash(f"Error al enviar la evaluación: {str(e)}", "error")
+        return redirect(url_for("evaluations.student_evaluations_view"))
+    finally:
+        db.close()
+
+
+def reset_evaluation_submission_controller(submission_id: int, request: Request):
+    """Reiniciar evaluación de un estudiante (eliminar respuestas y permitir volver a presentar)"""
+    db = SessionLocal()
+    try:
+        # Obtener la submission
+        submission = (
+            db.query(EvaluationSubmission)
+            .filter(EvaluationSubmission.id == submission_id)
+            .first()
+        )
+
+        if not submission:
+            flash("Envío de evaluación no encontrado", "error")
+            return redirect(request.referrer or url_for("users.dashboard"))
+
+        # Guardar datos para redirección
+        evaluation = submission.evaluation
+        course_id = evaluation.course_id if evaluation else None
+        student_id = submission.student_id
+
+        # Eliminar las respuestas asociadas
+        db.query(EvaluationSubmissionAnswer).filter(
+            EvaluationSubmissionAnswer.submission_id == submission_id
+        ).delete()
+
+        # Eliminar la submission (permitirá al estudiante volver a presentar)
+        db.delete(submission)
+        db.commit()
+
+        flash(
+            "Evaluación reiniciada exitosamente. El estudiante puede volver a presentarla.",
+            "success",
+        )
+
+        # Redirigir de vuelta a la página de evaluaciones del estudiante
+        if course_id and student_id:
+            return redirect(
+                url_for(
+                    "users.student_evaluations",
+                    course_id=course_id,
+                    student_id=student_id,
+                )
+            )
+        return redirect(request.referrer or url_for("users.dashboard"))
+
+    except Exception as e:
+        db.rollback()
+        flash(f"Error al reiniciar la evaluación: {str(e)}", "error")
+        return redirect(request.referrer or url_for("users.dashboard"))
+    finally:
+        db.close()
+
+
+def delete_evaluation_submission_controller(submission_id: int, request: Request):
+    """Eliminar envío de evaluación de un estudiante"""
+    db = SessionLocal()
+    try:
+        # Obtener la submission
+        submission = (
+            db.query(EvaluationSubmission)
+            .filter(EvaluationSubmission.id == submission_id)
+            .first()
+        )
+
+        if not submission:
+            flash("Envío de evaluación no encontrado", "error")
+            return redirect(request.referrer or url_for("users.dashboard"))
+
+        # Guardar datos para redirección
+        evaluation = submission.evaluation
+        course_id = evaluation.course_id if evaluation else None
+        student_id = submission.student_id
+
+        # Eliminar las respuestas asociadas (debería hacerse automáticamente por cascade)
+        db.query(EvaluationSubmissionAnswer).filter(
+            EvaluationSubmissionAnswer.submission_id == submission_id
+        ).delete()
+
+        # Eliminar la submission
+        db.delete(submission)
+        db.commit()
+
+        flash("Envío de evaluación eliminado exitosamente", "success")
+
+        # Redirigir de vuelta a la página de evaluaciones del estudiante
+        if course_id and student_id:
+            return redirect(
+                url_for(
+                    "users.student_evaluations",
+                    course_id=course_id,
+                    student_id=student_id,
+                )
+            )
+        return redirect(request.referrer or url_for("users.dashboard"))
+
+    except Exception as e:
+        db.rollback()
+        flash(f"Error al eliminar el envío: {str(e)}", "error")
+        return redirect(request.referrer or url_for("users.dashboard"))
+    finally:
+        db.close()
+
+
+def view_submission_answers_controller(submission_id: int, request: Request):
+    """Ver las respuestas de un estudiante en una evaluación"""
+    db = SessionLocal()
+    try:
+        current_user_id = get_jwt_identity()
+        user = db.query(User).filter(User.id == current_user_id).first()
+        if not user:
+            flash("Usuario no encontrado", "error")
+            return redirect(url_for("users.dashboard"))
+
+        # Obtener la submission con sus relaciones
+        submission = (
+            db.query(EvaluationSubmission)
+            .filter(EvaluationSubmission.id == submission_id)
+            .first()
+        )
+
+        if not submission:
+            flash("Envío de evaluación no encontrado", "error")
+            return redirect(request.referrer or url_for("users.dashboard"))
+
+        # Obtener la evaluación
+        evaluation = (
+            db.query(Evaluation)
+            .filter(Evaluation.id == submission.evaluation_id)
+            .first()
+        )
+        if not evaluation:
+            flash("Evaluación no encontrada", "error")
+            return redirect(request.referrer or url_for("users.dashboard"))
+
+        # Obtener el estudiante
+        student = db.query(User).filter(User.id == submission.student_id).first()
+        if not student:
+            flash("Estudiante no encontrado", "error")
+            return redirect(request.referrer or url_for("users.dashboard"))
+
+        # Obtener el curso y materia
+        course = db.query(Course).filter(Course.id == evaluation.course_id).first()
+        subject = db.query(Subject).filter(Subject.id == evaluation.subject_id).first()
+
+        # Obtener las preguntas de la evaluación con sus opciones
+        questions = (
+            db.query(EvaluationQuestion)
+            .filter(EvaluationQuestion.evaluation_id == evaluation.id)
+            .order_by(EvaluationQuestion.id)
+            .all()
+        )
+
+        # Obtener las respuestas del estudiante
+        answers = (
+            db.query(EvaluationSubmissionAnswer)
+            .filter(EvaluationSubmissionAnswer.submission_id == submission_id)
+            .all()
+        )
+
+        # Crear diccionario de respuestas para fácil acceso
+        answers_dict = {answer.question_id: answer for answer in answers}
+
+        # Convert the User object to a dictionary with role as string
+        user_dict = {
+            "id": user.id,
+            "username": user.username,
+            "document": user.document,
+            "full_name": user.full_name,
+            "avatar": getattr(user, "avatar", None),
+            "role": user.role.value if hasattr(user.role, "value") else str(user.role),
+        }
+
+        return render_template(
+            "teacher/view_submission_answers.html",
+            user=user_dict,
+            submission=submission,
+            evaluation=evaluation,
+            student=student,
+            course=course,
+            subject=subject,
+            questions=questions,
+            answers_dict=answers_dict,
+            total_questions=len(questions),
+            accion_logout=True,
+        )
+
+    except Exception as e:
+        flash(f"Error al cargar las respuestas: {str(e)}", "error")
+        return redirect(request.referrer or url_for("users.dashboard"))
+    finally:
+        db.close()
+
+
+def update_submission_score_controller(submission_id: int, request: Request):
+    """Actualizar la nota de un envío de evaluación"""
+    db = SessionLocal()
+    try:
+        # Obtener datos del request
+        data = request.get_json()
+        if not data or "score" not in data:
+            return jsonify({"success": False, "error": "Nota no proporcionada"}), 400
+
+        new_score = float(data["score"])
+
+        # Validar rango de nota
+        if new_score < 0 or new_score > 5:
+            return jsonify(
+                {"success": False, "error": "La nota debe estar entre 0.0 y 5.0"}
+            ), 400
+
+        # Obtener la submission
+        submission = (
+            db.query(EvaluationSubmission)
+            .filter(EvaluationSubmission.id == submission_id)
+            .first()
+        )
+
+        if not submission:
+            return jsonify(
+                {"success": False, "error": "Envío de evaluación no encontrado"}
+            ), 404
+
+        # Actualizar la nota
+        submission.score = new_score
+        db.commit()
+
+        return jsonify(
+            {
+                "success": True,
+                "message": "Nota actualizada correctamente",
+                "score": new_score,
+            }
+        ), 200
+
+    except ValueError:
+        return jsonify({"success": False, "error": "Nota inválida"}), 400
+    except Exception as e:
+        db.rollback()
+        return jsonify({"success": False, "error": str(e)}), 500
+    finally:
+        db.close()

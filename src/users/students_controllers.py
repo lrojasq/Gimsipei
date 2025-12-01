@@ -1,7 +1,6 @@
 from flask import Request, Response, flash, redirect, render_template, url_for
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from pydantic import ValidationError
-import traceback
 
 from src.models.user import UserRole
 from src.utils.decorator_role_required import role_required
@@ -10,6 +9,7 @@ from src.courses.service import (
     get_courses_service,
     add_student_to_course_service,
     get_student_tasks_service,
+    get_student_evaluations_service,
 )
 from src.courses.validation import CourseStudentSchema
 
@@ -42,7 +42,7 @@ def course_students_controller(course_id: int, request: Request) -> Response:
 
         if status_code == 404 or not course_data:
             flash("Curso no encontrado", "danger")
-            return redirect(url_for("admin.dashboard"))
+            return redirect(url_for("users.dashboard"))
 
         return render_template(
             "teacher/students.html",
@@ -54,7 +54,7 @@ def course_students_controller(course_id: int, request: Request) -> Response:
         )
     except Exception as e:
         flash(f"Error al cargar los estudiantes: {str(e)}", "danger")
-        return redirect(url_for("admin.dashboard"))
+        return redirect(url_for("users.dashboard"))
 
 
 @jwt_required()
@@ -76,7 +76,7 @@ def create_student_controller(course_id: int, request: Request) -> Response:
         course_data, _, course_status = get_course_students_for_view_service(course_id)
         if course_status == 404 or not course_data:
             flash("Curso no encontrado", "danger")
-            return redirect(url_for("admin.dashboard"))
+            return redirect(url_for("users.dashboard"))
 
         # Obtener lista de cursos para el dropdown
         courses, _ = get_courses_service()
@@ -178,7 +178,7 @@ def create_student_controller(course_id: int, request: Request) -> Response:
 
     except Exception as e:
         flash(f"Error al cargar el formulario: {str(e)}", "danger")
-        return redirect(url_for("admin.dashboard"))
+        return redirect(url_for("users.dashboard"))
 
 
 @jwt_required()
@@ -200,7 +200,7 @@ def edit_student_controller(
         course_data, _, course_status = get_course_students_for_view_service(course_id)
         if course_status == 404 or not course_data:
             flash("Curso no encontrado", "danger")
-            return redirect(url_for("admin.dashboard"))
+            return redirect(url_for("users.dashboard"))
 
         # Obtener lista de cursos para el dropdown
         courses, _ = get_courses_service()
@@ -272,7 +272,7 @@ def edit_student_controller(
 
     except Exception as e:
         flash(f"Error al cargar el formulario: {str(e)}", "danger")
-        return redirect(url_for("admin.dashboard"))
+        return redirect(url_for("users.dashboard"))
 
 
 @jwt_required()
@@ -356,4 +356,46 @@ def student_tasks_controller(
         )
     except Exception as e:
         flash(f"Error al cargar las tareas: {str(e)}", "danger")
+        return redirect(url_for("users.course_students", course_id=course_id))
+
+
+@jwt_required()
+@role_required([UserRole.TEACHER])
+def student_evaluations_controller(
+    course_id: int, student_id: int, request: Request
+) -> Response:
+    """Vista para mostrar las evaluaciones de un estudiante específico"""
+    user_id = get_jwt_identity()
+    try:
+        current_user, status_code = get_user_service(user_id, request)
+        if status_code != 200 or not current_user:
+            flash("Usuario no encontrado", "danger")
+            return redirect(url_for("auth.login"))
+
+        # Obtener datos del curso, estudiante y evaluaciones agrupadas por asignatura
+        data, subjects_list, status_code = get_student_evaluations_service(
+            course_id, student_id
+        )
+
+        if status_code == 404 or not data:
+            flash("Curso o estudiante no encontrado", "danger")
+            return redirect(url_for("users.course_students", course_id=course_id))
+
+        if status_code != 200:
+            flash(
+                f"Error al obtener las evaluaciones del estudiante (código: {status_code})",
+                "danger",
+            )
+            return redirect(url_for("users.course_students", course_id=course_id))
+
+        return render_template(
+            "teacher/student_evaluations.html",
+            user=current_user,
+            course=data["course"],
+            student=data["student"],
+            subjects=subjects_list,
+            accion_logout=True,
+        )
+    except Exception as e:
+        flash(f"Error al cargar las evaluaciones: {str(e)}", "danger")
         return redirect(url_for("users.course_students", course_id=course_id))

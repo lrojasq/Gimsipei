@@ -40,14 +40,14 @@ def books_view_controller(_: Request):
 
         if not user:
             flash("Usuario no encontrado", "error")
-            return redirect(url_for("admin.dashboard"))
+            return redirect(url_for("users.dashboard"))
 
         # Obtener todos los libros
         books, status_code = get_books_service()
 
         if status_code != 200:
             flash("Error al cargar los libros", "error")
-            return redirect(url_for("admin.dashboard"))
+            return redirect(url_for("users.dashboard"))
 
         # Obtener materias del profesor para el filtro
         course_subjects = (
@@ -110,7 +110,7 @@ def books_view_controller(_: Request):
         )
     except Exception:
         flash("Error al cargar la vista de libros", "error")
-        return redirect(url_for("admin.dashboard"))
+        return redirect(url_for("users.dashboard"))
     finally:
         db.close()
 
@@ -248,14 +248,14 @@ def read_book_controller(book_id: int, _: Request):
 
         if not user:
             flash("Usuario no encontrado", "error")
-            return redirect(url_for("admin.dashboard"))
+            return redirect(url_for("users.dashboard"))
 
         # Obtener el libro
         book_data, status_code = get_book_service(book_id)
 
         if status_code == 404:
             flash("Libro no encontrado", "error")
-            return redirect(url_for("admin.dashboard"))
+            return redirect(url_for("users.dashboard"))
 
         # Si es estudiante, solo puede ver libros para estudiantes
         if (
@@ -263,7 +263,7 @@ def read_book_controller(book_id: int, _: Request):
             and book_data.get("target_audience") != "STUDENT"
         ):
             flash("No tienes permiso para ver este libro", "error")
-            return redirect(url_for("admin.dashboard"))
+            return redirect(url_for("users.dashboard"))
 
         # Convert the User object to a dictionary with role as string
         user_dict = {
@@ -283,7 +283,7 @@ def read_book_controller(book_id: int, _: Request):
         )
     except Exception:
         flash("Error al cargar el libro", "error")
-        return redirect(url_for("admin.dashboard"))
+        return redirect(url_for("users.dashboard"))
     finally:
         db.close()
 

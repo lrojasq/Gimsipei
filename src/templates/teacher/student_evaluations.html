@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block title %}{{ student.full_name }} - Evaluaciones{% endblock %}
+
+{% block extra_css %}
+<link href="{{ url_for('static', filename='css/menu.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/category.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/admin.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/student_evaluations_teacher.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+{% block menu %}{% endblock %}
+
+{% include "flash_messages.html" %}
+
+<div class="container_category flex admin_category student-evaluations-teacher">
+    <!-- Inicio Evaluaciones del Estudiante -->
+    <div class="specialities_category cursos grades flex flex-column">
+        <!-- Header con número de grado y título -->
+        <div class="flex header-students">
+            <div class="course-grade-indicator">
+                <span class="grade-number">{{ course.grade_number }}</span>
+            </div>
+            <div class="course-title">
+                <h2>{{ student.full_name }} - Evaluaciones</h2>
+            </div>
+        </div>
+
+        <!-- Tabla de evaluaciones agrupadas por asignatura -->
+        <div class="evaluations-table-wrapper">
+            <table class="evaluations-table">
+                <thead>
+                    <tr>
+                        <th>Asignatura</th>
+                        <th>Nombre</th>
+                        <th>Fecha</th>
+                        <th>Nota</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if subjects %}
+                        {% for subject in subjects %}
+                            <!-- Fila de asignatura (expandible) -->
+                            <tr class="subject-row" data-subject-id="{{ subject.subject_id }}">
+                                <td colspan="5" class="subject-header">
+                                    <div class="flex subject-header-content">
+                                        <span class="subject-name">{{ subject.subject_name }}</span>
+                                        <i class="fas fa-chevron-down toggle-subject"></i>
+                                    </div>
+                                </td>
+                            </tr>
+                            <!-- Filas de evaluaciones (ocultas por defecto) -->
+                            {% if subject.evaluations %}
+                                {% for eval_item in subject.evaluations %}
+                                    <tr class="subject-content-row evaluation-row" data-subject-id="{{ subject.subject_id }}"
+                                        style="display: none;">
+                                        <td class="eval-indent"></td>
+                                        <td class="eval-name-cell">{{ eval_item.title }}</td>
+                                        <td class="eval-date-cell">{{ eval_item.submitted_at.strftime('%d-%m-%y') if
+                                            eval_item.submitted_at else '-' }}</td>
+                                        <td class="eval-score-cell editable-score" 
+                                            onclick="openEditScoreModal(this)"
+                                            data-submission-id="{{ eval_item.submission_id }}"
+                                            data-evaluation-title="{{ eval_item.title }}"
+                                            data-student-name="{{ student.full_name }}"
+                                            data-current-score="{{ eval_item.score if eval_item.score is not none else 0 }}"
+                                            title="Clic para editar nota">
+                                            {{ '%.1f'|format(eval_item.score) if eval_item.score is not none else '-' }}
+                                        </td>
+                                        <td class="eval-actions-cell">
+                                            <a href="{{ url_for('evaluations.view_submission_answers', submission_id=eval_item.submission_id) }}" class="view-link" title="Ver detalles">Ver</a>
+                                            <button class="action-btn reset-evaluation"
+                                                data-submission-id="{{ eval_item.submission_id }}"
+                                                data-evaluation-title="{{ eval_item.title }}"
+                                                data-student-name="{{ student.full_name }}" title="Reiniciar evaluación">
+                                                <i class="fas fa-redo"></i>
+                                            </button>
+                                            <button class="action-btn delete-evaluation-submission"
+                                                data-submission-id="{{ eval_item.submission_id }}"
+                                                data-evaluation-title="{{ eval_item.title }}" title="Eliminar envío">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr class="subject-content-row" data-subject-id="{{ subject.subject_id }}" style="display: none;">
+                                    <td colspan="5" class="empty-evaluations-cell">
+                                        <p>No hay evaluaciones enviadas para esta asignatura.</p>
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <tr class="empty-state-row">
+                            <td colspan="5" class="empty-state-cell">
+                                <p>Este curso no tiene materias asignadas. Por favor, asigne materias al curso primero.</p>
+                            </td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Sidebar Menu Component -->
+    {% include "sidebar_aside.html" %}
+</div>
+
+<!-- Modal de Confirmación de Eliminación -->
+{% include "delete_confirmation_modal.html" %}
+
+<!-- Modal de Editar Nota -->
+{% include "teacher/edit_score_modal.html" %}
+
+<!-- Modal de Reinicio de Evaluación -->
+{% include "teacher/reset_evaluation_modal.html" %}
+
+<!-- Custom JS -->
+<script src="{{ url_for('static', filename='js/delete_modal.js') }}"></script>
+<script src="{{ url_for('static', filename='js/student_evaluations_teacher.js') }}"></script>
+{% endblock %}

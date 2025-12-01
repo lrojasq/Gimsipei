@@ -1,0 +1,348 @@
+/* Student Evaluations View Styles */
+
+:root {
+  --evaluaciones: #f48d53;
+  --evaluaciones-active: #e55d1a;
+  --evaluaciones-light: #fff5f0;
+}
+
+/* Container principal */
+.student-evaluations {
+  min-height: calc(100vh - 100px);
+  overflow: hidden;
+}
+
+/* Panel izquierdo */
+.student-evaluations .data_categoty {
+  min-width: 280px;
+  max-width: 300px;
+  padding: 2rem;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.student-evaluations .data_categoty .title {
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.student-evaluations .data_categoty .title h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #333;
+  margin: 0;
+}
+
+.student-evaluations .student-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+.student-evaluations .data_grade_category {
+  gap: 0.25rem;
+  margin-bottom: 2rem;
+}
+
+.student-evaluations .data_grade_category p {
+  font-size: 0.95rem;
+  color: #666;
+  margin: 0;
+}
+
+/* Botones de filtro */
+.filter-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.btn-filter {
+  padding: 0.85rem 2rem;
+  border-radius: 25px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-transform: uppercase;
+  min-width: 180px;
+}
+
+.btn-filter:not(.btn-filter-outline) {
+  background-color: transparent;
+  border: 2px solid var(--evaluaciones);
+  color: var(--evaluaciones);
+}
+
+.btn-filter:not(.btn-filter-outline):hover,
+.btn-filter:not(.btn-filter-outline).active {
+  background-color: var(--evaluaciones);
+  color: white;
+}
+
+.btn-filter-outline {
+  background-color: transparent;
+  border: 2px solid #999;
+  color: #666;
+}
+
+.btn-filter-outline:hover,
+.btn-filter-outline.active {
+  background-color: var(--evaluaciones);
+  border-color: var(--evaluaciones);
+  color: white;
+}
+
+/* Panel central - Lista de evaluaciones */
+.student-evaluations .evaluations-content {
+  flex: 1;
+  background-color: #f5f5f5;
+  border-radius: 20px;
+  padding: 1.5rem;
+  margin: 1rem;
+  margin-right: 100px;
+  max-height: calc(100vh - 150px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  transition: opacity 0.1s ease;
+}
+
+.evaluations-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Tarjeta de evaluación - Similar al docente */
+.student-evaluations .exam.evaluation-card {
+  display: flex;
+  background-color: white;
+  border-radius: 12px;
+  padding: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  cursor: pointer;
+  overflow: hidden;
+  height: auto;
+}
+
+.student-evaluations .exam.evaluation-card:hover {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.student-evaluations .exam_content {
+  flex: 1;
+  display: flex;
+  gap: 1.5rem;
+  align-items: stretch;
+}
+
+.student-evaluations .img_evaluaciones {
+  width: 160px;
+  min-height: 110px;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.student-evaluations .img_evaluaciones img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.student-evaluations .evaluaciones_bg {
+  background-color: var(--evaluaciones);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.student-evaluations .evaluation-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    135deg,
+    var(--evaluaciones) 0%,
+    var(--evaluaciones-active) 100%
+  );
+}
+
+.student-evaluations .evaluation-placeholder i {
+  font-size: 3rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.student-evaluations .text-content {
+  flex: 1;
+  padding: 1rem 1rem 1rem 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.student-evaluations .text-content .title {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--evaluaciones);
+  margin: 0 0 0.5rem 0;
+}
+
+.student-evaluations .text-content p {
+  font-size: 0.9rem;
+  color: #666;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.student-evaluations .text-content p strong {
+  color: #333;
+}
+
+/* Nota para evaluaciones completadas */
+.student-evaluations .nota {
+  min-width: 100px;
+  width: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  border-left: 1px solid #eee;
+  background-color: #fafafa;
+  border-radius: 0 12px 12px 0;
+}
+
+.student-evaluations .nota span {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #333;
+  background-color: transparent;
+  height: auto;
+  width: auto;
+}
+
+.student-evaluations .nota hr {
+  width: 60px;
+  height: 4px;
+  border-radius: 10px;
+  border: none;
+  background-color: var(--evaluaciones);
+  margin: 0;
+}
+
+/* Estado vacío */
+.student-evaluations .empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  padding: 2rem;
+}
+
+.student-evaluations .empty-message {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #333;
+  text-align: center;
+}
+
+/* Scrollbar personalizado */
+.student-evaluations .evaluations-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.student-evaluations .evaluations-content::-webkit-scrollbar-track {
+  background: #e0e0e0;
+  border-radius: 4px;
+}
+
+.student-evaluations .evaluations-content::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 4px;
+}
+
+.student-evaluations .evaluations-content::-webkit-scrollbar-thumb:hover {
+  background: var(--evaluaciones);
+}
+
+/* Sidebar para evaluaciones */
+.student-evaluations .menu_aside {
+  background-color: var(--evaluaciones);
+  position: fixed;
+  right: 20px;
+  top: 110px;
+  z-index: 100;
+}
+
+.student-evaluations .menu_aside .aside_list li a.active,
+.student-evaluations .menu_aside .aside_list li a:hover {
+  background-color: var(--evaluaciones-active);
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .student-evaluations .data_categoty {
+    min-width: 240px;
+    max-width: 260px;
+  }
+
+  .student-evaluations .evaluations-content {
+    margin-right: 90px;
+  }
+}
+
+@media (max-width: 992px) {
+  .student-evaluations {
+    flex-direction: column;
+    overflow-y: auto;
+  }
+
+  .student-evaluations .data_categoty {
+    max-width: 100%;
+    min-width: auto;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .filter-buttons {
+    flex-direction: row;
+  }
+
+  .student-evaluations .evaluations-content {
+    margin: 0 1rem 1rem;
+    margin-right: 80px;
+    max-height: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .student-evaluations .exam_content {
+    flex-direction: column;
+  }
+
+  .student-evaluations .img_evaluaciones {
+    width: 100%;
+    height: 150px;
+  }
+
+  .student-evaluations .evaluation-score {
+    border-left: none;
+    border-top: 1px solid #eee;
+    padding: 1rem;
+  }
+
+  .student-evaluations .text-content {
+    padding: 1rem;
+  }
+}
