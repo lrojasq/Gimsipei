@@ -1,10 +1,11 @@
-from typing import Tuple, Optional
-from datetime import datetime
 import os
+from datetime import datetime
+from typing import Optional, Tuple
+
 from werkzeug.utils import secure_filename
 
-from ..models.book import Book
 from ..database.database import SessionLocal
+from ..models.book import Book
 
 
 def book_to_dict(book):
@@ -17,6 +18,7 @@ def book_to_dict(book):
         "file_path": book.file_path,
         "cover_image": book.cover_image,
         "target_audience": book.target_audience,
+        "grade_level": book.grade_level,
     }
 
 
@@ -61,6 +63,7 @@ def create_book_service(
             file_path=file_path,
             cover_image=cover_path,
             target_audience=data.get("target_audience", "STUDENT"),
+            grade_level=data.get("grade_level"),
         )
         db.add(book)
         db.commit()

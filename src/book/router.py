@@ -9,7 +9,6 @@ from .controllers import (
     update_book_controller,
     delete_book_controller,
     download_book_controller,
-    read_book_controller,
     get_books_api_controller,
     get_book_api_controller,
 )
@@ -20,7 +19,7 @@ book_bp = Blueprint("books", __name__, url_prefix="/books")
 # ========== HTML View Routes ==========
 @book_bp.route("", methods=["GET"])
 @jwt_required()
-@role_required([UserRole.TEACHER, UserRole.ADMIN])
+@role_required([UserRole.TEACHER, UserRole.STUDENT])
 def books_view():
     """Vista principal de libros para profesores"""
     return books_view_controller(request)
@@ -28,7 +27,7 @@ def books_view():
 
 @book_bp.route("/create", methods=["GET", "POST"])
 @jwt_required()
-@role_required([UserRole.TEACHER, UserRole.ADMIN])
+@role_required([UserRole.TEACHER, UserRole.STUDENT])
 def create_book():
     """Crear nuevo libro"""
     return create_book_controller(request)
@@ -36,7 +35,7 @@ def create_book():
 
 @book_bp.route("/<int:book_id>/edit", methods=["GET", "POST"])
 @jwt_required()
-@role_required([UserRole.TEACHER, UserRole.ADMIN])
+@role_required([UserRole.TEACHER])
 def update_book(book_id):
     """Actualizar libro"""
     return update_book_controller(book_id, request)
@@ -52,18 +51,10 @@ def delete_book(book_id):
 
 @book_bp.route("/<int:book_id>/download", methods=["GET"])
 @jwt_required()
-@role_required([UserRole.TEACHER, UserRole.ADMIN, UserRole.STUDENT])
+@role_required([UserRole.TEACHER])
 def download_book(book_id):
     """Descargar archivo del libro"""
     return download_book_controller(book_id, request)
-
-
-@book_bp.route("/<int:book_id>/read", methods=["GET"])
-@jwt_required()
-@role_required([UserRole.STUDENT, UserRole.TEACHER, UserRole.ADMIN])
-def read_book(book_id):
-    """Leer libro (vista para estudiantes)"""
-    return read_book_controller(book_id, request)
 
 
 # ========== API Routes ==========

@@ -23,19 +23,14 @@ from src.models.user import UserRole
 from src.utils.decorator_role_required import role_required
 from src.database.database import SessionLocal
 from src.models.user import User
-from src.models.subject import Subject
-from src.models.class_model import ClassModel
-from src.models.course_subject import CourseSubject
 
 
 # ========== HTML View Controllers ==========
 def books_view_controller(_: Request):
-    """Vista principal de libros para profesores"""
+    """Vista principal de libros"""
     try:
         current_user_id = get_jwt_identity()
         db = SessionLocal()
-
-        # Obtener información del usuario
         user = db.query(User).filter(User.id == current_user_id).first()
 
         if not user:
@@ -48,47 +43,6 @@ def books_view_controller(_: Request):
         if status_code != 200:
             flash("Error al cargar los libros", "error")
             return redirect(url_for("users.dashboard"))
-
-        # Obtener materias del profesor para el filtro
-        course_subjects = (
-            db.query(CourseSubject, Subject)
-            .join(Subject, CourseSubject.subject_id == Subject.id)
-            .filter(CourseSubject.teacher_id == current_user_id)
-            .distinct(Subject.id)
-            .all()
-        )
-
-        subjects_list = []
-        for _, subject in course_subjects:
-            subjects_list.append(
-                {
-                    "id": subject.id,
-                    "name": subject.name,
-                }
-            )
-
-        # Obtener clases del profesor para el filtro
-        classes = (
-            db.query(ClassModel)
-            .join(
-                CourseSubject,
-                (CourseSubject.subject_id == ClassModel.subject_id)
-                & (CourseSubject.course_id == ClassModel.course_id),
-            )
-            .filter(CourseSubject.teacher_id == current_user_id)
-            .distinct(ClassModel.id)
-            .all()
-        )
-
-        classes_list = []
-        for class_item in classes:
-            classes_list.append(
-                {
-                    "id": class_item.id,
-                    "title": class_item.title,
-                    "class_number": class_item.class_number,
-                }
-            )
 
         # Convert the User object to a dictionary with role as string
         user_dict = {
@@ -104,8 +58,6 @@ def books_view_controller(_: Request):
             "teacher/books_view.html",
             user=user_dict,
             books=books,
-            subjects=subjects_list,
-            classes=classes_list,
             accion_logout=True,
         )
     except Exception:
@@ -122,11 +74,13 @@ def create_book_controller(request: Request):
 
         if request.method == "POST":
             # Obtener datos del formulario
+            grade_level = request.form.get("grade_level")
             data = {
                 "title": request.form.get("title"),
                 "author": request.form.get("author"),
                 "description": request.form.get("description", ""),
                 "target_audience": request.form.get("target_audience", "STUDENT"),
+                "grade_level": int(grade_level) if grade_level else None,
             }
 
             # Obtener archivos
@@ -235,57 +189,6 @@ def download_book_controller(book_id: int, _: Request):
     except Exception:
         flash("Error al descargar el archivo", "error")
         return redirect(url_for("books.books_view"))
-
-
-def read_book_controller(book_id: int, _: Request):
-    """Vista para leer un libro (estudiantes)"""
-    try:
-        current_user_id = get_jwt_identity()
-        db = SessionLocal()
-
-        # Obtener información del usuario
-        user = db.query(User).filter(User.id == current_user_id).first()
-
-        if not user:
-            flash("Usuario no encontrado", "error")
-            return redirect(url_for("users.dashboard"))
-
-        # Obtener el libro
-        book_data, status_code = get_book_service(book_id)
-
-        if status_code == 404:
-            flash("Libro no encontrado", "error")
-            return redirect(url_for("users.dashboard"))
-
-        # Si es estudiante, solo puede ver libros para estudiantes
-        if (
-            user.role.value == "student"
-            and book_data.get("target_audience") != "STUDENT"
-        ):
-            flash("No tienes permiso para ver este libro", "error")
-            return redirect(url_for("users.dashboard"))
-
-        # Convert the User object to a dictionary with role as string
-        user_dict = {
-            "id": user.id,
-            "username": user.username,
-            "document": user.document,
-            "full_name": user.full_name,
-            "avatar": getattr(user, "avatar", None),
-            "role": user.role.value if hasattr(user.role, "value") else str(user.role),
-        }
-
-        return render_template(
-            "student/read_book.html",
-            user=user_dict,
-            book=book_data,
-            accion_logout=True,
-        )
-    except Exception:
-        flash("Error al cargar el libro", "error")
-        return redirect(url_for("users.dashboard"))
-    finally:
-        db.close()
 
 
 # ========== API Controllers ==========
