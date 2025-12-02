@@ -37,7 +37,7 @@
                             <h3>{{ content.section_title }}</h3>
                         {% endif %}
 
-                        <div class="d-flex gap-5 justify-content-between align-items-center">
+                        <div class="d-flex gap-5 justify-content-between align-items-center content_homework">
                             {% if content.content_text %}
                                 <div class="section-text">
                                     {{ content.content_text | safe }}
@@ -126,6 +126,11 @@
                 MARCAR COMO VISTA
             </button>
         </div>
+    </div>
+
+    <div class="bg_section_footer mobile_btns">
+        <span class="barra_bg barra_bg_left bg-clases"></span>
+        <span class="barra_bg barra_bg_right bg-gray"></span>
     </div>
 
     {% include "sidebar_aside.html" %}

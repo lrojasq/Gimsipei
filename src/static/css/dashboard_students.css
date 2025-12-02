@@ -306,6 +306,64 @@ body {
     object-fit: cover;
 }
 
+@media (max-width:1080px){
+    .swiper {
+        overflow: auto!important;
+    }
+    .swiper-wrapper{
+        height: auto!important;
+        flex-direction: column;
+    }
+    .bg-mision {
+        width: 97%;
+        height: auto;
+        padding: 2rem 0;
+    }
+    .vision-tp h2,
+    .mision-tp h2{
+        font-size: 1.5rem;
+    }
+    .bg-vision{
+        width: 100%;
+        height: auto;
+        padding: 2rem 0;
+    }
+    .bg-vision .menu{
+        gap: 1rem;
+        justify-content: space-around;
+        padding: 3px;
+    }
+    .clases,
+    .recursos,
+    .evaluaciones,
+    .libros,
+    .calificaciones,
+    .calificaciones{
+        width: 80px;
+        height: 80px;
+        background-size: contain;
+    }
+    .clases {
+        background-image: url("../images/images-gray/clases.png")!important;
+    }
+    .recursos {
+        background-image: url("../images/images-gray/recursos.png")!important;
+    }
+    .evaluaciones {
+        background-image: url("../images/images-gray/evaluaciones.png")!important;
+    }
+    .libros {
+        background-image: url("../images/images-gray/libros.png")!important;
+    }
+    .calificaciones {
+        background-image: url("../images/images-gray/calificaciones.png")!important;
+    }
+    .slider_dashboard_student .box-menu{
+        height: 200px;
+    }
+    
+}
+
 @media (max-width: 576px) {
     .containe {
         width: 100%;
@@ -313,12 +371,6 @@ body {
 
     .html {
         background-color: #f6f6f6;
-    }
-
-    .bg-vision {
-        width: 97%;
-        height: 90vh;
-        border-radius: 15px;
     }
 
     .menu {
@@ -329,15 +381,10 @@ body {
         display: none;
     }
 
-    .mision-tp,
+    /* .mision-tp,
     .vision-tp {
         width: 90%;
         margin-left: 10px;
         text-align: justify;
-    }
-
-    .bg-mision {
-        width: 97%;
-        height: 80vh;
-    }
+    } */
 }

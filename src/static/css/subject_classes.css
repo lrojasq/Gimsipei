@@ -514,19 +514,25 @@
 /* ========== Delete Confirmation Modal Styles ========== */
 
 /* ========== Sidebar Styles ========== */
-.admin_category .menu_aside {
+/* .admin_category .menu_aside {
     background-color: hsl(190, 65%, 55%);
 }
 
 .admin_category .menu_aside .aside_list li a.active,
 .admin_category .menu_aside .aside_list li a:hover {
     background-color: hsl(190, 65%, 45%);
-}
+} */
 
 /* ========== Responsive Design ========== */
 @media (max-width: 1200px) {
     .classes-grid {
         grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    }
+}
+
+@media (max-width: 1080px) {
+    .container_category{
+        background-color: white;
     }
 }
 

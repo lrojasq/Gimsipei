@@ -22,6 +22,7 @@
     --admin: #f94e4e;
     --admin-active: #e01e1e;
 }
+
 .header-cursos {
     width: 100%;
     background-color: #fff;
@@ -60,6 +61,7 @@
 .list-cursos li {
     border-top: 1px solid var(--secondary-color);
 }
+
 .list-cursos li:last-child {
     border-bottom: 1px solid var(--secondary-color);
 }
@@ -103,14 +105,17 @@
 .list-materias li .actions a {
     color: #606060;
 }
+
 .admin_category,
-.dashboard_category{
+.dashboard_category {
     justify-content: start;
 
 }
-.dashboard_category .specialities_category:has(.content-admin){
+
+.dashboard_category .specialities_category:has(.content-admin) {
     width: 80%;
 }
+
 .admin_category .add {
     width: 100%;
     justify-content: end;
@@ -127,18 +132,21 @@
     border: 1px solid var(--admin-active);
     font-weight: bold;
 }
+
 .form-admin .add a:hover,
 .admin_category .add a:hover {
     background-color: var(--admin-active);
     color: #fff;
     transition: all 0.3s ease-in-out;
 }
+
 .admin_category .add.grados {
     width: 100%;
     justify-content: end;
     text-align: right;
     padding: 1rem 5rem 1rem 0rem;
 }
+
 .form-admin .add.grados a,
 .admin_category .add.grados a {
     padding: 0.5rem 4rem;
@@ -148,6 +156,7 @@
     border: 1px solid var(--admin-active);
     font-weight: bold;
 }
+
 .form-admin .add.grados a:hover,
 .admin_category .add.grados a:hover {
     background-color: #fff;
@@ -155,7 +164,7 @@
     transition: all 0.3s ease-in-out;
 }
 
-.content-materias{
+.content-materias {
     display: none;
     gap: 0px;
 
@@ -178,20 +187,23 @@
     justify-content: space-between;
     gap: 0.2rem;
 }
-.right-text{
+
+.right-text {
     display: block;
     width: 100%;
     text-align: right;
     font-weight: 700;
     color: #fff;
 }
+
 .content-form {
     width: 100%;
     background-color: #f9afaf;
     border-radius: 10px;
     padding: 2rem;
 }
-.btn-admin{
+
+.btn-admin {
     padding: 0.5rem 4rem;
     background-color: var(--admin-active);
     color: #fff;
@@ -199,25 +211,34 @@
     border: 1px solid var(--admin-active);
     font-weight: bold;
 }
-.btn-admin:hover{
+
+.btn-admin:hover {
     color: var(--admin-active);
     background-color: #fff;
 }
-.input-group{
+
+.input-group {
     position: relative;
 }
-.input-group input{
+
+.input-group input {
     padding: 0.5rem;
     border-radius: 5px;
     width: 100%;
 }
-.input-group input::placeholder{
+
+.input-group input::placeholder {
     color: var(--admin);
     text-transform: uppercase;
 }
+
 .container_category.flex.recursos_category,
 .container_category.flex.clases_category {
     justify-content: start;
+}
+
+.container_category.flex.clases_category {
+    gap: 2rem;
 }
 
 .content-admin.flex.flex-column {
@@ -226,10 +247,12 @@
     border-radius: 15px;
     background: var(--gray-light);
 }
-.content-admin.flex.flex-column h2{
-    color:#5f6161;
+
+.content-admin.flex.flex-column h2 {
+    color: #5f6161;
     margin-bottom: 0.2rem;
 }
+
 .form-crear.flex {
     width: 100%;
 }
@@ -238,53 +261,64 @@ form.form-admin.flex.flex-column {
     width: 100%;
     align-items: end;
 }
-form.form-admin.flex.flex-column h1{
+
+form.form-admin.flex.flex-column h1 {
     color: white;
     font-size: x-large;
 }
-.img-usuario i{
+
+.img-usuario i {
     font-size: 100px;
     color: #fff;
 }
-.img-usuario img{
+
+.img-usuario img {
     width: 100%;
     border-radius: 50%;
     object-fit: cover;
 }
-.flex-form{
+
+.flex-form {
     gap: 5rem;
     justify-content: end;
     flex-wrap: nowrap;
 }
-.btns-form .add{
-    width: 40%!important;
+
+.btns-form .add {
+    width: 40% !important;
     padding: 0rem !important;
-    text-align: center!important;
+    text-align: center !important;
 }
-.btns-form .add a{
+
+.btns-form .add a {
     width: 100%;
     display: block;
     text-align: center;
-    border-radius: 5px!important;
+    border-radius: 5px !important;
     padding: .5rem !important;
 }
+
 .flex.btns-form {
     width: 100%;
     justify-content: space-between;
     text-align: center;
 }
-.form-crear-content{
+
+.form-crear-content {
     width: 70%;
     flex-wrap: nowrap;
 }
-.specialities_category:has(.content-admin){
+
+.specialities_category:has(.content-admin) {
     background-color: white;
 }
+
 .specialities_category:has(.content-admin)::-webkit-scrollbar-thumb {
     background: var(--clases);
     border-radius: 5px;
 }
-.container_datos_personales{
+
+.container_datos_personales {
     background: url(../images/menu-principal/backgroun.jpg);
     background-repeat: no-repeat;
     border-radius: 50px 50px 0 0;
@@ -298,45 +332,55 @@ form.form-admin.flex.flex-column h1{
 .session.flex.flex-column {
     width: 20%;
 }
-.session img{
+
+.session img {
     max-width: 100px;
     border-radius: 50px;
     margin: 0 auto;
 }
+
 .session {
     text-align: center;
 }
-.session .flex{
+
+.session .flex {
     gap: 0rem;
 }
+
 .session h2,
-.session span{
+.session span {
     font-size: medium;
     color: #fff;
 }
+
 .info_data.flex {
     width: 75%;
 }
-.info_data h1{
+
+.info_data h1 {
     color: #fff;
     text-align: center;
 }
+
 .data_usuario.flex.flex-column {
     width: 30%;
-    gap:1rem;
+    gap: 1rem;
 }
-.content-data-user::before{
+
+.content-data-user::before {
     content: "";
     width: 2px;
     height: 100%;
     background-color: #fff;
     border-radius: 5px;
 }
-.data_usuario.flex.flex-column .group{
-    color:#fff;
+
+.data_usuario.flex.flex-column .group {
+    color: #fff;
 }
+
 .data_usuario.flex.flex-column .group p,
-.data_usuario.flex.flex-column .group strong{
+.data_usuario.flex.flex-column .group strong {
     font-size: larger;
 }
 
@@ -344,17 +388,19 @@ form.form-admin.flex.flex-column h1{
     width: 60%;
     background: white;
     padding: 1rem;
-    gap:1rem;
+    gap: 1rem;
     text-align: center;
     max-width: 870px;
     border-radius: 10px;
 }
-.container_avatares h2{
+
+.container_avatares h2 {
     font-size: larger;
     letter-spacing: 2px;
     font-weight: 700;
 }
-.container_avatares span{
+
+.container_avatares span {
     letter-spacing: 2px;
     font-size: large;
 }
@@ -401,6 +447,7 @@ form.form-admin.flex.flex-column h1{
     from {
         transform: rotate(0deg);
     }
+
     to {
         transform: rotate(360deg);
     }
@@ -409,21 +456,25 @@ form.form-admin.flex.flex-column h1{
 .content_avatares.flex {
     justify-content: center;
 }
-.content-data-user{
+
+.content-data-user {
     align-items: center;
 }
-.modal{
+
+.modal {
     display: flex;
     width: 100vw;
     height: 100vh;
     background-color: #0007;
     justify-content: center;
     align-items: center;
-    display: none;/*  oculto modal de confirmación  */
+    display: none;
+    /*  oculto modal de confirmación  */
     z-index: 999999;
 
 }
-.content-modal{
+
+.content-modal {
     background-color: #fff;
     max-width: 35%;
     padding: 2rem;
@@ -432,43 +483,64 @@ form.form-admin.flex.flex-column h1{
     justify-content: center;
     border-radius: 20px;
 }
-.content-modal i{
+
+.content-modal i {
     color: var(--admin-active);
     font-size: 90px;
 }
-.content-modal span{
+
+.content-modal span {
     color: #b1b1b2;
 }
-.content-modal .flex{
+
+.content-modal .flex {
     justify-content: center;
 }
-.content-modal .flex .btn{
+
+.content-modal .flex .btn {
     width: 40%;
     background-color: #3bc0bb;
     color: #fff;
     border-color: transparent;
 }
-.content-modal .flex .btn:first-child{
+
+.content-modal .flex .btn:first-child {
     background-color: var(--admin-active);
 }
-@media (max-width:1024px) {
-    .container_datos_personales{
+
+@media (max-width:1080px) {
+    .container_datos_personales {
         background-position: top;
         background-size: cover;
         border-radius: 0px;
     }
-    .container_datos_personales > .flex{
+
+    .container_datos_personales>.flex {
         flex-direction: column;
 
     }
+
     .data_usuario.flex.flex-column,
     .info_data.flex,
     .container_avatares.flex.flex-column,
-    .session.flex.flex-column{
+    .session.flex.flex-column {
         width: 100%;
     }
-    .content-data-user{
+
+    .content-data-user {
         flex-direction: column;
+    }
+
+    .dashboard_category .specialities_category:has(.content-admin) {
+        width: 100%;
+    }
+
+    ul.list-unstyled.d-flex.gap-2.mb-0.students_list {
+        flex-wrap: wrap;
+    }
+
+    .content-admin.flex.flex-column h2 {
+        font-size: 2rem;
     }
 }
 
@@ -476,26 +548,32 @@ form.form-admin.flex.flex-column h1{
 
 .menu_aside {
     position: fixed;
-    right: 20px; /* pegar al borde derecho como en el diseño */
+    right: 20px;
+    /* pegar al borde derecho como en el diseño */
     top: 110px;
-    background-color: var(--admin-active);
+    /* background-color: var(--admin-active); */
     border-radius: 10px;
     z-index: 1000;
     width: 80px;
 }
-.menu_aside.clases{
+
+.menu_aside.clases {
     background-color: var(--clases);
 }
-.menu_aside.recursos{
+
+.menu_aside.recursos {
     background-color: var(--recursos);
 }
-.menu_aside.evaluaciones{
+
+.menu_aside.evaluaciones {
     background-color: var(--evaluaciones);
 }
-.menu_aside.libros{
+
+.menu_aside.libros {
     background-color: var(--libros);
 }
-.menu_aside.calificaciones{
+
+.menu_aside.calificaciones {
     background-color: var(--calificaciones);
 }
 
@@ -545,9 +623,13 @@ form.form-admin.flex.flex-column h1{
         right: 10px;
         top: 70px;
         padding: 10px 8px;
-        display: none!important;
+        display: none !important;
     }
-    .menu_aside .aside_list img { width: 36px; height: 36px; }
+
+    .menu_aside .aside_list img {
+        width: 36px;
+        height: 36px;
+    }
 }
 
 
@@ -589,6 +671,7 @@ form.form-admin.flex.flex-column h1{
 .list-cursos li {
     border-top: 1px solid var(--secondary-color);
 }
+
 .list-cursos li:last-child {
     border-bottom: 1px solid var(--secondary-color);
 }
@@ -632,6 +715,7 @@ form.form-admin.flex.flex-column h1{
 .list-materias li .actions a {
     color: #606060;
 }
+
 .admin_category .add {
     width: 100%;
     justify-content: end;
@@ -648,18 +732,21 @@ form.form-admin.flex.flex-column h1{
     border: 1px solid var(--admin-active);
     font-weight: bold;
 }
+
 .form-admin .add a:hover,
 .admin_category .add a:hover {
     background-color: var(--admin-active);
     color: #fff;
     transition: all 0.3s ease-in-out;
 }
+
 .admin_category .add.grados {
     width: 100%;
     justify-content: end;
     text-align: right;
     padding: 1rem 5rem 1rem 0rem;
 }
+
 .form-admin .add.grados a,
 .admin_category .add.grados a {
     padding: 0.5rem 4rem;
@@ -669,6 +756,7 @@ form.form-admin.flex.flex-column h1{
     border: 1px solid var(--admin-active);
     font-weight: bold;
 }
+
 .form-admin .add.grados a:hover,
 .admin_category .add.grados a:hover {
     background-color: #fff;
@@ -676,7 +764,7 @@ form.form-admin.flex.flex-column h1{
     transition: all 0.3s ease-in-out;
 }
 
-.content-materias{
+.content-materias {
     display: none;
     gap: 0px;
 
@@ -699,20 +787,23 @@ form.form-admin.flex.flex-column h1{
     justify-content: space-between;
     gap: 0.2rem;
 }
-.right-text{
+
+.right-text {
     display: block;
     width: 100%;
     text-align: right;
     font-weight: 700;
     color: #fff;
 }
+
 .content-form {
     width: 100%;
     background-color: #f9afaf;
     border-radius: 10px;
     padding: 2rem;
 }
-.btn-admin{
+
+.btn-admin {
     padding: 0.5rem 4rem;
     background-color: var(--admin-active);
     color: #fff;
@@ -720,19 +811,23 @@ form.form-admin.flex.flex-column h1{
     border: 1px solid var(--admin-active);
     font-weight: bold;
 }
-.btn-admin:hover{
+
+.btn-admin:hover {
     color: var(--admin-active);
     background-color: #fff;
 }
-.input-group{
+
+.input-group {
     position: relative;
 }
-.input-group input{
+
+.input-group input {
     padding: 0.5rem;
     border-radius: 5px;
     width: 100%;
 }
-.input-group input::placeholder{
+
+.input-group input::placeholder {
     color: var(--admin);
     text-transform: uppercase;
 }
@@ -749,40 +844,48 @@ form.form-admin.flex.flex-column {
     width: 100%;
     align-items: end;
 }
-.img-usuario i{
+
+.img-usuario i {
     font-size: 100px;
     color: #fff;
 }
-.flex-form{
+
+.flex-form {
     gap: 5rem;
     justify-content: end;
     flex-wrap: nowrap;
 }
-.btns-form .add{
-    width: 40%!important;
+
+.btns-form .add {
+    width: 40% !important;
     padding: 0rem !important;
-    text-align: center!important;
+    text-align: center !important;
 }
-.btns-form .add a{
+
+.btns-form .add a {
     width: 100%;
     display: block;
     text-align: center;
-    border-radius: 5px!important;
+    border-radius: 5px !important;
     padding: .5rem !important;
 }
+
 .flex.btns-form {
     width: 100%;
     justify-content: space-between;
     text-align: center;
 }
-.form-crear-content{
+
+.form-crear-content {
     width: 70%;
     flex-wrap: nowrap;
 }
-.specialities_category:has(.content-admin){
+
+.specialities_category:has(.content-admin) {
     background-color: white;
 }
-.container_datos_personales{
+
+.container_datos_personales {
     background: url(../images/menu-principal/backgroun.jpg);
     background-repeat: no-repeat;
     border-radius: 50px;
@@ -794,45 +897,55 @@ form.form-admin.flex.flex-column {
 .session.flex.flex-column {
     width: 20%;
 }
-.session img{
+
+.session img {
     max-width: 100px;
     border-radius: 50px;
     margin: 0 auto;
 }
+
 .session {
     text-align: center;
 }
-.session .flex{
+
+.session .flex {
     gap: 0rem;
 }
+
 .session h2,
-.session span{
+.session span {
     font-size: medium;
     color: #fff;
 }
+
 .info_data.flex {
     width: 75%;
 }
-.info_data h1{
+
+.info_data h1 {
     color: #fff;
     text-align: center;
 }
+
 .data_usuario.flex.flex-column {
     width: 30%;
-    gap:1rem;
+    gap: 1rem;
 }
-.content-data-user::before{
+
+.content-data-user::before {
     content: "";
     width: 2px;
     height: 100%;
     background-color: #fff;
     border-radius: 5px;
 }
-.data_usuario.flex.flex-column .group{
-    color:#fff;
+
+.data_usuario.flex.flex-column .group {
+    color: #fff;
 }
+
 .data_usuario.flex.flex-column .group p,
-.data_usuario.flex.flex-column .group strong{
+.data_usuario.flex.flex-column .group strong {
     font-size: larger;
 }
 
@@ -840,17 +953,19 @@ form.form-admin.flex.flex-column {
     width: 60%;
     background: white;
     padding: 1rem;
-    gap:1rem;
+    gap: 1rem;
     text-align: center;
     max-width: 870px;
     border-radius: 10px;
 }
-.container_avatares h2{
+
+.container_avatares h2 {
     font-size: larger;
     letter-spacing: 2px;
     font-weight: 700;
 }
-.container_avatares span{
+
+.container_avatares span {
     letter-spacing: 2px;
     font-size: large;
 }
@@ -868,20 +983,24 @@ form.form-admin.flex.flex-column {
 .content_avatares.flex {
     justify-content: center;
 }
-.content-data-user{
+
+.content-data-user {
     align-items: center;
 }
-.modal{
+
+.modal {
     display: flex;
     width: 100vw;
     height: 100vh;
     background-color: #0007;
     justify-content: center;
     align-items: center;
-    display: none;/*  oculto modal de confirmación  */
+    display: none;
+    /*  oculto modal de confirmación  */
 
 }
-.content-modal{
+
+.content-modal {
     background-color: #fff;
     max-width: 35%;
     padding: 2rem;
@@ -890,42 +1009,55 @@ form.form-admin.flex.flex-column {
     justify-content: center;
     border-radius: 20px;
 }
-.content-modal i{
+
+.content-modal i {
     color: var(--admin-active);
     font-size: 90px;
 }
-.content-modal span{
+
+.content-modal span {
     color: #b1b1b2;
 }
-.content-modal .flex{
+
+.content-modal .flex {
     justify-content: center;
 }
-.content-modal .flex .btn{
+
+.content-modal .flex .btn {
     width: 40%;
     background-color: #3bc0bb;
     color: #fff;
     border-color: transparent;
 }
-.content-modal .flex .btn:first-child{
+
+.content-modal .flex .btn:first-child {
     background-color: var(--admin-active);
 }
-@media (max-width:1024px) {
-    .container_datos_personales{
+
+@media (max-width:1080px) {
+    .container_datos_personales {
         background-position: top;
         background-size: cover;
         border-radius: 0px;
     }
-    .container_datos_personales > .flex{
+
+    .container_datos_personales>.flex {
         flex-direction: column;
 
     }
+
     .data_usuario.flex.flex-column,
     .info_data.flex,
     .container_avatares.flex.flex-column,
-    .session.flex.flex-column{
+    .session.flex.flex-column {
         width: 100%;
     }
-    .content-data-user{
+
+    .content-data-user {
         flex-direction: column;
+    }
+
+    .content-admin.flex.flex-column {
+        padding: 1rem!important;
     }
 }

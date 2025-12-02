@@ -417,14 +417,14 @@
 }
 
 /* Sidebar */
-.admin_category .menu_aside {
+/* .admin_category .menu_aside {
     background-color: hsl(190, 65%, 55%);
 }
 
 .admin_category .menu_aside .aside_list li a.active,
 .admin_category .menu_aside .aside_list li a:hover {
     background-color: hsl(190, 65%, 45%);
-}
+} */
 
 /* Alert Styles */
 .alert {
@@ -464,7 +464,7 @@
 
 @media (max-width: 768px) {
     .header-classes {
-        flex-direction: column;
+        /* flex-direction: column; */
         align-items: flex-start;
     }
     
@@ -497,7 +497,7 @@
     }
     
     .period-btn {
-        width: 100%;
+        width:45%;
     }
     
     .expanded-content {
@@ -621,7 +621,7 @@
 }
 
 .subject-row-expanded .empty-cell {
-    width: 10%;
+    width: 20%;
 }
 
 .subject-row-expanded .subject-name-cell {

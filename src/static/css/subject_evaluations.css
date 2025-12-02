@@ -1,13 +1,6 @@
 /* Subject Evaluations View Styles - Similar to subject_classes_minimal.css */
 
 /* Contenedor principal */
-.evaluaciones_category.container_category {
-    width: 100%;
-    gap: 30px; /* Aumentado el espacio entre columnas */
-    overflow-x: hidden; /* Prevenir scroll horizontal */
-    padding-right: 100px; /* Espacio para el sidebar derecho fijo */
-    position: relative;
-}
 
 /* Columna izquierda (Perfil) */
 .evaluaciones_category .data_categoty {
@@ -29,7 +22,7 @@
 
 /* Period containers display control */
 .period-evaluations-container {
-    width: 100%;
+    width: 95%;
 }
 
 /* Empty period state */
@@ -103,7 +96,16 @@
         height: 100px;
     }
 }
+@media (max-width: 1080px) {
+    .period-evaluations-container {
+        /* width: 90%; */
+        margin: 0 auto;
+    }
+     .evaluation .exam_content {
+        gap:0.5rem;
+    }
 
+}
 /* Pantallas Pequeñas (Tablets verticales) */
 @media (max-width: 992px) {
     .evaluaciones_category.container_category {
@@ -126,7 +128,7 @@
     }
 
     .evaluaciones_category .data_categoty .btns {
-        display: none; /* Ocultamos botones laterales y podríamos moverlos arriba */
+        /* display: none; Ocultamos botones laterales y podríamos moverlos arriba */
     }
     
     /* Mostrar botones de periodo horizontalmente si es necesario en móvil */
@@ -140,13 +142,11 @@
         padding: 0;
     }
 
-    .evaluation .exam_content {
-        flex-direction: column;
-    }
+   
 
     .evaluation .img_evaluaciones {
-        width: 100%;
-        height: 160px;
+        width: 30%;
+        height: 100%;
         margin-bottom: 10px;
     }
     

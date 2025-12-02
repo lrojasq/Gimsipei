@@ -53,32 +53,40 @@
         <div class="flex container_boxs_menu">
             <a href="{{ url_for('classes.teacher_classes_view') }}">
                 <div class="box-menu clases-hover">
-                    <img src="{{ url_for('static', filename='images/iconos/class.png') }}" alt="Clases y recursos"
-                        style="width: 60px; height: 70px;">
+                    <picture>
+                        <source srcset="{{ url_for('static', filename='images/images-gray/clases.png') }}"media="(max-width: 1080px)">
+                        <img src="{{ url_for('static', filename='images/iconos/class.png') }}" alt="Clases y recursos" style="width: 60px; height: 70px;">
+                    </picture>
                     <p>Clases y recursos</p>
                     <div class="barra barra-clases"></div>
                 </div>
             </a>
             <a href="{{ url_for('evaluations.evaluations_view') }}">
                 <div class="box-menu evaluaciones-hover">
-                    <img src="{{ url_for('static', filename='images/iconos/library.png') }}" alt="Evaluaciones"
-                        style="width: 60px; height: 70px;">
+                    <picture>
+                        <source srcset="{{ url_for('static', filename='images/images-gray/evaluaciones.png') }}"media="(max-width: 1080px)">
+                        <img src="{{ url_for('static', filename='images/iconos/library.png') }}" alt="Evaluaciones" style="width: 60px; height: 70px;">
+                    </picture>
                     <p>Evaluaciones</p>
                     <div class="barra barra-evaluaciones"></div>
                 </div>
             </a>
             <a href="{{ url_for('books.books_view') }}">
                 <div class="box-menu libros-hover">
-                    <img src="{{ url_for('static', filename='images/iconos/text.png') }}" alt="Libros"
-                        style="width: 70px; height: 60px;">
+                    <picture>
+                        <source srcset="{{ url_for('static', filename='images/images-gray/libros.png') }}"media="(max-width: 1080px)">
+                        <img src="{{ url_for('static', filename='images/iconos/text.png') }}" alt="Libros" style="width: 70px; height: 60px;">
+                    </picture>
                     <p>Libros</p>
                     <div class="barra barra-libros"></div>
                 </div>
             </a>
             <a href="#">
                 <div class="box-menu calificaciones-hover">
-                    <img src="{{ url_for('static', filename='images/iconos/evaluations.png') }}" alt="Calificaciones"
-                        style="width: 60px; height: 70px;">
+                    <picture>
+                        <source srcset="{{ url_for('static', filename='images/images-gray/calificaciones.png') }}"media="(max-width: 1080px)">
+                        <img src="{{ url_for('static', filename='images/iconos/evaluations.png') }}" alt="Calificaciones" style="width: 60px; height: 70px;">
+                    </picture>
                     <p>Calificaciones</p>
                     <div class="barra barra-calificaciones"></div>
                 </div>

@@ -383,6 +383,9 @@
     margin-right: 1rem;
 }
 
+.mobile_btns{
+    display: none;
+}
 /* ========== RESPONSIVE DESIGN (Basado en resources_view.html) ========== */
 
 /* Pantallas grandes a medianas (1200px) */
@@ -407,6 +410,28 @@
 }
 
 /* Tablets y pantallas medianas (992px) */
+@media (max-width:1080px){
+    .mobile_btns{
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+    }
+    .btns_desktop{
+        display: none;
+    }
+    .student-subject-view .flex.gap-2 h3{
+        font-size: 2rem;
+        font-weight: 700;
+        text-align: center;
+    }
+    .mobile_btns > .flex{
+        margin: auto;
+    }
+    .progress-container{
+        width: 100%;
+    }
+}
+
 @media (max-width: 992px) {
     .student-subject-view .data_categoty {
         padding: 1.5rem 1rem;
@@ -449,6 +474,11 @@
         height: 26px;
         min-width: 26px;
         font-size: 0.7rem;
+    }
+      .student-subject-view .period-btn {
+        flex: 1 1 45%;
+        font-size: 0.75rem;
+        padding: 0.5rem;
     }
 }
 
@@ -522,9 +552,6 @@
         font-size: 0.8rem;
     }
 
-    .student-subject-view .flex.gap-2 h3 {
-        font-size: 1.3rem;
-    }
 
     .student-subject-view .menu_aside {
         display: none;
@@ -535,12 +562,6 @@
 @media (max-width: 480px) {
     .student-subject-view .data_categoty .title h1 {
         font-size: 1.3rem;
-    }
-
-    .student-subject-view .period-btn {
-        flex: 1 1 100%;
-        font-size: 0.75rem;
-        padding: 0.5rem;
     }
 
     .student-subject-view .specialities_category {
@@ -586,10 +607,6 @@
 
     .progress-text {
         font-size: 0.8rem;
-    }
-
-    .student-subject-view .flex.gap-2 h3 {
-        font-size: 1.1rem;
     }
 
     .student-subject-view .flex.gap-2 a {

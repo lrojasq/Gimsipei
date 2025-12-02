@@ -1,6 +1,10 @@
 /* ========== Student Classes View Styles ========== */
 
 /* Alineación del contenedor principal */
+.specialities_category.flex.flex-column.student-classes-content {
+    width: 80%;
+}
+
 .student-classes-content {
     align-items: flex-start;
     justify-content:start;
@@ -97,6 +101,12 @@
 }
 
 /* ========== Responsive Design ========== */
+
+@media (max-width:1080px){
+    .specialities_category.flex.flex-column.student-classes-content{
+        width: 100%;
+    }
+}
 @media (max-width: 768px) {
     .subjects-grid {
         grid-template-columns: 1fr;
