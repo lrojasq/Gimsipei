@@ -5,9 +5,11 @@ from src.models.user import UserRole
 
 from .controllers import (
     resources_view_controller,
+    resources_view_subject_controller,
     create_resource_controller,
     delete_resource_controller,
     download_resource_controller,
+    student_resources_view_controller,
     get_resources_by_class_api_controller,
     get_resource_api_controller,
     create_resource_api_controller,
@@ -23,7 +25,7 @@ resources_bp = Blueprint("resources", __name__, url_prefix="/resources")
 @jwt_required()
 @role_required(UserRole.TEACHER)
 def resources_view():
-    """Vista principal de recursos"""
+    """Vista principal de recursos para profesores"""
     return resources_view_controller(request)
 
 
@@ -49,6 +51,23 @@ def delete_resource(resource_id):
 def download_resource(resource_id):
     """Descargar archivo del recurso"""
     return download_resource_controller(resource_id, request)
+
+
+# ========== Student Routes ==========
+@resources_bp.route("/student", methods=["GET"])
+@jwt_required()
+@role_required(UserRole.STUDENT)
+def student_resources_view():
+    """Vista principal de recursos para estudiantes - muestra materias"""
+    return student_resources_view_controller(request)
+
+
+@resources_bp.route("/course/<int:course_id>/subject/<int:subject_id>", methods=["GET"])
+@jwt_required()
+@role_required([UserRole.TEACHER, UserRole.STUDENT])
+def resources_view_subject(course_id, subject_id):
+    """Vista de recursos de una materia específica para profesores y estudiantes"""
+    return resources_view_subject_controller(course_id, subject_id, request)
 
 
 # ========== API Routes ==========

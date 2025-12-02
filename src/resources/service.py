@@ -3,8 +3,6 @@ from datetime import datetime
 import os
 
 from flask import Request
-
-# from flask_jwt_extended import get_jwt_identity
 from werkzeug.utils import secure_filename
 
 from src.database.database import SessionLocal
@@ -12,12 +10,141 @@ from src.models.resource import Resource, ResourceType
 from src.models.class_model import ClassModel
 from src.models.subject import Subject
 from src.models.course_subject import CourseSubject
+from src.models.course_student import CourseStudent
+from src.models.course import Course
+from src.models.user import User
 
-# from .validation import (
-#     ResourceCreateSchema,
-#     ResourceResponseSchema,
-#     ResourceUpdateSchema,
-# )
+
+def get_resources_by_student_service(student_id: int) -> Tuple[Optional[dict], int]:
+    """Obtener el curso y materias del estudiante para ver recursos"""
+    db = SessionLocal()
+    try:
+        # Obtener la inscripción del estudiante
+        enrollment = (
+            db.query(CourseStudent)
+            .filter(CourseStudent.student_id == student_id)
+            .first()
+        )
+
+        if not enrollment:
+            return {"error": "Estudiante no inscrito en ningún curso"}, 404
+
+        # Obtener el curso
+        course = db.query(Course).filter(Course.id == enrollment.course_id).first()
+        if not course:
+            return {"error": "Curso no encontrado"}, 404
+
+        # Obtener las materias del curso
+        course_subjects = (
+            db.query(CourseSubject)
+            .filter(
+                CourseSubject.course_id == course.id, CourseSubject.is_active.is_(True)
+            )
+            .all()
+        )
+
+        subjects_data = []
+        for cs in course_subjects:
+            subject = db.query(Subject).filter(Subject.id == cs.subject_id).first()
+            if subject:
+                subjects_data.append(
+                    {
+                        "subject": subject,
+                        "course_subject_id": cs.id,
+                    }
+                )
+
+        return {
+            "course": course,
+            "subjects": subjects_data,
+        }, 200
+
+    except Exception as e:
+        return {"error": f"Error al obtener las materias: {str(e)}"}, 500
+    finally:
+        db.close()
+
+
+def get_resources_by_student_subject_service(
+    user_id: int, course_id: int, subject_id: int
+) -> Tuple[Optional[dict], int]:
+    """Obtener recursos de una materia específica para un estudiante o profesor"""
+    db = SessionLocal()
+    try:
+        user = db.query(User).filter(User.id == user_id).first()
+        if not user:
+            return {"error": "Usuario no encontrado"}, 404
+
+        if user.role.value == "student":
+            # Verificar que el estudiante está inscrito en el curso
+            enrollment = (
+                db.query(CourseStudent)
+                .filter(
+                    CourseStudent.student_id == user_id,
+                    CourseStudent.course_id == course_id,
+                )
+                .first()
+            )
+
+            if not enrollment:
+                return {"error": "No estás inscrito en este curso"}, 403
+        # Para profesores, permitir acceso sin verificación de inscripción
+
+        # Obtener el curso
+        course = db.query(Course).filter(Course.id == course_id).first()
+        if not course:
+            return {"error": "Curso no encontrado"}, 404
+
+        # Obtener la materia
+        subject = db.query(Subject).filter(Subject.id == subject_id).first()
+        if not subject:
+            return {"error": "Materia no encontrada"}, 404
+
+        # Obtener las clases de esta materia para este curso
+        classes = (
+            db.query(ClassModel)
+            .filter(
+                ClassModel.course_id == course_id, ClassModel.subject_id == subject_id
+            )
+            .all()
+        )
+
+        # Obtener los recursos de estas clases
+        class_ids = [c.id for c in classes]
+        resources = (
+            db.query(Resource)
+            .filter(Resource.class_id.in_(class_ids))
+            .order_by(Resource.period, Resource.class_id)
+            .all()
+        )
+
+        # Agrupar recursos por período
+        periods_data = {1: [], 2: [], 3: [], 4: []}
+        for resource in resources:
+            class_info = next((c for c in classes if c.id == resource.class_id), None)
+            periods_data[resource.period].append(
+                {
+                    "id": resource.id,
+                    "title": resource.title,
+                    "cover_image": resource.cover_image,
+                    "period": resource.period,
+                    "class_number": class_info.class_number if class_info else None,
+                    "file_url": resource.file_url,
+                    "resource_type": resource.resource_type.value,
+                }
+            )
+
+        return {
+            "course": course,
+            "subject": subject,
+            "periods": periods_data,
+            "total_resources": len(resources),
+        }, 200
+
+    except Exception as e:
+        return {"error": f"Error al obtener los recursos: {str(e)}"}, 500
+    finally:
+        db.close()
 
 
 def get_resources_by_class_service(class_id: int) -> Tuple[List[dict], int]:

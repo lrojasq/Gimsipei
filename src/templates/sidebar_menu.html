@@ -31,23 +31,23 @@
 <div class="specialities_category flex">
     <div class="content-admin flex flex-column">
         {% if user.role == "TEACHER" %}
-        <h2>Estudiantes</h2>
-        {% if courses %}
-        <div class="d-flex gap-3">
-            <ul class="list-unstyled d-flex gap-2 mb-0 students_list">
-                {% for course in courses %}
-                <li>
-                    <a href="{{ url_for('users.course_students', course_id=course.id) }}"
-                        class="btn btn-outline-dark me-2 course-grade-btn">
-                        {{ course.grade_number }}
-                    </a>
-                </li>
-                {% endfor %}
-            </ul>
-        </div>
-        {% else %}
-        <p class="text-muted">No hay cursos disponibles en el colegio.</p>
-        {% endif %}
+            <h2>Estudiantes</h2>
+            {% if courses %}
+                <div class="d-flex gap-3">
+                    <ul class="list-unstyled d-flex gap-2 mb-0 students_list">
+                        {% for course in courses %}
+                            <li>
+                                <a href="{{ url_for('users.course_students', course_id=course.id) }}"
+                                    class="btn btn-outline-dark me-2 course-grade-btn">
+                                    {{ course.grade_number }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% else %}
+                <p class="text-muted">No hay cursos disponibles en el colegio.</p>
+            {% endif %}
         {% endif %}
         <h2>Administrar</h2>
         <div class="flex container_boxs_menu">

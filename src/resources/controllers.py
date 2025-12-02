@@ -12,14 +12,11 @@ from typing import Tuple, Optional
 from pydantic import ValidationError
 import os
 
-# from .validation import (
-#     ResourceCreateSchema,
-#     ResourceUpdateSchema,
-#     ResourceResponseSchema,
-# )
 from .service import (
     get_resources_by_class_service,
     get_resources_by_teacher_service,
+    get_resources_by_student_service,
+    get_resources_by_student_subject_service,
     get_resource_service,
     create_resource_service,
     update_resource_service,
@@ -38,8 +35,6 @@ def resources_view_controller(_: Request):
     try:
         current_user_id = get_jwt_identity()
         db = SessionLocal()
-
-        # Obtener información del usuario
         user = db.query(User).filter(User.id == current_user_id).first()
 
         if not user:
@@ -318,3 +313,112 @@ def delete_resource_api_controller(
         return ApiResponse.error(
             message="Error interno del servidor", details=str(e), status_code=500
         )
+
+
+# ========== Student Controllers ==========
+def student_resources_view_controller(_: Request):
+    """Vista principal de recursos para estudiantes - muestra las materias"""
+    try:
+        current_user_id = get_jwt_identity()
+        db = SessionLocal()
+
+        # Obtener información del usuario
+        user = db.query(User).filter(User.id == current_user_id).first()
+
+        if not user:
+            flash("Usuario no encontrado", "error")
+            return redirect(url_for("users.dashboard"))
+
+        # Obtener el curso y materias del estudiante
+        resources_data, status_code = get_resources_by_student_service(current_user_id)
+
+        if status_code != 200:
+            flash(resources_data.get("error", "Error al cargar las materias"), "error")
+            return redirect(url_for("users.dashboard"))
+
+        # Convert the User object to a dictionary
+        user_dict = {
+            "id": user.id,
+            "username": user.username,
+            "document": user.document,
+            "full_name": user.full_name,
+            "avatar": getattr(user, "avatar", None),
+            "role": user.role.value if hasattr(user.role, "value") else str(user.role),
+        }
+
+        return render_template(
+            "student/resources_view.html",
+            user=user_dict,
+            course=resources_data.get("course"),
+            subjects=resources_data.get("subjects", []),
+            accion_logout=True,
+        )
+    except Exception:
+        flash("Error al cargar la vista de recursos", "error")
+        return redirect(url_for("users.dashboard"))
+    finally:
+        db.close()
+
+
+def resources_view_subject_controller(
+    course_id: int, subject_id: int, request: Request
+):
+    """Vista de recursos de una materia específica para profesores y estudiantes"""
+    try:
+        current_user_id = get_jwt_identity()
+        db = SessionLocal()
+
+        # Obtener información del usuario
+        user = db.query(User).filter(User.id == current_user_id).first()
+
+        if not user:
+            flash("Usuario no encontrado", "error")
+            return redirect(url_for("users.dashboard"))
+
+        # Obtener los recursos de la materia
+        resources_data, status_code = get_resources_by_student_subject_service(
+            current_user_id, course_id, subject_id
+        )
+
+        if status_code != 200:
+            back_url = (
+                url_for("resources.student_resources_view")
+                if user.role.value == "student"
+                else url_for("resources.resources_view")
+            )
+            flash(resources_data.get("error", "Error al cargar los recursos"), "error")
+            return redirect(back_url)
+
+        # Convert the User object to a dictionary
+        user_dict = {
+            "id": user.id,
+            "username": user.username,
+            "document": user.document,
+            "full_name": user.full_name,
+            "avatar": getattr(user, "avatar", None),
+            "role": user.role.value if hasattr(user.role, "value") else str(user.role),
+        }
+
+        # Obtener el nombre de la materia
+        subject_obj = resources_data.get("subject")
+        subject_name = subject_obj.name if subject_obj else ""
+
+        return render_template(
+            "teacher/resources_view.html",
+            user=user_dict,
+            course=resources_data.get("course"),
+            subjects=[
+                {
+                    "subject_id": subject_id,
+                    "course_id": course_id,
+                    "subject_name": subject_name,
+                    "periods": resources_data.get("periods", {}),
+                }
+            ],
+            accion_logout=True,
+        )
+    except Exception:
+        flash("Error al cargar los recursos", "error")
+        return redirect(url_for("users.dashboard"))
+    finally:
+        db.close()
