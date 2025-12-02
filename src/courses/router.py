@@ -71,13 +71,6 @@ def remove_subject_from_course(course_id, subject_id, teacher_id):
     )
 
 
-# Teacher classes view
-# @courses_bp.route("/teacher/classes", methods=["GET"])
-# def teacher_classes():
-#     """Vista de clases y recursos para teachers"""
-#     return teacher_classes_controller(request)
-
-
 # Rutas API
 @courses_bp.route("/api", methods=["GET"])
 def get_courses_api():

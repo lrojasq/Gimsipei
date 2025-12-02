@@ -33,26 +33,26 @@
     <!-- Materias del curso -->
     <div class="specialities_category flex flex-column student-classes-content">
         {% if subjects %}
-        <div class="subjects-grid">
-            {% for subject_data in subjects %}
-            <a href="{{ url_for('classes.student_subject_classes_view', course_id=course.id, subject_id=subject_data.subject.id) }}"
-                class="subject-card">
-                <div class="subject-card-image">
-                    <!-- Área de imagen turquesa -->
-                </div>
-                <div class="subject-card-content">
-                    <div class="subject-bar"></div>
-                    <h3>{{ subject_data.subject.name }}</h3>
-                    
-                </div>
-            </a>
-            {% endfor %}
-        </div>
+            <div class="subjects-grid">
+                {% for subject_data in subjects %}
+                    <a href="{{ url_for('classes.student_subject_classes_view', course_id=course.id, subject_id=subject_data.subject.id) }}"
+                        class="subject-card">
+                        <div class="subject-card-image">
+                            <!-- Área de imagen turquesa -->
+                        </div>
+                        <div class="subject-card-content">
+                            <div class="subject-bar"></div>
+                            <h3>{{ subject_data.subject.name }}</h3>
+                            
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
         {% else %}
-        <div class="empty-state" style="text-align: center; padding: 4rem;">
-            <i class="fas fa-folder-open" style="font-size: 4rem; color: #bdc3c7;"></i>
-            <p style="margin-top: 1rem; color: #7f8c8d;">No hay materias disponibles en tu curso</p>
-        </div>
+            <div class="empty-state" style="text-align: center; padding: 4rem;">
+                <i class="fas fa-folder-open" style="font-size: 4rem; color: #bdc3c7;"></i>
+                <p style="margin-top: 1rem; color: #7f8c8d;">No hay materias disponibles en tu curso</p>
+            </div>
         {% endif %}
     </div>
 
