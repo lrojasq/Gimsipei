@@ -516,7 +516,7 @@
 
 @media (max-width: 480px) {
     .recursos_category .period-btn {
-        flex: 1 1 100%;
+        flex: 1 1 45%;
     }
     
     .recursos_category .exam.resource .text-content .d-flex {

@@ -137,14 +137,14 @@
 }
 
 /* Sidebar styling - mismo color azul */
-.admin_category .menu_aside {
+/* .admin_category .menu_aside {
     background-color: hsl(190, 65%, 55%);
 }
 
 .admin_category .menu_aside .aside_list li a.active,
 .admin_category .menu_aside .aside_list li a:hover {
     background-color: hsl(190, 65%, 45%);
-}
+} */
 
 /* Alert messages */
 .alert {

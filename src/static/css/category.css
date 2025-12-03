@@ -88,7 +88,8 @@ h1 {
     max-height: 90vh;
     overflow: auto;
 }
-.specialities_category.exam_category{
+
+.specialities_category.exam_category {
     width: 90%;
     margin: auto;
 }
@@ -746,6 +747,7 @@ hr.libros_br {
 .container_category.flex.evaluaciones_category {
     gap: 0;
 }
+
 .container_category.flex.evaluaciones_category .specialities_category {
     width: 90%;
 }
@@ -761,11 +763,13 @@ hr.libros_br {
     justify-content: start;
     gap: 3rem;
 }
+
 .btns_actions {
     display: flex;
     gap: 0px;
-}   
-.btns_actions a.btn{
+}
+
+.btns_actions a.btn {
     padding: 0.3rem 1rem;
     border-radius: 3px;
     font-weight: bold;
@@ -773,20 +777,24 @@ hr.libros_br {
     transition: all 0.3s ease;
     font-size: 9px;
 }
-.btns_actions .btn-edit{
+
+.btns_actions .btn-edit {
     background-color: var(--clases);
     color: #fff;
-    border-radius: 5px 0px 0px 5px!important;
+    border-radius: 5px 0px 0px 5px !important;
 }
-.btns_actions .btn-edit:hover{
+
+.btns_actions .btn-edit:hover {
     background-color: var(--clases-active);
     color: #fff;
 }
+
 .btns_actions .btn_delete {
     background-color: var(--admin);
     color: #fff;
-    border-radius: 0px 5px 5px 0px!important;
+    border-radius: 0px 5px 5px 0px !important;
 }
+
 .btns_actions .btn_delete:hover {
     background-color: var(--admin-active);
     color: #fff;
@@ -795,6 +803,11 @@ hr.libros_br {
 .specialities_category.class-detail-content {
     width: 90%;
     margin: auto;
+}
+
+
+.specialities_category.exams.flex.flex-column.recursos_category {
+    width: 80%;
 }
 
 
@@ -889,7 +902,7 @@ hr.libros_br {
 }
 
 .modal.modal_delete .btn-cancel {
-    background:var(--admin);
+    background: var(--admin);
     color: white;
 }
 
@@ -910,8 +923,8 @@ hr.libros_br {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
-.modal.modal_delete .btn{
-        border: none;
+.modal.modal_delete .btn {
+    border: none;
     border-radius: 18px;
     font-weight: 100;
     font-size: 1rem;
@@ -922,6 +935,11 @@ hr.libros_br {
     height: 29px;
 }
 
+.bg_section_footer.mobile_btns,
+.mobile_btns {
+    display: none;
+}
+
 @media (max-width:1600px) {
 
     .specialities_category.cursos.grades.flex.flex-column,
@@ -930,7 +948,7 @@ hr.libros_br {
     }
 }
 
-@media (max-width:1024px) {
+@media (max-width:1080px) {
     .data_categoty {
         text-align: center;
         padding: 0rem 1rem;
@@ -969,6 +987,10 @@ hr.libros_br {
         gap: 1rem;
     }
 
+    .specialities_category.flex.books {
+        width: 100%;
+    }
+
     #registroModalClass .modal-dialog.modal-dialog-centered,
     #registroModalCourse .modal-dialog.modal-dialog-centered,
     #registroModalAsignature .modal-dialog.modal-dialog-centered,
@@ -993,13 +1015,100 @@ hr.libros_br {
     .book {
         max-width: 45%;
         width: 45%;
+        height: 250px;
     }
+
     .libros_category .data_categoty p,
-    .libros_category .data_grade_category{
+    .libros_category .data_grade_category {
         display: none;
     }
+
     .books input#searchBooks {
         width: 100%;
+    }
+
+    .data_categoty p {
+        text-align: center;
+        margin: 0px;
+    }
+
+    .data_categoty {
+        gap: 0;
+        padding: 1rem;
+    }
+
+    .specialities_category.exams.flex.flex-column.clases_category.gap-4,
+    .specialities_category.exams.flex.flex-column.recursos_category {
+        width: 100%;
+    }
+
+    .mobile_btns {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .btns_desktop {
+        display: none;
+    }
+
+    .mobile_btns>.flex {
+        margin: auto;
+    }
+
+    .mobile_btns h3 {
+        font-size: 2rem;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+
+    .recursos_category .data_categoty {
+        gap: 1rem;
+    }
+
+    .container_category.flex.evaluaciones_category .specialities_category {
+        width: 100%;
+        margin-right: 0px;
+        margin: auto;
+        min-height: auto;
+    }
+
+    .nota span {
+        padding: 0.5rem 2rem;
+        background: var(--evaluaciones);
+        color: white;
+        height: 100%;
+        border-radius: 8px;
+    }
+
+    .bg_section_footer.mobile_btns,
+    .mobile_btns {
+        display: flex;
+    }
+
+    .specialities_category.cursos.grades.flex.flex-column,
+    .specialities_category {
+        max-height: max-content;
+        width: 100%;
+    }
+
+    .exam {
+        width: 100%;
+        height: 160px;
+    }
+
+    .text-content p {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+        /* Limita el texto a 3 líneas */
+        overflow: hidden;
+        line-height: 1;
+        text-overflow: ellipsis;
+    }
+    .modal.modal_delete .btn{
+        min-width: 10rem;
     }
 }
 
@@ -1022,19 +1131,12 @@ hr.libros_br {
         width: 25%;
     }
 
-    .nota span {
-        padding: 0.5rem 2rem;
-        background: #e55d1a;
-        color: white;
-    }
+
 
     .nota hr {
         display: none;
     }
 
-    .text-content p {
-        font-size: 0.6rem;
-    }
 
     .container_category .btns {
         flex-direction: row !important;

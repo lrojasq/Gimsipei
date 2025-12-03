@@ -317,6 +317,11 @@ input[type="file"] {
 }
 
 /* Responsive */
+@media (max-width:1080px){
+    .content_homework {
+        flex-direction: column;
+    }
+}
 @media (max-width: 768px) {
     .content-body {
         flex-direction: column;

@@ -23,7 +23,7 @@ ul{
 }
 .btn {
     padding: 0.3rem 1rem;
-    border-radius: 15px;
+    border-radius: 5px;
     color: var(--secondary-color);
     text-decoration: none;
     text-align: center;

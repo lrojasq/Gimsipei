@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 // SLIDER ADMIN
 
-if(document.querySelector('.mySwiper')){
+if(document.querySelector('.mySwiper') && screen.width>1080){
     var swiper = new Swiper(".mySwiper", {
 
     direction: "vertical",   // 👈 scroll vertical
