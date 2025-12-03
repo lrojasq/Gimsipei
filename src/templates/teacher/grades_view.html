@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}Calificaciones{% endblock %}
+
+{% block extra_css %}
+<link href="{{ url_for('static', filename='css/menu.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/category.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/admin.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/classes_resources.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/grades.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+{% block menu %}{% endblock %}
+
+{% include "flash_messages.html" %}
+
+<div class="container_category flex calificaciones_category">
+    <div class="specialities_category cursos grades flex flex-column">
+        <div class="flex header-classes">
+            <div class="classes-icon-wrapper">
+                <img src="{{ url_for('static', filename='images/svg/calificaciones.svg') }}" alt="Calificaciones" class="classes-icon">
+            </div>
+            <div class="classes-title">
+                <h2>Calificaciones</h2>
+            </div>
+        </div>
+
+        <!-- Tabla de cursos con estudiantes -->
+        <div class="classes-table-wrapper">
+            <table class="classes-table">
+                <thead class="table-header-collapsed">
+                    <tr>
+                        <th>Cursos</th>
+                        <th>Estudiante</th>
+                        <th>Modificar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if courses and courses|length > 0 %}
+                        {% for course in courses %}
+                        <tr class="course-row" data-course-id="{{ course.id }}">
+                            <td class="course-name-cell" colspan="3">
+                                <div class="course-header">
+                                    <span class="course-name">{{ course.name }}</span>
+                                    <button class="expand-btn" data-course-id="{{ course.id }}" aria-label="Expandir curso" title="Ver estudiantes del curso">
+                                        <i class="fas fa-chevron-down"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <!-- Fila expandible con los estudiantes del curso -->
+                        <tr class="expandable-row" data-course-id="{{ course.id }}" style="display: none;">
+                            <td colspan="3" class="expanded-content-cell">
+                                <div class="subjects-list">
+                                    {% if course.students and course.students|length > 0 %}
+                                        {% for student in course.students %}
+                                        <div class="subject-row-expanded">
+                                            <div class="empty-cell"></div>
+                                            <div class="subject-name-cell">
+                                                <span class="subject-name">{{ student.full_name }}</span>
+                                            </div>
+                                            <div class="subject-action-cell">
+                                                <a href="{{ url_for('grades.student_grades_view', course_id=course.id, student_id=student.id) }}" class="add-link-btn" title="Ver calificaciones">
+                                                    Ir
+                                                </a>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    {% else %}
+                                    <div class="empty-subjects">
+                                        <p>No hay estudiantes inscritos en este curso</p>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                    <tr class="empty-state-row">
+                        <td colspan="3" class="empty-state-cell">
+                            <p>No hay cursos disponibles.</p>
+                        </td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Sidebar Menu Component -->
+    {% include "sidebar_aside.html" %}
+</div>
+
+<!-- Custom JS -->
+<script src="{{ url_for('static', filename='js/classes_resources.js') }}"></script>
+{% endblock %}

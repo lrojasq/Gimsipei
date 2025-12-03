@@ -1,0 +1,20 @@
+<!-- Modal de Confirmación para Guardar Calificaciones -->
+<div class="modal modal_save" id="saveConfirmationModal" aria-hidden="true" style="display: none;">
+    <div class="bg-back close-modal-save"></div>
+    <div class="container">
+        <div class="save-icon">
+            <i class="fa-solid fa-floppy-disk" style="color: var(--calificaciones); font-size: 3rem;"></i>
+        </div>
+        <h2 class="save-title">¿Desea guardar las calificaciones?</h2>
+        <p class="save-warning">Se guardarán todas las notas del periodo actual</p>
+        <div class="save-buttons">
+            <button type="button" class="btn btn-cancel close-modal-save">CANCELAR</button>
+            <button type="button" class="btn btn-save" id="confirmSaveBtn">
+                <span class="btn-text">GUARDAR</span>
+                <span class="btn-spinner" style="display: none;">
+                    <i class="fas fa-spinner fa-spin"></i> GUARDANDO...
+                </span>
+            </button>
+        </div>
+    </div>
+</div>

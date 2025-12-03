@@ -17,6 +17,7 @@ from .evaluation_question import EvaluationQuestion, QuestionType
 from .evaluation_question_option import EvaluationQuestionOption
 from .evaluation_submission import EvaluationSubmission
 from .evaluation_submission_answer import EvaluationSubmissionAnswer
+from .grade import Grade
 
 __all__ = [
     "User",
@@ -39,4 +40,5 @@ __all__ = [
     "EvaluationQuestionOption",
     "EvaluationSubmission",
     "EvaluationSubmissionAnswer",
+    "Grade",
 ]
