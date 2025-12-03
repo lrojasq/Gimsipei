@@ -41,64 +41,67 @@
                 </thead>
                 <tbody>
                     {% if subjects %}
-                        {% for subject in subjects %}
-                            <!-- Fila de asignatura (expandible) -->
-                            <tr class="subject-row" data-subject-id="{{ subject.subject_id }}">
-                                <td colspan="5" class="subject-header">
-                                    <div class="flex subject-header-content">
-                                        <span class="subject-name">{{ subject.subject_name }}</span>
-                                        <i class="fas fa-chevron-down toggle-subject"></i>
-                                    </div>
-                                </td>
-                            </tr>
-                            <!-- Filas de evaluaciones (ocultas por defecto) -->
-                            {% if subject.evaluations %}
-                                {% for eval_item in subject.evaluations %}
-                                    <tr class="subject-content-row evaluation-row" data-subject-id="{{ subject.subject_id }}"
-                                        style="display: none;">
-                                        <td class="eval-indent"></td>
-                                        <td class="eval-name-cell">{{ eval_item.title }}</td>
-                                        <td class="eval-date-cell">{{ eval_item.submitted_at.strftime('%d-%m-%y') if
-                                            eval_item.submitted_at else '-' }}</td>
-                                        <td class="eval-score-cell editable-score" 
-                                            onclick="openEditScoreModal(this)"
-                                            data-submission-id="{{ eval_item.submission_id }}"
-                                            data-evaluation-title="{{ eval_item.title }}"
-                                            data-student-name="{{ student.full_name }}"
-                                            data-current-score="{{ eval_item.score if eval_item.score is not none else 0 }}"
-                                            title="Clic para editar nota">
-                                            {{ '%.1f'|format(eval_item.score) if eval_item.score is not none else '-' }}
-                                        </td>
-                                        <td class="eval-actions-cell btns_actions">
-                                            <a href="{{ url_for('evaluations.view_submission_answers', submission_id=eval_item.submission_id) }}" class="view-link" title="Ver detalles">Ver</a>
-                                            <button class="action-btn reset-evaluation btn-edit btn"
-                                                data-submission-id="{{ eval_item.submission_id }}"
-                                                data-evaluation-title="{{ eval_item.title }}"
-                                                data-student-name="{{ student.full_name }}" title="Reiniciar evaluación">
-                                                <i class="fas fa-redo"></i>
-                                            </button>
-                                            <button class="action-btn delete-evaluation-submission btn_delete btn"
-                                                data-submission-id="{{ eval_item.submission_id }}"
-                                                data-evaluation-title="{{ eval_item.title }}" title="Eliminar envío">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                            {% else %}
-                                <tr class="subject-content-row" data-subject-id="{{ subject.subject_id }}" style="display: none;">
-                                    <td colspan="5" class="empty-evaluations-cell">
-                                        <p>No hay evaluaciones enviadas para esta asignatura.</p>
-                                    </td>
-                                </tr>
-                            {% endif %}
-                        {% endfor %}
+                    {% for subject in subjects %}
+                    <!-- Fila de asignatura (expandible) -->
+                    <tr class="subject-row" data-subject-id="{{ subject.subject_id }}">
+                        <td colspan="5" class="subject-header">
+                            <div class="flex subject-header-content">
+                                <span class="subject-name">{{ subject.subject_name }}</span>
+                                <i class="fas fa-chevron-down toggle-subject"></i>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- Filas de evaluaciones (ocultas por defecto) -->
+                    {% if subject.evaluations %}
+                    {% for eval_item in subject.evaluations %}
+                    <tr class="subject-content-row evaluation-row" data-subject-id="{{ subject.subject_id }}"
+                        style="display: none;">
+                        <td class="eval-indent"></td>
+                        <td class="eval-name-cell" data-label="Evaluación">{{ eval_item.title }}</td>
+                        <td class="eval-date-cell" data-label="Fecha limite">{{
+                            eval_item.submitted_at.strftime('%d-%m-%y') if
+                            eval_item.submitted_at else '-' }}</td>
+                        <td class="eval-score-cell editable-score" onclick="openEditScoreModal(this)" data-label="Nota"
+                            data-submission-id="{{ eval_item.submission_id }}"
+                            data-evaluation-title="{{ eval_item.title }}" data-student-name="{{ student.full_name }}"
+                            data-current-score="{{ eval_item.score if eval_item.score is not none else 0 }}"
+                            title="Clic para editar nota">
+                            {{ '%.1f'|format(eval_item.score) if eval_item.score is not none else '-' }}
+                        </td>
+                        <td class="eval-actions-cell btns_actions" data-label="Acciones">
+                            <div class="d-flex gap-2">
+                                <a href="{{ url_for('evaluations.view_submission_answers', submission_id=eval_item.submission_id) }}"
+                                    class="view-link" title="Ver detalles">Ver</a>
+                                <button class="action-btn reset-evaluation btn-edit btn"
+                                    data-submission-id="{{ eval_item.submission_id }}"
+                                    data-evaluation-title="{{ eval_item.title }}"
+                                    data-student-name="{{ student.full_name }}" title="Reiniciar evaluación">
+                                    <i class="fas fa-redo"></i>
+                                </button>
+                                <button class="action-btn delete-evaluation-submission btn_delete btn"
+                                    data-submission-id="{{ eval_item.submission_id }}"
+                                    data-evaluation-title="{{ eval_item.title }}" title="Eliminar envío">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+
+                        </td>
+                    </tr>
+                    {% endfor %}
                     {% else %}
-                        <tr class="empty-state-row">
-                            <td colspan="5" class="empty-state-cell">
-                                <p>Este curso no tiene materias asignadas. Por favor, asigne materias al curso primero.</p>
-                            </td>
-                        </tr>
+                    <tr class="subject-content-row" data-subject-id="{{ subject.subject_id }}" style="display: none;">
+                        <td colspan="5" class="empty-evaluations-cell">
+                            <p>No hay evaluaciones enviadas para esta asignatura.</p>
+                        </td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                    {% else %}
+                    <tr class="empty-state-row">
+                        <td colspan="5" class="empty-state-cell">
+                            <p>Este curso no tiene materias asignadas. Por favor, asigne materias al curso primero.</p>
+                        </td>
+                    </tr>
                     {% endif %}
                 </tbody>
             </table>
