@@ -1,0 +1,373 @@
+/* Container principal de calificaciones */
+.grades-container {
+  width: 100%;
+  max-width: 1200px;
+  padding: 20px;
+}
+
+/* Layout para student_grades_view - centrar cuadro de calificaciones */
+.calificaciones_category .specialities_category.grades {
+  width: 70%;
+  max-width: 70%;
+  margin-left: 2rem;
+  margin-right: auto;
+}
+
+/* Ajuste del container para mejor distribución */
+.calificaciones_category {
+  gap: 2rem;
+}
+
+/* Back arrow link */
+.calificaciones_category .back-arrow-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: var(--calificaciones);
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.calificaciones_category .back-arrow-link:hover {
+  color: var(--calificaciones-active);
+}
+
+.calificaciones_category .back-arrow-link i {
+  font-size: 2rem;
+}
+
+/* Editable grade inputs (para profesores) */
+.grade-input {
+  width: 20%;
+  text-align: center;
+  padding: 0.5rem;
+  border-radius: 5px;
+  border: 1px solid transparent;
+  background-color: var(--light-color);
+  color: var(--calificaciones);
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+/* Grade value span (para estudiantes - solo lectura) */
+.grade-value {
+  width: 20%;
+  text-align: center;
+  padding: 0.5rem;
+  border-radius: 5px;
+  background-color: var(--light-color);
+  color: var(--calificaciones);
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+/* Primera fila (nombre de materia + nota final) con fondo morado */
+.grade_list li:first-child .grade-value {
+  background-color: var(--calificaciones);
+  color: var(--light-color);
+}
+
+/* Input de nota final también con fondo morado en la primera fila */
+.grade_list li:first-child .grade-input {
+  background-color: var(--calificaciones);
+  color: var(--light-color);
+}
+
+.grade_list li:first-child .grade-input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.grade-input:focus {
+  outline: none;
+  border-color: var(--calificaciones);
+  box-shadow: 0 0 0 2px rgba(162, 112, 242, 0.2);
+}
+
+.grade-input::placeholder {
+  color: #999;
+}
+
+.grade-input.grade-final {
+  font-weight: bold;
+}
+
+/* Remove spinner from number inputs */
+.grade-input::-webkit-outer-spin-button,
+.grade-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  appearance: none;
+  margin: 0;
+}
+
+.grade-input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+/* Panel lateral de información del estudiante */
+.student-info {
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+  border-radius: 15px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.student-info h1 {
+  color: var(--calificaciones);
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.student-info p {
+  color: #666;
+  margin: 5px 0;
+}
+
+/* Botones de periodo */
+.period-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.period-btn {
+  padding: 12px 20px;
+  border: 2px solid var(--calificaciones);
+  border-radius: 25px;
+  background: white;
+  color: var(--calificaciones);
+  font-weight: 600;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  text-align: center;
+}
+
+.period-btn:hover,
+.period-btn.active {
+  background: var(--calificaciones);
+  color: white;
+}
+
+/* Contenedor de tabla de calificaciones */
+.grades-table-container {
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Card de calificación por materia */
+.subject-grade-card {
+  margin-bottom: 20px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+/* Header de la materia */
+.subject-header {
+  background: linear-gradient(135deg, #d8b4fe 0%, var(--calificaciones) 100%);
+  color: white;
+  padding: 15px 20px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.subject-header .grade-value {
+  background: white;
+  color: var(--calificaciones);
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-weight: bold;
+}
+
+/* Filas de calificaciones */
+.grade-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  border-bottom: 1px solid #f0f0f0;
+  background: #faf5ff;
+}
+
+.grade-row:last-child {
+  border-bottom: none;
+}
+
+.grade-label {
+  color: #666;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+}
+
+.grade-value-small {
+  background: #e9d5ff;
+  color: var(--calificaciones);
+  padding: 6px 15px;
+  border-radius: 15px;
+  font-weight: 600;
+}
+
+/* Botón notas globales */
+.btn-global {
+  background: linear-gradient(135deg, var(--calificaciones) 0%, #d8b4fe 100%);
+  color: white;
+  padding: 15px 30px;
+  border-radius: 25px;
+  font-weight: 600;
+  text-transform: uppercase;
+  text-decoration: none;
+  display: inline-block;
+  margin-top: 20px;
+  transition: all 0.3s ease;
+}
+
+.btn-global:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(162, 112, 242, 0.4);
+  color: white;
+  text-decoration: none;
+}
+
+/* Botón volver - Icono de flecha */
+.btn-back-icon {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-back-icon i {
+  font-size: 1.5rem;
+  color: var(--calificaciones);
+  transition: color 0.3s ease;
+}
+
+.btn-back-icon:hover i {
+  color: var(--calificaciones-active);
+}
+
+/* Link de retorno con icono */
+.calificaciones_category a.btn-back-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: var(--calificaciones);
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.calificaciones_category a.btn-back-link:hover {
+  color: var(--calificaciones-active);
+}
+
+.calificaciones_category a.btn-back-link i {
+  font-size: 1.5rem;
+}
+
+/* SVG fill para calificaciones */
+.calificaciones_category .data_categoty svg .fil0 {
+  fill: var(--calificaciones);
+}
+
+/* Estado vacío */
+.empty-state {
+  text-align: center;
+  padding: 40px;
+}
+
+.empty-state i {
+  font-size: 3rem;
+  color: #bdc3c7;
+  margin-bottom: 15px;
+}
+
+.empty-state p {
+  color: #999;
+}
+
+/* ==============================================
+   GRADES VIEW - Vista principal de calificaciones
+   ============================================== */
+
+/* Colores de calificaciones para grades_view */
+.calificaciones_category .classes-table-wrapper {
+  background: white;
+}
+
+.calificaciones_category .course-header .expand-btn {
+  color: var(--calificaciones);
+}
+
+.calificaciones_category .course-header .expand-btn:hover {
+  color: var(--calificaciones-active);
+}
+
+.calificaciones_category .add-link-btn {
+  color: var(--calificaciones);
+}
+
+.calificaciones_category .add-link-btn:hover {
+  color: var(--calificaciones-active);
+}
+
+.calificaciones_category .header-classes .classes-icon-wrapper {
+  background: none;
+}
+
+.calificaciones_category .header-classes .classes-title h2 {
+  color: #374151;
+}
+
+/* Ajustes para el panel de datos lateral (solo en vistas con data_categoty) */
+.calificaciones_category .data_categoty {
+  min-width: 250px;
+  max-width: 300px;
+}
+
+/* Header con icono y título */
+.calificaciones_category .header-grades {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.calificaciones_category .header-grades h3 {
+  font-weight: bold;
+  margin: 0;
+  color: #333;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+  .calificaciones_category .data_categoty {
+    min-width: 200px;
+    max-width: 250px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container_category.calificaciones_category {
+    flex-direction: column;
+  }
+
+  .calificaciones_category .data_categoty {
+    max-width: 100%;
+    min-width: unset;
+  }
+}

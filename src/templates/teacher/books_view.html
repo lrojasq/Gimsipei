@@ -50,11 +50,13 @@
                     <option value="asc">A-Z</option>
                     <option value="desc">Z-A</option>
                 </select>
-                <select name="genero" id="filter_genero">
-                    <option value="">- Audiencia -</option>
-                    <option value="STUDENT">Estudiantes</option>
-                    <option value="TEACHER">Docentes</option>
-                </select>
+                {% if user.role == "teacher" %}
+                    <select name="genero" id="filter_genero">
+                        <option value="">- Audiencia -</option>
+                        <option value="STUDENT">Estudiantes</option>
+                        <option value="TEACHER">Docentes</option>
+                    </select>
+                {% endif %}
                 <select name="grado" id="filter_grado">
                     <option value="">- Grado -</option>
                     <option value="6">6° Grado</option>
