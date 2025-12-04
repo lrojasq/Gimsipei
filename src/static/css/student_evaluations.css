@@ -276,7 +276,7 @@
 
 @media (max-width:1080px) {
   .btn-filter {
-    min-width: 165px;
+    min-width: 145px;
     padding: 0.5rem 1rem;
   }
 
@@ -290,7 +290,7 @@
   }
 
   .student-evaluations .text-content .title {
-    font-size: 1rem;
+    font-size: 0.8rem;
   }
 
   .student-evaluations .text-content p {
@@ -301,6 +301,7 @@
     overflow: hidden;
     line-height: 1;
     text-overflow: ellipsis; 
+    font-size: 0.5rem;
   }
   
   .student-evaluations .text-content {
