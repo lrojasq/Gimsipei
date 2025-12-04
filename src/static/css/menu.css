@@ -293,6 +293,9 @@ a {
 .bg-clases{
     background-color: var(--barra-ginsipei);
 }
+.bg-calificaciones{
+    background-color: var(--barra-calificaciones);
+}
 
 
 * {

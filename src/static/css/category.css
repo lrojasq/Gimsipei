@@ -601,6 +601,8 @@ hr.libros_br {
 .grade_list li span.grade {
     width: 20%;
     text-align: center;
+    background-color: #cdbbf1;
+    color: var(--light-color);
 }
 
 .grade_list li span.subject_global {
@@ -610,6 +612,10 @@ hr.libros_br {
 .grade_list li span.periodo {
     width: 15%;
     text-align: center;
+}
+.grade_list li span.periodo:last-child:not(.global)  {
+    background-color: #cdbbf1;
+    color: var(--light-color);
 }
 
 .grade_list li:first-child span {

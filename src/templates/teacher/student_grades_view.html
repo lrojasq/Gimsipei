@@ -3,153 +3,175 @@
 {% block title %}Calificaciones - {{ grades_data.student.full_name }}{% endblock %}
 
 {% block extra_css %}
-    <link href="{{ url_for('static', filename='css/menu.css') }}" rel="stylesheet">
-    <link href="{{ url_for('static', filename='css/category.css') }}" rel="stylesheet">
-    <link href="{{ url_for('static', filename='css/admin.css') }}" rel="stylesheet">
-    <link href="{{ url_for('static', filename='css/grades.css') }}" rel="stylesheet">
-    <link href="{{ url_for('static', filename='css/grades_modal.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+<link href="{{ url_for('static', filename='css/menu.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/category.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/admin.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/grades.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/grades_modal.css') }}" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 {% endblock %}
 
 {% block content %}
-    {% block menu %}{% endblock %}
+{% block menu %}{% endblock %}
 
-    {% include "flash_messages.html" %}
+{% include "flash_messages.html" %}
 
-    <div class="container_category flex calificaciones_category">
-        <div class="data_categoty flex flex-column">
-            <div class="title flex">
-                <img src="{{ url_for('static', filename='images/svg/calificaciones.svg') }}" alt="Calificaciones" style="width: 50px; height: 50px;">
-                <h1>Calificaciones</h1>
-            </div>
-
-            <p>{{ grades_data.student.full_name }}</p>
-            <div class="data_grade_category flex flex-column">
-                <p>{{ grades_data.student.document }}</p>
-                <p>{{ grades_data.course.name }}</p>
-            </div>
-
-            <div class="btns flex flex-column">
-                <a href="{{ url_for('grades.student_grades_view', course_id=grades_data.course.id, student_id=grades_data.student.id, period=1) }}" class="btn btn-calificaciones {% if current_period == 1 %}active{% endif %}">PERIODO 1</a>
-                <a href="{{ url_for('grades.student_grades_view', course_id=grades_data.course.id, student_id=grades_data.student.id, period=2) }}" class="btn btn-calificaciones {% if current_period == 2 %}active{% endif %}">PERIODO 2</a>
-                <a href="{{ url_for('grades.student_grades_view', course_id=grades_data.course.id, student_id=grades_data.student.id, period=3) }}" class="btn btn-calificaciones {% if current_period == 3 %}active{% endif %}">PERIODO 3</a>
-                <a href="{{ url_for('grades.student_grades_view', course_id=grades_data.course.id, student_id=grades_data.student.id, period=4) }}" class="btn btn-calificaciones {% if current_period == 4 %}active{% endif %}">PERIODO 4</a>
-                <a href="{{ url_for('grades.student_global_grades_view', course_id=grades_data.course.id, student_id=grades_data.student.id) }}" class="btn btn-calificaciones">NOTAS GLOBALES</a>
-                {% if user.role == 'teacher' %}
-                    <button type="button" class="btn btn-calificaciones active" id="saveGradesBtn">GUARDAR</button>
-                {% endif %}
-            </div>
+<div class="container_category flex calificaciones_category">
+    <div class="data_categoty flex flex-column">
+        <div class="title flex">
+            <img src="{{ url_for('static', filename='images/svg/calificaciones.svg') }}" alt="Calificaciones"
+                style="width: 50px; height: 50px;">
+            <h1>Calificaciones</h1>
         </div>
 
-        <!-- Inicio Calificaciones por Materia -->
-        <div class="specialities_category grades flex flex-column">
-            <div class="flex gap-2 align-items-center">
-                {% if user.role == 'teacher' %}
-                    <a href="{{ url_for('grades.grades_view') }}" class="back-arrow-link">
-                        <i class="bi bi-arrow-left-short"></i>
-                    </a>
-                {% endif %}
-                <h3 class="font-weight-bold mb-0">{{ grades_data.course.name }} - Periodo {{ current_period }}</h3>
-            </div>
-
-            {% for subject in grades_data.subjects %}
-                <div class="grade flex" data-subject-id="{{ subject.id }}">
-                    <ul class="grade_list flex flex-column">
-                        <li class="flex">
-                            <span class="text_subject">{{ subject.name|upper }}</span>
-                            {% if subject.periods and current_period in subject.periods %}
-                                {% set period_data = subject.periods[current_period] %}
-                                {% if user.role == 'teacher' %}
-                                    <input type="number" step="0.1" min="0" max="5" class="grade-input grade-final" data-field="final_grade" value="{{ period_data.final_grade if period_data.final_grade else '' }}" placeholder="-">
-                                {% else %}
-                                    <span class="grade">{{ period_data.final_grade if period_data.final_grade else '-' }}</span>
-                                {% endif %}
-                            {% else %}
-                                {% if user.role == 'teacher' %}
-                                    <input type="number" step="0.1" min="0" max="5" class="grade-input grade-final" data-field="final_grade" value="" placeholder="-">
-                                {% else %}
-                                    <span class="grade">-</span>
-                                {% endif %}
-                            {% endif %}
-                        </li>
-                        <li class="flex">
-                            <span class="text_subject">TAREAS</span>
-                            {% if subject.periods and current_period in subject.periods %}
-                                {% set period_data = subject.periods[current_period] %}
-                                {% if user.role == 'teacher' %}
-                                    <input type="number" step="0.1" min="0" max="5" class="grade-input" data-field="tasks_grade" value="{{ period_data.tasks_grade if period_data.tasks_grade else '' }}" placeholder="-">
-                                {% else %}
-                                    <span class="grade">{{ period_data.tasks_grade if period_data.tasks_grade else '-' }}</span>
-                                {% endif %}
-                            {% else %}
-                                {% if user.role == 'teacher' %}
-                                    <input type="number" step="0.1" min="0" max="5" class="grade-input" data-field="tasks_grade" value="" placeholder="-">
-                                {% else %}
-                                    <span class="grade">-</span>
-                                {% endif %}
-                            {% endif %}
-                        </li>
-                        <li class="flex">
-                            <span class="text_subject">TRABAJOS</span>
-                            {% if subject.periods and current_period in subject.periods %}
-                                {% set period_data = subject.periods[current_period] %}
-                                {% if user.role == 'teacher' %}
-                                    <input type="number" step="0.1" min="0" max="5" class="grade-input" data-field="assignments_grade" value="{{ period_data.assignments_grade if period_data.assignments_grade else '' }}" placeholder="-">
-                                {% else %}
-                                    <span class="grade">{{ period_data.assignments_grade if period_data.assignments_grade else '-' }}</span>
-                                {% endif %}
-                            {% else %}
-                                {% if user.role == 'teacher' %}
-                                    <input type="number" step="0.1" min="0" max="5" class="grade-input" data-field="assignments_grade" value="" placeholder="-">
-                                {% else %}
-                                    <span class="grade">-</span>
-                                {% endif %}
-                            {% endif %}
-                        </li>
-                        <li class="flex">
-                            <span class="text_subject">EVALUACIONES</span>
-                            {% if subject.periods and current_period in subject.periods %}
-                                {% set period_data = subject.periods[current_period] %}
-                                {% if user.role == 'teacher' %}
-                                    <input type="number" step="0.1" min="0" max="5" class="grade-input" data-field="evaluations_grade" value="{{ period_data.evaluations_grade if period_data.evaluations_grade else '' }}" placeholder="-">
-                                {% else %}
-                                    <span class="grade">{{ period_data.evaluations_grade if period_data.evaluations_grade else '-' }}</span>
-                                {% endif %}
-                            {% else %}
-                                {% if user.role == 'teacher' %}
-                                    <input type="number" step="0.1" min="0" max="5" class="grade-input" data-field="evaluations_grade" value="" placeholder="-">
-                                {% else %}
-                                    <span class="grade">-</span>
-                                {% endif %}
-                            {% endif %}
-                        </li>
-                    </ul>
-                </div>
-            {% else %}
-                <div class="empty-state">
-                    <i class="fas fa-clipboard-list"></i>
-                    <p>No hay materias registradas para este curso</p>
-                </div>
-            {% endfor %}
+        <p>{{ grades_data.student.full_name }}</p>
+        <div class="data_grade_category flex flex-column">
+            <p>{{ grades_data.student.document }}</p>
+            <p>{{ grades_data.course.name }}</p>
         </div>
 
-        <!-- Menu lateral -->
-        {% include "sidebar_aside.html" %}
+        <div class="btns flex flex-column">
+            <a href="{{ url_for('grades.student_grades_view', course_id=grades_data.course.id, student_id=grades_data.student.id, period=1) }}"
+                class="btn btn-calificaciones {% if current_period == 1 %}active{% endif %}">PERIODO 1</a>
+            <a href="{{ url_for('grades.student_grades_view', course_id=grades_data.course.id, student_id=grades_data.student.id, period=2) }}"
+                class="btn btn-calificaciones {% if current_period == 2 %}active{% endif %}">PERIODO 2</a>
+            <a href="{{ url_for('grades.student_grades_view', course_id=grades_data.course.id, student_id=grades_data.student.id, period=3) }}"
+                class="btn btn-calificaciones {% if current_period == 3 %}active{% endif %}">PERIODO 3</a>
+            <a href="{{ url_for('grades.student_grades_view', course_id=grades_data.course.id, student_id=grades_data.student.id, period=4) }}"
+                class="btn btn-calificaciones {% if current_period == 4 %}active{% endif %}">PERIODO 4</a>
+            <a href="{{ url_for('grades.student_global_grades_view', course_id=grades_data.course.id, student_id=grades_data.student.id) }}"
+                class="btn btn-calificaciones">NOTAS GLOBALES</a>
+            {% if user.role == 'teacher' %}
+            <button type="button" class="btn btn-calificaciones active" id="saveGradesBtn">GUARDAR</button>
+            {% endif %}
+        </div>
     </div>
 
-    {% if user.role == 'teacher' %}
-        <!-- Modales de Calificaciones (solo para profesores) -->
-        {% include "teacher/save_grades_modal.html" %}
-        {% include "teacher/success_grades_modal.html" %}
+    <!-- Inicio Calificaciones por Materia -->
+    <div class="specialities_category grades flex flex-column">
+        <div class="flex gap-2 align-items-center">
+            {% if user.role == 'teacher' %}
+            <a href="{{ url_for('grades.grades_view') }}" class="back-arrow-link">
+                <i class="bi bi-arrow-left-short"></i>
+            </a>
+            {% endif %}
+            <!-- <h3 class="font-weight-bold mb-0">{{ grades_data.course.name }} - Periodo {{ current_period }}</h3> -->
+        </div>
 
-        <!-- Configuración para JavaScript -->
-        <script>
-            window.gradesConfig = {
-                courseId: {{ grades_data.course.id }},
-                studentId: {{ grades_data.student.id }},
-                period: {{ current_period }}
+        {% for subject in grades_data.subjects %}
+        <div class="grade flex" data-subject-id="{{ subject.id }}">
+            <ul class="grade_list flex flex-column">
+                <li class="flex">
+                    <span class="text_subject">{{ subject.name|upper }}</span>
+                    {% if subject.periods and current_period in subject.periods %}
+                    {% set period_data = subject.periods[current_period] %}
+                    {% if user.role == 'teacher' %}
+                    <input type="number" step="0.1" min="0" max="5" class="grade-input grade-final"
+                        data-field="final_grade"
+                        value="{{ period_data.final_grade if period_data.final_grade else '' }}" placeholder="-">
+                    {% else %}
+                    <span class="grade">{{ period_data.final_grade if period_data.final_grade else '-' }}</span>
+                    {% endif %}
+                    {% else %}
+                    {% if user.role == 'teacher' %}
+                    <input type="number" step="0.1" min="0" max="5" class="grade-input grade-final"
+                        data-field="final_grade" value="" placeholder="-">
+                    {% else %}
+                    <span class="grade">-</span>
+                    {% endif %}
+                    {% endif %}
+                </li>
+                <li class="flex">
+                    <span class="text_subject">TAREAS</span>
+                    {% if subject.periods and current_period in subject.periods %}
+                    {% set period_data = subject.periods[current_period] %}
+                    {% if user.role == 'teacher' %}
+                    <input type="number" step="0.1" min="0" max="5" class="grade-input" data-field="tasks_grade"
+                        value="{{ period_data.tasks_grade if period_data.tasks_grade else '' }}" placeholder="-">
+                    {% else %}
+                    <span class="grade">{{ period_data.tasks_grade if period_data.tasks_grade else '-' }}</span>
+                    {% endif %}
+                    {% else %}
+                    {% if user.role == 'teacher' %}
+                    <input type="number" step="0.1" min="0" max="5" class="grade-input" data-field="tasks_grade"
+                        value="" placeholder="-">
+                    {% else %}
+                    <span class="grade">-</span>
+                    {% endif %}
+                    {% endif %}
+                </li>
+                <li class="flex">
+                    <span class="text_subject">TRABAJOS</span>
+                    {% if subject.periods and current_period in subject.periods %}
+                    {% set period_data = subject.periods[current_period] %}
+                    {% if user.role == 'teacher' %}
+                    <input type="number" step="0.1" min="0" max="5" class="grade-input" data-field="assignments_grade"
+                        value="{{ period_data.assignments_grade if period_data.assignments_grade else '' }}"
+                        placeholder="-">
+                    {% else %}
+                    <span class="grade">{{ period_data.assignments_grade if period_data.assignments_grade else '-'
+                        }}</span>
+                    {% endif %}
+                    {% else %}
+                    {% if user.role == 'teacher' %}
+                    <input type="number" step="0.1" min="0" max="5" class="grade-input" data-field="assignments_grade"
+                        value="" placeholder="-">
+                    {% else %}
+                    <span class="grade">-</span>
+                    {% endif %}
+                    {% endif %}
+                </li>
+                <li class="flex">
+                    <span class="text_subject">EVALUACIONES</span>
+                    {% if subject.periods and current_period in subject.periods %}
+                    {% set period_data = subject.periods[current_period] %}
+                    {% if user.role == 'teacher' %}
+                    <input type="number" step="0.1" min="0" max="5" class="grade-input" data-field="evaluations_grade"
+                        value="{{ period_data.evaluations_grade if period_data.evaluations_grade else '' }}"
+                        placeholder="-">
+                    {% else %}
+                    <span class="grade">{{ period_data.evaluations_grade if period_data.evaluations_grade else '-'
+                        }}</span>
+                    {% endif %}
+                    {% else %}
+                    {% if user.role == 'teacher' %}
+                    <input type="number" step="0.1" min="0" max="5" class="grade-input" data-field="evaluations_grade"
+                        value="" placeholder="-">
+                    {% else %}
+                    <span class="grade">-</span>
+                    {% endif %}
+                    {% endif %}
+                </li>
+            </ul>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="fas fa-clipboard-list"></i>
+            <p>No hay materias registradas para este curso</p>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="bg_section_footer mobile_btns">
+        <span class="barra_bg barra_bg_left bg-calificaciones"></span>
+        <span class="barra_bg barra_bg_right bg-gray"></span>
+    </div>
+    <!-- Menu lateral -->
+    {% include "sidebar_aside.html" %}
+</div>
+
+{% if user.role == 'teacher' %}
+<!-- Modales de Calificaciones (solo para profesores) -->
+{% include "teacher/save_grades_modal.html" %}
+{% include "teacher/success_grades_modal.html" %}
+
+<!-- Configuración para JavaScript -->
+<script>
+    window.gradesConfig = {
+        courseId: {{ grades_data.course.id }},
+    studentId: { { grades_data.student.id } },
+    period: { { current_period } }
             };
-        </script>
-        <script src="{{ url_for('static', filename='js/grades_view.js') }}"></script>
-    {% endif %}
+</script>
+<script src="{{ url_for('static', filename='js/grades_view.js') }}"></script>
+{% endif %}
 {% endblock %}
