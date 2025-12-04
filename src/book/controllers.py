@@ -67,6 +67,45 @@ def books_view_controller(_: Request):
         db.close()
 
 
+def read_book_controller(book_id: int):
+    """Vista para leer/visualizar un libro ePub"""
+    try:
+        current_user_id = get_jwt_identity()
+        db = SessionLocal()
+        user = db.query(User).filter(User.id == current_user_id).first()
+
+        if not user:
+            flash("Usuario no encontrado", "error")
+            return redirect(url_for("books.books_view"))
+
+        # Obtener el libro
+        book, status_code = get_book_service(book_id)
+
+        if status_code != 200 or not book:
+            flash("Libro no encontrado", "error")
+            return redirect(url_for("books.books_view"))
+
+        # Preparar datos del usuario
+        user_dict = {
+            "id": user.id,
+            "username": user.username,
+            "full_name": user.full_name,
+            "role": user.role.value if hasattr(user.role, "value") else str(user.role),
+        }
+
+        return render_template(
+            "teacher/book_reader.html",
+            user=user_dict,
+            book=book,
+            accion_logout=True,
+        )
+    except Exception as e:
+        flash(f"Error al cargar el libro: {str(e)}", "error")
+        return redirect(url_for("books.books_view"))
+    finally:
+        db.close()
+
+
 def create_book_controller(request: Request):
     """Crear un nuevo libro"""
     try:

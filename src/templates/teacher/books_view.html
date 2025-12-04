@@ -84,33 +84,36 @@
             <!-- Books Grid -->
             {% if books and books|length > 0 %}
                 {% for book in books %}
-                    <div class="book flex flex-column" 
-                         data-book-title="{{ book.title|lower }}"
-                         data-book-author="{{ book.author|lower }}" 
-                         data-book-audience="{{ book.target_audience }}"
-                         data-book-grade="{{ book.grade_level or '' }}">
-                        {% if book.cover_image %}
-                            <img width="100%" height="100%" src="{{ book.cover_image }}" alt="{{ book.title }}">
-                        {% else %}
-                            <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #ea6ef4; min-height: 200px;">
-                                <i class="fas fa-book" style="font-size: 3rem; color: rgba(255, 255, 255, 0.7);"></i>
+                    <a href="{{ url_for('books.read_book', book_id=book.id) }}" class="book-link">
+                        <div class="book flex flex-column" 
+                             data-book-title="{{ book.title|lower }}"
+                             data-book-author="{{ book.author|lower }}" 
+                             data-book-audience="{{ book.target_audience }}"
+                             data-book-grade="{{ book.grade_level or '' }}">
+                            {% if book.cover_image %}
+                                <img width="100%" height="100%" src="{{ book.cover_image }}" alt="{{ book.title }}">
+                            {% else %}
+                                <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #ea6ef4; min-height: 200px;">
+                                    <i class="fas fa-book" style="font-size: 3rem; color: rgba(255, 255, 255, 0.7);"></i>
+                                </div>
+                            {% endif %}
+                            <div class="title_speciality flex flex-column">
+                                {{ book.title }}
+                                {% if book.grade_level %}
+                                    <small style="color: #666; font-size: 0.8rem;">{{ book.grade_level }}° Grado</small>
+                                {% endif %}
+                                <hr class="libros_br" />
+                                ePub
+                                {% if user.role == "teacher" %}
+                                    <span class="open-delete-book-modal" data-book-id="{{ book.id }}" title="Eliminar"
+                                       style="margin-top: 0.5rem; color: #dc3545; cursor: pointer; align-self: flex-end;"
+                                       onclick="event.preventDefault(); event.stopPropagation();">
+                                        <i class="fas fa-trash"></i>
+                                    </span>
+                                {% endif %}
                             </div>
-                        {% endif %}
-                        <div class="title_speciality flex flex-column">
-                            {{ book.title }}
-                            {% if book.grade_level %}
-                                <small style="color: #666; font-size: 0.8rem;">{{ book.grade_level }}° Grado</small>
-                            {% endif %}
-                            <hr class="libros_br" />
-                            ePub
-                            {% if user.role == "teacher" %}
-                                <a href="#" class="open-delete-book-modal" data-book-id="{{ book.id }}" title="Eliminar"
-                                   style="margin-top: 0.5rem; color: #dc3545; cursor: pointer; align-self: flex-end;">
-                                    <i class="fas fa-trash"></i>
-                                </a>
-                            {% endif %}
                         </div>
-                    </div>
+                    </a>
                 {% endfor %}
             {% else %}
                 <div class="empty-books" style="width: 100%; text-align: center; padding: 3rem;">

@@ -5,6 +5,7 @@ from src.models.user import UserRole
 
 from .controllers import (
     books_view_controller,
+    read_book_controller,
     create_book_controller,
     update_book_controller,
     delete_book_controller,
@@ -21,8 +22,16 @@ book_bp = Blueprint("books", __name__, url_prefix="/books")
 @jwt_required()
 @role_required([UserRole.TEACHER, UserRole.STUDENT])
 def books_view():
-    """Vista principal de libros para profesores"""
+    """Vista principal de libros"""
     return books_view_controller(request)
+
+
+@book_bp.route("/<int:book_id>/read", methods=["GET"])
+@jwt_required()
+@role_required([UserRole.TEACHER, UserRole.STUDENT])
+def read_book(book_id):
+    """Vista para leer/visualizar un libro ePub"""
+    return read_book_controller(book_id)
 
 
 @book_bp.route("/create", methods=["GET", "POST"])

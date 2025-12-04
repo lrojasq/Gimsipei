@@ -477,8 +477,24 @@ hr.clases_br {
     margin: auto;
 }
 
-.book {
+/* Book link wrapper */
+.book-link {
+    text-decoration: none;
+    color: inherit;
     width: 23%;
+    transition: transform 0.2s ease;
+}
+
+.book-link:hover {
+    transform: translateY(-5px);
+}
+
+.book-link:hover .book {
+    box-shadow: 0 8px 25px rgba(234, 110, 244, 0.3);
+}
+
+.book {
+    width: 100%;
     flex-wrap: nowrap;
     gap: 0px;
     background-color: var(--light-color);
@@ -487,6 +503,8 @@ hr.clases_br {
     border-radius: 15px;
     padding: 7px;
     height: 370px;
+    cursor: pointer;
+    transition: box-shadow 0.2s ease;
 }
 
 .book img {
@@ -1018,9 +1036,13 @@ hr.libros_br {
         overflow: visible;
     }
 
-    .book {
-        max-width: 45%;
+    .book-link {
         width: 45%;
+    }
+
+    .book {
+        max-width: 100%;
+        width: 100%;
         height: 250px;
     }
 
@@ -1164,8 +1186,12 @@ hr.libros_br {
         max-width: 45%;
     }
 
+    .book-link {
+        width: 45%;
+    }
+
     .book {
-        max-width: 45%;
+        max-width: 100%;
     }
 
     .grade_list li span {
