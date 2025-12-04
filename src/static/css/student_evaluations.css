@@ -220,6 +220,7 @@
   justify-content: center;
   min-height: 400px;
   padding: 2rem;
+  width: 100%;
 }
 
 .student-evaluations .empty-message {
