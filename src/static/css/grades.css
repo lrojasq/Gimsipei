@@ -351,6 +351,14 @@
   color: #333;
 }
 
+.calificaciones_category .specialities_category.grades .subject-row-expanded .empty-cell {
+    width: 30%;
+}
+
+.calificaciones_category .specialities_category.grades .classes-table thead th{
+  width: 20%;
+}
+
 /* Responsive adjustments */
 @media (max-width:1080px){
   .calificaciones_category .specialities_category.grades{
