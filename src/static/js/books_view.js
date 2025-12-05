@@ -138,7 +138,7 @@ function initializeFilter() {
 
 // Apply Filters
 function applyFilters() {
-  const books = document.querySelectorAll(".book");
+  const books = document.querySelectorAll(".book-link");
   const filterAlfabetico =
     document.getElementById("filter_alfabetico")?.value || "";
   const filterGenero = document.getElementById("filter_genero")?.value || "";
