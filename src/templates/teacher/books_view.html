@@ -89,7 +89,7 @@
                              data-book-title="{{ book.title|lower }}"
                              data-book-author="{{ book.author|lower }}" 
                              data-book-audience="{{ book.target_audience }}"
-                             data-book-grade="{{ book.grade_level or '' }}">
+                             data-book-grade="{{ book.grade_level if book.grade_level else '' }}">
                             {% if book.cover_image %}
                                 <img width="100%" height="100%" src="{{ book.cover_image }}" alt="{{ book.title }}">
                             {% else %}

@@ -81,52 +81,50 @@ function closeDeleteModal() {
  * Esta función debe llamarse una vez cuando se carga la página
  */
 function initializeDeleteModalListeners() {
-  setTimeout(function () {
-    const modal = document.getElementById("deleteConfirmationModal");
-    const form = document.getElementById("deleteConfirmationForm");
-    if (!modal) return;
+  const modal = document.getElementById("deleteConfirmationModal");
+  const form = document.getElementById("deleteConfirmationForm");
+  if (!modal) return;
 
-    const closeModalBtns = modal.querySelectorAll(".close-modal");
-    const bgBack = modal.querySelector(".bg-back");
+  const closeModalBtns = modal.querySelectorAll(".close-modal");
+  const bgBack = modal.querySelector(".bg-back");
 
-    // Listener para el submit del formulario (mostrar spinner)
-    if (form) {
-      form.addEventListener("submit", function (e) {
-        // Prevenir doble submit
-        if (form.dataset.submitting === "true") {
-          e.preventDefault();
-          return;
-        }
-        form.dataset.submitting = "true";
-        showDeleteSpinner();
-      });
-    }
-
-    // Listeners para los botones de cerrar
-    closeModalBtns.forEach((btn) => {
-      btn.addEventListener("click", function (e) {
+  // Listener para el submit del formulario (mostrar spinner)
+  if (form) {
+    form.addEventListener("submit", function (e) {
+      // Prevenir doble submit
+      if (form.dataset.submitting === "true") {
         e.preventDefault();
-        e.stopPropagation();
-        closeDeleteModal();
-      });
-    });
-
-    // Listener para el fondo
-    if (bgBack) {
-      bgBack.addEventListener("click", function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        closeDeleteModal();
-      });
-    }
-
-    // Listener para la tecla ESC
-    document.addEventListener("keydown", function (e) {
-      if (e.key === "Escape" && modal.style.display === "flex") {
-        closeDeleteModal();
+        return;
       }
+      form.dataset.submitting = "true";
+      showDeleteSpinner();
     });
-  }, 200);
+  }
+
+  // Listeners para los botones de cerrar
+  closeModalBtns.forEach((btn) => {
+    btn.addEventListener("click", function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      closeDeleteModal();
+    });
+  });
+
+  // Listener para el fondo
+  if (bgBack) {
+    bgBack.addEventListener("click", function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      closeDeleteModal();
+    });
+  }
+
+  // Listener para la tecla ESC
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && modal.style.display === "flex") {
+      closeDeleteModal();
+    }
+  });
 }
 
 /**
@@ -135,20 +133,19 @@ function initializeDeleteModalListeners() {
  * @param {function} getDeleteUrl - Función que recibe el elemento del botón y retorna la URL de eliminación
  */
 function initializeDeleteButtons(buttonSelector, getDeleteUrl) {
-  setTimeout(function () {
-    const deleteButtons = document.querySelectorAll(buttonSelector);
+  const deleteButtons = document.querySelectorAll(buttonSelector);
 
-    deleteButtons.forEach((button) => {
-      button.addEventListener("click", function (e) {
-        e.preventDefault();
-        const deleteUrl = getDeleteUrl(this);
+  deleteButtons.forEach((button) => {
+    button.addEventListener("click", function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      const deleteUrl = getDeleteUrl(this);
 
-        if (deleteUrl) {
-          showDeleteConfirmationModal(deleteUrl);
-        }
-      });
+      if (deleteUrl) {
+        showDeleteConfirmationModal(deleteUrl);
+      }
     });
-  }, 100);
+  });
 }
 
 // Inicializar listeners cuando el DOM esté listo
@@ -159,3 +156,4 @@ if (document.readyState === 'loading') {
 } else {
   initializeDeleteModalListeners();
 }
+

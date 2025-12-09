@@ -2,10 +2,9 @@
 
 document.addEventListener("DOMContentLoaded", function () {
   initializeDeleteBookModal();
-  initializeEditBookModal();
   initializeFileInputs();
   initializeFilter();
-  initializeDeleteModalListeners();
+  initializeFormSubmit();
 
   // Add book button
   const addBookBtn = document.getElementById("addBookBtn");
@@ -37,12 +36,19 @@ function openCreateBookModal() {
   // Reset form
   form.reset();
   form.action = "/books/create";
-  title.textContent = "CREAR LIBRO";
-  document.getElementById("book_id").value = "";
+  if (title) title.textContent = "CREAR LIBRO";
+  
+  const bookIdInput = document.getElementById("book_id");
+  if (bookIdInput) bookIdInput.value = "";
 
   // Clear file names
-  document.getElementById("book_file_name").textContent = "";
-  document.getElementById("book_cover_image_name").textContent = "";
+  const bookFileName = document.getElementById("book_file_name");
+  const coverImageName = document.getElementById("book_cover_image_name");
+  if (bookFileName) bookFileName.textContent = "";
+  if (coverImageName) coverImageName.textContent = "";
+
+  // Reset submit button
+  resetSubmitButton();
 
   // Show modal
   modal.style.display = "flex";
@@ -56,26 +62,20 @@ function closeCreateBookModal() {
   }
 }
 
-// Initialize Edit Book Modal - Removed as per design requirements
-function initializeEditBookModal() {
-  // Edit functionality removed per design requirements
-}
-
 // Initialize Delete Book Modal
 function initializeDeleteBookModal() {
-  setTimeout(function () {
-    const deleteButtons = document.querySelectorAll(".open-delete-book-modal");
+  const deleteButtons = document.querySelectorAll(".open-delete-book-modal");
 
-    deleteButtons.forEach((button) => {
-      button.addEventListener("click", function (e) {
-        e.preventDefault();
-        const bookId = this.getAttribute("data-book-id");
-        const deleteUrl = `/books/${bookId}/delete`;
+  deleteButtons.forEach((button) => {
+    button.addEventListener("click", function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      const bookId = this.getAttribute("data-book-id");
+      const deleteUrl = `/books/${bookId}/delete`;
 
-        showDeleteConfirmationModal(deleteUrl);
-      });
+      showDeleteConfirmationModal(deleteUrl);
     });
-  }, 100);
+  });
 }
 
 // Initialize File Inputs
@@ -97,6 +97,77 @@ function initializeFileInputs() {
       document.getElementById("book_cover_image_name").textContent = fileName;
     });
   }
+}
+
+// Initialize Form Submit
+function initializeFormSubmit() {
+  const form = document.getElementById("createBookForm");
+  if (form) {
+    form.addEventListener("submit", function (e) {
+      // Prevent double submit
+      if (form.dataset.submitting === "true") {
+        e.preventDefault();
+        return false;
+      }
+
+      // Validate required fields
+      const title = document.getElementById("book_title");
+      const author = document.getElementById("book_author");
+      const targetAudience = document.getElementById("book_target_audience");
+
+      if (!title || !title.value.trim()) {
+        e.preventDefault();
+        alert("Por favor ingrese el título del libro");
+        return false;
+      }
+
+      if (!author || !author.value.trim()) {
+        e.preventDefault();
+        alert("Por favor ingrese el autor del libro");
+        return false;
+      }
+
+      if (!targetAudience || !targetAudience.value) {
+        e.preventDefault();
+        alert("Por favor seleccione la audiencia del libro");
+        return false;
+      }
+
+      // Form is valid, show spinner and allow submission
+      form.dataset.submitting = "true";
+      showSubmitSpinner();
+      return true;
+    });
+  }
+}
+
+// Show spinner on submit button
+function showSubmitSpinner() {
+  const submitBtn = document.getElementById("submitBookBtn");
+  if (!submitBtn) return;
+
+  const btnText = submitBtn.querySelector(".btn-text");
+  const btnSpinner = submitBtn.querySelector(".btn-spinner");
+
+  submitBtn.disabled = true;
+  if (btnText) btnText.style.display = "none";
+  if (btnSpinner) btnSpinner.style.display = "inline";
+}
+
+// Reset submit button
+function resetSubmitButton() {
+  const submitBtn = document.getElementById("submitBookBtn");
+  if (!submitBtn) return;
+
+  const btnText = submitBtn.querySelector(".btn-text");
+  const btnSpinner = submitBtn.querySelector(".btn-spinner");
+
+  submitBtn.disabled = false;
+  if (btnText) btnText.style.display = "inline";
+  if (btnSpinner) btnSpinner.style.display = "none";
+  
+  const form = document.getElementById("createBookForm");
+  if (form) form.dataset.submitting = "false";
 }
 
 // Initialize Filter
@@ -138,7 +209,7 @@ function initializeFilter() {
 
 // Apply Filters
 function applyFilters() {
-  const books = document.querySelectorAll(".book");
+  const books = document.querySelectorAll(".book-link");
   const filterAlfabetico =
     document.getElementById("filter_alfabetico")?.value || "";
   const filterGenero = document.getElementById("filter_genero")?.value || "";
@@ -150,37 +221,42 @@ function applyFilters() {
 
   // Filter by search term
   if (searchTerm) {
-    visibleBooks = visibleBooks.filter((book) => {
-      const title = book.getAttribute("data-book-title") || "";
-      const author = book.getAttribute("data-book-author") || "";
+    visibleBooks = visibleBooks.filter((bookLink) => {
+      const bookDiv = bookLink.querySelector(".book");
+      const title = bookDiv?.getAttribute("data-book-title") || "";
+      const author = bookDiv?.getAttribute("data-book-author") || "";
       return title.includes(searchTerm) || author.includes(searchTerm);
     });
   }
 
   // Filter by genre (target_audience)
   if (filterGenero) {
-    visibleBooks = visibleBooks.filter((book) => {
-      return book.getAttribute("data-book-audience") === filterGenero;
+    visibleBooks = visibleBooks.filter((bookLink) => {
+      const bookDiv = bookLink.querySelector(".book");
+      const bookAudience = bookDiv?.getAttribute("data-book-audience");
+      return bookAudience === filterGenero;
     });
   }
 
   // Filter by grade level
   if (filterGrado) {
-    visibleBooks = visibleBooks.filter((book) => {
-      return book.getAttribute("data-book-grade") === filterGrado;
+    visibleBooks = visibleBooks.filter((bookLink) => {
+      const bookDiv = bookLink.querySelector(".book");
+      const bookGrade = bookDiv?.getAttribute("data-book-grade");
+      return bookGrade && bookGrade.toString() === filterGrado.toString();
     });
   }
 
   // Sort alphabetically
   if (filterAlfabetico) {
     visibleBooks.sort((a, b) => {
-      const titleA = a.getAttribute("data-book-title") || "";
-      const titleB = b.getAttribute("data-book-title") || "";
-      if (filterAlfabetico === "asc") {
-        return titleA.localeCompare(titleB);
-      } else {
-        return titleB.localeCompare(titleA);
-      }
+      const bookDivA = a.querySelector(".book");
+      const bookDivB = b.querySelector(".book");
+      const titleA = bookDivA?.getAttribute("data-book-title") || "";
+      const titleB = bookDivB?.getAttribute("data-book-title") || "";
+      return filterAlfabetico === "asc"
+        ? titleA.localeCompare(titleB)
+        : titleB.localeCompare(titleA);
     });
   }
 
@@ -189,18 +265,21 @@ function applyFilters() {
     book.style.display = "none";
   });
 
-  // Show filtered books
-  visibleBooks.forEach((book) => {
-    book.style.display = "flex";
-  });
-
-  // Reorder books in DOM if sorted
-  if (filterAlfabetico && visibleBooks.length > 0) {
-    const booksGrid = document.querySelector(".books-grid");
-    if (booksGrid) {
-      visibleBooks.forEach((book) => {
-        booksGrid.appendChild(book);
-      });
+  // Show filtered books and reorder them in the DOM
+  const booksGrid = document.querySelector(".books-grid");
+  const searchBar = document.querySelector(".search-bar");
+  
+  if (booksGrid) {
+    // If sorting or filtering, reorder the books in the DOM
+    visibleBooks.forEach((book) => {
+      book.style.display = "flex";
+      // Move the book to maintain order
+      booksGrid.appendChild(book);
+    });
+    
+    // Keep search bar at the top
+    if (searchBar && booksGrid.contains(searchBar)) {
+      booksGrid.insertBefore(searchBar, booksGrid.firstChild);
     }
   }
 }
