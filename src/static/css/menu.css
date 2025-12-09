@@ -636,12 +636,12 @@ i.bi.bi-arrow-left-short {
 }
 
 /* Sidebar Active State */
-.menu_aside .aside_list li a.active {
+/* .menu_aside .aside_list li a.active {
     position: relative;
     background-color: rgba(255, 255, 255, 0.2);
     border-radius: 10px;
     padding: 5px;
-}
+} */
 
 .menu_aside .aside_list li a.active::after {
     content: "";

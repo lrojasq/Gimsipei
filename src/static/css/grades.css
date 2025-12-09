@@ -42,11 +42,16 @@
   padding: 0.5rem;
   border-radius: 5px;
   border: 1px solid transparent;
-  background-color: var(--light-color);
-  color: var(--calificaciones);
+  background-color:#cdbbf1;
+  color: #fff;
   font-weight: 600;
   font-size: 1rem;
   transition: all 0.3s ease;
+}
+.grade-input:focus-visible,
+.grade-input:hover{
+  background-color: var(--calificaciones);
+  color: #fff;
 }
 
 /* Grade value span (para estudiantes - solo lectura) */
