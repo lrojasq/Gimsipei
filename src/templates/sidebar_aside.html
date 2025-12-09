@@ -3,87 +3,101 @@
     <ul class="aside_list flex flex-column">
         {% if user.role == "admin" %}
         <li>
-            <a href="{{ url_for('users.dashboard') }}" title="Inicio">
+            <a href="{{ url_for('users.dashboard') }}" title="Inicio"
+                class="{% if request.endpoint == 'users.dashboard' %}active{% endif %}">
                 <img src="{{ url_for('static', filename='images/iconos/home.png') }}" alt="Inicio"
                     style="width: 50px; height: 50px;">
             </a>
         </li>
         <li>
-            <a href="{{ url_for('users.teachers_management') }}" title="Docentes">
+            <a href="{{ url_for('users.teachers_management') }}" title="Docentes"
+                class="{% if request.endpoint == 'users.teachers_management' %}active{% endif %}">
                 <img src="{{ url_for('static', filename='images/iconos/class.png') }}" alt="Docentes"
                     style="width: 50px; height: 50px;">
             </a>
         </li>
         <li>
-            <a href="{{ url_for('courses.courses_management') }}" title="Cursos">
+            <a href="{{ url_for('courses.courses_management') }}" title="Cursos"
+                class="{% if request.endpoint == 'courses.courses_management' %}active{% endif %}">
                 <img src="{{ url_for('static', filename='images/iconos/text.png') }}" alt="Cursos"
                     style="width: 50px; height: 50px;">
             </a>
         </li>
         {% elif user.role == "teacher" %}
         <li>
-            <a href="{{ url_for('users.dashboard') }}" title="Inicio">
+            <a href="{{ url_for('users.dashboard') }}" title="Inicio"
+                class="{% if request.endpoint == 'users.dashboard' %}active{% endif %}">
                 <img src="{{ url_for('static', filename='images/iconos/home.png') }}" alt="Inicio"
                     style="width: 50px; height: 50px;">
             </a>
         </li>
         <li>
-            <a href="{{ url_for('classes.teacher_classes_view') }}" title="Clases y recursos">
+            <a href="{{ url_for('classes.teacher_classes_view') }}" title="Clases y recursos"
+                class="{% if request.endpoint and request.endpoint.startswith('classes.') %}active{% endif %}">
                 <img src="{{ url_for('static', filename='images/iconos/class.png') }}" alt="Clases y recursos"
                     style="width: 50px; height: 50px;">
             </a>
         </li>
         <li>
-            <a href="{{ url_for('evaluations.evaluations_view') }}" title="Evaluaciones">
+            <a href="{{ url_for('evaluations.evaluations_view') }}" title="Evaluaciones"
+                class="{% if request.endpoint and request.endpoint.startswith('evaluations.') %}active{% endif %}">
                 <img src="{{ url_for('static', filename='images/iconos/library.png') }}" alt="Evaluaciones"
                     style="width: 50px; height: 50px;">
             </a>
         </li>
         <li>
-            <a href="{{ url_for('books.books_view') }}" title="Libros">
+            <a href="{{ url_for('books.books_view') }}" title="Libros"
+                class="{% if request.endpoint and request.endpoint.startswith('books.') %}active{% endif %}">
                 <img src="{{ url_for('static', filename='images/iconos/text.png') }}" alt="Libros"
                     style="width: 50px; height: 50px;">
             </a>
         </li>
         <li>
-            <a href="{{ url_for('grades.grades_view') }}" title="Calificaciones">
+            <a href="{{ url_for('grades.grades_view') }}" title="Calificaciones"
+                class="{% if request.endpoint and request.endpoint.startswith('grades.') %}active{% endif %}">
                 <img src="{{ url_for('static', filename='images/iconos/evaluations.png') }}" alt="Calificaciones"
-                    style="width: 50px; height: 50px;">
+                    style="width: 50px; height: 50px;"> 
             </a>
         </li>
         {% elif user.role == "student" or user.role == "STUDENT" %}
         <li>
-            <a href="{{ url_for('users.dashboard') }}" title="Inicio">
+            <a href="{{ url_for('users.dashboard') }}" title="Inicio"
+                class="{% if request.endpoint == 'users.dashboard' %}active{% endif %}">
                 <img src="{{ url_for('static', filename='images/iconos/home.png') }}" alt="Inicio"
                     style="width: 50px; height: 50px;">
             </a>
         </li>
         <li>
-            <a href="{{ url_for('classes.student_classes_view') }}" title="Clases">
+            <a href="{{ url_for('classes.student_classes_view') }}" title="Clases"
+                class="{% if request.endpoint and request.endpoint.startswith('classes.') %}active{% endif %}">
                 <img src="{{ url_for('static', filename='images/iconos/class.png') }}" alt="Clases"
                     style="width: 50px; height: 50px;">
             </a>
         </li>
         <li>
-            <a href="{{ url_for('resources.student_resources_view') }}" title="Recursos">
+            <a href="{{ url_for('resources.student_resources_view') }}" title="Recursos"
+                class="{% if request.endpoint and request.endpoint.startswith('resources.') %}active{% endif %}">
                 <img src="{{ url_for('static', filename='images/iconos/resources.png') }}" alt="Recursos"
                     style="width: 50px; height: 50px;">
             </a>
         </li>
         <li>
-            <a  href="{{ url_for('evaluations.student_evaluations_view') }}" title="Evaluaciones">
+            <a href="{{ url_for('evaluations.student_evaluations_view') }}" title="Evaluaciones"
+                class="{% if request.endpoint and request.endpoint.startswith('evaluations.') %}active{% endif %}">
                 <img src="{{ url_for('static', filename='images/iconos/library.png') }}" alt="Evaluaciones"
                     style="width: 50px; height: 50px;">
             </a>
         </li>
         <li>
-            <a href="{{ url_for('books.books_view') }}" title="Libros">
+            <a href="{{ url_for('books.books_view') }}" title="Libros"
+                class="{% if request.endpoint and request.endpoint.startswith('books.') %}active{% endif %}">
                 <img src="{{ url_for('static', filename='images/iconos/text.png') }}" alt="Libros"
                     style="width: 50px; height: 50px;">
             </a>
         </li>
         <li>
-            <a href="{{ url_for('grades.grades_view') }}" title="Calificaciones">
+            <a href="{{ url_for('grades.grades_view') }}" title="Calificaciones"
+                class="{% if request.endpoint and request.endpoint.startswith('grades.') %}active{% endif %}">
                 <img src="{{ url_for('static', filename='images/iconos/evaluations.png') }}" alt="Calificaciones"
                     style="width: 50px; height: 50px;">
             </a>

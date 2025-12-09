@@ -635,6 +635,26 @@ i.bi.bi-arrow-left-short {
     justify-content: center;
 }
 
+/* Sidebar Active State */
+.menu_aside .aside_list li a.active {
+    position: relative;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    padding: 5px;
+}
+
+.menu_aside .aside_list li a.active::after {
+    content: "";
+    position: absolute;
+    left: -10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 70%;
+    background-color: #ffffff;
+    border-radius: 0 4px 4px 0;
+}
+
 @media (min-width:1600px) {
 
     .mision-tp p,
@@ -766,9 +786,6 @@ i.bi.bi-arrow-left-short {
     .bg_section_footer{
         position: relative;
         bottom: -30px;
-    }
-    .content-admin .box-menu{
-        /* background-color: var(--azul-oscuro); */
     }
     .content-admin .container_boxs_menu{
         gap: 1rem;
