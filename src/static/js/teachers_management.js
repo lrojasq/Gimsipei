@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize all functionality
     initializePasswordToggle();
     initializeFormValidation();
-    initializeDeleteModalListeners(); // Inicializar listeners del modal de eliminación
+    // initializeDeleteModalListeners() ya se llama automáticamente en delete_modal.js
     initializeDeleteModal(); // Inicializar botones de eliminar
     initializeAutoCloseAlerts();
     initializeLoadingStates();
@@ -92,8 +92,22 @@ function initializeAutoCloseAlerts() {
     
     alerts.forEach(alert => {
         setTimeout(() => {
-            const bsAlert = new bootstrap.Alert(alert);
-            bsAlert.close();
+            // Verificar que el elemento aún existe en el DOM
+            if (alert && document.body.contains(alert)) {
+                // Verificar que Bootstrap está disponible
+                if (typeof bootstrap !== 'undefined' && bootstrap.Alert) {
+                    const bsAlert = new bootstrap.Alert(alert);
+                    bsAlert.close();
+                } else {
+                    // Fallback: eliminar manualmente
+                    alert.style.opacity = '0';
+                    setTimeout(() => {
+                        if (alert && alert.parentNode) {
+                            alert.remove();
+                        }
+                    }, 300);
+                }
+            }
         }, 5000);
     });
 }

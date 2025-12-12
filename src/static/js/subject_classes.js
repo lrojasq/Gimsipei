@@ -109,8 +109,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // Initialize delete modal listeners (from delete_modal.js)
-  initializeDeleteModalListeners();
+  // initializeDeleteModalListeners() ya se llama automáticamente en delete_modal.js
 
   // Initialize loading states for forms
   initializeLoadingStates();

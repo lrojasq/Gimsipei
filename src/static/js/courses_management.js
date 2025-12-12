@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeAutoCloseAlerts();
     initializeLoadingStates();
     initializeAccordion();
-    initializeDeleteModalListeners(); // Inicializar listeners del modal de eliminación
+    // initializeDeleteModalListeners() ya se llama automáticamente en delete_modal.js
     initializeDeleteSubjectModal();
     initializeCreateCourseModal();
     initializeCreateSubjectModal();

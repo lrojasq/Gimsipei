@@ -1,8 +1,7 @@
 // Student Tasks JavaScript - Simple UI/UX handling
 
 document.addEventListener("DOMContentLoaded", function () {
-  // Inicializar listeners del modal
-  initializeDeleteModalListeners();
+  // initializeDeleteModalListeners() ya se llama automáticamente en delete_modal.js
 
   // Inicializar expand/collapse de materias
   initializeAccordion();

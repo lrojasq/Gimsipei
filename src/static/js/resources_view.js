@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initializePeriodSelector();
     initializeResourceModal();
     initializeAddFirstResourceButtons();
-    initializeDeleteModalListeners();
+    // initializeDeleteModalListeners() ya se llama automáticamente en delete_modal.js
     initializeDeleteResourceModal();
     initializeLoadingStates();
 });

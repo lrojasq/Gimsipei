@@ -20,9 +20,16 @@ function showDeleteConfirmationModal(actionUrl) {
   // Mostrar modal
   modal.classList.add("show");
   modal.style.display = "flex";
-  modal.removeAttribute("aria-hidden");
   modal.setAttribute("aria-modal", "true");
   modal.setAttribute("role", "dialog");
+  
+  // Enfocar el primer botón del modal después de un pequeño delay
+  setTimeout(() => {
+    const firstButton = modal.querySelector('.btn-cancel');
+    if (firstButton) {
+      firstButton.focus();
+    }
+  }, 100);
 }
 
 /**
@@ -66,14 +73,26 @@ function closeDeleteModal() {
   const modal = document.getElementById("deleteConfirmationModal");
   if (!modal) return;
 
+  // Primero remover el foco de cualquier elemento dentro del modal
+  const focusedElement = modal.querySelector(':focus');
+  if (focusedElement) {
+    focusedElement.blur();
+  }
+
+  // Luego ocultar el modal
   modal.classList.remove("show");
   modal.style.display = "none";
-  modal.setAttribute("aria-hidden", "true");
   modal.removeAttribute("aria-modal");
   modal.removeAttribute("role");
 
   // Resetear el botón al cerrar
   resetDeleteButton();
+  
+  // Resetear el estado de submitting del formulario
+  const form = document.getElementById("deleteConfirmationForm");
+  if (form) {
+    form.dataset.submitting = "false";
+  }
 }
 
 /**
@@ -94,10 +113,13 @@ function initializeDeleteModalListeners() {
       // Prevenir doble submit
       if (form.dataset.submitting === "true") {
         e.preventDefault();
+        console.log("Formulario ya está siendo enviado, prevenido doble submit");
         return;
       }
+      console.log("Enviando formulario de eliminación a:", form.action);
       form.dataset.submitting = "true";
       showDeleteSpinner();
+      // No prevenir el submit, dejar que se envíe normalmente
     });
   }
 

@@ -1,7 +1,7 @@
 // Students Management JavaScript
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize all functionality
-    initializeDeleteModalListeners();
+    // initializeDeleteModalListeners() ya se llama automáticamente en delete_modal.js
     initializeDeleteModal();
     initializeAutoCloseAlerts();
     initializeCreateStudentButton();
