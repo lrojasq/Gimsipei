@@ -964,6 +964,10 @@ hr.libros_br {
     display: none;
 }
 
+.calificaciones_category .specialities_category.grades .classes-table-wrapper::-webkit-scrollbar-thumb {
+    background: var(--calificaciones);
+    border-radius: 5px;
+}
 @media (max-width:1600px) {
 
     .specialities_category.cursos.grades.flex.flex-column,
@@ -1120,6 +1124,7 @@ hr.libros_br {
         max-height: max-content;
         width: 100%;
     }
+   
 
     .exam {
         width: 100%;
