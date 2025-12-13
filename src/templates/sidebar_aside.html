@@ -56,10 +56,10 @@
             <a href="{{ url_for('grades.grades_view') }}" title="Calificaciones"
                 class="{% if request.endpoint and request.endpoint.startswith('grades.') %}active{% endif %}">
                 <img src="{{ url_for('static', filename='images/iconos/evaluations.png') }}" alt="Calificaciones"
-                    style="width: 50px; height: 50px;"> 
+                    style="width: 50px; height: 50px;">
             </a>
         </li>
-        {% elif user.role == "student" or user.role == "STUDENT" %}
+        {% elif user.role == "student" %}
         <li>
             <a href="{{ url_for('users.dashboard') }}" title="Inicio"
                 class="{% if request.endpoint == 'users.dashboard' %}active{% endif %}">
