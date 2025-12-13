@@ -276,11 +276,11 @@ def edit_student_controller(
 
 
 @jwt_required()
-@role_required([UserRole.ADMIN, UserRole.TEACHER])
+@role_required([UserRole.TEACHER])
 def delete_student_controller(
     course_id: int, student_id: int, request: Request
 ) -> Response:
-    """Eliminar un estudiante de un curso"""
+    """Eliminar un estudiante de un curso (solo teachers)"""
     try:
         current_user_id = get_jwt_identity()
         result, status_code = delete_user_service(student_id, request, current_user_id)

@@ -303,7 +303,7 @@ def dashboard_controller(_: Request) -> Response:
             return redirect(url_for("auth.login"))
 
         # User is admin
-        if user_role == "ADMIN":
+        if user_role == "admin":
             return render_template(
                 "admin/dashboard.html",
                 user={
@@ -317,7 +317,7 @@ def dashboard_controller(_: Request) -> Response:
             )
 
         # User is teacher
-        elif user_role == "TEACHER":
+        elif user_role == "teacher":
             courses_list = get_all_courses_for_dashboard()
 
             return render_template(

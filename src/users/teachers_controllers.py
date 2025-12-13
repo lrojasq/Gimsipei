@@ -180,7 +180,7 @@ def edit_teacher_controller(teacher_id: int, request: Request) -> Response:
 @jwt_required()
 @role_required([UserRole.ADMIN])
 def delete_teacher_controller(teacher_id: int, request: Request) -> Response:
-    """Delete a teacher"""
+    """Delete a teacher or admin (only admins can do this)"""
     try:
         current_user_id = get_jwt_identity()
         result, status_code = delete_user_service(teacher_id, request, current_user_id)
