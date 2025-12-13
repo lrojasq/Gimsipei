@@ -3,30 +3,18 @@
 {% block title %}Editar Usuario{% endblock %}
 
 {% block extra_css %}
-<link href="{{ url_for('static', filename='css/menu.css') }}" rel="stylesheet">
-<link href="{{ url_for('static', filename='css/category.css') }}" rel="stylesheet">
-<link href="{{ url_for('static', filename='css/admin.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/menu.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/category.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/admin.css') }}" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
-{# <div class="container-fluid p-4 ">
-    <!-- Header -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h1 class="h3 mb-0 text-dark">Editar Usuario</h1>
-            <p class="text-muted mb-0">Modifica la información del docente</p>
-        </div>
-        <a href="{{ url_for('users.teachers_management') }}" class="btn btn-outline-secondary">
-            <i class="fas fa-arrow-left me-2"></i>Volver
-        </a>
-    </div> #}
     {% block menu %}{% endblock %}
-
-
 
     <div class="container_category flex admin_category teachers_management">
         <!-- Perfil de Usuario -->
         {% include "user_profile.html" %}
+
         <div class="specialities_category flex">
             <div class="content-admin flex flex-column">
                 <div class="form-crear flex">
@@ -34,41 +22,62 @@
                         <div class="content-form flex flex-column">
                             <h1 class="right-text">Editar Usuario</h1>
                             <div class="flex flex-form">
-                                <div class="img-usuario">
-                                    <i class="fa-slab-press fa-regular fa-circle-user"></i>
+                                <div class="img-usuario" style="width: 200px; height: 200px;">
+                                    <img src="{{ url_for('static', filename='images/avatares/' ~ (teacher.avatar or 'buho.png')) }}"
+                                         alt="Avatar del docente">
                                 </div>
                                 <div class="flex flex-column form-crear-content">
                                     <div class="flex input-group">
-                                        <input type="text" name="full_name" id="full_name" placeholder="Nombre"
-                                            value="{{ teacher.full_name}}" required>
+                                        <input type="text"
+                                               name="full_name"
+                                               id="full_name"
+                                               placeholder="Nombre"
+                                               value="{{ teacher.full_name }}"
+                                               required>
                                     </div>
-
                                     <div class="flex input-group">
-                                        <input type="text" name="document" id="document" placeholder="Documento"
-                                            value="{{ teacher.document }}" required>
+                                        <input type="text"
+                                               name="document"
+                                               id="document"
+                                               placeholder="Documento"
+                                               value="{{ teacher.document }}"
+                                               required>
                                     </div>
-
                                     <div class="flex input-group">
-                                        <input type="text" name="username" id="username" placeholder="Usuario"
-                                            value="{{ teacher.username }}" required>
+                                        <input type="text"
+                                               name="username"
+                                               id="username"
+                                               placeholder="Usuario"
+                                               value="{{ teacher.username }}"
+                                               required>
                                     </div>
-
                                     <div class="flex input-group">
-                                        <input type="password" name="password" id="password"
-                                            placeholder="Nueva contraseña (opcional)">
+                                        <input type="password"
+                                               name="password"
+                                               id="password"
+                                               placeholder="Nueva contraseña (opcional)">
                                     </div>
 
                                     <!-- Selección de rol explícita -->
                                     <div class="container mt-3">
-                                        <div class="btn-group flex justify-content-around" role="group"
-                                            aria-label="Tipo de usuario">
-                                            <input type="radio" class="btn-check" name="role" id="docente"
-                                                value="teacher" autocomplete="off" {% if teacher.role=='TEACHER'
-                                                %}checked{% endif %} />
+                                        <div class="btn-group flex justify-content-around"
+                                             role="group"
+                                             aria-label="Tipo de usuario">
+                                            <input type="radio"
+                                                   class="btn-check"
+                                                   name="role"
+                                                   id="docente"
+                                                   value="teacher"
+                                                   autocomplete="off"
+                                                   {% if teacher.role=='teacher' %}checked{% endif %}>
                                             <label class="btn btn-outline-danger" for="docente">DOCENTE</label>
-
-                                            <input type="radio" class="btn-check" name="role" id="admin" value="admin"
-                                                autocomplete="off" {% if teacher.role=='ADMIN' %}checked{% endif %} />
+                                            <input type="radio"
+                                                   class="btn-check"
+                                                   name="role"
+                                                   id="admin"
+                                                   value="admin"
+                                                   autocomplete="off"
+                                                   {% if teacher.role=='admin' %}checked{% endif %}>
                                             <label class="btn btn-outline-danger" for="admin">ADMINISTRADOR</label>
                                         </div>
                                     </div>
@@ -77,17 +86,15 @@
                         </div>
                         <div class="flex" style="gap:12px;">
                             <a href="{{ url_for('users.teachers_management') }}"
-                                class="btn-admin btn-cancelar">VOLVER</a>
+                               class="btn-admin btn-cancelar">VOLVER</a>
                             <button type="submit" class="btn-admin">ACTUALIZAR</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
-
-        <!-- Sidebar Aside Component -->
         {% include "sidebar_aside.html" %}
+    </div>
 
-        <!-- Custom JS -->
-        <script src="{{ url_for('static', filename='js/teachers_management.js') }}"></script>
-        {% endblock %}
+    <script src="{{ url_for('static', filename='js/teachers_management.js') }}"></script>
+{% endblock %}

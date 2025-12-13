@@ -63,7 +63,10 @@
                             </div>
                         </div>
                     </div>
-                    <button type="submit" class="btn-admin">GUARDAR</button>
+                    <div class="flex" style="gap:12px;">
+                        <a href="{{ url_for('users.teachers_management') }}" class="btn-admin btn-cancelar">VOLVER</a>
+                        <button type="submit" class="btn-admin">GUARDAR</button>
+                    </div>
                 </form>
             </div>
         </div>
