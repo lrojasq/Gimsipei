@@ -62,7 +62,7 @@ def create_book_service(
             description=data.get("description", ""),
             file_path=file_path,
             cover_image=cover_path,
-            target_audience=data.get("target_audience", "STUDENT"),
+            target_audience=data.get("target_audience", "student"),
             grade_level=data.get("grade_level"),
         )
         db.add(book)

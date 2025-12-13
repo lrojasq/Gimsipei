@@ -118,7 +118,7 @@ def create_book_controller(request: Request):
                 "title": request.form.get("title"),
                 "author": request.form.get("author"),
                 "description": request.form.get("description", ""),
-                "target_audience": request.form.get("target_audience", "STUDENT"),
+                "target_audience": request.form.get("target_audience", "student"),
                 "grade_level": int(grade_level) if grade_level else None,
             }
 
