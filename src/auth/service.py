@@ -43,19 +43,9 @@ def login_user_service(
 ) -> Response | tuple[dict, int]:
     db = SessionLocal()
     try:
-        try:
-            user = db.query(User).filter_by(username=validated.username).first()
-        except Exception:
-            db.rollback()
-            message = "Error de conexión con la base de datos"
-            if request.is_json:
-                return {"error": message}, 500
-            flash(message, "danger")
-            return redirect(url_for("auth.login"))
-    finally:
-        db.close()
+        # Get user by username and check if password is correct
+        user = db.query(User).filter_by(username=validated.username).first()
 
-    try:
         if not user or not check_password_hash(
             user.hashed_password, validated.password
         ):
@@ -65,9 +55,9 @@ def login_user_service(
             flash(message, "danger")
             return redirect(url_for("auth.login"))
 
-        # Crear token de acceso
+        # Create access token
         access_token = create_access_token(
-            identity=user.id, additional_claims={"role": user.role.name}
+            identity=user.id, additional_claims={"role": user.role.value}
         )
 
         if request.is_json:
@@ -76,38 +66,44 @@ def login_user_service(
                 "user": {
                     "id": user.id,
                     "username": user.username,
-                    "role": user.role.name,
+                    "role": user.role.value,
                 },
             }, 200
 
-        # Redirigir al dashboard
+        # Redirect to dashboard with access token
         response = make_response(redirect(url_for("users.dashboard")))
-
         set_access_cookies(response, access_token)
         flash(f"Bienvenido, {user.username}!", "success")
         return response
+
     except Exception:
+        db.rollback()
         message = "Error al procesar el inicio de sesión"
         if request.is_json:
             return {"error": message}, 500
         flash(message, "danger")
         return redirect(url_for("auth.login"))
+    finally:
+        db.close()
 
 
-def get_current_user_service(request: Request) -> tuple[dict, int]:
+def get_current_user_service(_: Request) -> tuple[dict, int]:
     user_id: int = get_jwt_identity()
     db = SessionLocal()
     try:
         user = db.query(User).get(user_id)
+        if not user:
+            return {"error": "User not found"}, 404
+
+        return {
+            "id": user.id,
+            "username": user.username,
+            "role": user.role.value,
+        }, 200
+    except Exception as e:
+        return {"error": f"Error al obtener el usuario: {str(e)}"}, 500
     finally:
         db.close()
-    if not user:
-        return {"error": "User not found"}, 404
-    return {
-        "id": user.id,
-        "username": user.username,
-        "role": user.role.name,
-    }, 200
 
 
 def logout_user_service(request: Request) -> Response:
@@ -158,8 +154,9 @@ def forgot_password_service(
         if request.is_json:
             return {"message": message}, 200
 
+        # Use Post-Redirect-Get pattern to prevent form resubmission
         flash(message, "success")
-        return render_template("auth/forgot_password.html")
+        return redirect(url_for("auth.login"))
 
     except Exception:
         db.rollback()
