@@ -1,18 +1,8 @@
-from datetime import datetime, timezone
-from werkzeug.utils import secure_filename
 import os
+from datetime import datetime, timezone
 
-from src.models.resource import Resource
-from src.database.database import SessionLocal
-from src.models.subject import Subject
-from src.models.user import User, UserRole
-from src.models.class_model import ClassModel
-from src.models.course import Course
-from src.models.class_view import ClassView
-from src.models.course_student import CourseStudent
-from src.models.class_content import ClassContent
-from src.models.assignment import Assignment
-from src.models.assignment_submission import AssignmentSubmission
+from werkzeug.utils import secure_filename
+
 from src.classes.validation import (
     SubjectCreate,
     SubjectUpdate,
@@ -21,7 +11,18 @@ from src.courses.service import (
     COURSE_NAME_ORDER,
     get_grade_number_from_course_name,
 )
+from src.database.database import SessionLocal
+from src.models.assignment import Assignment
+from src.models.assignment_submission import AssignmentSubmission
+from src.models.class_content import ClassContent
+from src.models.class_model import ClassModel
+from src.models.class_view import ClassView
+from src.models.course import Course
+from src.models.course_student import CourseStudent
 from src.models.course_subject import CourseSubject
+from src.models.resource import Resource
+from src.models.subject import Subject
+from src.models.user import User, UserRole
 
 
 # Subject Services
@@ -82,7 +83,7 @@ def delete_subject(subject_id: int, current_user_id: int):
             return None
 
         # If user is a teacher, they can only delete subjects they are assigned to
-        if current_user.role.name == UserRole.TEACHER.name:
+        if current_user.role.value == UserRole.TEACHER.value:
             from src.models.course_subject import CourseSubject
 
             assignment = (
@@ -546,7 +547,7 @@ def delete_class_service(class_id: int, user_role: str):
 
         # Verify permissions
         if user_role:
-            if user_role.lower() != UserRole.TEACHER.value:
+            if user_role != UserRole.TEACHER.value:
                 return {"error": "No tienes permisos para eliminar esta clase"}, 403
 
         # Save the image path before deleting the record

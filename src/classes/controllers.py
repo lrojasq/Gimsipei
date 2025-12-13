@@ -91,12 +91,7 @@ def teacher_classes_view_controller():
         )
     except Exception as e:
         flash(f"Error al cargar los cursos: {str(e)}", "danger")
-        return render_template(
-            "teacher/teacher_classes.html",
-            courses=[],
-            user=current_user,
-            accion_logout=True,
-        )
+        return redirect(url_for("users.dashboard"))
 
 
 def create_class_controller():
@@ -224,7 +219,9 @@ def update_class_controller(class_id: int):
         cover_file = request.files.get("cover_image")
         result, status_code = service.update_class_service(class_id, data, cover_file)
 
-        flash(result["message"], "success") if status_code == 200 else flash(result.get("error", "Error al actualizar la clase"), "danger")
+        flash(result["message"], "success") if status_code == 200 else flash(
+            result.get("error", "Error al actualizar la clase"), "danger"
+        )
 
         # Redirigir a la vista de clases por período
         course_id = request.form.get("course_id")
