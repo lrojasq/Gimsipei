@@ -11,8 +11,6 @@
 
 {% block content %}
     {% block menu %}{% endblock %}
-    <!-- Flash Messages -->
-    {% include "flash_messages.html" %}
 
     <div class="container_category flex admin_category courses_management">
         <!-- Inicio Cursos -->
@@ -45,8 +43,11 @@
                                                 <span class="flex actions">
                                                     <a href="#"
                                                        class="open-edit-subject-modal"
+                                                       data-course-id="{{ course.id }}"
                                                        data-subject-id="{{ subject.subject_id }}"
-                                                       data-subject-name="{{ subject.subject_name }}">
+                                                       data-subject-name="{{ subject.subject_name }}"
+                                                       data-teacher-id="{{ subject.teacher_id }}"
+                                                       data-teacher-name="{{ subject.teacher_name }}">
                                                         Editar
                                                     </a>
                                                     <a href="#"
@@ -92,7 +93,6 @@
         <!-- Modales superpuestos a la página -->
         {% include "admin/create_course.html" %}
         {% include "admin/create_subject.html" %}
-        {% include "admin/edit_subject.html" %}
         {% include "delete_confirmation_modal.html" %}
 
         <!-- Custom JS -->
