@@ -464,9 +464,13 @@ a {
 .mobile-header:has(+ .libros_category) .mobile-nav a:hover,
 .mobile-header:has(+ .calificaciones_category) .mobile-nav a:hover,
 .mobile-header:has(+ .evaluaciones_category) .mobile-nav a:hover,
-.mobile-header:has(+ .admin_category) .mobile-nav a:hover,
 .mobile-header:has(+ .recursos_category) .mobile-nav a:hover {
     background-color: var(--azul-oscuro);
+    color: white;
+}
+
+.mobile-header:has(+ .admin_category) .mobile-nav a:hover{
+    background-color: var(--admin-active);
     color: white;
 }
 
@@ -561,11 +565,13 @@ a {
 .mobile-header:has(+ .evaluaciones_category):after {
     background: var(--evaluaciones-active);
 }
-
-.mobile-header:has(+ .clases_category):after,
 .mobile-header:has(+ .admin_category):after {
+    background: var(--admin-active);
+}
+.mobile-header:has(+ .clases_category):after{
     background: var(--barra-clases);
 }
+
 
 
 
@@ -654,7 +660,14 @@ i.bi.bi-arrow-left-short {
     background-color: #ffffff;
     border-radius: 0 4px 4px 0;
 }
-
+.calificaciones_category :has(.content-admin)::-webkit-scrollbar-thumb {
+    background: var(--calificaciones-active);
+    border-radius: 5px;
+}
+.specialities_category.exams.flex.flex-column.recursos_category::-webkit-scrollbar-thumb {
+    background: var(--recursos);
+    border-radius: 5px;
+}
 @media (min-width:1600px) {
 
     .mision-tp p,

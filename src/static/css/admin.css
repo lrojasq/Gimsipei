@@ -248,6 +248,7 @@
     background: var(--gray-light);
 }
 
+
 .content-admin.flex.flex-column h2 {
     color: #5f6161;
     margin-bottom: 0.2rem;
@@ -315,6 +316,10 @@ form.form-admin.flex.flex-column h1 {
 
 .specialities_category:has(.content-admin)::-webkit-scrollbar-thumb {
     background: var(--clases);
+    border-radius: 5px;
+}
+.admin_category :has(.content-admin)::-webkit-scrollbar-thumb {
+    background: var(--admin-active);
     border-radius: 5px;
 }
 
