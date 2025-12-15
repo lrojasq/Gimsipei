@@ -13,7 +13,6 @@
 {% block content %}
 {% block menu %}{% endblock %}
 
-{% include "flash_messages.html" %}
 
 <div class="container_category flex calificaciones_category">
     <div class="data_categoty flex flex-column">
@@ -46,11 +45,10 @@
     <div class="specialities_category grades flex flex-column">
         <div class="flex gap-2 align-items-center">
             {% if user.role == 'teacher' %}
-            <a href="{{ url_for('grades.grades_view') }}" class="back-arrow-link">
-                <i class="bi bi-arrow-left-short"></i>
-            </a>
+                <a href="{{ url_for('grades.grades_view') }}" class="back-arrow-link">
+                    <i class="bi bi-arrow-left-short"></i>
+                </a>
             {% endif %}
-            <!-- <h3 class="font-weight-bold mb-0">{{ grades_data.course.name }} - Notas Globales</h3> -->
         </div>
 
         <div class="grade flex" style="width: 100%;">
