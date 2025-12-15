@@ -5,11 +5,6 @@
 <link href="{{ url_for('static', filename='css/login.css') }}" rel="stylesheet">
 {% endblock %}
 
-<!-- Flash Messages -->
-<div class="container mt-3">
-    {% include "flash_messages.html" %}
-</div>
-
 <main class="flex-grow-1">
 
     {% block content %}
@@ -48,23 +43,8 @@
     </div>
 </main>
 
-<script>
-    function openPassword(){
-        let iconPassword = document.querySelector('.fa-lock');
-        let inputPassword = document.getElementById('password');
-        let isTypePassword = true;
-        if(!iconPassword || !inputPassword) return false
-        iconPassword.addEventListener('click',()=>{
-            if(isTypePassword){
-                inputPassword.setAttribute('type','text');
-                isTypePassword= false;
-            }else{
-                inputPassword.setAttribute('type','password')
-                isTypePassword= true;
-            }
-            
-        })
-    }
-    openPassword();
-</script>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/login.js') }}"></script>
 {% endblock %}
