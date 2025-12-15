@@ -1,0 +1,233 @@
+/* Flash Messages - Fixed Overlay Styles */
+.flash-messages-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+    max-width: 420px;
+    width: 100%;
+    pointer-events: none;
+}
+
+.flash-message {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    margin-bottom: 12px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-left: 4px solid;
+    pointer-events: auto;
+    opacity: 0;
+    transform: translateX(400px);
+    transition: all 0.3s ease-in-out;
+}
+
+.flash-message.fade-in {
+    animation: slideInRight 0.4s ease forwards;
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(400px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.flash-content {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    gap: 12px;
+}
+
+.flash-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+    color: #ffffff;
+}
+
+.flash-text {
+    font-size: 14px;
+    line-height: 1.5;
+    color: #ffffff;
+    word-wrap: break-word;
+    font-weight: 500;
+}
+
+.flash-close {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.8);
+    cursor: pointer;
+    padding: 4px 8px;
+    font-size: 16px;
+    flex-shrink: 0;
+    margin-left: 8px;
+    transition: color 0.2s ease;
+}
+
+.flash-close:hover {
+    color: #ffffff;
+}
+
+/* Success Style - Verde */
+.flash-success {
+    border-left-color: #1e7e34;
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+}
+
+.flash-success .flash-icon {
+    color: #ffffff;
+}
+
+.flash-success .flash-text {
+    color: #ffffff;
+    font-weight: 500;
+}
+
+.flash-success .flash-close {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.flash-success .flash-close:hover {
+    color: #ffffff;
+}
+
+/* Danger/Error Style - Rojo */
+.flash-danger {
+    border-left-color: #bd2130;
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+}
+
+.flash-danger .flash-icon {
+    color: #ffffff;
+}
+
+.flash-danger .flash-text {
+    color: #ffffff;
+    font-weight: 500;
+}
+
+.flash-danger .flash-close {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.flash-danger .flash-close:hover {
+    color: #ffffff;
+}
+
+/* Warning Style - Amarillo/Naranja */
+.flash-warning {
+    border-left-color: #d39e00;
+    background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+    box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3);
+}
+
+.flash-warning .flash-icon {
+    color: #ffffff;
+}
+
+.flash-warning .flash-text {
+    color: #ffffff;
+    font-weight: 500;
+}
+
+.flash-warning .flash-close {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.flash-warning .flash-close:hover {
+    color: #ffffff;
+}
+
+/* Info Style - Azul */
+.flash-info {
+    border-left-color: #117a8b;
+    background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+    box-shadow: 0 4px 12px rgba(23, 162, 184, 0.3);
+}
+
+.flash-info .flash-icon {
+    color: #ffffff;
+}
+
+.flash-info .flash-text {
+    color: #ffffff;
+    font-weight: 500;
+}
+
+.flash-info .flash-close {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.flash-info .flash-close:hover {
+    color: #ffffff;
+}
+
+/* Error Style (alias for danger) - Rojo */
+.flash-error {
+    border-left-color: #bd2130;
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+}
+
+.flash-error .flash-icon {
+    color: #ffffff;
+}
+
+.flash-error .flash-text {
+    color: #ffffff;
+    font-weight: 500;
+}
+
+.flash-error .flash-close {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.flash-error .flash-close:hover {
+    color: #ffffff;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .flash-messages-container {
+        bottom: 10px;
+        right: 10px;
+        left: 10px;
+        max-width: none;
+    }
+
+    .flash-message {
+        padding: 12px 16px;
+    }
+
+    .flash-text {
+        font-size: 13px;
+    }
+}
+
+/* Auto-dismiss animation */
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(400px);
+    }
+}
+
+.flash-message.fade-out {
+    animation: fadeOut 0.3s ease forwards;
+}
+
