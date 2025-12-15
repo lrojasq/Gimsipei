@@ -230,6 +230,9 @@ hr.clases_br {
     background-color: var(--clases);
 }
 
+.grades_students .menu_aside {
+    background-color: hsl(190, 65%, 55%);
+}
 .menu_aside:has(+ .clases_category) {
     background-color: var(--clases);
 }
@@ -543,11 +546,15 @@ hr.libros_br {
 .container_category.flex.libros_category {
     justify-content: flex-start;
     column-gap: 2rem;
+    background-color: #fff;
+}
+.container_category.flex.libros_category .data_categoty{
+    width: 15%;
 }
 
 .libros_category .specialities_category {
     /* Mantener proporción similar pero sin que se vaya al centro */
-    width: 80%;
+    width: 75%;
     align-items: start;
     gap: 1rem;
     height: auto;
@@ -786,6 +793,7 @@ hr.libros_br {
 .container_category.flex.libros_category {
     justify-content: start;
     gap: 3rem;
+    background-color: #fff;
 }
 
 .btns_actions {
