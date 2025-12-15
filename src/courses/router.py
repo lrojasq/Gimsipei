@@ -4,7 +4,6 @@ from .courses_controllers import (
     create_course_controller,
     edit_course_controller,
     delete_course_controller,
-    course_detail_controller,
     remove_student_from_course_controller,
     remove_subject_from_course_controller,
     # teacher_classes_controller,
@@ -48,12 +47,6 @@ def edit_course(course_id):
 def delete_course(course_id):
     """Eliminar curso"""
     return delete_course_controller(course_id, request)
-
-
-@courses_bp.route("/<int:course_id>", methods=["GET"])
-def course_detail(course_id):
-    """Detalle del curso con estudiantes y materias"""
-    return course_detail_controller(course_id, request)
 
 
 @courses_bp.route("/<int:course_id>/students/<int:student_id>/remove", methods=["POST"])

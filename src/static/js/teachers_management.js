@@ -128,14 +128,18 @@ function initializeLoadingStates() {
 
 // Show Loading State
 function showLoadingState(button) {
+    if (button.classList.contains('loading')) return;
+
     button.classList.add('loading');
     button.disabled = true;
     
-    const originalText = button.innerHTML;
-    button.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Procesando...';
-    
-    // Store original text for potential restoration
-    button.setAttribute('data-original-text', originalText);
+    // Store original text for potential restoration (only once)
+    if (!button.getAttribute('data-original-text')) {
+        button.setAttribute('data-original-text', button.innerHTML);
+    }
+
+    // IMPORTANT: teachers_management.css already uses `.btn.loading::after` as spinner.
+    button.innerHTML = 'Procesando...';
 }
 
 // Hide Loading State

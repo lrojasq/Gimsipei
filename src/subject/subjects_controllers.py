@@ -45,61 +45,59 @@ def create_subject_controller(request: Request) -> Response:
     try:
         data = request.form.to_dict()
         course_id = int(data.get("course_id", 0)) if data.get("course_id") else None
-        validated = SubjectCreateSchema(**data)
-        result, status_code = create_subject_service(validated, request)
+        subject_id = int(data.get("subject_id", 0)) if data.get("subject_id") else None
+        teacher_id = int(data.get("teacher_id", 0)) if data.get("teacher_id") else None
 
-        # 200: materia existente, 201: materia nueva
-        if status_code in (200, 201) and result:
-            # If course_id and teacher_id are provided, create the course-subject-teacher assignment
-            if course_id and data.get("teacher_id"):
-                from src.courses.service import add_subject_to_course_service
-                from src.courses.validation import CourseSubjectSchema
-
-                assignment_data = CourseSubjectSchema(
-                    subject_id=result.id,
-                    teacher_id=int(data.get("teacher_id")),
-                    is_active=True,
-                )
-                _, assignment_status = add_subject_to_course_service(
-                    course_id, assignment_data, request
-                )
-
-                if assignment_status in (200, 201):
-                    if status_code == 201:
-                        flash(
-                            "Materia creada y asignada al curso exitosamente", "success"
-                        )
-                    else:
-                        flash("Materia asignada al curso exitosamente", "success")
-                elif assignment_status == 400:
-                    flash(
-                        "Esta materia ya está asignada a este curso con el mismo profesor",
-                        "danger",
-                    )
-                else:
-                    if status_code == 201:
-                        flash(
-                            "Materia creada pero no se pudo asignar al curso", "warning"
-                        )
-                    else:
-                        flash("No se pudo asignar la materia al curso", "warning")
-            else:
-                if status_code == 201:
-                    flash("Materia creada exitosamente", "success")
-                else:
-                    flash("Materia ya existe en el sistema", "info")
-
-            # Redirect back to courses if coming from course view
-            if course_id:
-                return redirect(url_for("courses.courses_management"))
+        # 1) Resolver/crear la materia por nombre (siempre viene del modal)
+        subject_name = data.get("name")
+        if not subject_name:
+            flash("Por favor seleccione una materia.", "danger")
             return redirect(url_for("courses.courses_management"))
-        elif status_code == 400:
-            flash(
-                "Ya existe una materia con ese nombre o el profesor no es válido",
-                "danger",
+
+        validated_subject = SubjectCreateSchema(name=subject_name)
+        subject_result, subject_status = create_subject_service(
+            validated_subject, request
+        )
+
+        if subject_status not in (200, 201) or not subject_result:
+            flash("Error al crear/obtener la materia.", "danger")
+            return redirect(url_for("courses.courses_management"))
+
+        # 2) Si viene course_id + teacher_id, asignar/actualizar en el curso
+        if course_id and teacher_id:
+            from src.courses.service import add_subject_to_course_service
+            from src.courses.validation import CourseSubjectSchema
+
+            assignment_data = CourseSubjectSchema(
+                subject_id=subject_result.id,  # subject destino
+                teacher_id=teacher_id,
+                is_active=True,
+                original_subject_id=subject_id
+                or None,  # subject original (para edición)
             )
+            _, assignment_status = add_subject_to_course_service(
+                course_id, assignment_data, request
+            )
+
+            if assignment_status in (200, 201):
+                if subject_id:
+                    flash("Asignación actualizada exitosamente", "success")
+                else:
+                    flash("Materia asignada al curso exitosamente", "success")
+            elif assignment_status == 400:
+                flash("El profesor no es válido.", "danger")
+            elif assignment_status == 404:
+                flash("Curso no encontrado.", "danger")
+            else:
+                flash("Error al actualizar la asignación.", "danger")
+
+            return redirect(url_for("courses.courses_management"))
+
+        # 3) Si no viene course_id/teacher_id, es solo creación de materia global
+        if subject_status == 201:
+            flash("Materia creada exitosamente", "success")
         else:
-            flash("Error al crear la materia", "danger")
+            flash("Materia ya existe en el sistema", "info")
 
         return redirect(url_for("courses.courses_management"))
 

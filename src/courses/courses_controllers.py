@@ -14,7 +14,9 @@ from .service import (
     get_available_course_names,
 )
 from .validation import CourseCreateSchema, CourseUpdateSchema
-from .service import get_course_subjects_service
+from .service import (
+    get_course_subjects_service,
+)
 from src.subject.service import (
     get_teachers_for_form_service,
     get_available_subject_names,
@@ -184,38 +186,6 @@ def delete_course_controller(course_id: int, request: Request) -> Response:
 
 @jwt_required()
 @role_required([UserRole.ADMIN])
-def course_detail_controller(course_id: int, request: Request) -> Response:
-    """Detailed view of a course with students and subjects"""
-    try:
-        course, status_code = get_course_service(course_id, request)
-        if status_code == 404:
-            flash("Curso no encontrado", "danger")
-            return redirect(url_for("courses.courses_management"))
-
-        # Get course students
-        from .service import get_course_students_service
-
-        students, _ = get_course_students_service(course_id)
-
-        # Get course subjects
-        from .service import get_course_subjects_service
-
-        subjects, _ = get_course_subjects_service(course_id)
-
-        return render_template(
-            "admin/course_detail.html",
-            course=course,
-            students=students,
-            subjects=subjects,
-            accion_logout=True,
-        )
-    except Exception as e:
-        flash(f"Error al cargar el detalle del curso: {str(e)}", "danger")
-        return redirect(url_for("courses.courses_management"))
-
-
-@jwt_required()
-@role_required([UserRole.ADMIN])
 def remove_student_from_course_controller(
     course_id: int, student_id: int, request: Request
 ) -> Response:
@@ -236,7 +206,7 @@ def remove_student_from_course_controller(
     except Exception as e:
         flash(f"Error interno: {str(e)}", "danger")
 
-    return redirect(url_for("courses.course_detail", course_id=course_id))
+    return redirect(url_for("courses.courses_management"))
 
 
 @jwt_required()

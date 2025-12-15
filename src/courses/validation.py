@@ -33,3 +33,4 @@ class CourseSubjectSchema(BaseModel):
     subject_id: int
     teacher_id: int
     is_active: bool = True
+    original_subject_id: Optional[int] = None

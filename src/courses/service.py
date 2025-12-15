@@ -1,10 +1,11 @@
 import os
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import List, Optional, Tuple
 
 from flask import Request
 from flask_jwt_extended import get_jwt_identity
+from sqlalchemy.exc import IntegrityError
 
 from src.database.database import SessionLocal
 from src.models.assignment import Assignment
@@ -442,7 +443,7 @@ def get_course_subjects_service(course_id: int) -> Tuple[List[dict], int]:
 def add_subject_to_course_service(
     course_id: int, data: CourseSubjectSchema, request: Request
 ) -> Tuple[Optional[dict], int]:
-    """Agregar materia a un curso"""
+    """Agregar o actualizar materia en un curso"""
     db = SessionLocal()
     try:
         # Verificar que el curso existe
@@ -450,40 +451,96 @@ def add_subject_to_course_service(
         if not course:
             return None, 404
 
-        # Verificar que el usuario es profesor
-        teacher = (
-            db.query(User)
-            .filter(User.id == data.teacher_id, User.role == UserRole.TEACHER)
-            .first()
-        )
-        if not teacher:
-            return None, 400
+        # --- Modo edición con cambio de materia (mover asignación) ---
+        if data.original_subject_id and data.original_subject_id != data.subject_id:
+            original_assignment = (
+                db.query(CourseSubject)
+                .filter(
+                    CourseSubject.course_id == course_id,
+                    CourseSubject.subject_id == data.original_subject_id,
+                )
+                .first()
+            )
 
-        # Verificar que no esté ya asignado
+            target_assignment = (
+                db.query(CourseSubject)
+                .filter(
+                    CourseSubject.course_id == course_id,
+                    CourseSubject.subject_id == data.subject_id,
+                )
+                .first()
+            )
+
+            # Si ya existe una asignación para el subject destino, actualizamos y eliminamos la original
+            if target_assignment:
+                # Si no hay original, lo tratamos como "update" normal del destino
+                if target_assignment.teacher_id != data.teacher_id:
+                    target_assignment.teacher_id = data.teacher_id
+                target_assignment.assigned_at = datetime.now(timezone.utc)
+
+                if (
+                    original_assignment
+                    and original_assignment.id != target_assignment.id
+                ):
+                    db.delete(original_assignment)
+
+                try:
+                    db.commit()
+                except IntegrityError:
+                    db.rollback()
+                    return None, 400
+                return {"message": "Asignación actualizada exitosamente"}, 200
+
+            # Si existe la asignación original, la movemos (cambiando subject_id y teacher_id)
+            if original_assignment:
+                original_assignment.subject_id = data.subject_id
+                original_assignment.teacher_id = data.teacher_id
+                original_assignment.assigned_at = datetime.now(timezone.utc)
+                try:
+                    db.commit()
+                except IntegrityError:
+                    db.rollback()
+                    return None, 400
+                return {"message": "Asignación actualizada exitosamente"}, 200
+
+        # --- Crear si no existe, o actualizar profesor si existe
         existing_assignment = (
             db.query(CourseSubject)
             .filter(
                 CourseSubject.course_id == course_id,
                 CourseSubject.subject_id == data.subject_id,
-                CourseSubject.teacher_id == data.teacher_id,
             )
             .first()
         )
 
         if existing_assignment:
-            return None, 400  # Ya está asignado
+            if existing_assignment.teacher_id == data.teacher_id:
+                return {"message": "La materia ya está asignada a este profesor"}, 200
 
-        # Crear nueva asignación
+            existing_assignment.teacher_id = data.teacher_id
+            existing_assignment.assigned_at = datetime.now(timezone.utc)
+            try:
+                db.commit()
+            except IntegrityError:
+                db.rollback()
+                return None, 400
+            return {"message": "Asignación actualizada exitosamente"}, 200
+
         course_subject = CourseSubject(
             course_id=course_id,
             subject_id=data.subject_id,
             teacher_id=data.teacher_id,
         )
-
         db.add(course_subject)
-        db.commit()
-
+        try:
+            db.commit()
+        except IntegrityError:
+            db.rollback()
+            return None, 400
         return {"message": "Materia agregada al curso exitosamente"}, 201
+    except IntegrityError:
+        db.rollback()
+        return None, 400
     except Exception:
         db.rollback()
         return None, 500

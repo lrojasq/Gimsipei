@@ -50,7 +50,7 @@ function initializeClassActions() {
             e.preventDefault();
             const classId = this.getAttribute('data-class-id');
             // TODO: Navigate to edit class page
-            console.log('Edit class:', classId);
+            // Edit class
             showToast('Funcionalidad de edición en desarrollo', 'info');
         });
     });
@@ -62,7 +62,7 @@ function initializeClassActions() {
             e.preventDefault();
             const classId = this.getAttribute('data-class-id');
             // TODO: Navigate to resources page
-            console.log('View resources for class:', classId);
+            // View resources for class
             showToast('Funcionalidad de recursos en desarrollo', 'info');
         });
     });
@@ -76,7 +76,7 @@ function initializeClassActions() {
             
             if (confirm('¿Está seguro de que desea eliminar esta clase? Esta acción no se puede deshacer.')) {
                 // TODO: Implement delete functionality
-                console.log('Delete class:', classId);
+                // Delete class
                 showToast('Funcionalidad de eliminación en desarrollo', 'info');
             }
         });
