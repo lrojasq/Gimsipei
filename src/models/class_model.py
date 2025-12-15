@@ -1,7 +1,9 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
-from sqlalchemy.orm import relationship
-from src.database.database import Base
 from datetime import datetime, timezone
+
+from sqlalchemy import Column, DateTime, ForeignKey, Integer, String
+from sqlalchemy.orm import relationship
+
+from src.database.database import Base
 
 
 class ClassModel(Base):
@@ -27,9 +29,29 @@ class ClassModel(Base):
 
     # Relationships
     course = relationship("Course", back_populates="classes")
-    subject = relationship("Subject")
+    subject = relationship("Subject", back_populates="classes")
     creator = relationship("User", back_populates="created_classes")
-    resources = relationship("Resource", back_populates="class_", lazy="dynamic")
-    views = relationship("ClassView", back_populates="class_", lazy="dynamic")
-    contents = relationship("ClassContent", back_populates="class_", lazy="dynamic")
-    assignments = relationship("Assignment", back_populates="class_", lazy="dynamic")
+    resources = relationship(
+        "Resource",
+        back_populates="class_",
+        lazy="dynamic",
+        cascade="all, delete-orphan",
+    )
+    views = relationship(
+        "ClassView",
+        back_populates="class_",
+        lazy="dynamic",
+        cascade="all, delete-orphan",
+    )
+    contents = relationship(
+        "ClassContent",
+        back_populates="class_",
+        lazy="dynamic",
+        cascade="all, delete-orphan",
+    )
+    assignments = relationship(
+        "Assignment",
+        back_populates="class_",
+        lazy="dynamic",
+        cascade="all, delete-orphan",
+    )

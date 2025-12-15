@@ -1,7 +1,8 @@
-from datetime import datetime
-from typing import Optional
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Text
+from datetime import datetime, timezone
+
+from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import relationship
+
 from src.database.database import Base
 
 
@@ -14,9 +15,11 @@ class Document(Base):
     title: str = Column(String(255), nullable=False)
     content: str = Column(Text, nullable=False)
     author_id: int = Column(Integer, ForeignKey("users.id"), nullable=False)
-    created_at: datetime = Column(DateTime, default=datetime.utcnow)
+    created_at: datetime = Column(DateTime, default=datetime.now(timezone.utc))
     updated_at: datetime = Column(
-        DateTime, default=datetime.utcnow, onupdate=datetime.utcnow
+        DateTime,
+        default=datetime.now(timezone.utc),
+        onupdate=datetime.now(timezone.utc),
     )
     is_active: bool = Column(Integer, default=1)
 

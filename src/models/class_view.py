@@ -1,7 +1,9 @@
-from sqlalchemy import Column, Integer, ForeignKey, DateTime
+from datetime import datetime, timezone
+
+from sqlalchemy import Column, DateTime, ForeignKey, Integer
 from sqlalchemy.orm import relationship
+
 from src.database.database import Base
-from datetime import datetime
 
 
 class ClassView(Base):
@@ -12,7 +14,7 @@ class ClassView(Base):
     id = Column(Integer, primary_key=True, index=True)
     class_id = Column(Integer, ForeignKey("classes.id"), nullable=False)
     student_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-    viewed_at = Column(DateTime, default=datetime.utcnow)
+    viewed_at = Column(DateTime, default=datetime.now(timezone.utc))
 
     # Relationships
     class_ = relationship("ClassModel", back_populates="views")

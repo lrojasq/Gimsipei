@@ -1,7 +1,9 @@
-from sqlalchemy import Column, Integer, String, DateTime
-from sqlalchemy.orm import relationship
-from src.database.database import Base
 from datetime import datetime, timezone
+
+from sqlalchemy import Column, DateTime, Integer, String
+from sqlalchemy.orm import relationship
+
+from src.database.database import Base
 
 
 class Subject(Base):
@@ -22,3 +24,6 @@ class Subject(Base):
     course_assignments = relationship(
         "CourseSubject", back_populates="subject", lazy="dynamic"
     )
+    classes = relationship("ClassModel", back_populates="subject", lazy="dynamic")
+    evaluations = relationship("Evaluation", back_populates="subject", lazy="dynamic")
+    grades = relationship("Grade", back_populates="subject", lazy="dynamic")

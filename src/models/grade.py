@@ -30,8 +30,8 @@ class Grade(Base):
 
     # Relationships
     student = relationship("User", foreign_keys=[student_id])
-    course = relationship("Course")
-    subject = relationship("Subject")
+    course = relationship("Course", back_populates="grades")
+    subject = relationship("Subject", back_populates="grades")
 
     # Ensure unique grade per student, course, subject, and period
     __table_args__ = (

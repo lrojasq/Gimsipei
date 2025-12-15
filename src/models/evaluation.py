@@ -1,7 +1,9 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Text
-from sqlalchemy.orm import relationship
-from src.database.database import Base
 from datetime import datetime, timezone
+
+from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, Text
+from sqlalchemy.orm import relationship
+
+from src.database.database import Base
 
 
 class Evaluation(Base):
@@ -26,13 +28,19 @@ class Evaluation(Base):
 
     # Relationships
     course = relationship("Course", back_populates="evaluations")
-    subject = relationship("Subject")
+    subject = relationship("Subject", back_populates="evaluations")
     creator = relationship("User", back_populates="created_evaluations")
     questions = relationship(
-        "EvaluationQuestion", back_populates="evaluation", cascade="all, delete-orphan"
+        "EvaluationQuestion",
+        back_populates="evaluation",
+        cascade="all, delete-orphan",
+        lazy="dynamic",
     )
     submissions = relationship(
-        "EvaluationSubmission", back_populates="evaluation", lazy="dynamic"
+        "EvaluationSubmission",
+        back_populates="evaluation",
+        lazy="dynamic",
+        cascade="all, delete-orphan",
     )
 
     def __repr__(self):

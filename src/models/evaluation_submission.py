@@ -1,7 +1,9 @@
-from sqlalchemy import Column, Integer, ForeignKey, DateTime, Float, Boolean
-from sqlalchemy.orm import relationship
-from src.database.database import Base
 from datetime import datetime, timezone
+
+from sqlalchemy import Boolean, Column, DateTime, Float, ForeignKey, Integer
+from sqlalchemy.orm import relationship
+
+from src.database.database import Base
 
 
 class EvaluationSubmission(Base):
