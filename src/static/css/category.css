@@ -546,6 +546,7 @@ hr.libros_br {
 .container_category.flex.libros_category {
     justify-content: flex-start;
     column-gap: 2rem;
+    background-color: #fff;
 }
 .container_category.flex.libros_category .data_categoty{
     width: 15%;
@@ -792,6 +793,7 @@ hr.libros_br {
 .container_category.flex.libros_category {
     justify-content: start;
     gap: 3rem;
+    background-color: #fff;
 }
 
 .btns_actions {
