@@ -111,7 +111,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return book.locations.generate(1024);
       })
       .then(() => {
-        console.log("Locations generated");
+        // Locations generated
       });
   }
 

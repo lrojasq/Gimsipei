@@ -38,14 +38,14 @@ def resources_view_controller(_: Request):
         user = db.query(User).filter(User.id == current_user_id).first()
 
         if not user:
-            flash("Usuario no encontrado", "error")
+            flash("Usuario no encontrado", "danger")
             return redirect(url_for("users.dashboard"))
 
         # Obtener recursos organizados por materia
         resources_data, status_code = get_resources_by_teacher_service(current_user_id)
 
         if status_code != 200:
-            flash("Error al cargar los recursos", "error")
+            flash("Error al cargar los recursos", "danger")
             return redirect(url_for("users.dashboard"))
 
         # Convert the User object to a dictionary with role as string
@@ -65,7 +65,7 @@ def resources_view_controller(_: Request):
             accion_logout=True,
         )
     except Exception:
-        flash("Error al cargar la vista de recursos", "error")
+        flash("Error al cargar la vista de recursos", "danger")
         return redirect(url_for("users.dashboard"))
     finally:
         db.close()
@@ -108,12 +108,12 @@ def create_resource_controller(request: Request):
                 flash("Recurso creado exitosamente", "success")
             else:
                 error_msg = result.get("error", "Error al crear el recurso")
-                flash(error_msg, "error")
+                flash(error_msg, "danger")
 
             return redirect(url_for("resources.resources_view"))
 
     except Exception:
-        flash("Error al crear el recurso", "error")
+        flash("Error al crear el recurso", "danger")
         return redirect(url_for("resources.resources_view"))
 
 
@@ -125,11 +125,11 @@ def delete_resource_controller(resource_id: int, request: Request):
         if status_code == 200:
             flash("Recurso eliminado exitosamente", "success")
         else:
-            flash("Error al eliminar el recurso", "error")
+            flash("Error al eliminar el recurso", "danger")
 
         return redirect(url_for("resources.resources_view"))
     except Exception:
-        flash("Error al eliminar el recurso", "error")
+        flash("Error al eliminar el recurso", "danger")
         return redirect(url_for("resources.resources_view"))
 
 
@@ -139,11 +139,11 @@ def download_resource_controller(resource_id: int, _: Request):
         file_path, filename, status_code = get_resource_file_path_service(resource_id)
 
         if status_code == 404:
-            flash("Recurso o archivo no encontrado", "error")
+            flash("Recurso o archivo no encontrado", "danger")
             return redirect(url_for("resources.resources_view"))
 
         if not file_path or not os.path.exists(file_path):
-            flash("El archivo no existe", "error")
+            flash("El archivo no existe", "danger")
             return redirect(url_for("resources.resources_view"))
 
         # Enviar el archivo con headers
@@ -154,7 +154,7 @@ def download_resource_controller(resource_id: int, _: Request):
             mimetype="application/octet-stream",
         )
     except Exception:
-        flash("Error al descargar el archivo", "error")
+        flash("Error al descargar el archivo", "danger")
         return redirect(url_for("resources.resources_view"))
 
 
@@ -326,14 +326,14 @@ def student_resources_view_controller(_: Request):
         user = db.query(User).filter(User.id == current_user_id).first()
 
         if not user:
-            flash("Usuario no encontrado", "error")
+            flash("Usuario no encontrado", "danger")
             return redirect(url_for("users.dashboard"))
 
         # Obtener el curso y materias del estudiante
         resources_data, status_code = get_resources_by_student_service(current_user_id)
 
         if status_code != 200:
-            flash(resources_data.get("error", "Error al cargar las materias"), "error")
+            flash(resources_data.get("error", "Error al cargar las materias"), "danger")
             return redirect(url_for("users.dashboard"))
 
         # Convert the User object to a dictionary
@@ -354,7 +354,7 @@ def student_resources_view_controller(_: Request):
             accion_logout=True,
         )
     except Exception:
-        flash("Error al cargar la vista de recursos", "error")
+        flash("Error al cargar la vista de recursos", "danger")
         return redirect(url_for("users.dashboard"))
     finally:
         db.close()
@@ -372,7 +372,7 @@ def resources_view_subject_controller(
         user = db.query(User).filter(User.id == current_user_id).first()
 
         if not user:
-            flash("Usuario no encontrado", "error")
+            flash("Usuario no encontrado", "danger")
             return redirect(url_for("users.dashboard"))
 
         # Obtener los recursos de la materia
@@ -386,7 +386,7 @@ def resources_view_subject_controller(
                 if user.role.value == "student"
                 else url_for("resources.resources_view")
             )
-            flash(resources_data.get("error", "Error al cargar los recursos"), "error")
+            flash(resources_data.get("error", "Error al cargar los recursos"), "danger")
             return redirect(back_url)
 
         # Convert the User object to a dictionary
@@ -418,7 +418,7 @@ def resources_view_subject_controller(
             accion_logout=True,
         )
     except Exception:
-        flash("Error al cargar los recursos", "error")
+        flash("Error al cargar los recursos", "danger")
         return redirect(url_for("users.dashboard"))
     finally:
         db.close()

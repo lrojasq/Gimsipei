@@ -113,10 +113,10 @@ function initializeDeleteModalListeners() {
       // Prevenir doble submit
       if (form.dataset.submitting === "true") {
         e.preventDefault();
-        console.log("Formulario ya está siendo enviado, prevenido doble submit");
+        // prevenir doble submit
         return;
       }
-      console.log("Enviando formulario de eliminación a:", form.action);
+      // enviar formulario
       form.dataset.submitting = "true";
       showDeleteSpinner();
       // No prevenir el submit, dejar que se envíe normalmente

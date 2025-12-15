@@ -3,7 +3,6 @@ from flask import (
     url_for,
     flash,
     make_response,
-    render_template,
 )
 from src.models.user import User, UserRole
 from src.database.database import SessionLocal
@@ -98,7 +97,7 @@ def get_current_user_service(_: Request) -> tuple[dict, int]:
         return {
             "id": user.id,
             "username": user.username,
-            "role": user.role.value,
+                "role": user.role.value,
         }, 200
     except Exception as e:
         return {"error": f"Error al obtener el usuario: {str(e)}"}, 500
