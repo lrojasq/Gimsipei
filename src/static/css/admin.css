@@ -29,6 +29,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 0rem 1rem;
 }
 
 .header-cursos .items-header {
@@ -84,7 +85,7 @@
 }
 
 .list-materias {
-    background-color: var(--gray-light);
+    background-color: #fff;
     gap: 0px;
 }
 
@@ -92,9 +93,13 @@
     width: 100%;
     display: flex;
     justify-content: space-between;
+    background-color: #fff;
     align-items: center;
-    border-top: 1px solid var(--secondary-color);
-    padding: 0.5rem 8rem 0.5rem 0rem;
+    border-top: 1px solid #d8d8d8;
+    padding: 1rem 9rem 1rem 1rem;
+}
+.list-materias li:last-child{
+    border-bottom: 1px solid #d8d8d8;
 }
 
 .list-materias li .actions {
@@ -111,9 +116,13 @@
     justify-content: start;
 
 }
+.dashboard_category .data_categoty{
+    width: 25%;
+    padding: 2rem;
+}
 
 .dashboard_category .specialities_category:has(.content-admin) {
-    width: 80%;
+    width: 67%;
 }
 
 .admin_category .add {
@@ -252,6 +261,7 @@
 .content-admin.flex.flex-column h2 {
     color: #5f6161;
     margin-bottom: 0.2rem;
+    font-size: 1.5rem;
 }
 
 .form-crear.flex {
@@ -620,7 +630,7 @@ form.form-admin.flex.flex-column h1 {
     background: var(--azul-oscuro);
     color: white;
     border: none;
-    font-size: 20px;
+    font-size: 2rem;
 }
 
 @media (max-width: 992px) {
@@ -709,7 +719,7 @@ form.form-admin.flex.flex-column h1 {
     justify-content: space-between;
     align-items: center;
     border-top: 1px solid var(--secondary-color);
-    padding: 0.5rem 8rem 0.5rem 0rem;
+    padding: 1rem 9rem 1rem 1rem;
 }
 
 .list-materias li .actions {

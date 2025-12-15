@@ -871,7 +871,7 @@ table#accordionCourses thead th {
 }
 
 .modal.modal_delete .container .delete-icon {
-    width: 80px;
+    /* width: 80px;
     height: 80px;
     border-radius: 50%;
     background: #ffffff;
@@ -879,7 +879,7 @@ table#accordionCourses thead th {
     align-items: center;
     justify-content: center;
     margin-bottom: 25px;
-    border: 5px solid var(--course-dark);
+    border: 5px solid var(--course-dark); */
 }
 
 .modal.modal_delete .container .delete-icon i {
@@ -926,7 +926,7 @@ table#accordionCourses thead th {
 form#deleteConfirmationForm {
     width: 100%;
 }
-.delete-buttons .btn {
+/* .delete-buttons .btn {
     border: none;
     border-radius: 18px;
     padding: 4px 30px;
@@ -940,7 +940,7 @@ form#deleteConfirmationForm {
     display: flex;
     justify-content: center;
     font-weight: lighter;
-}
+} */
 
 /* .modal.modal_delete .container .delete-buttons .btn-delete {
     background-color: var(--teal);

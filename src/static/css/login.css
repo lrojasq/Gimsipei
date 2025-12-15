@@ -5,10 +5,10 @@
     --success-color: #28a745;
     --danger-color: #dc3545;
     --warning-color: #ffc107;
-    --info-color: #17a2b8;
+    --info-color: #1cc3ea;
     --light-color: #ffffff;
     --dark-color: #343a40;
-    --border-color: #00c2e7;
+    --border-color: #1cc3ea;
 }
 
 body {
@@ -49,6 +49,7 @@ form {
     width: 100%;
     display: flex;
     flex-direction: column;
+    gap: 1rem;
 }
 
 h2 {
@@ -58,46 +59,72 @@ h2 {
 
 label {
     margin-left: 13%;
+    font-weight: 700;
+    color: #666666;
 }
-.form-group{
+
+.form-checked label {
+    font-weight: 300;
+}
+
+.form-group {
     position: relative;
     width: 75%;
     margin: auto;
 }
-.form-group i{
+
+.form-group i {
     position: absolute;
     right: 2rem;
-    top:25px;
+    top: 25px;
     margin: auto;
     color: var(--light-color);
+    cursor: pointer;
 }
+
 .input {
     width: 100%;
     height: 70px;
-    border: 1px solid var(--info-color);
+    border:none;
     border-radius: 5px;
     background-color: var(--info-color);
+    color: var(--light-color);
     margin: 0 auto;
     padding: 10px;
     transition: .3 all ease;
 }
-.input::placeholder{
+.input.input:outline{
+    border: none;
+}
+.input::placeholder {
     color: var(--light-color);
     transition: .3 all ease;
 }
+
 input:hover {
-    background-color: var(--light-color);
-    border: 1px solid var(--info-color);
+    background-color: var(--info-color);
+    border: none;
 }
+
 input:-internal-autofill-selected::placeholder,
 .input:active::placeholder,
-.input:hover::placeholder{
-    color: var(--primary-color);
+.input:hover::placeholder {
+    color: var(--light-color);
 }
-input:-internal-autofill-selected + i,
-input:active + i,
-input:hover + i{
-    color: var(--info-color);
+
+input:-internal-autofill-selected+i,
+input:active+i,
+input:hover+i {
+    color: var(--light-color) !important;
+    cursor: pointer;
+}
+
+input.input:-internal-autofill-selected,
+input.input:active,
+input.input:hover {
+    color: var(--light-color) !important;
+    background-color: var(--info-color) !important;
+    border:none;
 }
 
 .form-checked {
@@ -124,6 +151,8 @@ input:hover + i{
     font-size: 1.5rem;
     color: var(--light-color);
     background-color: var(--info-color);
+    border-radius: 5px;
+    border: none;
 }
 
 .iniciar:hover {
@@ -139,9 +168,11 @@ input:hover + i{
 
 a {
     text-decoration: none;
-    color: var(--info-color);
+    color: #666666;
+    font-weight: 300;
 }
-.hidden_desktop{
+
+.hidden_desktop {
     display: none;
 }
 
@@ -150,7 +181,8 @@ a {
     .bg-index {
         background-image: url("../images/bg-index-1400.png");
     }
-    form{
+
+    form {
         top: 36%;
     }
 }
@@ -186,7 +218,7 @@ a {
     form {
         width: 700px;
         height: 500px;
-       top: 36%;
+        top: 36%;
     }
 }
 
@@ -267,18 +299,22 @@ a {
         margin: 0 auto;
         margin-top: 40px;
     }
+
     .hidden_mobile,
     .form-checked {
         display: none;
     }
-    .form-group i{
+
+    .form-group i {
         top: 10px;
         color: var(--primary-color);
     }
+
     .input {
         background-color: var(--light-color);
     }
-    .hidden_desktop{
+
+    .hidden_desktop {
         display: block;
         margin-bottom: 2rem;
     }

@@ -97,7 +97,7 @@
 /* Resource card using horizontal layout */
 .recursos_category .exam.resource {
     width: 30%;
-    height: 180px;
+    height: 290px;
 }
 
 
@@ -170,6 +170,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    margin: auto;
 }
 
 .recursos_category .exam.resource .text-content .d-flex {

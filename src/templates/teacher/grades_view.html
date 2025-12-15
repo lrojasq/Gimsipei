@@ -32,9 +32,9 @@
             <table class="classes-table">
                 <thead class="table-header-collapsed">
                     <tr>
-                        <th>Cursos</th>
-                        <th>Estudiante</th>
-                        <th>Modificar</th>
+                        <th class="text-start">Cursos</th>
+                        <th class="text-center">Estudiante</th>
+                        <th class="text-end" >Modificar</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -58,11 +58,11 @@
                                 {% if course.students and course.students|length > 0 %}
                                 {% for student in course.students %}
                                 <div class="subject-row-expanded">
-                                    <div class="empty-cell"></div>
-                                    <div class="subject-name-cell">
+                                    <div class="empty-cell-s"></div>
+                                    <div class="text-center">
                                         <span class="subject-name">{{ student.full_name }}</span>
                                     </div>
-                                    <div class="subject-action-cell">
+                                    <div class="text-end">
                                         <a href="{{ url_for('grades.student_grades_view', course_id=course.id, student_id=student.id) }}"
                                             class="add-link-btn" title="Ver calificaciones">
                                             Ir

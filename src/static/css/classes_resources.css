@@ -79,12 +79,12 @@
 }
 
 .classes-table thead th {
-    text-align: left;
+    /* text-align: left;
     padding: 1rem 0px;
     color: hsl(0, 0%, 25%);
     font-weight: 600;
     font-size: 1.125rem;
-    background: white;
+    background: white; */
 }
 
 .classes-table tbody tr.course-row {
@@ -552,7 +552,7 @@
 
 /* Table header styles */
 .table-header-collapsed th {
-    padding: 1.25rem 2rem;
+    padding: 1.25rem 1rem;
     text-align: left;
     font-weight: 600;
     color: hsl(0, 0%, 35%);
@@ -569,7 +569,7 @@
 }
 
 .course-row .course-name-cell {
-    padding: 1.5rem 0rem;
+    padding: 1.5rem 1rem;
     border-bottom: 1px solid hsl(0, 0%, 85%);
     background-color: white;
 }
@@ -608,6 +608,11 @@
     border-bottom: 1px solid hsl(0, 0%, 90%);
     transition: background-color 0.2s ease;
 }
+.subject-row-expanded {
+    justify-content: space-between;
+    text-align: left;
+}
+
 .admin_category .grades .subject-row-expanded{
     justify-content: end;
 }
