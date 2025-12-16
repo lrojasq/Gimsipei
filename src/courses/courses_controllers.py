@@ -1,4 +1,4 @@
-from flask import Request, Response, flash, redirect, render_template, url_for
+from flask import Request, Response, redirect, render_template, url_for
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from pydantic import ValidationError
 
@@ -29,6 +29,7 @@ from src.users.service import get_user_service
 @role_required([UserRole.ADMIN])
 def courses_management_controller(_: Request) -> Response:
     """View to manage courses"""
+    current_user = None
     try:
         current_user_id = get_jwt_identity()
         current_user, _ = get_user_service(current_user_id, _)
@@ -62,8 +63,7 @@ def courses_management_controller(_: Request) -> Response:
             available_subjects=available_subjects,
             accion_logout=True,
         )
-    except Exception as e:
-        flash(f"Error al cargar la lista de cursos: {str(e)}", "danger")
+    except Exception:
         return render_template(
             "admin/courses_management.html",
             courses=[],
@@ -89,22 +89,15 @@ def create_course_controller(request: Request) -> Response:
         result, status_code = create_course_service(validated, request)
 
         if status_code == 201 and result:
-            flash("Curso creado exitosamente", "success")
             return redirect(url_for("courses.courses_management"))
         elif status_code == 400:
-            flash(
-                "Ya existe un curso con ese nombre en el mismo año académico", "danger"
-            )
             return redirect(url_for("courses.courses_management"))
         else:
-            flash("Error al crear el curso", "danger")
             return redirect(url_for("courses.courses_management"))
 
-    except ValidationError as e:
-        flash(f"Datos inválidos: {str(e)}", "danger")
+    except ValidationError:
         return redirect(url_for("courses.courses_management"))
-    except Exception as e:
-        flash(f"Error interno: {str(e)}", "danger")
+    except Exception:
         return redirect(url_for("courses.courses_management"))
 
 
@@ -116,13 +109,11 @@ def edit_course_controller(course_id: int, request: Request) -> Response:
         try:
             course, status_code = get_course_service(course_id, request)
             if status_code == 404:
-                flash("Curso no encontrado", "danger")
                 return redirect(url_for("courses.courses_management"))
             return render_template(
                 "admin/edit_course.html", course=course, accion_logout=True
             )
-        except Exception as e:
-            flash(f"Error al cargar el curso: {str(e)}", "danger")
+        except Exception:
             return redirect(url_for("courses.courses_management"))
 
     try:
@@ -134,31 +125,23 @@ def edit_course_controller(course_id: int, request: Request) -> Response:
         result, status_code = update_course_service(course_id, validated, request)
 
         if status_code == 200:
-            flash("Curso actualizado exitosamente", "success")
             return redirect(url_for("courses.courses_management"))
         elif status_code == 404:
-            flash("Curso no encontrado", "danger")
             return redirect(url_for("courses.courses_management"))
         elif status_code == 400:
-            flash(
-                "Ya existe un curso con ese nombre en el mismo año y período", "danger"
-            )
             return render_template(
                 "admin/edit_course.html", course=result, accion_logout=True
             )
         else:
-            flash("Error al actualizar el curso", "danger")
             return render_template(
                 "admin/edit_course.html", course=result, accion_logout=True
             )
 
-    except ValidationError as e:
-        flash(f"Datos inválidos: {str(e)}", "danger")
+    except ValidationError:
         return render_template(
             "admin/edit_course.html", course=course_data, accion_logout=True
         )
-    except Exception as e:
-        flash(f"Error interno: {str(e)}", "danger")
+    except Exception:
         return render_template(
             "admin/edit_course.html", course=course_data, accion_logout=True
         )
@@ -170,16 +153,8 @@ def delete_course_controller(course_id: int, request: Request) -> Response:
     """Delete a course"""
     try:
         result, status_code = delete_course_service(course_id, request)
-
-        if status_code == 200:
-            flash("Curso eliminado exitosamente", "success")
-        elif status_code == 404:
-            flash("Curso no encontrado", "danger")
-        else:
-            flash("Error al eliminar el curso", "danger")
-
-    except Exception as e:
-        flash(f"Error interno: {str(e)}", "danger")
+    except Exception:
+        pass
 
     return redirect(url_for("courses.courses_management"))
 
@@ -198,13 +173,13 @@ def remove_student_from_course_controller(
         )
 
         if status_code == 200:
-            flash("Estudiante removido del curso exitosamente", "success")
+            pass
         elif status_code == 404:
-            flash("Inscripción no encontrada", "danger")
+            pass
         else:
-            flash("No se pudo remover el estudiante", "danger")
-    except Exception as e:
-        flash(f"Error interno: {str(e)}", "danger")
+            pass
+    except Exception:
+        pass
 
     return redirect(url_for("courses.courses_management"))
 
@@ -223,12 +198,12 @@ def remove_subject_from_course_controller(
         )
 
         if status_code == 200:
-            flash("Materia removida del curso exitosamente", "success")
+            pass
         elif status_code == 404:
-            flash("Asignación no encontrada", "danger")
+            pass
         else:
-            flash("No se pudo remover la materia", "danger")
-    except Exception as e:
-        flash(f"Error interno: {str(e)}", "danger")
+            pass
+    except Exception:
+        pass
 
     return redirect(url_for("courses.courses_management"))

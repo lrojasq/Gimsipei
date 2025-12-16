@@ -4,7 +4,6 @@ from flask import (
     render_template,
     redirect,
     url_for,
-    flash,
     send_file,
 )
 from flask_jwt_extended import jwt_required, get_jwt_identity
@@ -28,6 +27,7 @@ from src.models.user import UserRole
 from src.utils.decorator_role_required import role_required
 from src.database.database import SessionLocal
 from src.models.user import User
+from src.models.class_model import ClassModel
 
 
 def resources_view_controller(_: Request):
@@ -38,14 +38,12 @@ def resources_view_controller(_: Request):
         user = db.query(User).filter(User.id == current_user_id).first()
 
         if not user:
-            flash("Usuario no encontrado", "danger")
             return redirect(url_for("users.dashboard"))
 
         # Obtener recursos organizados por materia
         resources_data, status_code = get_resources_by_teacher_service(current_user_id)
 
         if status_code != 200:
-            flash("Error al cargar los recursos", "danger")
             return redirect(url_for("users.dashboard"))
 
         # Convert the User object to a dictionary with role as string
@@ -65,7 +63,6 @@ def resources_view_controller(_: Request):
             accion_logout=True,
         )
     except Exception:
-        flash("Error al cargar la vista de recursos", "danger")
         return redirect(url_for("users.dashboard"))
     finally:
         db.close()
@@ -105,15 +102,13 @@ def create_resource_controller(request: Request):
             )
 
             if status_code == 201:
-                flash("Recurso creado exitosamente", "success")
+                pass
             else:
-                error_msg = result.get("error", "Error al crear el recurso")
-                flash(error_msg, "danger")
+                pass
 
             return redirect(url_for("resources.resources_view"))
 
     except Exception:
-        flash("Error al crear el recurso", "danger")
         return redirect(url_for("resources.resources_view"))
 
 
@@ -123,13 +118,12 @@ def delete_resource_controller(resource_id: int, request: Request):
         _, status_code = delete_resource_service(resource_id, request)
 
         if status_code == 200:
-            flash("Recurso eliminado exitosamente", "success")
+            pass
         else:
-            flash("Error al eliminar el recurso", "danger")
+            pass
 
         return redirect(url_for("resources.resources_view"))
     except Exception:
-        flash("Error al eliminar el recurso", "danger")
         return redirect(url_for("resources.resources_view"))
 
 
@@ -139,11 +133,9 @@ def download_resource_controller(resource_id: int, _: Request):
         file_path, filename, status_code = get_resource_file_path_service(resource_id)
 
         if status_code == 404:
-            flash("Recurso o archivo no encontrado", "danger")
             return redirect(url_for("resources.resources_view"))
 
         if not file_path or not os.path.exists(file_path):
-            flash("El archivo no existe", "danger")
             return redirect(url_for("resources.resources_view"))
 
         # Enviar el archivo con headers
@@ -154,7 +146,6 @@ def download_resource_controller(resource_id: int, _: Request):
             mimetype="application/octet-stream",
         )
     except Exception:
-        flash("Error al descargar el archivo", "danger")
         return redirect(url_for("resources.resources_view"))
 
 
@@ -178,6 +169,64 @@ def get_resources_by_class_api_controller(
         return ApiResponse.error(
             message="Error interno del servidor", details=str(e), status_code=500
         )
+
+
+@jwt_required()
+@role_required([UserRole.TEACHER, UserRole.ADMIN])
+def get_available_classes_api_controller(request: Request):
+    """
+    API: listar clases existentes por course_id, subject_id y period.
+    Se usa para poblar el select del modal de creación de recursos y evitar
+    que se envíen números de clase inexistentes.
+    """
+    db = SessionLocal()
+    try:
+        course_id = request.args.get("course_id", type=int)
+        subject_id = request.args.get("subject_id", type=int)
+        period = request.args.get("period", type=int)
+
+        if not course_id or not subject_id or not period:
+            return ApiResponse.error(
+                message="Faltan parámetros requeridos: course_id, subject_id, period",
+                status_code=400,
+            )
+
+        classes = (
+            db.query(ClassModel)
+            .filter(
+                ClassModel.course_id == course_id,
+                ClassModel.subject_id == subject_id,
+                ClassModel.period == period,
+            )
+            .order_by(ClassModel.class_number.asc())
+            .all()
+        )
+
+        items = [
+            {
+                "id": c.id,
+                "class_number": c.class_number,
+                "title": c.title,
+                "period": c.period,
+            }
+            for c in classes
+        ]
+
+        return ApiResponse.list_response(
+            items=items,
+            total=len(items),
+            page=1,
+            per_page=max(len(items), 1),
+            message="Clases obtenidas exitosamente",
+        )
+    except Exception as e:
+        return ApiResponse.error(
+            message="Error al obtener clases",
+            details=str(e),
+            status_code=500,
+        )
+    finally:
+        db.close()
 
 
 @jwt_required()
@@ -326,14 +375,12 @@ def student_resources_view_controller(_: Request):
         user = db.query(User).filter(User.id == current_user_id).first()
 
         if not user:
-            flash("Usuario no encontrado", "danger")
             return redirect(url_for("users.dashboard"))
 
         # Obtener el curso y materias del estudiante
         resources_data, status_code = get_resources_by_student_service(current_user_id)
 
         if status_code != 200:
-            flash(resources_data.get("error", "Error al cargar las materias"), "danger")
             return redirect(url_for("users.dashboard"))
 
         # Convert the User object to a dictionary
@@ -354,7 +401,6 @@ def student_resources_view_controller(_: Request):
             accion_logout=True,
         )
     except Exception:
-        flash("Error al cargar la vista de recursos", "danger")
         return redirect(url_for("users.dashboard"))
     finally:
         db.close()
@@ -372,7 +418,6 @@ def resources_view_subject_controller(
         user = db.query(User).filter(User.id == current_user_id).first()
 
         if not user:
-            flash("Usuario no encontrado", "danger")
             return redirect(url_for("users.dashboard"))
 
         # Obtener los recursos de la materia
@@ -386,7 +431,6 @@ def resources_view_subject_controller(
                 if user.role.value == "student"
                 else url_for("resources.resources_view")
             )
-            flash(resources_data.get("error", "Error al cargar los recursos"), "danger")
             return redirect(back_url)
 
         # Convert the User object to a dictionary
@@ -418,7 +462,6 @@ def resources_view_subject_controller(
             accion_logout=True,
         )
     except Exception:
-        flash("Error al cargar los recursos", "danger")
         return redirect(url_for("users.dashboard"))
     finally:
         db.close()

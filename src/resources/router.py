@@ -15,6 +15,7 @@ from .controllers import (
     create_resource_api_controller,
     update_resource_api_controller,
     delete_resource_api_controller,
+    get_available_classes_api_controller,
 )
 
 resources_bp = Blueprint("resources", __name__, url_prefix="/resources")
@@ -75,6 +76,14 @@ def resources_view_subject(course_id, subject_id):
 def get_resources_by_class_api(class_id):
     """API para obtener recursos de una clase"""
     return get_resources_by_class_api_controller(class_id, request)
+
+
+@resources_bp.route("/api/classes", methods=["GET"])
+@jwt_required()
+@role_required([UserRole.TEACHER])
+def get_available_classes_api():
+    """API para listar clases existentes (por curso/materia/periodo) para crear recursos"""
+    return get_available_classes_api_controller(request)
 
 
 @resources_bp.route("/api/<int:resource_id>", methods=["GET"])

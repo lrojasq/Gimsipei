@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import Optional, Tuple
 
-from flask import Request, Response, flash, redirect, send_file, url_for
+from flask import Request, Response, redirect, send_file, url_for
 from flask_jwt_extended import jwt_required
 from pydantic import ValidationError
 
@@ -276,7 +276,6 @@ def download_assignment_submission_controller(
         )
 
         if status_code == 404:
-            flash("Entrega no encontrada o sin archivo adjunto", "warning")
             return redirect(
                 url_for(
                     "users.student_tasks", course_id=course_id, student_id=student_id
@@ -284,7 +283,6 @@ def download_assignment_submission_controller(
             )
 
         if status_code != 200 or not submission_data:
-            flash("Error al obtener la entrega", "danger")
             return redirect(
                 url_for(
                     "users.student_tasks", course_id=course_id, student_id=student_id
@@ -295,7 +293,6 @@ def download_assignment_submission_controller(
         file_url = submission_data.get("file_url")
 
         if not file_url:
-            flash("Esta entrega no tiene archivo adjunto", "warning")
             return redirect(
                 url_for(
                     "users.student_tasks", course_id=course_id, student_id=student_id
@@ -308,7 +305,6 @@ def download_assignment_submission_controller(
         file_path = Path("src") / clean_url
 
         if not file_path.exists():
-            flash("Archivo no encontrado en el servidor", "danger")
             return redirect(
                 url_for(
                     "users.student_tasks", course_id=course_id, student_id=student_id
@@ -338,8 +334,7 @@ def download_assignment_submission_controller(
         response.headers["X-Content-Type-Options"] = "nosniff"
 
         return response
-    except Exception as e:
-        flash(f"Error al descargar el archivo: {str(e)}", "danger")
+    except Exception:
         return redirect(
             url_for("users.student_tasks", course_id=course_id, student_id=student_id)
         )
@@ -357,18 +352,17 @@ def delete_assignment_submission_controller(
         )
 
         if status_code == 404:
-            flash("Entrega no encontrada", "danger")
+            pass
         elif status_code == 200:
-            flash("Entrega eliminada exitosamente", "success")
+            pass
         else:
-            flash("Error al eliminar la entrega", "danger")
+            pass
 
         # Redirigir de vuelta a la página de tareas del estudiante
         return redirect(
             url_for("users.student_tasks", course_id=course_id, student_id=student_id)
         )
-    except Exception as e:
-        flash(f"Error al eliminar la entrega: {str(e)}", "danger")
+    except Exception:
         return redirect(
             url_for("users.student_tasks", course_id=course_id, student_id=student_id)
         )
