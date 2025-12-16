@@ -829,4 +829,10 @@ i.bi.bi-arrow-left-short {
     .container_boxs_menu >a{
         width: 30%;
     }
+    .big-box .box-menu.clases-hover {
+        width: 125px;
+    }
+    .d-flex.barra-group{
+        bottom: 0px;
+    }
 }
