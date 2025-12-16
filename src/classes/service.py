@@ -996,6 +996,43 @@ def get_student_progress_service(user_id: int, course_id: int, subject_id: int):
         db.close()
 
 
+def get_student_viewed_class_ids_service(
+    student_id: int, course_id: int, subject_id: int
+) -> tuple[dict, int]:
+    """Obtiene los IDs de clases vistas por el estudiante en un curso/materia (sin cargar todas las clases)."""
+    db = SessionLocal()
+    try:
+        # Verificar inscripción
+        enrollment = (
+            db.query(CourseStudent)
+            .filter(
+                CourseStudent.student_id == student_id,
+                CourseStudent.course_id == course_id,
+            )
+            .first()
+        )
+        if not enrollment:
+            return {"success": False, "error": "No tienes acceso a este curso"}, 403
+
+        viewed_classes_query = (
+            db.query(ClassView.class_id)
+            .join(ClassModel, ClassModel.id == ClassView.class_id)
+            .filter(
+                ClassView.student_id == student_id,
+                ClassModel.course_id == course_id,
+                ClassModel.subject_id == subject_id,
+            )
+            .all()
+        )
+
+        viewed_ids = [row[0] for row in viewed_classes_query]
+        return {"success": True, "viewed_class_ids": viewed_ids}, 200
+    except Exception as e:
+        return {"success": False, "error": f"Error al obtener vistas: {str(e)}"}, 500
+    finally:
+        db.close()
+
+
 # Class Detail Services
 def get_class_detail_service(class_id: int, user_id: int = None, user_role: str = None):
     """
@@ -1037,6 +1074,7 @@ def get_class_detail_service(class_id: int, user_id: int = None, user_role: str 
 
         # Si es estudiante, verificar si ya envió las tareas
         submitted_assignment_ids = []
+        class_viewed = False
         if user_id and user_role == "student":
             submissions = (
                 db.query(AssignmentSubmission.assignment_id)
@@ -1044,6 +1082,12 @@ def get_class_detail_service(class_id: int, user_id: int = None, user_role: str 
                 .all()
             )
             submitted_assignment_ids = [s[0] for s in submissions]
+            class_viewed = (
+                db.query(ClassView)
+                .filter(ClassView.student_id == user_id, ClassView.class_id == class_id)
+                .first()
+                is not None
+            )
 
         return {
             "class": {
@@ -1055,6 +1099,7 @@ def get_class_detail_service(class_id: int, user_id: int = None, user_role: str 
                 "period": class_item.period,
                 "course_id": class_item.course_id,
                 "subject_id": class_item.subject_id,
+                "viewed": class_viewed,
             },
             "course": {
                 "id": course.id,
@@ -1380,6 +1425,9 @@ def submit_assignment_service(data: dict, student_id: int, file=None):
             file.save(filepath)
             file_url = f"/static/uploads/assignments/{filename}"
 
+        # Guardar class_id antes del commit (tras commit puede expirar el objeto)
+        class_id_to_mark = assignment.class_id
+
         # Crear entrega
         submission = AssignmentSubmission(
             assignment_id=data.get("assignment_id"),
@@ -1391,6 +1439,26 @@ def submit_assignment_service(data: dict, student_id: int, file=None):
         db.add(submission)
         db.commit()
         db.refresh(submission)
+
+        # Marcar la clase como vista automáticamente al enviar la tarea.
+        # Usamos una sesión separada para que, si falla, no afecte el envío de la tarea.
+        view_db = SessionLocal()
+        try:
+            existing_view = (
+                view_db.query(ClassView)
+                .filter(
+                    ClassView.student_id == student_id,
+                    ClassView.class_id == class_id_to_mark,
+                )
+                .first()
+            )
+            if not existing_view:
+                view_db.add(ClassView(student_id=student_id, class_id=class_id_to_mark))
+                view_db.commit()
+        except Exception:
+            view_db.rollback()
+        finally:
+            view_db.close()
 
         return {"message": "Tarea enviada exitosamente", "id": submission.id}, 201
 

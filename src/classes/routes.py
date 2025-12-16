@@ -133,6 +133,16 @@ def get_student_progress(course_id: int, subject_id: int):
     return controllers.get_student_progress_controller(course_id, subject_id)
 
 
+@class_bp.route(
+    "/student/viewed-classes/<int:course_id>/<int:subject_id>", methods=["GET"]
+)
+@jwt_required()
+@role_required(UserRole.STUDENT)
+def get_student_viewed_classes(course_id: int, subject_id: int):
+    """Obtener IDs de clases vistas para refrescar UI sin recargar"""
+    return controllers.get_student_viewed_classes_controller(course_id, subject_id)
+
+
 # Class Detail View Routes
 @class_bp.route("/detail/<int:class_id>", methods=["GET"])
 @jwt_required()
