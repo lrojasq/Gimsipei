@@ -1,172 +1,181 @@
 {% extends "base.html" %}
 
-{% block title %}{{ class_data.title }} - Detalle{% endblock %}
+{% block title %}
+    {{ class_data.title }} - Detalle
+{% endblock %}
 
 {% block extra_css %}
-<link href="{{ url_for('static', filename='css/menu.css') }}" rel="stylesheet">
-<link href="{{ url_for('static', filename='css/category.css') }}" rel="stylesheet">
-<link href="{{ url_for('static', filename='css/admin.css') }}" rel="stylesheet">
-<link href="{{ url_for('static', filename='css/class_detail.css') }}" rel="stylesheet">
-<link href="{{ url_for('static', filename='css/teacher_class_detail.css') }}" rel="stylesheet">
-<link href="{{ url_for('static', filename='css/modal.css') }}" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="{{ url_for('static', filename='css/menu.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/category.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/admin.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/class_detail.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/teacher_class_detail.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/modal.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 {% endblock %}
 
 {% block content %}
-{% block menu %}{% endblock %}
+    {% block menu %}{% endblock %}
 
-<div class="container_category flex clases_category class-detail-view teacher-view" data-class-id="{{ class_data.id }}">
+    <div class="container_category flex clases_category class-detail-view teacher-view" data-class-id="{{ class_data.id }}">
 
-    <!-- Contenido Principal -->
-    <div class="teacher-main-content">
-        <!-- Detalles de la clase -->
-        <div class="class-details-header">
-            <button onclick="window.history.back()" class="btn-back-icon">
-                <i class="fas fa-chevron-left"></i>
-            </button>
-            <div class="details-title-section">
-                <h3 class="details-label">DETALLES DE LA CLASE:</h3>
-                <h1 class="class-title">{{ class_data.title }}</h1>
-            </div>
-        </div>
-
-        {% if class_data.description %}
-        <div class="class-description-section">
-            <p>{{ class_data.description }}</p>
-        </div>
-        {% endif %}
-
-        <!-- Contenido de la clase -->
-        <div class="content-section-wrapper">
-            <div class="section-header-teacher">
-                <h3>CONTENIDO DE LA CLASE</h3>
-                <button class="btn-add-item" onclick="openAddContentModal()">
-                    <i class="fas fa-plus"></i> AGREGAR CONTENIDO
+        <!-- Contenido Principal -->
+        <div class="teacher-main-content">
+            <!-- Detalles de la clase -->
+            <div class="class-details-header">
+                <button onclick="window.history.back()" class="btn-back-icon">
+                    <i class="fas fa-chevron-left"></i>
                 </button>
-            </div>
-
-            {% if contents %}
-            <div class="content-items-container">
-                {% for content in contents %}
-                <div class="content-item-card" data-content-id="{{ content.id }}">
-                    <div class="content-item-header">
-                        {% if content.section_title %}
-                        <h4>{{ content.section_title }}</h4>
-                        {% else %}
-                        <h4>Contenido {{ loop.index }}</h4>
-                        {% endif %}
-
-                        <div class="content-item-actions btns_actions">
-                            <button class="btn-icon-small btn-edit" onclick="editContent({{ content.id }})"
-                                title="Editar">
-                                <i class="bi bi-pencil-fill"></i>
-                            </button>
-                            <button class="btn-icon-small btn-delete-small btn_delete"
-                                onclick="deleteContent({{ content.id }})" title="Eliminar">
-                                <i class="bi bi-trash3-fill"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="d-flex gap-5 justify-content-between align-items-center content_homework">
-                        {% if content.content_text %}
-                        <div class="content-item-text">
-                            {{ content.content_text | safe }}
-                        </div>
-                        {% endif %}
-
-                        {% if content.content_image %}
-                        <div class="content-item-image">
-                            <img src="{{ content.content_image }}" alt="{{ content.section_title or 'Imagen' }}">
-                        </div>
-                        {% endif %}
-                    </div>
+                <div class="details-title-section">
+                    <h3 class="details-label">DETALLES DE LA CLASE:</h3>
+                    <h1 class="class-title">{{ class_data.title }}</h1>
                 </div>
-                {% endfor %}
             </div>
-            {% else %}
-            <div class="empty-state-box">
-                <i class="fas fa-book-open"></i>
-                <p>Esta clase aún no tiene contenido. Haz clic en "Agregar Contenido" para comenzar.</p>
-            </div>
+
+            {% if class_data.description %}
+                <div class="class-description-section">
+                    <p>{{ class_data.description }}</p>
+                </div>
             {% endif %}
-        </div>
 
-        <!-- Tareas Activas -->
-        <div class="tasks-section-wrapper">
-            <div class="section-header-teacher">
-                <h3>TAREAS ACTIVAS</h3>
-                <button class="btn-add-item" onclick="openAddAssignmentModal()">
-                    <i class="fas fa-plus"></i> CREAR TAREA
-                </button>
+            <!-- Contenido de la clase -->
+            <div class="content-section-wrapper">
+                <div class="section-header-teacher">
+                    <h3>CONTENIDO DE LA CLASE</h3>
+                    <button class="btn-add-item" onclick="openAddContentModal()">
+                        <i class="fas fa-plus"></i> AGREGAR CONTENIDO
+                    </button>
+                </div>
+
+                {% if contents %}
+                    <div class="content-items-container">
+                        {% for content in contents %}
+                            <div class="content-item-card" data-content-id="{{ content.id }}">
+                                <div class="content-item-header">
+                                    {% if content.section_title %}
+                                        <h4>{{ content.section_title }}</h4>
+                                    {% else %}
+                                        <h4>Contenido {{ loop.index }}</h4>
+                                    {% endif %}
+
+                                    <div class="content-item-actions btns_actions">
+                                        <button class="btn-icon-small btn-edit"
+                                                onclick="editContent({{ content.id }})"
+                                                title="Editar">
+                                            <i class="bi bi-pencil-fill"></i>
+                                        </button>
+                                        <button class="btn-icon-small btn-delete-small btn_delete"
+                                                onclick="deleteContent({{ content.id }})"
+                                                title="Eliminar">
+                                            <i class="bi bi-trash3-fill"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex gap-5 justify-content-between align-items-center content_homework">
+                                    {% if content.content_text %}
+                                        <div class="content-item-text">
+                                            {{ content.content_text | safe }}
+                                        </div>
+                                    {% endif %}
+
+                                    {% if content.content_image %}
+                                        <div class="content-item-image">
+                                            <img src="{{ content.content_image }}" alt="{{ content.section_title or 'Imagen' }}">
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="empty-state-box">
+                        <i class="fas fa-book-open"></i>
+                        <p>Esta clase aún no tiene contenido. Haz clic en "Agregar Contenido" para comenzar.</p>
+                    </div>
+                {% endif %}
             </div>
 
-            {% if assignments %}
-            <div class="tasks-items-container">
-                {% for assignment in assignments %}
-                <div class="task-item-card" data-assignment-id="{{ assignment.id }}">
-                    <div class="task-item-header">
-                        <h4>{{ assignment.title }}</h4>
-                        <div class="task-item-icons">
-                            <i class="fas fa-book-open"></i>
-                            <i class="fas fa-calendar-alt"></i>
-                        </div>
-                    </div>
-
-                    {% if assignment.description %}
-                    <p class="task-item-description">{{ assignment.description }}</p>
+            <!-- Tareas Activas -->
+            <div class="tasks-section-wrapper">
+                <div class="section-header-teacher">
+                    <h3>TAREAS ACTIVAS</h3>
+                    {% if not assignments %}
+                        <button class="btn-add-item" onclick="openAddAssignmentModal()">
+                            <i class="fas fa-plus"></i> CREAR TAREA
+                        </button>
                     {% endif %}
-
-                    <div class="task-item-meta">
-                        {% if assignment.due_date %}
-                        <span>
-                            <i class="far fa-calendar"></i>
-                            Fecha límite: {{ assignment.due_date[:10] }}
-                        </span>
-                        {% endif %}
-                        <span>
-                            <i class="fas fa-star"></i>
-                            Puntaje máximo: {{ assignment.max_score }}
-                        </span>
-                    </div>
-
-                    <div class="task-item-actions btns_actions">
-                        <button class="btn-icon-small btn-edit" onclick="editAssignment({{ assignment.id }})"
-                            title="Editar tarea">
-                            <i class="bi bi-pencil-fill"></i>
-                        </button>
-                        <button class="btn-icon-small btn-delete-small btn_delete"
-                            onclick="deleteAssignment({{ assignment.id }})" title="Eliminar tarea">
-                            <i class="bi bi-trash3-fill"></i>
-                        </button>
-                    </div>
                 </div>
-                {% endfor %}
+
+                {% if assignments %}
+                    <div class="tasks-items-container">
+                        {% for assignment in assignments %}
+                            <div class="task-item-card" data-assignment-id="{{ assignment.id }}">
+                                <div class="task-item-header">
+                                    <h4>{{ assignment.title }}</h4>
+                                    <div class="task-item-icons">
+                                        <i class="fas fa-book-open"></i>
+                                        <i class="fas fa-calendar-alt"></i>
+                                    </div>
+                                </div>
+
+                                {% if assignment.description %}
+                                    <p class="task-item-description">{{ assignment.description }}</p>
+                                {% endif %}
+
+                                <div class="task-item-meta">
+                                    {% if assignment.due_date %}
+                                        <span>
+                                            <i class="far fa-calendar"></i>
+                                            Fecha límite: {{ assignment.due_date[:10] }}
+                                        </span>
+                                    {% endif %}
+                                    <span>
+                                        <i class="fas fa-star"></i>
+                                        Puntaje máximo: {{ assignment.max_score }}
+                                    </span>
+                                </div>
+
+                                <div class="task-item-actions btns_actions">
+                                    <button class="btn-icon-small btn-edit"
+                                            onclick="editAssignment({{ assignment.id }})"
+                                            title="Editar tarea">
+                                        <i class="bi bi-pencil-fill"></i>
+                                    </button>
+                                    <button class="btn-icon-small btn-delete-small btn_delete"
+                                            onclick="deleteAssignment({{ assignment.id }})"
+                                            title="Eliminar tarea">
+                                        <i class="bi bi-trash3-fill"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="empty-state-box">
+                        <i class="fas fa-tasks"></i>
+                        <p>No hay tareas creadas para esta clase. Haz clic en "Crear Tarea" para agregar una.</p>
+                    </div>
+                {% endif %}
             </div>
-            {% else %}
-            <div class="empty-state-box">
-                <i class="fas fa-tasks"></i>
-                <p>No hay tareas creadas para esta clase. Haz clic en "Crear Tarea" para agregar una.</p>
-            </div>
-            {% endif %}
         </div>
+
+        <div class="bg_section_footer mobile_btns">
+            <span class="barra_bg barra_bg_left bg-clases"></span>
+            <span class="barra_bg barra_bg_right bg-gray"></span>
+        </div>
+
+        {% include "sidebar_aside.html" %}
+
     </div>
 
-    <div class="bg_section_footer mobile_btns">
-        <span class="barra_bg barra_bg_left bg-clases"></span>
-        <span class="barra_bg barra_bg_right bg-gray"></span>
-    </div>
-
-    {% include "sidebar_aside.html" %}
-</div>
-
-<!-- Modales -->
-{% include "teacher/add_class_content_modal.html" %}
-{% include "teacher/create_assignment_modal.html" %}
-{% include "delete_confirmation_modal.html" %}
+    <!-- Modales -->
+    {% include "teacher/add_class_content_modal.html" %}
+    {% include "teacher/create_assignment_modal.html" %}
+    {% include "delete_confirmation_modal.html" %}
 {% endblock %}
 
 {% block extra_js %}
-<script src="{{ url_for('static', filename='js/class_detail_teacher.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/class_detail_teacher.js') }}"></script>
 {% endblock %}

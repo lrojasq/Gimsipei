@@ -108,11 +108,13 @@
                                         </span>
                                     </div>
 
-                                    <button class="btn-task"
-                                            style="padding: 0.5rem 1rem; font-size: 0.85rem;"
-                                            onclick="openSubmitModal({{ assignment.id }}, '{{ assignment.title }}')">
-                                        <i class="fas fa-upload"></i> ADJUNTAR TAREA
-                                    </button>
+                                    {% if not assignment.submitted %}
+                                        <button class="btn-task"
+                                                style="padding: 0.5rem 1rem; font-size: 0.85rem;"
+                                                onclick="openSubmitModal({{ assignment.id }}, '{{ assignment.title }}')">
+                                            <i class="fas fa-upload"></i> ADJUNTAR TAREA
+                                        </button>
+                                    {% endif %}
                                 </div>
                             {% endfor %}
                         </div>
@@ -122,9 +124,11 @@
         </div>
 
         <div class="content-footer">
-            <button class="btn-outline btn-mark-viewed" data-class-id="{{ class_data.id }}">
-                MARCAR COMO VISTA
-            </button>
+            {% if not class_data.viewed %}
+                <button class="btn-outline btn-mark-viewed" data-class-id="{{ class_data.id }}">
+                    MARCAR COMO VISTA
+                </button>
+            {% endif %}
         </div>
     </div>
 
