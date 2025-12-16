@@ -4,10 +4,64 @@ document.addEventListener('DOMContentLoaded', function() {
     initializePeriodSelector();
     initializeResourceModal();
     initializeAddFirstResourceButtons();
-    // initializeDeleteModalListeners() ya se llama automáticamente en delete_modal.js
     initializeDeleteResourceModal();
     initializeLoadingStates();
 });
+
+async function loadAvailableClassesForResourceModal() {
+    const courseId = document.getElementById('resource_course_id')?.value;
+    const subjectId = document.getElementById('resource_subject_id')?.value;
+    const period = document.querySelector('#createResourceModal select[name="period"]')?.value;
+
+    const classSelect = document.getElementById('resource_class_number');
+    const submitBtn = document.querySelector('#createResourceForm button[type="submit"]');
+    if (!classSelect || !submitBtn) return;
+
+    // Reset UI state
+    classSelect.innerHTML = '<option value="">CARGANDO CLASES...</option>';
+    classSelect.disabled = true;
+    submitBtn.disabled = true;
+
+    if (!courseId || !subjectId || !period) {
+        classSelect.innerHTML = '<option value="">SELECCIONA UN PERIODO</option>';
+        return;
+    }
+
+    try {
+        const response = await fetch(`/resources/api/classes?course_id=${encodeURIComponent(courseId)}&subject_id=${encodeURIComponent(subjectId)}&period=${encodeURIComponent(period)}`, {
+            method: 'GET',
+            credentials: 'same-origin',
+            headers: { 'Accept': 'application/json' }
+        });
+
+        const payload = await response.json();
+        const items = payload?.data?.items || [];
+
+        if (!response.ok || payload?.success === false) {
+            classSelect.innerHTML = '<option value="">ERROR AL CARGAR CLASES</option>';
+            return;
+        }
+
+        if (!items.length) {
+            classSelect.innerHTML = '<option value="">NO HAY CLASES EN ESTE PERIODO</option>';
+            return;
+        }
+
+        classSelect.innerHTML = '<option value="">SELECCIONA UNA CLASE</option>';
+        items.forEach(item => {
+            const opt = document.createElement('option');
+            // El backend de create_resource espera el "número de clase" (class_number), no el id.
+            opt.value = String(item.class_number);
+            opt.textContent = `CLASE ${item.class_number}${item.title ? ` - ${item.title}` : ''}`;
+            classSelect.appendChild(opt);
+        });
+
+        classSelect.disabled = false;
+        submitBtn.disabled = false;
+    } catch (e) {
+        classSelect.innerHTML = '<option value="">ERROR AL CARGAR CLASES</option>';
+    }
+}
 
 // Period Selector Functionality
 function initializePeriodSelector() {
@@ -67,6 +121,9 @@ function openCreateResourceModal(subjectId = null, period = null) {
     if (periodSelect) {
         periodSelect.value = period || document.querySelector('.period-btn.active')?.getAttribute('data-period') || '';
     }
+
+    // Cargar clases disponibles para el periodo/curso/materia
+    loadAvailableClassesForResourceModal();
 }
 
 function closeCreateResourceModal() {
@@ -82,6 +139,15 @@ function closeCreateResourceModal() {
             display.textContent = '';
         });
     }
+
+    // Reset select state
+    const classSelect = document.getElementById('resource_class_number');
+    const submitBtn = document.querySelector('#createResourceForm button[type="submit"]');
+    if (classSelect) {
+        classSelect.innerHTML = '<option value="">SELECCIONA UNA CLASE</option>';
+        classSelect.disabled = true;
+    }
+    if (submitBtn) submitBtn.disabled = false;
 }
 
 // Initialize "Add First Resource" buttons
@@ -110,6 +176,7 @@ function initializeResourceModal() {
     // File input display names
     const coverImageInput = document.getElementById('resource_cover_image');
     const resourceFileInput = document.getElementById('resource_file');
+    const periodSelect = document.querySelector('#createResourceModal select[name="period"]');
     
     if (coverImageInput) {
         coverImageInput.addEventListener('change', function() {
@@ -126,6 +193,12 @@ function initializeResourceModal() {
             if (fileNameDisplay) {
                 fileNameDisplay.textContent = this.files[0]?.name || '';
             }
+        });
+    }
+
+    if (periodSelect) {
+        periodSelect.addEventListener('change', function() {
+            loadAvailableClassesForResourceModal();
         });
     }
 

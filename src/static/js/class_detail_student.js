@@ -57,7 +57,6 @@ async function markClassAsViewed(classId, courseId, subjectId, button) {
 
     // Si faltan IDs (modo prueba/quemado), simular éxito
     if (!courseId || !subjectId) {
-      showNotification("¡Clase marcada como vista! (Modo Simulado)", "success");
       if (button) {
         button.innerHTML = '<i class="fas fa-check"></i> VISTA';
         button.classList.add("viewed");
@@ -98,7 +97,6 @@ async function markClassAsViewed(classId, courseId, subjectId, button) {
         });
         const retryData = await retryResponse.json();
         if (retryData.success) {
-          showNotification("¡Clase marcada como vista!", "success");
           if (button) {
             button.innerHTML = '<i class="fas fa-check"></i> VISTA';
             button.classList.add("viewed");
@@ -111,16 +109,11 @@ async function markClassAsViewed(classId, courseId, subjectId, button) {
     const data = await response.json();
 
     if (data.success) {
-      showNotification("¡Clase marcada como vista!", "success");
       if (button) {
         button.innerHTML = '<i class="fas fa-check"></i> VISTA';
         button.classList.add("viewed");
       }
     } else {
-      showNotification(
-        "Error al marcar como vista: " + (data.error || "Desconocido"),
-        "error"
-      );
       if (button) {
         button.disabled = false;
         button.innerHTML = "MARCAR COMO VISTA";
@@ -128,7 +121,6 @@ async function markClassAsViewed(classId, courseId, subjectId, button) {
     }
   } catch (error) {
     console.error("Error:", error);
-    showNotification("Error de conexión", "error");
     if (button) {
       button.disabled = false;
       button.innerHTML = "MARCAR COMO VISTA";
@@ -156,7 +148,6 @@ function initializeSubmitForm() {
         btnSubmit.innerHTML = '<div class="spinner"></div> Enviando...';
 
         setTimeout(() => {
-          showNotification("Tarea enviada exitosamente (Simulado)", "success");
           closeSubmitModal();
           btnSubmit.classList.remove("loading");
           btnSubmit.disabled = false;
@@ -263,66 +254,9 @@ window.addEventListener("click", function (event) {
 });
 
 // Notification Function
-function showNotification(message, type = "info") {
-  const notification = document.createElement("div");
-  notification.className = `notification notification-${type}`;
-  notification.innerHTML = `
-        <div class="notification-content">
-            <i class="fas fa-${
-              type === "success" ? "check-circle" : "exclamation-circle"
-            }"></i>
-            <span>${message}</span>
-        </div>
-    `;
-
-  // Add styles if not already present
-  if (!document.getElementById("notification-styles")) {
-    const style = document.createElement("style");
-    style.id = "notification-styles";
-    style.textContent = `
-            .notification {
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                padding: 15px 20px;
-                border-radius: 8px;
-                color: white;
-                font-weight: 600;
-                z-index: 10000;
-                animation: slideIn 0.3s ease;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            }
-            .notification-success {
-                background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
-            }
-            .notification-error {
-                background: linear-gradient(135deg, #f44336 0%, #e53935 100%);
-            }
-            .notification-content {
-                display: flex;
-                align-items: center;
-                gap: 10px;
-            }
-            @keyframes slideIn {
-                from {
-                    opacity: 0;
-                    transform: translateX(100px);
-                }
-                to {
-                    opacity: 1;
-                    transform: translateX(0);
-                }
-            }
-        `;
-    document.head.appendChild(style);
-  }
-
-  document.body.appendChild(notification);
-
-  setTimeout(() => {
-    notification.style.animation = "slideIn 0.3s ease reverse";
-    setTimeout(() => notification.remove(), 300);
-  }, 3000);
+// Notificaciones deshabilitadas por requerimiento: no mostrar mensajes al usuario.
+function showNotification() {
+  return;
 }
 
 // Export functions for global access

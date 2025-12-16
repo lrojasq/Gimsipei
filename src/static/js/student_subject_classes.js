@@ -4,6 +4,17 @@
  */
 
 document.addEventListener('DOMContentLoaded', function () {
+    // Al volver con "Atrás" (bfcache), refrescar solo progreso + estados sin recargar la página completa.
+    window.addEventListener('pageshow', function (event) {
+        const navEntry = performance.getEntriesByType && performance.getEntriesByType('navigation')
+            ? performance.getEntriesByType('navigation')[0]
+            : null;
+        const isBackForward = event.persisted || (navEntry && navEntry.type === 'back_forward');
+        if (isBackForward) {
+            refreshViewedState();
+        }
+    });
+
     const periodButtons = document.querySelectorAll('.period-btn');
     const periodContainers = document.querySelectorAll('.period-classes-container');
 
@@ -102,14 +113,14 @@ document.addEventListener('DOMContentLoaded', function () {
                     notViewedBtn.classList.add('active');
                 }
 
-                // Actualizar la barra de progreso
-                updateProgressBar();
+                // Mantener UI siempre sincronizada: refrescar progreso + ids vistos (sin recargar página)
+                refreshViewedState();
             } else {
-                alert('Error al actualizar el estado de la clase: ' + (data.error || 'Error desconocido'));
+                // Error silencioso - no mostrar al usuario
             }
         })
         .catch(error => {
-            alert('Error al conectar con el servidor. Por favor, verifica tu conexión.');
+            // Error silencioso - no mostrar al usuario
         })
         .finally(() => {
             // Rehabilitar botones
@@ -129,20 +140,58 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    const progressBar = document.querySelector('.progress-bar-fill');
-                    const progressText = document.querySelector('.progress-text');
-                    
-                    if (progressBar) {
+                    document.querySelectorAll('.progress-bar-fill').forEach(progressBar => {
                         progressBar.style.width = data.percentage + '%';
-                    }
-                    
-                    if (progressText) {
+                    });
+
+                    document.querySelectorAll('.progress-text').forEach(progressText => {
                         progressText.textContent = `${data.viewed} de ${data.total} clases vistas`;
-                    }
+                    });
                 }
             })
             .catch(error => {
                 // Error silencioso - no mostrar al usuario
+            });
+    }
+
+    /**
+     * Refresca estados de botones (vista/no vista) y la barra de progreso sin recargar toda la página.
+     */
+    function refreshViewedState() {
+        const root = document.querySelector('.student-subject-view');
+        if (!root) return;
+
+        const courseId = root.getAttribute('data-course-id');
+        const subjectId = root.getAttribute('data-subject-id');
+        if (!courseId || !subjectId) return;
+
+        // Actualizar barra (conteo + %)
+        updateProgressBar();
+
+        // Actualizar íconos por clase
+        fetch(`/classes/student/viewed-classes/${courseId}/${subjectId}`)
+            .then(r => r.json())
+            .then(data => {
+                if (!data || !data.success) return;
+                const viewedSet = new Set((data.viewed_class_ids || []).map(String));
+
+                document.querySelectorAll('.exam.class').forEach(card => {
+                    const classId = card.getAttribute('data-class-id');
+                    const viewedBtn = card.querySelector('.btn-mark-viewed');
+                    const notViewedBtn = card.querySelector('.btn-mark-not-viewed');
+                    if (!classId || !viewedBtn || !notViewedBtn) return;
+
+                    if (viewedSet.has(String(classId))) {
+                        viewedBtn.classList.add('active');
+                        notViewedBtn.classList.remove('active');
+                    } else {
+                        viewedBtn.classList.remove('active');
+                        notViewedBtn.classList.add('active');
+                    }
+                });
+            })
+            .catch(() => {
+                // Error silencioso
             });
     }
 });
