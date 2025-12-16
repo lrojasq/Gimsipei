@@ -4,7 +4,6 @@ from flask import (
     render_template,
     redirect,
     url_for,
-    flash,
     send_file,
 )
 from flask_jwt_extended import jwt_required, get_jwt_identity
@@ -34,14 +33,12 @@ def books_view_controller(_: Request):
         user = db.query(User).filter(User.id == current_user_id).first()
 
         if not user:
-            flash("Usuario no encontrado", "danger")
             return redirect(url_for("users.dashboard"))
 
         # Obtener todos los libros
         books, status_code = get_books_service()
 
         if status_code != 200:
-            flash("Error al cargar los libros", "danger")
             return redirect(url_for("users.dashboard"))
 
         # Convert the User object to a dictionary with role as string
@@ -61,7 +58,6 @@ def books_view_controller(_: Request):
             accion_logout=True,
         )
     except Exception:
-        flash("Error al cargar la vista de libros", "danger")
         return redirect(url_for("users.dashboard"))
     finally:
         db.close()
@@ -75,14 +71,12 @@ def read_book_controller(book_id: int):
         user = db.query(User).filter(User.id == current_user_id).first()
 
         if not user:
-            flash("Usuario no encontrado", "danger")
             return redirect(url_for("books.books_view"))
 
         # Obtener el libro
         book, status_code = get_book_service(book_id)
 
         if status_code != 200 or not book:
-            flash("Libro no encontrado", "danger")
             return redirect(url_for("books.books_view"))
 
         # Preparar datos del usuario
@@ -99,8 +93,7 @@ def read_book_controller(book_id: int):
             book=book,
             accion_logout=True,
         )
-    except Exception as e:
-        flash(f"Error al cargar el libro: {str(e)}", "danger")
+    except Exception:
         return redirect(url_for("books.books_view"))
     finally:
         db.close()
@@ -135,14 +128,13 @@ def create_book_controller(request: Request):
             )
 
             if status_code == 201:
-                flash("Libro creado exitosamente", "success")
+                pass
             else:
-                flash(result.get("error", "Error al crear el libro"), "danger")
+                pass
 
             return redirect(url_for("books.books_view"))
 
     except Exception:
-        flash("Error al crear el libro", "danger")
         return redirect(url_for("books.books_view"))
 
 
@@ -170,16 +162,14 @@ def update_book_controller(book_id: int, request: Request):
             )
 
             if status_code == 200:
-                flash("Libro actualizado exitosamente", "success")
+                pass
             else:
-                flash(result.get("error", "Error al actualizar el libro"), "danger")
+                pass
 
             return redirect(url_for("books.books_view"))
         else:
-            # GET request - redirect to books view (editing is handled via modal)
             return redirect(url_for("books.books_view"))
     except Exception:
-        flash("Error al actualizar el libro", "danger")
         return redirect(url_for("books.books_view"))
 
 
@@ -189,13 +179,12 @@ def delete_book_controller(book_id: int, request: Request):
         _, status_code = delete_book_service(book_id)
 
         if status_code == 200:
-            flash("Libro eliminado exitosamente", "success")
+            pass
         else:
-            flash("Error al eliminar el libro", "danger")
+            pass
 
         return redirect(url_for("books.books_view"))
     except Exception:
-        flash("Error al eliminar el libro", "danger")
         return redirect(url_for("books.books_view"))
 
 
@@ -205,17 +194,14 @@ def download_book_controller(book_id: int, _: Request):
         book_data, status_code = get_book_service(book_id)
 
         if status_code == 404:
-            flash("Libro no encontrado", "danger")
             return redirect(url_for("books.books_view"))
 
         if not book_data or not book_data.get("file_path"):
-            flash("El archivo del libro no está disponible", "danger")
             return redirect(url_for("books.books_view"))
 
         file_path = os.path.join("src", book_data["file_path"].lstrip("/"))
 
         if not os.path.exists(file_path):
-            flash("El archivo no existe", "danger")
             return redirect(url_for("books.books_view"))
 
         # Enviar el archivo con headers
@@ -226,7 +212,6 @@ def download_book_controller(book_id: int, _: Request):
             mimetype="application/epub+zip",
         )
     except Exception:
-        flash("Error al descargar el archivo", "danger")
         return redirect(url_for("books.books_view"))
 
 

@@ -1,7 +1,6 @@
 from flask import (
     redirect,
     url_for,
-    flash,
     make_response,
 )
 from src.models.user import User, UserRole
@@ -30,7 +29,6 @@ def login_required(f):
     def decorated_function(*args, **kwargs):
         user_id = get_jwt_identity()
         if not user_id:
-            flash("Por favor inicie sesión para acceder a esta página.", "warning")
             return redirect(url_for("auth.login_form"))
         return f(*args, **kwargs)
 
@@ -51,7 +49,6 @@ def login_user_service(
             message = "Credenciales inválidas"
             if request.is_json:
                 return {"error": message}, 401
-            flash(message, "danger")
             return redirect(url_for("auth.login"))
 
         # Create access token
@@ -72,7 +69,6 @@ def login_user_service(
         # Redirect to dashboard with access token
         response = make_response(redirect(url_for("users.dashboard")))
         set_access_cookies(response, access_token)
-        flash(f"Bienvenido, {user.username}!", "success")
         return response
 
     except Exception:
@@ -80,7 +76,6 @@ def login_user_service(
         message = "Error al procesar el inicio de sesión"
         if request.is_json:
             return {"error": message}, 500
-        flash(message, "danger")
         return redirect(url_for("auth.login"))
     finally:
         db.close()
@@ -97,7 +92,7 @@ def get_current_user_service(_: Request) -> tuple[dict, int]:
         return {
             "id": user.id,
             "username": user.username,
-                "role": user.role.value,
+            "role": user.role.value,
         }, 200
     except Exception as e:
         return {"error": f"Error al obtener el usuario: {str(e)}"}, 500
@@ -117,14 +112,12 @@ def logout_user_service(request: Request) -> Response:
         if user_id:
             # Si había sesión activa, limpiar cookies y mostrar mensaje de éxito
             unset_jwt_cookies(response)
-            flash("Has cerrado sesión exitosamente.", "success")
         else:
             # Si no había sesión activa, solo redirigir
-            flash("Ya no tenías una sesión activa.", "info")
+            pass
     except Exception:
         # En caso de cualquier error, solo limpiar cookies y redirigir
         unset_jwt_cookies(response)
-        flash("Sesión cerrada.", "info")
 
     return response
 
@@ -142,7 +135,6 @@ def forgot_password_service(
             message = "Usuario no encontrado"
             if request.is_json:
                 return {"error": message}, 404
-            flash(message, "danger")
             return redirect(url_for("auth.forgot_password"))
 
         # Actualizar contraseña
@@ -154,7 +146,6 @@ def forgot_password_service(
             return {"message": message}, 200
 
         # Use Post-Redirect-Get pattern to prevent form resubmission
-        flash(message, "success")
         return redirect(url_for("auth.login"))
 
     except Exception:
@@ -162,7 +153,6 @@ def forgot_password_service(
         message = "Error al actualizar la contraseña"
         if request.is_json:
             return {"error": message}, 500
-        flash(message, "danger")
         return redirect(url_for("auth.forgot_password"))
     finally:
         db.close()

@@ -13,7 +13,7 @@ from .validation import (
     ForgotPasswordSchema,
 )
 from pydantic import ValidationError
-from flask import flash, redirect, url_for
+from flask import redirect, url_for
 
 
 def login_user_controller(request: Request) -> Response | tuple[dict, int]:
@@ -34,13 +34,11 @@ def login_user_controller(request: Request) -> Response | tuple[dict, int]:
         if request.is_json:
             return jsonify({"error": str(e)}), 400
         else:
-            flash("Datos de formulario inválidos", "danger")
             return redirect(url_for("auth.login"))
     except Exception as e:
         if request.is_json:
             return jsonify({"error": str(e)}), 500
         else:
-            flash("Error interno del servidor", "danger")
             return redirect(url_for("auth.login"))
 
 
@@ -72,13 +70,11 @@ def forgot_password_controller(request: Request) -> Response | tuple[dict, int]:
         if request.is_json:
             return jsonify({"error": str(e)}), 400
         else:
-            flash("Datos de formulario inválidos", "danger")
             return redirect(url_for("auth.forgot_password"))
     except Exception as e:
         if request.is_json:
             return jsonify({"error": str(e)}), 500
         else:
-            flash("Error interno del servidor: " + str(e), "danger")
             return redirect(url_for("auth.forgot_password"))
 
 

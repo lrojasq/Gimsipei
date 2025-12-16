@@ -1,6 +1,5 @@
 from flask import (
     Request,
-    flash,
     jsonify,
     redirect,
     render_template,
@@ -30,7 +29,6 @@ def grades_view_controller(_: Request):
         user = db.query(User).filter(User.id == current_user_id).first()
 
         if not user:
-            flash("Usuario no encontrado", "danger")
             return redirect(url_for("users.dashboard"))
 
         if user.role == UserRole.STUDENT:
@@ -50,14 +48,12 @@ def grades_view_controller(_: Request):
                     )
                 )
             else:
-                flash("No estás inscrito en ningún curso", "danger")
                 return redirect(url_for("users.dashboard"))
 
         # Mostrar todos los cursos con estudiantes
         courses, status_code = get_courses_with_students_service(current_user_id)
 
         if status_code != 200:
-            flash("Error al cargar los cursos", "danger")
             return redirect(url_for("users.dashboard"))
 
         # Convert the User object to a dictionary with role as string
@@ -90,12 +86,10 @@ def student_grades_view_controller(course_id: int, student_id: int, request: Req
         user = db.query(User).filter(User.id == current_user_id).first()
 
         if not user:
-            flash("Usuario no encontrado", "danger")
             return redirect(url_for("users.dashboard"))
 
         # Solo puede ver sus propias calificaciones
         if user.role == UserRole.STUDENT and user.id != student_id:
-            flash("No tienes permiso para ver estas calificaciones", "danger")
             return redirect(url_for("grades.grades_view"))
 
         # Obtener periodo del query string (por defecto periodo 1)
@@ -107,7 +101,6 @@ def student_grades_view_controller(course_id: int, student_id: int, request: Req
         )
 
         if status_code != 200:
-            flash(grades_data.get("error", "Error al cargar calificaciones"), "danger")
             return redirect(url_for("grades.grades_view"))
 
         # Convert the User object to a dictionary with role as string
@@ -128,7 +121,6 @@ def student_grades_view_controller(course_id: int, student_id: int, request: Req
             accion_logout=True,
         )
     except Exception:
-        flash("Error al cargar las calificaciones del estudiante", "danger")
         return redirect(url_for("grades.grades_view"))
     finally:
         db.close()
@@ -142,12 +134,10 @@ def student_global_grades_view_controller(course_id: int, student_id: int, _: Re
         user = db.query(User).filter(User.id == current_user_id).first()
 
         if not user:
-            flash("Usuario no encontrado", "danger")
             return redirect(url_for("users.dashboard"))
 
         # Si es estudiante, solo puede ver sus propias calificaciones
         if user.role == UserRole.STUDENT and user.id != student_id:
-            flash("No tienes permiso para ver estas calificaciones", "danger")
             return redirect(url_for("grades.grades_view"))
 
         # Obtener calificaciones globales del estudiante
@@ -156,7 +146,6 @@ def student_global_grades_view_controller(course_id: int, student_id: int, _: Re
         )
 
         if status_code != 200:
-            flash(grades_data.get("error", "Error al cargar calificaciones"), "danger")
             return redirect(url_for("grades.grades_view"))
 
         # Convert the User object to a dictionary with role as string
@@ -176,8 +165,6 @@ def student_global_grades_view_controller(course_id: int, student_id: int, _: Re
             accion_logout=True,
         )
     except Exception:
-
-        flash("Error al cargar las calificaciones globales", "danger")
         return redirect(url_for("grades.grades_view"))
     finally:
         db.close()
@@ -209,9 +196,9 @@ def update_grade_controller(
             )
 
             if status_code == 200:
-                flash("Calificación actualizada exitosamente", "success")
+                pass
             else:
-                flash(result.get("error", "Error al actualizar calificación"), "danger")
+                pass
 
             # Redirigir de vuelta a la vista del estudiante
             return redirect(
@@ -225,7 +212,6 @@ def update_grade_controller(
 
         return redirect(url_for("grades.grades_view"))
     except Exception:
-        flash("Error al actualizar la calificación", "danger")
         return redirect(url_for("grades.grades_view"))
 
 

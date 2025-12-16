@@ -4,7 +4,6 @@ from flask import (
     render_template,
     redirect,
     url_for,
-    flash,
     jsonify,
 )
 from flask_jwt_extended import jwt_required, get_jwt_identity
@@ -46,14 +45,12 @@ def evaluations_view_controller(_: Request):
         user = db.query(User).filter(User.id == current_user_id).first()
 
         if not user:
-            flash("Usuario no encontrado", "danger")
             return redirect(url_for("users.dashboard"))
 
         # Obtener todos los cursos con sus materias
         courses, status_code = get_all_courses_with_subjects_for_evaluations()
 
         if status_code != 200:
-            flash("Error al cargar los cursos", "danger")
             return redirect(url_for("users.dashboard"))
 
         # Convert the User object to a dictionary with role as string
@@ -73,7 +70,6 @@ def evaluations_view_controller(_: Request):
             accion_logout=True,
         )
     except Exception:
-        flash("Error al cargar la vista de evaluaciones", "danger")
         return redirect(url_for("users.dashboard"))
     finally:
         db.close()
@@ -89,7 +85,6 @@ def subject_evaluations_view_controller(course_id: int, subject_id: int, _: Requ
         user = db.query(User).filter(User.id == current_user_id).first()
 
         if not user:
-            flash("Usuario no encontrado", "danger")
             return redirect(url_for("evaluations.evaluations_view"))
 
         # Obtener curso y materia
@@ -97,7 +92,6 @@ def subject_evaluations_view_controller(course_id: int, subject_id: int, _: Requ
         subject = db.query(Subject).filter(Subject.id == subject_id).first()
 
         if not course or not subject:
-            flash("Curso o materia no encontrado", "danger")
             return redirect(url_for("evaluations.evaluations_view"))
 
         # Obtener evaluaciones agrupadas por periodo
@@ -106,7 +100,6 @@ def subject_evaluations_view_controller(course_id: int, subject_id: int, _: Requ
         )
 
         if status_code != 200:
-            flash("Error al cargar las evaluaciones", "danger")
             return redirect(url_for("evaluations.evaluations_view"))
 
         # Convert the User object to a dictionary with role as string
@@ -128,7 +121,6 @@ def subject_evaluations_view_controller(course_id: int, subject_id: int, _: Requ
             accion_logout=True,
         )
     except Exception:
-        flash("Error al cargar la vista de evaluaciones", "danger")
         return redirect(url_for("evaluations.evaluations_view"))
     finally:
         db.close()
@@ -180,7 +172,6 @@ def create_evaluation_controller(request: Request):
             )
 
             if status_code == 201:
-                flash("Evaluación creada exitosamente", "success")
                 return redirect(
                     url_for(
                         "evaluations.subject_evaluations_view",
@@ -189,7 +180,6 @@ def create_evaluation_controller(request: Request):
                     )
                 )
             else:
-                flash(result.get("error", "Error al crear la evaluación"), "danger")
                 return redirect(
                     url_for(
                         "evaluations.subject_evaluations_view",
@@ -198,8 +188,7 @@ def create_evaluation_controller(request: Request):
                     )
                 )
 
-    except Exception as e:
-        flash(f"Error al crear la evaluación: {str(e)}", "danger")
+    except Exception:
         course_id = request.form.get("course_id")
         subject_id = request.form.get("subject_id")
         if course_id and subject_id:
@@ -238,7 +227,6 @@ def update_evaluation_controller(evaluation_id: int, request: Request):
             )
 
             if status_code == 200:
-                flash("Evaluación actualizada exitosamente", "success")
                 course_id = data.get("course_id") or request.form.get("course_id")
                 subject_id = data.get("subject_id") or request.form.get("subject_id")
                 if course_id and subject_id:
@@ -250,7 +238,7 @@ def update_evaluation_controller(evaluation_id: int, request: Request):
                         )
                     )
             else:
-                flash(result.get("error", "Error al actualizar la evaluación"), "danger")
+                pass
 
             course_id = request.form.get("course_id")
             subject_id = request.form.get("subject_id")
@@ -265,8 +253,7 @@ def update_evaluation_controller(evaluation_id: int, request: Request):
         else:
             # GET request - redirect to evaluations view
             return redirect(url_for("evaluations.evaluations_view"))
-    except Exception as e:
-        flash(f"Error al actualizar la evaluación: {str(e)}", "danger")
+    except Exception:
         course_id = request.form.get("course_id")
         subject_id = request.form.get("subject_id")
         if course_id and subject_id:
@@ -291,9 +278,9 @@ def delete_evaluation_controller(evaluation_id: int, request: Request):
         _, status_code = delete_evaluation_service(evaluation_id)
 
         if status_code == 200:
-            flash("Evaluación eliminada exitosamente", "success")
+            pass
         else:
-            flash("Error al eliminar la evaluación", "danger")
+            pass
 
         if course_id and subject_id:
             return redirect(
@@ -305,7 +292,6 @@ def delete_evaluation_controller(evaluation_id: int, request: Request):
             )
         return redirect(url_for("evaluations.evaluations_view"))
     except Exception:
-        flash("Error al eliminar la evaluación", "danger")
         return redirect(url_for("evaluations.evaluations_view"))
 
 
@@ -378,7 +364,6 @@ def student_evaluations_view_controller(filter_type: str, _: Request):
         user = db.query(User).filter(User.id == current_user_id).first()
 
         if not user:
-            flash("Usuario no encontrado", "danger")
             return redirect(url_for("users.dashboard"))
 
         # Obtener el curso del estudiante
@@ -475,8 +460,7 @@ def student_evaluations_view_controller(filter_type: str, _: Request):
             filter_type=filter_type,
             accion_logout=True,
         )
-    except Exception as e:
-        flash(f"Error al cargar las evaluaciones: {str(e)}", "danger")
+    except Exception:
         return redirect(url_for("users.dashboard"))
     finally:
         db.close()
@@ -490,14 +474,12 @@ def student_take_evaluation_controller(evaluation_id: int, _: Request):
         user = db.query(User).filter(User.id == current_user_id).first()
 
         if not user:
-            flash("Usuario no encontrado", "danger")
             return redirect(url_for("users.dashboard"))
 
         # Obtener la evaluación
         evaluation = db.query(Evaluation).filter(Evaluation.id == evaluation_id).first()
 
         if not evaluation:
-            flash("Evaluación no encontrada", "danger")
             return redirect(url_for("evaluations.student_evaluations_view"))
 
         # Verificar si ya completó esta evaluación
@@ -512,7 +494,6 @@ def student_take_evaluation_controller(evaluation_id: int, _: Request):
         )
 
         if existing_submission:
-            flash("Ya has completado esta evaluación", "warning")
             return redirect(url_for("evaluations.student_evaluations_view"))
 
         # Obtener las preguntas de la evaluación
@@ -544,8 +525,7 @@ def student_take_evaluation_controller(evaluation_id: int, _: Request):
             questions=questions,
             accion_logout=True,
         )
-    except Exception as e:
-        flash(f"Error al cargar la evaluación: {str(e)}", "danger")
+    except Exception:
         return redirect(url_for("evaluations.student_evaluations_view"))
     finally:
         db.close()
@@ -559,7 +539,6 @@ def student_submit_evaluation_controller(evaluation_id: int, request: Request):
         evaluation = db.query(Evaluation).filter(Evaluation.id == evaluation_id).first()
 
         if not evaluation:
-            flash("Evaluación no encontrada", "danger")
             return redirect(url_for("evaluations.student_evaluations_view"))
 
         # Verificar si ya completó esta evaluación
@@ -574,7 +553,6 @@ def student_submit_evaluation_controller(evaluation_id: int, request: Request):
         )
 
         if existing_submission:
-            flash("Ya has completado esta evaluación", "warning")
             return redirect(url_for("evaluations.student_evaluations_view"))
 
         # Obtener las preguntas
@@ -585,7 +563,6 @@ def student_submit_evaluation_controller(evaluation_id: int, request: Request):
         )
 
         if not questions:
-            flash("La evaluación no tiene preguntas", "danger")
             return redirect(url_for("evaluations.student_evaluations_view"))
 
         # Crear o actualizar la submission
@@ -658,14 +635,12 @@ def student_submit_evaluation_controller(evaluation_id: int, request: Request):
 
         db.commit()
 
-        flash("Evaluación enviada exitosamente", "success")
         return redirect(
             url_for("evaluations.student_evaluations_view", filter="completed")
         )
 
-    except Exception as e:
+    except Exception:
         db.rollback()
-        flash(f"Error al enviar la evaluación: {str(e)}", "danger")
         return redirect(url_for("evaluations.student_evaluations_view"))
     finally:
         db.close()
@@ -683,7 +658,6 @@ def reset_evaluation_submission_controller(submission_id: int, request: Request)
         )
 
         if not submission:
-            flash("Envío de evaluación no encontrado", "danger")
             return redirect(request.referrer or url_for("users.dashboard"))
 
         # Guardar datos para redirección
@@ -700,11 +674,6 @@ def reset_evaluation_submission_controller(submission_id: int, request: Request)
         db.delete(submission)
         db.commit()
 
-        flash(
-            "Evaluación reiniciada exitosamente. El estudiante puede volver a presentarla.",
-            "success",
-        )
-
         # Redirigir de vuelta a la página de evaluaciones del estudiante
         if course_id and student_id:
             return redirect(
@@ -716,9 +685,8 @@ def reset_evaluation_submission_controller(submission_id: int, request: Request)
             )
         return redirect(request.referrer or url_for("users.dashboard"))
 
-    except Exception as e:
+    except Exception:
         db.rollback()
-        flash(f"Error al reiniciar la evaluación: {str(e)}", "danger")
         return redirect(request.referrer or url_for("users.dashboard"))
     finally:
         db.close()
@@ -736,7 +704,6 @@ def delete_evaluation_submission_controller(submission_id: int, request: Request
         )
 
         if not submission:
-            flash("Envío de evaluación no encontrado", "danger")
             return redirect(request.referrer or url_for("users.dashboard"))
 
         # Guardar datos para redirección
@@ -753,8 +720,6 @@ def delete_evaluation_submission_controller(submission_id: int, request: Request
         db.delete(submission)
         db.commit()
 
-        flash("Envío de evaluación eliminado exitosamente", "success")
-
         # Redirigir de vuelta a la página de evaluaciones del estudiante
         if course_id and student_id:
             return redirect(
@@ -766,9 +731,8 @@ def delete_evaluation_submission_controller(submission_id: int, request: Request
             )
         return redirect(request.referrer or url_for("users.dashboard"))
 
-    except Exception as e:
+    except Exception:
         db.rollback()
-        flash(f"Error al eliminar el envío: {str(e)}", "danger")
         return redirect(request.referrer or url_for("users.dashboard"))
     finally:
         db.close()
@@ -781,7 +745,6 @@ def view_submission_answers_controller(submission_id: int, request: Request):
         current_user_id = get_jwt_identity()
         user = db.query(User).filter(User.id == current_user_id).first()
         if not user:
-            flash("Usuario no encontrado", "danger")
             return redirect(url_for("users.dashboard"))
 
         # Obtener la submission con sus relaciones
@@ -792,7 +755,6 @@ def view_submission_answers_controller(submission_id: int, request: Request):
         )
 
         if not submission:
-            flash("Envío de evaluación no encontrado", "danger")
             return redirect(request.referrer or url_for("users.dashboard"))
 
         # Obtener la evaluación
@@ -802,13 +764,11 @@ def view_submission_answers_controller(submission_id: int, request: Request):
             .first()
         )
         if not evaluation:
-            flash("Evaluación no encontrada", "danger")
             return redirect(request.referrer or url_for("users.dashboard"))
 
         # Obtener el estudiante
         student = db.query(User).filter(User.id == submission.student_id).first()
         if not student:
-            flash("Estudiante no encontrado", "danger")
             return redirect(request.referrer or url_for("users.dashboard"))
 
         # Obtener el curso y materia
@@ -857,8 +817,7 @@ def view_submission_answers_controller(submission_id: int, request: Request):
             accion_logout=True,
         )
 
-    except Exception as e:
-        flash(f"Error al cargar las respuestas: {str(e)}", "danger")
+    except Exception:
         return redirect(request.referrer or url_for("users.dashboard"))
     finally:
         db.close()
