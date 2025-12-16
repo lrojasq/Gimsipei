@@ -3,7 +3,6 @@ from typing import Optional, Tuple
 from flask import (
     Request,
     Response,
-    flash,
     redirect,
     render_template,
     url_for,
@@ -214,7 +213,6 @@ def profile_view_controller(request: Request) -> Response:
     try:
         user, status_code = get_user_service(user_id, request)
         if status_code != 200 or not user:
-            flash("Usuario no encontrado", "danger")
             return redirect(url_for("auth.login"))
 
         if flask_request.method == "POST":
@@ -231,7 +229,6 @@ def profile_view_controller(request: Request) -> Response:
                         ),
                         400,
                     )
-                flash("Avatar no válido", "danger")
                 return redirect(url_for("users.profile"))
 
             try:
@@ -246,7 +243,6 @@ def profile_view_controller(request: Request) -> Response:
                         return jsonify(
                             {"status": "success", "avatar": selected_avatar}
                         ), 200
-                    flash("Avatar actualizado exitosamente", "success")
                 else:
                     if (
                         flask_request.headers.get("X-Requested-With")
@@ -261,7 +257,6 @@ def profile_view_controller(request: Request) -> Response:
                             ),
                             500,
                         )
-                    flash("Error al actualizar el avatar", "danger")
             except Exception:
                 if flask_request.headers.get("X-Requested-With") == "XMLHttpRequest":
                     return (
@@ -273,7 +268,6 @@ def profile_view_controller(request: Request) -> Response:
                         ),
                         500,
                     )
-                flash("Error al actualizar el avatar", "danger")
 
             return redirect(url_for("users.profile"))
 
@@ -285,7 +279,6 @@ def profile_view_controller(request: Request) -> Response:
             accion_logout=True,
         )
     except Exception:
-        flash("Error al cargar el perfil", "danger")
         return redirect(url_for("users.dashboard"))
 
 
@@ -299,7 +292,6 @@ def dashboard_controller(_: Request) -> Response:
         # Obtener información del usuario
         user, status_code = get_user_service(user_id, _)
         if status_code != 200 or not user:
-            flash("Usuario no encontrado", "danger")
             return redirect(url_for("auth.login"))
 
         # User is admin
@@ -347,5 +339,4 @@ def dashboard_controller(_: Request) -> Response:
                 accion_logout=True,
             )
     except Exception:
-        flash("Error al obtener el dashboard", "danger")
         return redirect(url_for("auth.login"))

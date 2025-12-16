@@ -1,4 +1,4 @@
-from flask import Request, Response, flash, redirect, render_template, url_for
+from flask import Request, Response, redirect, render_template, url_for
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from pydantic import ValidationError
 
@@ -32,7 +32,6 @@ def course_students_controller(course_id: int, request: Request) -> Response:
         # Obtener información del usuario actual
         current_user, status_code = get_user_service(user_id, request)
         if status_code != 200 or not current_user:
-            flash("Usuario no encontrado", "danger")
             return redirect(url_for("auth.login"))
 
         # Obtener curso y estudiantes usando el servicio
@@ -41,7 +40,6 @@ def course_students_controller(course_id: int, request: Request) -> Response:
         )
 
         if status_code == 404 or not course_data:
-            flash("Curso no encontrado", "danger")
             return redirect(url_for("users.dashboard"))
 
         return render_template(
@@ -53,7 +51,6 @@ def course_students_controller(course_id: int, request: Request) -> Response:
             accion_logout=True,
         )
     except Exception as e:
-        flash(f"Error al cargar los estudiantes: {str(e)}", "danger")
         return redirect(url_for("users.dashboard"))
 
 
@@ -67,7 +64,6 @@ def create_student_controller(course_id: int, request: Request) -> Response:
         # Obtener información del usuario actual
         current_user, status_code = get_user_service(user_id, request)
         if status_code != 200 or not current_user:
-            flash("Usuario no encontrado", "danger")
             return redirect(url_for("auth.login"))
 
         # Obtener información del curso
@@ -75,7 +71,6 @@ def create_student_controller(course_id: int, request: Request) -> Response:
 
         course_data, _, course_status = get_course_students_for_view_service(course_id)
         if course_status == 404 or not course_data:
-            flash("Curso no encontrado", "danger")
             return redirect(url_for("users.dashboard"))
 
         # Obtener lista de cursos para el dropdown
@@ -116,30 +111,18 @@ def create_student_controller(course_id: int, request: Request) -> Response:
                 )
 
                 if enroll_status == 201:
-                    flash(
-                        "Estudiante creado y asociado al curso exitosamente", "success"
-                    )
                     return redirect(
                         url_for("users.course_students", course_id=selected_course_id)
                     )
                 elif enroll_status == 400:
-                    flash(
-                        "El estudiante fue creado pero ya está inscrito en este curso",
-                        "warning",
-                    )
                     return redirect(
                         url_for("users.course_students", course_id=selected_course_id)
                     )
                 else:
-                    flash(
-                        "Estudiante creado pero hubo un error al asociarlo al curso",
-                        "warning",
-                    )
                     return redirect(
                         url_for("users.course_students", course_id=selected_course_id)
                     )
             elif status_code == 400:
-                flash("El documento o nombre de usuario ya está en uso", "danger")
                 return render_template(
                     "teacher/create_student.html",
                     user=current_user,
@@ -148,7 +131,6 @@ def create_student_controller(course_id: int, request: Request) -> Response:
                     accion_logout=True,
                 )
             else:
-                flash("Error al crear el estudiante", "danger")
                 return render_template(
                     "teacher/create_student.html",
                     user=current_user,
@@ -158,7 +140,6 @@ def create_student_controller(course_id: int, request: Request) -> Response:
                 )
 
         except ValidationError:
-            flash("Datos inválidos. Por favor verifique la información", "danger")
             return render_template(
                 "teacher/create_student.html",
                 user=current_user,
@@ -167,7 +148,6 @@ def create_student_controller(course_id: int, request: Request) -> Response:
                 accion_logout=True,
             )
         except Exception as e:
-            flash(f"Error interno: {str(e)}", "danger")
             return render_template(
                 "teacher/create_student.html",
                 user=current_user,
@@ -177,7 +157,6 @@ def create_student_controller(course_id: int, request: Request) -> Response:
             )
 
     except Exception as e:
-        flash(f"Error al cargar el formulario: {str(e)}", "danger")
         return redirect(url_for("users.dashboard"))
 
 
@@ -193,13 +172,11 @@ def edit_student_controller(
         # Obtener información del usuario actual
         current_user, status_code = get_user_service(user_id, request)
         if status_code != 200 or not current_user:
-            flash("Usuario no encontrado", "danger")
             return redirect(url_for("auth.login"))
 
         # Obtener información del curso
         course_data, _, course_status = get_course_students_for_view_service(course_id)
         if course_status == 404 or not course_data:
-            flash("Curso no encontrado", "danger")
             return redirect(url_for("users.dashboard"))
 
         # Obtener lista de cursos para el dropdown
@@ -209,7 +186,6 @@ def edit_student_controller(
             try:
                 student, status_code = get_user_service(student_id, request)
                 if status_code == 404:
-                    flash("Estudiante no encontrado", "danger")
                     return redirect(
                         url_for("users.course_students", course_id=course_id)
                     )
@@ -222,7 +198,6 @@ def edit_student_controller(
                     accion_logout=True,
                 )
             except Exception as e:
-                flash(f"Error al cargar el estudiante: {str(e)}", "danger")
                 return redirect(url_for("users.course_students", course_id=course_id))
 
         try:
@@ -239,13 +214,10 @@ def edit_student_controller(
             _, status_code = update_user_service(student_id, validated, request)
 
             if status_code == 200:
-                flash("Estudiante actualizado exitosamente", "success")
                 return redirect(url_for("users.course_students", course_id=course_id))
             elif status_code == 404:
-                flash("Estudiante no encontrado", "danger")
                 return redirect(url_for("users.course_students", course_id=course_id))
             else:
-                flash("Error al actualizar el estudiante", "danger")
                 return render_template(
                     "teacher/edit_student.html",
                     student=student_data,
@@ -256,7 +228,6 @@ def edit_student_controller(
                 )
 
         except ValidationError:
-            flash("Datos inválidos. Por favor verifique la información", "danger")
             return render_template(
                 "teacher/edit_student.html",
                 student=student_data,
@@ -267,11 +238,9 @@ def edit_student_controller(
             )
 
         except Exception as e:
-            flash(f"Error interno: {str(e)}", "danger")
             return redirect(url_for("users.course_students", course_id=course_id))
 
     except Exception as e:
-        flash(f"Error al cargar el formulario: {str(e)}", "danger")
         return redirect(url_for("users.dashboard"))
 
 
@@ -285,28 +254,10 @@ def delete_student_controller(
         current_user_id = get_jwt_identity()
         result, status_code = delete_user_service(student_id, request, current_user_id)
 
-        if status_code == 200:
-            flash("Estudiante eliminado exitosamente", "success")
-        elif status_code == 404:
-            flash("Estudiante no encontrado", "danger")
-        elif status_code == 409:
-            message = result.get(
-                "message",
-                "No se puede eliminar el estudiante porque tiene datos relacionados",
-            )
-            flash(message, "warning")
-        elif status_code == 500:
-            message = (
-                result.get("message", "Error al eliminar el estudiante")
-                if result
-                else "Error al eliminar el estudiante"
-            )
-            flash(message, "danger")
-        else:
-            flash("Error al eliminar el estudiante", "danger")
+        # Flash messages removidos por requerimiento del cliente.
 
     except Exception as e:
-        flash(f"Error interno: {str(e)}", "danger")
+        pass
 
     return redirect(url_for("users.course_students", course_id=course_id))
 
@@ -323,7 +274,6 @@ def student_tasks_controller(
         # Obtener información del usuario actual
         current_user, status_code = get_user_service(user_id, request)
         if status_code != 200 or not current_user:
-            flash("Usuario no encontrado", "danger")
             return redirect(url_for("auth.login"))
 
         # Obtener datos del curso, estudiante y tareas agrupadas por asignatura
@@ -332,19 +282,14 @@ def student_tasks_controller(
         )
 
         if status_code == 404 or not data:
-            flash("Curso o estudiante no encontrado", "danger")
             return redirect(url_for("users.course_students", course_id=course_id))
 
         if status_code != 200:
-            flash(
-                f"Error al obtener las materias del curso (código: {status_code})",
-                "danger",
-            )
             return redirect(url_for("users.course_students", course_id=course_id))
 
         # Si no hay materias, mostrar mensaje pero aún así renderizar la vista
         if not subjects_list:
-            flash("Este curso no tiene materias asignadas", "info")
+            pass
 
         return render_template(
             "teacher/student_tasks.html",
@@ -355,7 +300,6 @@ def student_tasks_controller(
             accion_logout=True,
         )
     except Exception as e:
-        flash(f"Error al cargar las tareas: {str(e)}", "danger")
         return redirect(url_for("users.course_students", course_id=course_id))
 
 
@@ -369,7 +313,6 @@ def student_evaluations_controller(
     try:
         current_user, status_code = get_user_service(user_id, request)
         if status_code != 200 or not current_user:
-            flash("Usuario no encontrado", "danger")
             return redirect(url_for("auth.login"))
 
         # Obtener datos del curso, estudiante y evaluaciones agrupadas por asignatura
@@ -378,14 +321,9 @@ def student_evaluations_controller(
         )
 
         if status_code == 404 or not data:
-            flash("Curso o estudiante no encontrado", "danger")
             return redirect(url_for("users.course_students", course_id=course_id))
 
         if status_code != 200:
-            flash(
-                f"Error al obtener las evaluaciones del estudiante (código: {status_code})",
-                "danger",
-            )
             return redirect(url_for("users.course_students", course_id=course_id))
 
         return render_template(
@@ -397,5 +335,4 @@ def student_evaluations_controller(
             accion_logout=True,
         )
     except Exception as e:
-        flash(f"Error al cargar las evaluaciones: {str(e)}", "danger")
         return redirect(url_for("users.course_students", course_id=course_id))

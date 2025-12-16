@@ -1,4 +1,4 @@
-from flask import Request, Response, flash, redirect, render_template, url_for
+from flask import Request, Response, redirect, render_template, url_for
 from flask_jwt_extended import jwt_required
 from pydantic import ValidationError
 
@@ -51,7 +51,6 @@ def create_subject_controller(request: Request) -> Response:
         # 1) Resolver/crear la materia por nombre (siempre viene del modal)
         subject_name = data.get("name")
         if not subject_name:
-            flash("Por favor seleccione una materia.", "danger")
             return redirect(url_for("courses.courses_management"))
 
         validated_subject = SubjectCreateSchema(name=subject_name)
@@ -60,7 +59,6 @@ def create_subject_controller(request: Request) -> Response:
         )
 
         if subject_status not in (200, 201) or not subject_result:
-            flash("Error al crear/obtener la materia.", "danger")
             return redirect(url_for("courses.courses_management"))
 
         # 2) Si viene course_id + teacher_id, asignar/actualizar en el curso
@@ -81,31 +79,29 @@ def create_subject_controller(request: Request) -> Response:
 
             if assignment_status in (200, 201):
                 if subject_id:
-                    flash("Asignación actualizada exitosamente", "success")
+                    pass
                 else:
-                    flash("Materia asignada al curso exitosamente", "success")
+                    pass
             elif assignment_status == 400:
-                flash("El profesor no es válido.", "danger")
+                pass
             elif assignment_status == 404:
-                flash("Curso no encontrado.", "danger")
+                pass
             else:
-                flash("Error al actualizar la asignación.", "danger")
+                pass
 
             return redirect(url_for("courses.courses_management"))
 
         # 3) Si no viene course_id/teacher_id, es solo creación de materia global
         if subject_status == 201:
-            flash("Materia creada exitosamente", "success")
+            pass
         else:
-            flash("Materia ya existe en el sistema", "info")
+            pass
 
         return redirect(url_for("courses.courses_management"))
 
-    except ValidationError as e:
-        flash(f"Datos inválidos: {str(e)}", "danger")
+    except ValidationError:
         return redirect(url_for("courses.courses_management"))
-    except Exception as e:
-        flash(f"Error interno: {str(e)}", "danger")
+    except Exception:
         return redirect(url_for("courses.courses_management"))
 
 
@@ -122,21 +118,19 @@ def edit_subject_controller(subject_id: int, request: Request) -> Response:
         result, status_code = update_subject_service(subject_id, validated, request)
 
         if status_code == 200:
-            flash("Materia actualizada exitosamente", "success")
+            pass
         elif status_code == 404:
-            flash("Materia no encontrada", "danger")
+            pass
         elif status_code == 400:
-            flash("Ya existe una materia con ese nombre", "danger")
+            pass
         else:
-            flash("Error al actualizar la materia", "danger")
+            pass
 
         return redirect(url_for("courses.courses_management"))
 
-    except ValidationError as e:
-        flash(f"Datos inválidos: {str(e)}", "danger")
+    except ValidationError:
         return redirect(url_for("courses.courses_management"))
-    except Exception as e:
-        flash(f"Error interno: {str(e)}", "danger")
+    except Exception:
         return redirect(url_for("courses.courses_management"))
 
 
@@ -148,14 +142,14 @@ def delete_subject_controller(subject_id: int, request: Request) -> Response:
         _, status_code = delete_subject_service(subject_id, request)
 
         if status_code == 200:
-            flash("Materia eliminada exitosamente", "success")
+            pass
         elif status_code == 404:
-            flash("Materia no encontrada", "danger")
+            pass
         else:
-            flash("Error al eliminar la materia", "danger")
+            pass
 
-    except Exception as e:
-        flash(f"Error interno: {str(e)}", "danger")
+    except Exception:
+        pass
 
     # Redirect back to courses if coming from course view
     course_id = request.args.get("course_id")
