@@ -51,7 +51,7 @@
         {% endif %}
         <h2>Administrar</h2>
         <div class="flex container_boxs_menu">
-            <a href="{{ url_for('classes.teacher_classes_view') }}">
+            <a href="{{ url_for('classes.teacher_classes_view') }}" class="big-box">
                 <div class="box-menu clases-hover">
                     <picture>
                         <source srcset="{{ url_for('static', filename='images/images-gray/clases.png') }}"
@@ -60,7 +60,12 @@
                             style="width: 60px; height: 70px;">
                     </picture>
                     <p>Clases y recursos</p>
-                    <div class="barra barra-clases"></div>
+                    <div class="d-flex barra-group">
+                        <div class="barra barra-clases"></div>    
+                        <div class="barra barra-recursos"></div>
+                    </div>
+                    
+
                 </div>
             </a>
             <a href="{{ url_for('evaluations.evaluations_view') }}">

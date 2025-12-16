@@ -135,6 +135,29 @@ html {
     background-color: var(--azul-oscuro);
 }
 
+.big-box .box-menu.clases-hover {
+    width: 300px;
+}
+
+.d-flex.barra-group {
+    position: absolute;
+    justify-content: center;
+    gap: 1rem;
+    flex-direction: row;
+    overflow: auto;
+    width: 100%;
+    height: auto;
+    bottom: -20px;
+    left: 0px;
+}
+
+.barra-group .barra {
+    width: 50%;
+    position: relative;
+    margin: 0px;
+    bottom: 0;
+}
+
 .box-menu {
     color: var(--blanco);
 }
