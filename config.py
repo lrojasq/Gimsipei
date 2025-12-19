@@ -21,7 +21,7 @@ class Config:
     # JWT Configuration
     JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
     JWT_TOKEN_LOCATION = ["headers", "cookies"]  # Soporta tanto headers como cookies
-    JWT_COOKIE_SECURE = False  # Set to True in production
+    JWT_COOKIE_SECURE = True  # Set to True in production
     JWT_COOKIE_CSRF_PROTECT = False  # Deshabilitado para simplificar
     JWT_ACCESS_COOKIE_PATH = "/"
     JWT_REFRESH_COOKIE_PATH = "/auth/refresh"
