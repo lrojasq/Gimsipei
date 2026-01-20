@@ -2,7 +2,7 @@
 <!-- Admin Menu -->
 {% if user.role == "admin" %}
 <div class="specialities_category flex">
-    <div class="content-admin flex flex-column">
+    <div class="content-admin flex flex-column gap-1">
         <h2>Administrar</h2>
         <div class="flex">
             <a href="{{ url_for('users.teachers_management') }}">
@@ -29,7 +29,7 @@
 <!-- Teacher Menu -->
 {% if user.role == "teacher" %}
 <div class="specialities_category flex">
-    <div class="content-admin flex flex-column">
+    <div class="content-admin flex flex-column gap-2">
         {% if user.role == "teacher" %}
         <h2>Estudiantes</h2>
         {% if courses %}

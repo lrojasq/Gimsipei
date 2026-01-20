@@ -341,6 +341,7 @@
     font-size: 1.1rem;
     color: #7f8c8d;
     margin-bottom: 1.5rem;
+    text-align: center;
 }
 
 .btn-add-first-class {
@@ -533,6 +534,9 @@
 @media (max-width: 1080px) {
     .container_category{
         background-color: white;
+    }
+    .empty-period p{
+        text-align: center;
     }
 }
 

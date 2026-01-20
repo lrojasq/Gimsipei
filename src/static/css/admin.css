@@ -1075,4 +1075,17 @@ form.form-admin.flex.flex-column {
     .content-admin.flex.flex-column {
         padding: 1rem!important;
     }
+    .flex.header-cursos,
+    .content-cursos{
+        width: 840px;
+    }
+    .dashboard_category .data_categoty{
+        width: 100%;
+        padding: 1rem;
+    }
+    .students_list a.btn.btn-outline-dark.me-2.course-grade-btn{
+        width: 60px;
+        height: 60px;
+        font-size: 1.5rem;
+    }
 }

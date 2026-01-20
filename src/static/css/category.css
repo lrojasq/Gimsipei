@@ -1,684 +1,682 @@
 /* Global Styles */
 :root {
-    --primary-color: #007bff;
-    --secondary-color: #6c757d;
-    --success-color: #28a745;
-    --danger-color: #dc3545;
-    --warning-color: #ffc107;
-    --info-color: #17a2b8;
-    --light-color: #ffffff;
-    --dark-color: #343a40;
-    --border-color: #00c2e7;
-    --gray-light: #f4f4f4;
-    --clases: #23ccc3;
-    --clases-active: #16b7ab;
-    --recursos: #f7cb52;
-    --recursos-active: #e5ab1a;
-    --evaluaciones: #f48d53;
-    --evaluaciones-active: #e55d1a;
-    --libros: #ea6ef4;
-    --libros-active: #d944ea;
-    --calificaciones: #a270f2;
-    --calificaciones-active: #6c43d1;
-    --admin: #f94e4e;
-    --admin-active: #e01e1e;
+  --primary-color: #007bff;
+  --secondary-color: #6c757d;
+  --success-color: #28a745;
+  --danger-color: #dc3545;
+  --warning-color: #ffc107;
+  --info-color: #17a2b8;
+  --light-color: #ffffff;
+  --dark-color: #343a40;
+  --border-color: #00c2e7;
+  --gray-light: #f4f4f4;
+  --clases: #23ccc3;
+  --clases-active: #16b7ab;
+  --recursos: #f7cb52;
+  --recursos-active: #e5ab1a;
+  --evaluaciones: #f48d53;
+  --evaluaciones-active: #e55d1a;
+  --libros: #ea6ef4;
+  --libros-active: #d944ea;
+  --calificaciones: #a270f2;
+  --calificaciones-active: #6c43d1;
+  --admin: #f94e4e;
+  --admin-active: #e01e1e;
 }
 
 .container_category {
-    justify-content: space-between;
-    padding: 3rem 3rem 0rem;
-    height: 100vh;
+  justify-content: space-between;
+  padding: 3rem 3rem 0rem;
+  height: 100vh;
 }
 
 h1 {
-    font-size: x-large;
-    font-weight: bolder;
+  font-size: x-large;
+  font-weight: bolder;
 }
 
 .data_categoty {
-    gap: 1rem;
+  gap: 1rem;
 }
 
 .clases_category .data_categoty svg {
-    fill: var(--clases);
+  fill: var(--clases);
 }
 
 .recursos_category .data_categoty svg {
-    fill: var(--recursos);
+  fill: var(--recursos);
 }
 
 .libros_category .data_categoty svg {
-    fill: var(--libros);
+  fill: var(--libros);
 }
 
 .evaluaciones_category .data_categoty svg {
-    fill: var(--evaluaciones);
+  fill: var(--evaluaciones);
 }
 
 .calificaciones_category .data_categoty svg {
-    fill: var(--calificaciones);
+  fill: var(--calificaciones);
 }
 
-.data_categoty>.title {
-    gap: 1rem;
-    align-items: center;
+.data_categoty > .title {
+  gap: 1rem;
+  align-items: center;
 }
 
 .data_categoty p {
-    font-size: larger;
+  font-size: larger;
 }
 
 .data_grade_category {
-    gap: 0rem;
-    color: var(--secondary-color);
+  gap: 0rem;
+  color: var(--secondary-color);
 }
 
 .data_grade_category p {
-    margin: 0px;
+  margin: 0px;
+  color: #666;
 }
 
 /* specialities_category */
 .specialities_category {
-    justify-content: space-around;
-    gap: 3rem;
-    padding: 2rem;
-    background-color: var(--gray-light);
-    border-radius: 10px;
-    width: 70%;
-    max-height: 90vh;
-    overflow: auto;
+  justify-content: space-around;
+  gap: 3rem;
+  padding: 2rem;
+  background-color: var(--gray-light);
+  border-radius: 10px;
+  width: 70%;
+  max-height: 90vh;
+  overflow: auto;
 }
 
 .specialities_category.exam_category {
-    width: 90%;
-    margin: auto;
+  width: 90%;
+  margin: auto;
 }
 
 .specialities_category:has(form) {
-    padding: 0px;
+  padding: 0px;
 }
 
 .specialities_category:has(form) label.btn.btn-outline-danger {
-    border-radius: 5px;
-    width: 40%;
+  border-radius: 5px;
+  width: 40%;
 }
 
 .specialities_category.cursos {
-    width: 90%;
-    background-color: #fff;
+  width: 90%;
+  background-color: #fff;
 }
 
 .specialities_category::-webkit-scrollbar {
-    width: 15px;
+  width: 15px;
 }
 
 /* Track */
 .specialities_category::-webkit-scrollbar-track {
-    background: #888;
-    border-radius: 5px;
+  background: #888;
+  border-radius: 5px;
 }
 
 .specialities_category:has(.content-admin) {
-    text-align: left;
-    justify-content: start;
+  text-align: left;
+  justify-content: start;
 }
 
 /* Handle */
 .clases_category .specialities_category::-webkit-scrollbar-thumb {
-    background: var(--clases);
-    border-radius: 5px;
+  background: var(--clases);
+  border-radius: 5px;
 }
 
 .recursos_category .specialities_category::-webkit-scrollbar-thumb {
-    background: var(--recursos);
-    border-radius: 5px;
+  background: var(--recursos);
+  border-radius: 5px;
 }
 
 .libros_category .specialities_category::-webkit-scrollbar-thumb {
-    background: var(--libros);
-    border-radius: 5px;
+  background: var(--libros);
+  border-radius: 5px;
 }
 
 .evaluaciones_category .specialities_category::-webkit-scrollbar-thumb {
-    background: var(--evaluaciones);
-    border-radius: 5px;
+  background: var(--evaluaciones);
+  border-radius: 5px;
 }
 
 .calificaciones_category .specialities_category::-webkit-scrollbar-thumb {
-    background: var(--calificaciones);
-    border-radius: 5px;
+  background: var(--calificaciones);
+  border-radius: 5px;
 }
 
 .admin_category .specialities_category::-webkit-scrollbar-thumb {
-    background: var(--admin);
-    border-radius: 5px;
+  background: var(--admin);
+  border-radius: 5px;
 }
 
 /* Handle on hover */
 .specialities_category::-webkit-scrollbar-thumb:hover {
-    background: #555;
+  background: #555;
 }
 
 ::-webkit-scrollbar {
-    width: 10px;
+  width: 10px;
 }
 
 /* Track */
 ::-webkit-scrollbar-track {
-    background: #888;
-    border-radius: 5px;
+  background: #888;
+  border-radius: 5px;
 }
 
 .speciality {
-    width: 45%;
-    align-items: end;
-    height: 40%;
-    justify-content: center;
-    text-align: center;
-    border-radius: 10px;
-    overflow: hidden;
+  width: 45%;
+  align-items: end;
+  height: 40%;
+  justify-content: center;
+  text-align: center;
+  border-radius: 10px;
+  overflow: hidden;
 }
 
 .clases_category .speciality {
-    background-color: var(--clases);
+  background-color: var(--clases);
 }
 
 .recursos_category .speciality {
-    background-color: var(--recursos);
+  background-color: var(--recursos);
 }
 
 .libros_category .speciality {
-    background-color: var(--libros);
+  background-color: var(--libros);
 }
 
 .evaluaciones_category .speciality {
-    background-color: var(--evaluaciones);
+  background-color: var(--evaluaciones);
 }
 
 .admin_category .speciality {
-    background-color: var(--admin);
+  background-color: var(--admin);
 }
 
 .title_speciality {
-    width: 100%;
-    background-color: var(--light-color);
-    padding: 1rem;
-    gap: 1rem;
+  width: 100%;
+  background-color: var(--light-color);
+  padding: 1rem;
+  gap: 1rem;
 }
 
 .title_speciality hr {
-    width: 100%;
-    margin: auto;
-    height: 3px;
-    border-radius: 10px;
-    border: none;
-    opacity: 1;
+  width: 100%;
+  margin: auto;
+  height: 3px;
+  border-radius: 10px;
+  border: none;
+  opacity: 1;
 }
 
 hr.clases_br {
-    background-color: var(--clases);
+  background-color: var(--clases);
 }
-
 
 /* aside menu */
 
 .menu_aside {
-    height: 100%;
-    gap: 15px;
-    border-radius: 10px 10px 0px 0px;
-    overflow: hidden;
-    background-color: var(--clases);
+  height: 100%;
+  gap: 15px;
+  border-radius: 10px 10px 0px 0px;
+  overflow: hidden;
+  background-color: var(--clases);
 }
 
 .grades_students .menu_aside {
-    background-color: hsl(190, 65%, 55%);
+  background-color: hsl(190, 65%, 55%);
 }
 .menu_aside:has(+ .clases_category) {
-    background-color: var(--clases);
+  background-color: var(--clases);
 }
 
 .recursos_category .menu_aside {
-    background-color: var(--recursos);
+  background-color: var(--recursos);
 }
 
 .libros_category .menu_aside {
-    background-color: var(--libros);
+  background-color: var(--libros);
 }
 
 .evaluaciones_category .menu_aside {
-    background-color: var(--evaluaciones);
+  background-color: var(--evaluaciones);
 }
 
 .calificaciones_category .menu_aside {
-    background-color: var(--calificaciones);
+  background-color: var(--calificaciones);
 }
 
 .admin_category .menu_aside {
-    background-color: var(--admin);
+  background-color: var(--admin);
 }
 
 .menu_aside svg {
-    fill: var(--light-color);
-    max-width: 50px;
-    max-height: 50px;
+  fill: var(--light-color);
+  max-width: 50px;
+  max-height: 50px;
 }
 
 .aside_list {
-    gap: 0px;
+  gap: 0px;
 }
 
 .aside_list li {
-    height: auto;
-    width: auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    max-height: 80px;
+  height: auto;
+  width: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-height: 80px;
 }
 
 .aside_list li a {
-    height: 100%;
-    width: 100%;
-    padding: 1rem;
+  height: 100%;
+  width: 100%;
+  padding: 1rem;
 }
 
 .clases_category .aside_list li a.active,
 .clases_category .aside_list li a:hover {
-    background-color: var(--clases-active);
+  background-color: var(--clases-active);
 }
 
 .recursos_category .aside_list li a.active,
 .recursos_category .aside_list li a:hover {
-    background-color: var(--recursos-active);
+  background-color: var(--recursos-active);
 }
 
 .libros_category .aside_list li a.active,
 .libros_category .aside_list li a:hover {
-    background-color: var(--libros-active);
+  background-color: var(--libros-active);
 }
 
 .evaluaciones_category .aside_list li a.active,
 .evaluaciones_category .aside_list li a:hover {
-    background-color: var(--evaluaciones-active);
+  background-color: var(--evaluaciones-active);
 }
 
 .calificaciones_category .aside_list li a.active,
 .calificaciones_category .aside_list li a:hover {
-    background-color: var(--calificaciones-active);
+  background-color: var(--calificaciones-active);
 }
 
 .admin_category .aside_list li a.active,
 .admin_category .aside_list li a:hover {
-    background-color: var(--admin-active);
+  background-color: var(--admin-active);
 }
 
 .aside_list li a.active svg,
 .aside_list li a:hover svg {
-    fill: var(--light-color);
+  fill: var(--light-color);
 }
 
 /* estilos categoria */
 .exams {
-    gap: 1rem;
-    align-items: start;
-    justify-content: flex-start;
-    flex-wrap: nowrap;
+  gap: 1rem;
+  align-items: start;
+  justify-content: flex-start;
+  flex-wrap: nowrap;
 }
 
 .exam {
-    width: 100%;
-    height: 200px;
+  width: 100%;
+  height: 200px;
 }
 
-
 .exam_content {
-    background: #ffff;
-    gap: 1rem;
-    height: max-content;
-    padding: 0px;
-    align-items: center;
-    border-radius: 15px;
-    overflow: hidden;
-    flex-wrap: nowrap;
-    width: 80%;
-    height: 100%;
+  background: #ffff;
+  gap: 1rem;
+  height: max-content;
+  padding: 0px;
+  align-items: center;
+  border-radius: 15px;
+  overflow: hidden;
+  flex-wrap: nowrap;
+  width: 80%;
+  height: 100%;
 }
 
 .class .exam_content {
-    width: 100%;
+  width: 100%;
 }
 
 .evaluaciones_bg {
-    background-color: var(--evaluaciones);
+  background-color: var(--evaluaciones);
 }
 
 .class .evaluaciones_bg {
-    background-color: var(--clases);
+  background-color: var(--clases);
 }
 
 .img_evaluaciones {
-    width: 100px;
-    width: 20%;
+  width: 100px;
+  width: 20%;
 }
 
 .text-content {
-    gap: 1rem;
-    padding: 1rem;
-    width: 90%;
-    position: relative;
+  gap: 1rem;
+  padding: 1rem;
+  width: 90%;
+  position: relative;
 }
 
 .text-content::before {
-    content: "";
-    width: 4px;
-    height: 80%;
-    background-color: var(--gray-light);
-    border-radius: 15px;
-    margin-bottom: 0.5rem;
-    display: block;
-    position: absolute;
-    left: 0px;
+  content: "";
+  width: 4px;
+  height: 80%;
+  background-color: var(--gray-light);
+  border-radius: 15px;
+  margin-bottom: 0.5rem;
+  display: block;
+  position: absolute;
+  left: 0px;
 }
 
 .text-content h2 {
-    font-size: 1rem;
-    font-weight: bold;
-    color: var(--evaluaciones);
+  font-size: 1rem;
+  font-weight: bold;
+  color: var(--evaluaciones);
 }
 
 .class .text-content h2 {
-    color: var(--clases);
+  color: var(--clases);
 }
 
 .text-content p {
-    font-size: 0.9rem;
-    color: var(--dark-color);
+  font-size: 0.9rem;
+  color: var(--dark-color);
 }
 
 .nota {
-    width: 15%;
-    justify-content: flex-start;
-    gap: 0.5rem;
+  width: 15%;
+  justify-content: flex-start;
+  gap: 0.5rem;
 }
 
 .nota span {
-    font-size: 1.2rem;
-    color: var(--dark-color);
-    background-color: var(--light-color);
-    border-radius: 15px;
-    width: 100%;
-    align-items: center;
-    text-align: center;
-    justify-content: center;
-    height: 40%;
+  font-size: 1.2rem;
+  color: var(--dark-color);
+  background-color: var(--light-color);
+  border-radius: 15px;
+  width: 100%;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  height: 40%;
 }
 
 .nota hr {
-    width: 90%;
-    height: 4px;
-    border-radius: 10px;
-    border: none;
-    opacity: 1;
-    background-color: var(--evaluaciones);
-    margin: 0px auto;
+  width: 90%;
+  height: 4px;
+  border-radius: 10px;
+  border: none;
+  opacity: 1;
+  background-color: var(--evaluaciones);
+  margin: 0px auto;
 }
 
 .btn-evaluaciones {
-    color: var(--evaluaciones);
-    border-color: var(--evaluaciones);
-    width: 15rem;
-    text-align: center;
-    margin-top: 1rem;
+  color: var(--evaluaciones);
+  border-color: var(--evaluaciones);
+  width: 15rem;
+  text-align: center;
+  margin-top: 1rem;
 }
 
 .btn-evaluaciones.active {
-    background-color: var(--evaluaciones-active);
-    color: var(--light-color);
+  background-color: var(--evaluaciones-active);
+  color: var(--light-color);
 }
 
 .btn-evaluaciones:hover {
-    background-color: var(--evaluaciones-active);
-    color: var(--light-color);
-    border-color: var(--light-color);
+  background-color: var(--evaluaciones-active);
+  color: var(--light-color);
+  border-color: var(--light-color);
 }
 
 /* estilos libros */
 .specialities_category.flex.flex-column.books {
-    flex-wrap: nowrap;
-    width: 79%;
-    gap: 0;
+  flex-wrap: nowrap;
+  width: 79%;
+  gap: 0;
 }
 
 .books {
-    /* gap: 1rem; */
-    align-items: start;
-    justify-content: flex-start;
-    flex-wrap: wrap;
-    background-color: var(--light-color);
-    position: relative;
+  /* gap: 1rem; */
+  align-items: start;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  background-color: var(--light-color);
+  position: relative;
 }
 
 .books input#searchBooks {
-    width: 300px;
-    padding: 0.75rem 1rem 0.75rem 2.5rem;
-    border: 2px solid #e0e0e0;
-    border-radius: 38px;
-    font-size: 1rem;
+  width: 300px;
+  padding: 0.75rem 1rem 0.75rem 2.5rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 38px;
+  font-size: 1rem;
 }
 
 .books::before {
-    content: "";
-    width: 9px;
-    height: 90%;
-    background-color: #fdebff;
-    border-radius: 2px;
-    margin-bottom: 0.5rem;
-    position: absolute;
-    left: 0px;
-    top: 0%;
-    bottom: 0%;
-    margin: auto;
+  content: "";
+  width: 9px;
+  height: 90%;
+  background-color: #fdebff;
+  border-radius: 2px;
+  margin-bottom: 0.5rem;
+  position: absolute;
+  left: 0px;
+  top: 0%;
+  bottom: 0%;
+  margin: auto;
 }
 
 /* Book link wrapper */
 .book-link {
-    text-decoration: none;
-    color: inherit;
-    width: 23%;
-    transition: transform 0.2s ease;
+  text-decoration: none;
+  color: inherit;
+  width: 23%;
+  transition: transform 0.2s ease;
 }
 
 .book-link:hover {
-    transform: translateY(-5px);
+  transform: translateY(-5px);
 }
 
 .book-link:hover .book {
-    box-shadow: 0 8px 25px rgba(234, 110, 244, 0.3);
+  box-shadow: 0 8px 25px rgba(234, 110, 244, 0.3);
 }
 
 .book {
-    width: 100%;
-    flex-wrap: nowrap;
-    gap: 0px;
-    background-color: var(--light-color);
-    text-align: center;
-    border: 11px solid #fdebff;
-    border-radius: 15px;
-    padding: 7px;
-    height: 370px;
-    cursor: pointer;
-    transition: box-shadow 0.2s ease;
+  width: 100%;
+  flex-wrap: nowrap;
+  gap: 0px;
+  background-color: var(--light-color);
+  text-align: center;
+  border: 11px solid #fdebff;
+  border-radius: 15px;
+  padding: 7px;
+  height: 370px;
+  cursor: pointer;
+  transition: box-shadow 0.2s ease;
 }
 
 .book img {
-    width: 100%;
-    height: 70%;
-    object-fit: cover;
-    background-color: var(--libros);
+  width: 100%;
+  height: 70%;
+  object-fit: cover;
+  background-color: var(--libros);
 }
 
 .book .title_speciality {
-    padding: 0px;
-    gap: 2px;
-    font-size: small;
+  padding: 0px;
+  gap: 2px;
+  font-size: small;
 }
 
 hr.libros_br {
-    background-color: var(--libros);
-    height: 5px;
-    width: 90%;
-    margin: 0px auto;
+  background-color: var(--libros);
+  height: 5px;
+  width: 90%;
+  margin: 0px auto;
 }
 
 .btn-libros {
-    color: var(--libros);
-    border-color: var(--libros);
+  color: var(--libros);
+  border-color: var(--libros);
 }
 
 .btn-libros:hover,
 .btn-libros.active {
-    background-color: var(--libros);
-    color: var(--light-color);
-    border-color: var(--light-color);
+  background-color: var(--libros);
+  color: var(--light-color);
+  border-color: var(--light-color);
 }
 
 /* Layout específico para Libros (teacher/books_view) */
 .container_category.flex.libros_category {
-    justify-content: flex-start;
-    column-gap: 2rem;
-    background-color: #fff;
+  justify-content: flex-start;
+  column-gap: 2rem;
+  background-color: #fff;
 }
-.container_category.flex.libros_category .data_categoty{
-    width: 15%;
+.container_category.flex.libros_category .data_categoty {
+  width: 15%;
 }
 
 .libros_category .specialities_category {
-    /* Mantener proporción similar pero sin que se vaya al centro */
-    width: 75%;
-    align-items: start;
-    gap: 1rem;
-    height: auto;
-    max-height: max-content;
+  /* Mantener proporción similar pero sin que se vaya al centro */
+  width: 75%;
+  align-items: start;
+  gap: 1rem;
+  height: auto;
+  max-height: max-content;
 }
 
 /* Ajustes específicos para vista de Libros (teacher/books_view) */
 .libros_category .search-bar.libros-search {
-    width: 100%;
+  width: 100%;
 }
 
 .libros_category .libros-search-wrapper {
-    position: relative;
-    width: 100%;
+  position: relative;
+  width: 100%;
 }
 
 .libros_category .libros-search-input {
-    width: 100%;
-    padding: 0.5rem 1rem 0.5rem 2.3rem;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    font-size: 0.9rem;
+  width: 100%;
+  padding: 0.5rem 1rem 0.5rem 2.3rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 0.9rem;
 }
 
 .libros_category .libros-search-icon {
-    position: absolute;
-    left: 0.75rem;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #999;
-    font-size: 0.85rem;
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #999;
+  font-size: 0.85rem;
 }
 
 /* estilos calificaciones */
 .grades {
-    gap: 1rem;
-    align-items: start;
-    justify-content: flex-start;
-    flex-wrap: nowrap;
+  gap: 1rem;
+  align-items: start;
+  justify-content: flex-start;
+  flex-wrap: nowrap;
 }
 
 .grade {
-    width: 100%;
+  width: 100%;
 }
 
 .grade_list {
-    gap: 0.5rem;
+  gap: 0.5rem;
 }
 
 .grade_list li {
-    justify-content: space-between;
-    flex-wrap: nowrap;
-    width: 100%;
-    gap: 0.5rem;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  width: 100%;
+  gap: 0.5rem;
 }
 
 .grade_list li span {
-    background-color: var(--light-color);
-    color: var(--calificaciones);
-    flex-wrap: nowrap;
-    padding: 0.5rem;
-    border-radius: 5px;
+  background-color: var(--light-color);
+  color: var(--calificaciones);
+  flex-wrap: nowrap;
+  padding: 0.5rem;
+  border-radius: 5px;
 }
 
 .grade_list li span {
-    width: 80%;
+  width: 80%;
 }
 
 .grade_list li span.grade {
-    width: 20%;
-    text-align: center;
-    background-color: #cdbbf1;
-    color: var(--light-color);
+  width: 20%;
+  text-align: center;
+  background-color: #cdbbf1;
+  color: var(--light-color);
 }
 
 .grade_list li span.subject_global {
-    width: 25%;
+  width: 25%;
 }
 
 .grade_list li span.periodo {
-    width: 15%;
-    text-align: center;
+  width: 15%;
+  text-align: center;
 }
-.grade_list li span.periodo:last-child:not(.global)  {
-    background-color: #cdbbf1;
-    color: var(--light-color);
+.grade_list li span.periodo:last-child:not(.global) {
+  background-color: #cdbbf1;
+  color: var(--light-color);
 }
 
 .grade_list li:first-child span {
-    background-color: var(--calificaciones);
-    color: var(--light-color);
+  background-color: var(--calificaciones);
+  color: var(--light-color);
 }
 
 .btn-calificaciones {
-    color: var(--calificaciones);
-    background-color: var(--light-color);
-    border-color: var(--calificaciones);
+  color: var(--calificaciones);
+  background-color: var(--light-color);
+  border-color: var(--calificaciones);
 }
 
 .btn-calificaciones:hover {
-    background-color: var(--calificaciones);
-    color: var(--light-color);
+  background-color: var(--calificaciones);
+  color: var(--light-color);
 }
 
 .btn-calificaciones.active {
-    background-color: var(--calificaciones);
-    color: var(--light-color);
+  background-color: var(--calificaciones);
+  color: var(--light-color);
 }
 
-
 .btn-clases {
-    color: var(--clases);
-    background-color: var(--light-color);
-    border-color: var(--clases);
+  color: var(--clases);
+  background-color: var(--light-color);
+  border-color: var(--clases);
 }
 
 .btn-clases:hover {
-    background-color: var(--clases);
-    color: var(--light-color);
+  background-color: var(--clases);
+  color: var(--light-color);
 }
 
 .btn-clases.active {
-    background-color: var(--clases);
-    color: var(--light-color);
+  background-color: var(--clases);
+  color: var(--light-color);
 }
 
 /* modals create  */
@@ -686,528 +684,526 @@ hr.libros_br {
 #registroModalCourse .modal-dialog.modal-dialog-centered,
 #registroModalAsignature .modal-dialog.modal-dialog-centered,
 #registroModalQuiz .modal-dialog.modal-dialog-centered {
-    max-width: 50%;
+  max-width: 50%;
 }
 
 #registroModalClass .title-modal {
-    color: var(--clases);
+  color: var(--clases);
 }
 
 #registroModalCourse .title-modal,
 #registroModalAsignature .title-modal {
-    color: var(--admin-active);
+  color: var(--admin-active);
 }
 
 #registroModalQuiz .title-modal {
-    color: var(--evaluaciones-active);
+  color: var(--evaluaciones-active);
 }
 
 #registroModalClass .modal-header,
 #registroModalCourse .modal-header,
 #registroModalAsignature .modal-header,
 #registroModalQuiz .modal-header {
-    border: none;
+  border: none;
 }
 
 #registroModalClass button.btn,
 #registroModalCourse button.btn,
 #registroModalAsignature button.btn,
 #registroModalQuiz button.btn {
-    padding: 0.5rem 4rem;
-    border-radius: 10px;
-    font-weight: bold;
+  padding: 0.5rem 4rem;
+  border-radius: 10px;
+  font-weight: bold;
 }
 
 #registroModalClass button.btn.btn-danger {
-    background-color: var(--clases);
-    background: var(--clases);
-    color: #fff;
-    border: 1px solid var(--clases);
+  background-color: var(--clases);
+  background: var(--clases);
+  color: #fff;
+  border: 1px solid var(--clases);
 }
 
 #registroModalCourse button.btn.btn-danger,
 #registroModalAsignature button.btn.btn-danger {
-    background-color: var(--admin-active);
-    background: var(--admin-active);
-    color: #fff;
-    border: 1px solid var(--admin-active);
+  background-color: var(--admin-active);
+  background: var(--admin-active);
+  color: #fff;
+  border: 1px solid var(--admin-active);
 }
 
 #registroModalQuiz button.btn.btn-danger {
-    background-color: var(--evaluaciones-active);
-    background: var(--evaluaciones-active);
-    color: #fff;
-    border: 1px solid var(--evaluaciones-active);
+  background-color: var(--evaluaciones-active);
+  background: var(--evaluaciones-active);
+  color: #fff;
+  border: 1px solid var(--evaluaciones-active);
 }
 
 #registroModalClass .modal-content,
 #registroModalCourse .modal-content,
 #registroModalAsignature .modal-content,
 #registroModalQuiz .modal-content {
-    padding: 1rem 2rem;
-    border-radius: 10px;
+  padding: 1rem 2rem;
+  border-radius: 10px;
 }
 
 #registroModalClass .modal-header,
 #registroModalCourse .modal-header,
 #registroModalAsignature .modal-header,
 #registroModalQuiz .modal-header {
-    padding: 1rem 0px;
+  padding: 1rem 0px;
 }
 
 #registroModalClass .modal-body,
 #registroModalCourse .modal-body,
 #registroModalAsignature .modal-body,
 #registroModalQuiz .modal-body {
-    padding: 0px;
+  padding: 0px;
 }
 
 #registroModalClass .form-control:valid {
-    border-color: var(--clases)
+  border-color: var(--clases);
 }
 
 #registroModalCourse .form-control:valid,
 #registroModalAsignature .form-control:valid {
-    border-color: var(--admin-active)
+  border-color: var(--admin-active);
 }
 
 #registroModalQuiz .form-control:valid {
-    border-color: var(--evaluaciones-active)
+  border-color: var(--evaluaciones-active);
 }
 
 .container_category.flex.evaluaciones_category {
-    gap: 0;
+  gap: 0;
 }
 
 .container_category.flex.evaluaciones_category .specialities_category {
-    width: 90%;
+  width: 90%;
 }
 
 .books_content.d-flex {
-    width: 100%;
-    justify-content: start;
-    gap: 1.5rem;
-    flex-wrap: wrap;
+  width: 100%;
+  justify-content: start;
+  gap: 1.5rem;
+  flex-wrap: wrap;
 }
 
 .container_category.flex.libros_category {
-    justify-content: start;
-    gap: 3rem;
-    background-color: #fff;
+  justify-content: start;
+  gap: 3rem;
+  background-color: #fff;
 }
 
 .btns_actions {
-    display: flex;
-    gap: 0px;
+  display: flex;
+  gap: 0px;
 }
 
 .btns_actions a.btn {
-    padding: 0.3rem 1rem;
-    border-radius: 3px;
-    font-weight: bold;
-    border: none;
-    transition: all 0.3s ease;
-    font-size: 9px;
+  padding: 0.3rem 1rem;
+  border-radius: 3px;
+  font-weight: bold;
+  border: none;
+  transition: all 0.3s ease;
+  font-size: 9px;
 }
 
 .btns_actions .btn-edit {
-    background-color: var(--clases);
-    color: #fff;
-    border-radius: 5px 0px 0px 5px !important;
+  background-color: var(--clases);
+  color: #fff;
+  border-radius: 5px 0px 0px 5px !important;
 }
 
 .btns_actions .btn-edit:hover {
-    background-color: var(--clases-active);
-    color: #fff;
+  background-color: var(--clases-active);
+  color: #fff;
 }
 
 .btns_actions .btn_delete {
-    background-color: var(--admin);
-    color: #fff;
-    border-radius: 0px 5px 5px 0px !important;
+  background-color: var(--admin);
+  color: #fff;
+  border-radius: 0px 5px 5px 0px !important;
 }
 
 .btns_actions .btn_delete:hover {
-    background-color: var(--admin-active);
-    color: #fff;
+  background-color: var(--admin-active);
+  color: #fff;
 }
 
 .specialities_category.class-detail-content {
-    width: 90%;
-    margin: auto;
+  width: 90%;
+  margin: auto;
 }
-
 
 .specialities_category.exams.flex.flex-column.recursos_category {
-    width: 80%;
+  width: 80%;
 }
-
 
 /* MODAL DELETE */
 .modal.modal_delete {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 10000;
-    display: none;
-    justify-content: center;
-    align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10000;
+  display: none;
+  justify-content: center;
+  align-items: center;
 }
 
 .modal.modal_delete[aria-hidden="false"] {
-    display: flex;
+  display: flex;
 }
 
 .modal.modal_delete .bg-back {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(2px);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(2px);
 }
 
 .modal.modal_delete .container {
-    position: relative;
-    z-index: 10001;
-    background: white;
-    border-radius: 20px;
-    padding: 3rem 2.5rem;
-    max-width: 500px;
-    width: 90%;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-    text-align: center;
-    animation: slideUp 0.3s ease;
+  position: relative;
+  z-index: 10001;
+  background: white;
+  border-radius: 20px;
+  padding: 3rem 2.5rem;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  animation: slideUp 0.3s ease;
 }
 
 .modal.modal_delete .delete-icon {
-    font-size: 4rem;
-    margin-bottom: 1.5rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .modal.modal_delete .delete-icon i {
-    width: 80px;
-    height: 80px;
-    background: #ffe0e0;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2.5rem;
+  width: 80px;
+  height: 80px;
+  background: #ffe0e0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
 }
 
 .modal.modal_delete .delete-title {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #333;
-    margin: 0 0 1rem 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 1rem 0;
 }
 
 .modal.modal_delete .delete-warning {
-    font-size: 1rem;
-    color: #666;
-    margin: 0 0 2rem 0;
-    text-align: center;
+  font-size: 1rem;
+  color: #666;
+  margin: 0 0 2rem 0;
+  text-align: center;
 }
 
 .modal.modal_delete .delete-buttons {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
 }
 
 .modal.modal_delete .btn {
-    /* padding: 0.9rem 2rem; */
-    border: none;
-    border-radius: 10px;
-    font-weight: 700;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    min-width: 130px;
+  /* padding: 0.9rem 2rem; */
+  border: none;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 130px;
 }
 
 .modal.modal_delete .btn-cancel {
-    background: var(--admin);
-    color: white;
+  background: var(--admin);
+  color: white;
 }
 
 .modal.modal_delete .btn-cancel:hover {
-    background: var(--admin-active);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  background: var(--admin-active);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .modal.modal_delete .btn-delete {
-    background: var(--clases);
-    color: white;
+  background: var(--clases);
+  color: white;
 }
 
 .modal.modal_delete .btn-delete:hover {
-    background: var(--clases-active);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  background: var(--clases-active);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .modal.modal_delete .btn {
-    border: none;
-    border-radius: 18px;
-    font-weight: 100;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    min-width: 12rem;
-    padding: 0px;
-    height: 29px;
+  border: none;
+  border-radius: 18px;
+  font-weight: 100;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 12rem;
+  padding: 0px;
+  height: 29px;
 }
 
 .bg_section_footer.mobile_btns,
 .mobile_btns {
+  display: none;
+}
+
+.calificaciones_category
+  .specialities_category.grades
+  .classes-table-wrapper::-webkit-scrollbar-thumb {
+  background: var(--calificaciones);
+  border-radius: 5px;
+}
+@media (max-width: 1600px) {
+  .specialities_category.cursos.grades.flex.flex-column,
+  .specialities_category {
+    max-height: 80vh;
+  }
+}
+
+@media (max-width: 1080px) {
+  .data_categoty {
+    text-align: center;
+    padding: 0rem 1rem;
+  }
+
+  .menu_aside {
+    display: none !important;
+  }
+
+  .container_category {
+    flex-direction: column;
+    height: auto;
+    width: 100%;
+    padding: 0rem;
+  }
+
+  .data_categoty > .title {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .specialities_category {
+    flex-direction: column;
+    width: 100%;
+    max-height: max-content;
+  }
+
+  .speciality {
+    width: 100%;
+    height: 340px;
+  }
+
+  .specialities_category.flex.books,
+  .filter {
+    flex-direction: row !important;
+    gap: 1rem;
+  }
+
+  .specialities_category.flex.books {
+    width: 100%;
+  }
+
+  #registroModalClass .modal-dialog.modal-dialog-centered,
+  #registroModalCourse .modal-dialog.modal-dialog-centered,
+  #registroModalAsignature .modal-dialog.modal-dialog-centered,
+  #registroModalQuiz .modal-dialog.modal-dialog-centered {
+    max-width: 90%;
+  }
+
+  .container_category.flex.libros_category {
+    flex-direction: column !important;
+    max-width: 100%;
+    flex-wrap: nowrap;
+  }
+
+  .specialities_category.flex.flex-column.books {
+    flex-direction: column !important;
+    height: auto;
+    max-height: unset;
+    position: relative;
+    overflow: visible;
+  }
+
+  .book-link {
+    width: 45%;
+  }
+
+  .book {
+    max-width: 100%;
+    width: 100%;
+    height: 250px;
+  }
+
+  .libros_category .data_categoty p,
+  .libros_category .data_grade_category {
     display: none;
+  }
+
+  .books input#searchBooks {
+    width: 100%;
+  }
+
+  .data_categoty p {
+    text-align: center;
+    margin: 0px;
+    color: #666;
+  }
+
+  .data_categoty {
+    gap: 0;
+    padding: 1rem;
+  }
+
+  .specialities_category.exams.flex.flex-column.clases_category.gap-4,
+  .specialities_category.exams.flex.flex-column.recursos_category {
+    width: 100%;
+  }
+
+  .mobile_btns {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .btns_desktop {
+    display: none;
+  }
+
+  .mobile_btns > .flex {
+    margin: auto;
+  }
+
+  .mobile_btns h3 {
+    font-size: 2rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+
+  .recursos_category .data_categoty {
+    gap: 1rem;
+  }
+
+  .container_category.flex.evaluaciones_category .specialities_category {
+    width: 100%;
+    margin-right: 0px;
+    margin: auto;
+    min-height: auto;
+  }
+
+  .nota span {
+    padding: 0.5rem 2rem;
+    background: var(--evaluaciones);
+    color: white;
+    height: 100%;
+    border-radius: 8px;
+  }
+
+  .bg_section_footer.mobile_btns,
+  .mobile_btns {
+    display: flex;
+  }
+
+  .specialities_category.cursos.grades.flex.flex-column,
+  .specialities_category {
+    max-height: max-content;
+    width: 100%;
+  }
+
+  .exam {
+    width: 100%;
+    height: 160px;
+  }
+
+  .text-content p {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    /* Limita el texto a 3 líneas */
+    overflow: hidden;
+    line-height: 1;
+    text-overflow: ellipsis;
+  }
+  .modal.modal_delete .btn {
+    min-width: 10rem;
+  }
+  .container_category.flex.libros_category .data_categoty {
+    width: 100%;
+  }
+  .filter.flex.flex-column {
+    justify-content: center;
+  }
+  .filter button,
+  .filter select {
+    width: 45%;
+  }
 }
 
-.calificaciones_category .specialities_category.grades .classes-table-wrapper::-webkit-scrollbar-thumb {
-    background: var(--calificaciones);
-    border-radius: 5px;
-}
-@media (max-width:1600px) {
+@media (max-width: 600px) {
+  .specialities_category {
+    padding: 0.5rem;
+  }
 
-    .specialities_category.cursos.grades.flex.flex-column,
-    .specialities_category {
-        max-height: 80vh;
-    }
-}
+  .exam {
+    gap: 0.5rem;
+    flex-direction: column;
+    align-items: end;
+  }
 
-@media (max-width:1080px) {
-    .data_categoty {
-        text-align: center;
-        padding: 0rem 1rem;
-    }
+  .exam_content {
+    width: 100%;
+  }
 
-    .menu_aside {
-        display: none !important;
-    }
+  .nota {
+    width: 25%;
+  }
 
-    .container_category {
-        flex-direction: column;
-        height: auto;
-        width: 100%;
-        padding: 0rem;
-    }
+  .nota hr {
+    display: none;
+  }
 
-    .data_categoty>.title {
-        flex-direction: column;
-        text-align: center;
-    }
+  .container_category .btns {
+    flex-direction: row !important;
+    justify-content: center;
+    gap: 1rem;
+  }
 
-    .specialities_category {
-        flex-direction: column;
-        width: 100%;
-        max-height: max-content;
-    }
+  .btn-evaluaciones {
+    max-width: 45%;
+    height: 27px;
+    padding: 0rem;
+    margin: auto;
+    text-align: center;
+    font-size: 1rem;
+    border-radius: 10px;
+  }
 
-    .speciality {
-        width: 100%;
-        height: 340px;
-    }
+  .book-link {
+    width: 45%;
+  }
 
-    .specialities_category.flex.books,
-    .filter {
-        flex-direction: row !important;
-        gap: 1rem;
-    }
-
-    .specialities_category.flex.books {
-        width: 100%;
-    }
-
-    #registroModalClass .modal-dialog.modal-dialog-centered,
-    #registroModalCourse .modal-dialog.modal-dialog-centered,
-    #registroModalAsignature .modal-dialog.modal-dialog-centered,
-    #registroModalQuiz .modal-dialog.modal-dialog-centered {
-        max-width: 90%;
-    }
-
-    .container_category.flex.libros_category {
-        flex-direction: column !important;
-        max-width: 100%;
-        flex-wrap: nowrap;
-    }
-
-    .specialities_category.flex.flex-column.books {
-        flex-direction: column !important;
-        height: auto;
-        max-height: unset;
-        position: relative;
-        overflow: visible;
-    }
-
-    .book-link {
-        width: 45%;
-    }
-
-    .book {
-        max-width: 100%;
-        width: 100%;
-        height: 250px;
-    }
-
-    .libros_category .data_categoty p,
-    .libros_category .data_grade_category {
-        display: none;
-    }
-
-    .books input#searchBooks {
-        width: 100%;
-    }
-
-    .data_categoty p {
-        text-align: center;
-        margin: 0px;
-    }
-
-    .data_categoty {
-        gap: 0;
-        padding: 1rem;
-    }
-
-    .specialities_category.exams.flex.flex-column.clases_category.gap-4,
-    .specialities_category.exams.flex.flex-column.recursos_category {
-        width: 100%;
-    }
-
-    .mobile_btns {
-        display: flex;
-        flex-direction: column;
-        gap: 2rem;
-    }
-
-    .btns_desktop {
-        display: none;
-    }
-
-    .mobile_btns>.flex {
-        margin: auto;
-    }
-
-    .mobile_btns h3 {
-        font-size: 2rem;
-        font-weight: 700;
-        text-align: center;
-        margin-bottom: 1rem;
-    }
-
-    .recursos_category .data_categoty {
-        gap: 1rem;
-    }
-
-    .container_category.flex.evaluaciones_category .specialities_category {
-        width: 100%;
-        margin-right: 0px;
-        margin: auto;
-        min-height: auto;
-    }
-
-    .nota span {
-        padding: 0.5rem 2rem;
-        background: var(--evaluaciones);
-        color: white;
-        height: 100%;
-        border-radius: 8px;
-    }
-
-    .bg_section_footer.mobile_btns,
-    .mobile_btns {
-        display: flex;
-    }
-
-    .specialities_category.cursos.grades.flex.flex-column,
-    .specialities_category {
-        max-height: max-content;
-        width: 100%;
-    }
-   
-
-    .exam {
-        width: 100%;
-        height: 160px;
-    }
-
-    .text-content p {
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 3;
-        /* Limita el texto a 3 líneas */
-        overflow: hidden;
-        line-height: 1;
-        text-overflow: ellipsis;
-    }
-    .modal.modal_delete .btn{
-        min-width: 10rem;
-    }
-}
-
-@media (max-width:600px) {
-    .specialities_category {
-        padding: 0.5rem;
-    }
-
-    .exam {
-        gap: 0.5rem;
-        flex-direction: column;
-        align-items: end;
-    }
-
-    .exam_content {
-        width: 100%;
-    }
-
-    .nota {
-        width: 25%;
-    }
-
-
-
-    .nota hr {
-        display: none;
-    }
-
-
-    .container_category .btns {
-        flex-direction: row !important;
-        justify-content: center;
-        gap: 1rem;
-    }
-
-    .btn-evaluaciones {
-        max-width: 45%;
-        height: 27px;
-        padding: 0rem;
-        margin: auto;
-        text-align: center;
-        font-size: 1rem;
-        border-radius: 10px;
-    }
-
-    .filter select {
-        max-width: 45%;
-    }
-
-    .book-link {
-        width: 45%;
-    }
-
-    .book {
-        max-width: 100%;
-    }
-
-    .grade_list li span {
-        font-size: .5rem;
-    }
+  .book {
+    max-width: 100%;
+  }
 }

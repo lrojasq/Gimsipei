@@ -45,15 +45,15 @@
                             <tr data-student-id="{{ student.id }}">
                                 <td>{{ student.full_name }}</td>
                                 <td>{{ student.document }}</td>
-                                <td>
+                                <td >
                                     <a href="{{ url_for('users.student_tasks', course_id=course.id, student_id=student.id) }}" 
-                                    class="view-link-btn">
+                                    class="view-link-btn" style="margin-left: 2rem;">
                                         Ir
                                     </a>
                                 </td>
                                 <td>
                                     <a href="{{ url_for('users.student_evaluations', course_id=course.id, student_id=student.id) }}" 
-                                    class="view-link-btn">
+                                    class="view-link-btn" style="margin-left: 2rem;">
                                         Ir
                                     </a>
                                 </td>

@@ -466,6 +466,7 @@
     .header-classes {
         /* flex-direction: column; */
         align-items: flex-start;
+        padding: 20px 0 20px 0;
     }
     
     .classes-icon-wrapper {
@@ -1002,6 +1003,9 @@ a.add-link-btn:hover {
     border-radius: 8px;
     transition: all 0.3s ease;
 }
+#createResourceModal select#resource_class_number{
+    display: none;
+}
 
 #createResourceModal input::placeholder {
     color: rgba(255, 255, 255, 0.9);
@@ -1209,6 +1213,9 @@ a.add-link-btn:hover {
 
 /* Modal Responsive */
 @media (max-width: 768px) {
+    #editClassModal .btn-submit{
+        width: 70%;
+    }
     .modal-container {
         width: 95%;
         max-height: 95vh;

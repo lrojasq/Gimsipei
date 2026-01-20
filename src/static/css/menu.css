@@ -119,7 +119,7 @@ html {
 
 .container_boxs_menu {
     justify-content: space-between;
-    gap: 0px;
+    gap: 2rem;
 }
 
 .box-menu {
@@ -128,7 +128,7 @@ html {
     align-items: center;
     flex-direction: column;
     gap: 10px;
-    width: 147px;
+    width: 130px;
     height: 158px;
     position: relative;
     border-radius: 15px;
@@ -136,7 +136,7 @@ html {
 }
 
 .big-box .box-menu.clases-hover {
-    width: 300px;
+    width: 220px;
 }
 
 .d-flex.barra-group {
@@ -764,7 +764,7 @@ i.bi.bi-arrow-left-short {
 
     .box-menu {
         width: 125px;
-        height: 140px;
+        height: 120px;
         position: relative;
         background-color: #f6f6f6;
     }
@@ -832,7 +832,26 @@ i.bi.bi-arrow-left-short {
     .big-box .box-menu.clases-hover {
         width: 125px;
     }
+    .box-menu:hover .barra,
     .d-flex.barra-group{
-        bottom: 0px;
+        bottom: 8px;
+    }
+    .big-box .box-menu.clases-hover:hover picture img {
+        content: url("/static/images/iconos/class.png");
+    }
+    .box-menu.evaluaciones-hover:hover picture img {
+        content: url("/static/images/iconos/library.png");
+    }
+    .box-menu.libros-hover:hover picture img {
+        content: url("/static/images/iconos/text.png");
+    }
+    .box-menu.calificaciones-hover:hover picture img {
+        content: url("/static/images/iconos/evaluations.png");
+    }
+    .box-menu:hover p{
+        color: var(--blanco);
+    }
+    .box-menu:hover .barra{
+        background-color: var(--blanco)!important;
     }
 }
