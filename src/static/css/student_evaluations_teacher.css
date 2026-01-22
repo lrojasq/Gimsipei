@@ -206,11 +206,11 @@
   background-color: hsl(0, 0%, 90%);
   color: hsl(0, 0%, 30%);
 }
-.student-evaluations-teacher .action-btn.reset-evaluation{
+.student-evaluations-teacher .action-btn.reset-evaluation {
   background-color: var(--evaluaciones);
-  border:none;
+  border: none;
 }
-.student-evaluations-teacher .btn_delete{
+.student-evaluations-teacher .btn_delete {
   border: none;
 }
 .student-evaluations-teacher .action-btn.reset-evaluation:hover {
@@ -570,7 +570,7 @@
 
 @media (max-width: 1080px) {
   .evaluations-table thead {
-    display: none;
+    /* display: none; */
   }
 
   .evaluations-table tbody tr {
@@ -736,5 +736,37 @@
   to {
     transform: translateX(0);
     opacity: 1;
+  }
+}
+@media (max-width: 768px) {
+  /* 🔥 FORZAR TABLA REAL EN MOBILE */
+  .evaluations-table,
+  .evaluations-table tr,
+  .evaluations-table td,
+  .evaluations-table th {
+    display: table;
+  }
+
+  .evaluations-table tr {
+    display: table-row;
+  }
+
+  .evaluations-table td,
+  .evaluations-table th {
+    display: table-cell;
+  }
+
+  /* Header de asignatura */
+    .evaluations-table .subject-header {
+    width: 100%;
+    padding: 12px 16px;
+  }
+
+  /* Contenedor interno */
+    .evaluations-table .subject-header-content {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center;
+    width: 100%;
   }
 }
