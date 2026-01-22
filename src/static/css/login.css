@@ -22,6 +22,7 @@ body {
     background-image: url("../images/bg-index.png");
     background-size: cover;
     background-repeat: no-repeat;
+    background-color: #1cc3ea;
 }
 
 /* Auth Forms */
