@@ -611,6 +611,9 @@ table#accordionCourses thead th {
         flex-direction: column;
         gap: 1rem;
     }
+    .modal.modal_delete .container{
+        max-width: 95%;
+    }
 }
 
 @media (max-width: 576px) {

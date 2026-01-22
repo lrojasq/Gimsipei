@@ -209,6 +209,7 @@ a {
 @media (max-width: 1600px) and (min-height: 801px) {
     .bg-index {
         background-size: contain;
+        background-position-x: -40px;
         background-image: url("../images/bg-index-1400.png");
     }
 

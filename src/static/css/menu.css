@@ -497,7 +497,10 @@ a {
   background-color: var(--barra-ginsipei);
   color: white;
 }
-
+.mobile-header:has(+ .admin_category.teachers_management) .mobile-nav a:hover{
+  background-color: var(--admin-active);
+  color: white;
+}
 .mobile-header:has(+ .clases_category) .mobile-nav a:hover {
   background-color: var(--barra-clases);
   color: white;
@@ -593,6 +596,9 @@ a {
 }
 .mobile-header:has(+ .admin_category .form-crear):after {
   background: var(--barra-ginsipei);
+}
+.mobile-header:has(+ .admin_category.teachers_management):after{
+  background: var(--admin-active);
 }
 .mobile-header:has(+ .clases_category):after {
   background: var(--barra-clases);
@@ -875,5 +881,9 @@ i.bi.bi-arrow-left-short {
   }
   .subject-row-expanded:has(.empty-cell-S) {
     padding: 1rem;
+  }
+  .big-box .box-menu.clases-hover, .box-menu {
+      width: 105px;
+      height: 140px;
   }
 }

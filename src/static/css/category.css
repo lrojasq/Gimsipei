@@ -63,7 +63,7 @@ h1 {
   gap: 1rem;
   align-items: center;
 }
-
+.data_categoty a,
 .data_categoty p {
   font-size: larger;
 }
@@ -1064,7 +1064,7 @@ hr.libros_br {
   .books input#searchBooks {
     width: 100%;
   }
-
+  .data_categoty a,
   .data_categoty p {
     text-align: center;
     margin: 0px;
