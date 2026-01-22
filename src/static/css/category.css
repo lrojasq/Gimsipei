@@ -149,11 +149,12 @@ h1 {
   background: var(--calificaciones);
   border-radius: 5px;
 }
-
+.admin_category .specialities_category .container-fluid::-webkit-scrollbar-thumb,
 .admin_category .specialities_category::-webkit-scrollbar-thumb {
   background: var(--admin);
   border-radius: 5px;
 }
+
 
 /* Handle on hover */
 .specialities_category::-webkit-scrollbar-thumb:hover {

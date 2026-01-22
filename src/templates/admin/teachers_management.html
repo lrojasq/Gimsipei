@@ -16,36 +16,39 @@
 <div class="container_category flex admin_category teachers_management">
     <!-- Inicio Cursos -->
     <div class="specialities_category cursos grades flex flex-column">
-        <div class="flex header-cursos">
-            <div class="items-header">
-                <div class="flex">
-                    <span>Nombre</span>
-                    <span>Documento</span>
+        <div class="container-fluid overflow-auto">
+            <div class="flex header-cursos">
+                <div class="items-header">
+                    <div class="flex">
+                        <span>Nombre</span>
+                        <span>Documento</span>
+                    </div>
+                    <span>Acciones</span>
                 </div>
-                <span>Acciones</span>
+            </div>
+
+            <div class="content-cursos">
+                <ul class="flex flex-column list-materias">
+                    {% for teacher in teachers %}
+                    <li class="flex ">
+                        <div class="data">
+                            <span>{{ teacher.full_name }}</span>
+                            <span>{{ teacher.document }}</span>
+                        </div>
+                        <span class="flex actions">
+                            <a href="{{ url_for('users.edit_teacher', teacher_id=teacher.id) }}" class=""><i
+                                    class="fas fa-edit"></i> </a>
+                            <a href="#" class="open-delete-teacher-modal" data-teacher-id="{{ teacher.id }}"
+                                data-teacher-name="{{ teacher.full_name or teacher.username }}">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </span>
+                    </li>
+                    {% endfor %}
+                </ul>
             </div>
         </div>
 
-        <div class="content-cursos">
-            <ul class="flex flex-column list-materias">
-                {% for teacher in teachers %}
-                <li class="flex ">
-                    <div class="data">
-                        <span>{{ teacher.full_name }}</span>
-                        <span>{{ teacher.document }}</span>
-                    </div>
-                    <span class="flex actions">
-                        <a href="{{ url_for('users.edit_teacher', teacher_id=teacher.id) }}" class=""><i
-                                class="fas fa-edit"></i> </a>
-                        <a href="#" class="open-delete-teacher-modal" data-teacher-id="{{ teacher.id }}"
-                            data-teacher-name="{{ teacher.full_name or teacher.username }}">
-                            <i class="fas fa-trash"></i>
-                        </a>
-                    </span>
-                </li>
-                {% endfor %}
-            </ul>
-        </div>
         <span class="flex add grados">
             <a href="{{ url_for('users.create_teacher') }}" class="btn btn-primary"><i
                     class="fas fa-plus me-2"></i>CREAR USUARIO</a>

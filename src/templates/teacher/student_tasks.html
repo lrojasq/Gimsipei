@@ -34,8 +34,8 @@
                 <thead>
                     <tr>
                         <th>Asignatura</th>
-                        <th>Nombre</th>
-                        <th>Fecha</th>
+                        <th class="d-none d-md-table-cell">Nombre</th>
+                        <th class="d-none d-md-table-cell">Fecha</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -56,10 +56,10 @@
                     {% for class_item in subject.classes %}
                     <tr class="subject-content-row class-row" data-subject-id="{{ subject.subject_id }}"
                         style="display: none;">
-                        <td class="class-indent"></td>
+                        <td class="class-indent d-none d-md-table-cell"></td>
                         <td class="class-name-cell">{{ class_item.title if class_item.title else 'Clase ' ~
                             class_item.class_number }}</td>
-                        <td class="class-date-cell">{{ class_item.date }}</td>
+                        <td class="class-date-cell d-none d-md-table-cell">{{ class_item.date }}</td>
                         <td class="class-actions-cell btns_actions ">
                             <a href="{{ url_for('courses.download_assignment_submission', course_id=course.id, student_id=student.id, assignment_id=class_item.id) }}"
                                 class="download-link btn-edit" title="Descargar" target="_blank">

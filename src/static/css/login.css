@@ -22,6 +22,7 @@ body {
     background-image: url("../images/bg-index.png");
     background-size: cover;
     background-repeat: no-repeat;
+    background-color: #1cc3ea;
 }
 
 /* Auth Forms */
@@ -104,7 +105,7 @@ label {
 }
 
 input:hover {
-    background-color: var(--info-color);
+    background-color: var(--light-color);
     border: none;
 }
 
@@ -158,7 +159,7 @@ input.input:hover {
 }
 
 .iniciar:hover {
-    background-color: var(--light-color);
+    background-color: var(--info-color);
     border: 1px solid var(--info-color);
     ;
 }
@@ -188,8 +189,6 @@ a {
         top: 36%;
     }
 }
-
-/* xl -Large devices (large desktops, 1200px and up)*/
 @media (min-width: 1201px) and (max-width: 1600px) {
     .bg-index {
         background-image: url("../images/bg-index-1200.png");
@@ -206,6 +205,16 @@ a {
     }
 
 }
+
+@media (max-width: 1600px) and (min-height: 801px) {
+    .bg-index {
+        background-size: contain;
+        background-image: url("../images/bg-index-1400.png");
+    }
+
+}
+/* xl -Large devices (large desktops, 1200px and up)*/
+
 
 /* lg  Large devices (desktops, 992px and up)*/
 @media (min-width: 993px) and(max-width: 1200px) {
@@ -310,13 +319,13 @@ a {
     .form-group i {
         top: 6px;
         right: 1rem;
-        color: var(--primary-color) !important;
+        color: var(--info-color) !important;
     }
 
     input:-internal-autofill-selected+i,
     input:active+i,
     input:hover+i {
-        color:  var(--primary-color) !important;
+        color:  var(--info-color) !important;
         cursor: pointer;
     }
 
