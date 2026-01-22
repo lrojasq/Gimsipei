@@ -997,7 +997,7 @@ a.add-link-btn:hover {
   transition: all 0.3s ease;
 }
 #createResourceModal select#resource_class_number {
-  display: none;
+  /* display: none; */
 }
 
 #createResourceModal input::placeholder {
