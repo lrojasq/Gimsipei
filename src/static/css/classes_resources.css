@@ -1259,6 +1259,7 @@ a.add-link-btn:hover {
   }
   #createBookModal .btn-submit{
     padding: 1rem;
+    width: 70%;
   }
   .subject-row-expanded:has(.empty-cell-s) {
     padding: 1rem;
