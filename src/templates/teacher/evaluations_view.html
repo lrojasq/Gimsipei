@@ -34,7 +34,7 @@
                 <thead class="table-header-collapsed">
                     <tr>
                         <th class="text-start">Cursos</th>
-                        <th class="text-center">Asignatura</th>
+                        <th class="text-center d-none d-md-table-cell" >Asignatura</th>
                         <th class="text-end">Recursos</th>
                     </tr>
                 </thead>
@@ -59,7 +59,7 @@
                                         {% if course.subjects %}
                                             {% for subject in course.subjects %}
                                                 <div class="subject-row-expanded">
-                                                    <div class="empty-cell-S"></div>
+                                                    <div class="empty-cell-s"></div>
                                                     <div class="text-center">
                                                         <span class="subject-name">{{ subject.name }}</span>
                                                     </div>

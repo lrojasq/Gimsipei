@@ -66,15 +66,6 @@
             </div>
         </div>
 
-        {% if teacher %}
-        <p class="">{{ teacher.full_name }}</p>
-        <div class="data_grade_category flex flex-column ">
-            <p>{{ teacher.document }}</p>
-            <p>Docente</p>
-        </div>
-        {% else %}
-        <p>Sin docente asignado</p>
-        {% endif %}
 
         {% if user.role == "teacher" %}
         <div class="flex flex-column gap-5">

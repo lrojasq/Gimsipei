@@ -262,10 +262,6 @@
     overflow-x: auto;
   }
 
-  .students-table {
-    min-width: 600px;
-  }
-
   .students-table thead th,
   .students-table tbody td {
     padding: 0.75rem 0.5rem;

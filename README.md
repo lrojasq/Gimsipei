@@ -18,7 +18,7 @@
     ```bash
     # Windows
     py -m venv env
-    py -3.12 -m venv venv
+    py -3.12 -m venv env
   
     # Linux
     python3 -m venv env

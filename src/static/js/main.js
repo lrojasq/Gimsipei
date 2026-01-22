@@ -75,8 +75,10 @@ const mobileNav = document.getElementById('mobileNav');
 if (hamburger && mobileNav) {
     hamburger.addEventListener('click', function () {
         mobileNav.classList.toggle('active');
+        document.body.classList.toggle('overflow-hidden');
         // Animación para el menú hamburguesa (opcional)
         this.classList.toggle('open');
+        
     });
 
     let menu = document.querySelectorAll('.mobile-nav li a')
@@ -84,6 +86,7 @@ if (hamburger && mobileNav) {
         item.addEventListener('click', () => {
             mobileNav.classList.remove('active');
             hamburger.classList.remove('open');
+            document.body.classList.toggle('overflow-hidden');
         });
     });
 }

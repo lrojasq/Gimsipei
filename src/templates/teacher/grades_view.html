@@ -57,7 +57,7 @@
                                 {% if course.students and course.students|length > 0 %}
                                 {% for student in course.students %}
                                 <div class="subject-row-expanded">
-                                    <div class="empty-cell-s"></div>
+                                    <div class="empty-cell-s d-md-table-cell d-none"></div>
                                     <div class="text-center">
                                         <span class="subject-name">{{ student.full_name }}</span>
                                     </div>

@@ -111,20 +111,20 @@ input:hover {
 input:-internal-autofill-selected::placeholder,
 .input:active::placeholder,
 .input:hover::placeholder {
-    color: var(--light-color);
+    color: var(--info-color);
 }
 
 input:-internal-autofill-selected+i,
 input:active+i,
 input:hover+i {
-    color: var(--light-color) !important;
+    color: var(--info-color) !important;
     cursor: pointer;
 }
 
 input.input:-internal-autofill-selected,
 input.input:active,
 input.input:hover {
-    color: var(--light-color) !important;
+    color: var(--info-color) !important;
     background-color: var(--info-color) !important;
     border: none;
 }
@@ -158,7 +158,7 @@ input.input:hover {
 }
 
 .iniciar:hover {
-    background-color: var(--light-color);
+    background-color: var(--info-color);
     border: 1px solid var(--info-color);
     ;
 }
@@ -310,13 +310,13 @@ a {
     .form-group i {
         top: 6px;
         right: 1rem;
-        color: var(--primary-color) !important;
+        color: var(--info-color) !important;
     }
 
     input:-internal-autofill-selected+i,
     input:active+i,
     input:hover+i {
-        color:  var(--primary-color) !important;
+        color:  var(--info-color) !important;
         cursor: pointer;
     }
 

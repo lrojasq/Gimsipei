@@ -7,16 +7,24 @@
         <div class="flex">
             <a href="{{ url_for('users.teachers_management') }}">
                 <div class="box-menu clases-hover">
-                    <img src="{{ url_for('static', filename='images/iconos/class.png') }}" alt="Docentes"
-                        style="width: 80px; height: 80px;">
+                      <picture>
+                        <source srcset="{{ url_for('static', filename='images/images-gray/clases.png') }}"
+                            media="(max-width: 1080px)">
+                        <img src="{{ url_for('static', filename='images/iconos/class.png') }}" alt="Clases y recursos"
+                            style="width: 60px; height: 70px;">
+                    </picture>
                     <p>Docente</p>
                     <div class="barra barra-clases"></div>
                 </div>
             </a>
             <a href="{{ url_for('courses.courses_management') }}">
                 <div class="box-menu libros-hover">
-                    <img src="{{ url_for('static', filename='images/iconos/library.png') }}" alt="Cursos"
-                        style="width: 70px; height: 80px;">
+                    <picture>
+                        <source srcset="{{ url_for('static', filename='images/images-gray/evaluaciones.png') }}"
+                            media="(max-width: 1080px)">
+                        <img src="{{ url_for('static', filename='images/iconos/library.png') }}" alt="Evaluaciones"
+                            style="width: 60px; height: 70px;">
+                    </picture>
                     <p>Cursos</p>
                     <div class="barra barra-libros"></div>
                 </div>
