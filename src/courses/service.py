@@ -31,28 +31,53 @@ from .validation import (
 def get_available_course_names() -> List[str]:
     """Genera lista de nombres de cursos disponibles"""
 
-    course_names = ["Sexto", "Séptimo", "Octavo", "Noveno", "Décimo", "Undécimo"]
+    course_names = [
+        "Primero",
+        "Segundo",
+        "Tercero",
+        "Cuarto",
+        "Quinto",
+        "Sexto",
+        "Séptimo",
+        "Octavo",
+        "Noveno",
+        "Décimo",
+        "Once",
+        "Extracurricular",
+    ]
     return course_names
 
 
 # Diccionario de cursos ordenados por grado
 COURSE_NAME_ORDER = {
-    "Sexto": 1,
-    "Séptimo": 2,
-    "Octavo": 3,
-    "Noveno": 4,
-    "Décimo": 5,
-    "Undécimo": 6,
-}
-
-# Mapeo de nombres de cursos a números de grado
-COURSE_NAME_TO_GRADE = {
+    "Primero": 1,
+    "Segundo": 2,
+    "Tercero": 3,
+    "Cuarto": 4,
+    "Quinto": 5,
     "Sexto": 6,
     "Séptimo": 7,
     "Octavo": 8,
     "Noveno": 9,
     "Décimo": 10,
-    "Undécimo": 11,
+    "Once": 11,
+    "Extracurricular": 12,
+}
+
+# Mapeo de nombres de cursos a números de grado (E para Extracurricular)
+COURSE_NAME_TO_GRADE = {
+    "Primero": 1,
+    "Segundo": 2,
+    "Tercero": 3,
+    "Cuarto": 4,
+    "Quinto": 5,
+    "Sexto": 6,
+    "Séptimo": 7,
+    "Octavo": 8,
+    "Noveno": 9,
+    "Décimo": 10,
+    "Once": 11,
+    "Extracurricular": "E",
 }
 
 

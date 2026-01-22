@@ -22,7 +22,7 @@
                 alt="Avatar" id="profileAvatar">
             <div class="flex flex-column ">
                 <h2>{{ user.full_name or user.username }}</h2>
-                <span>{{ user.role }}</span>
+                <span>{% if user.role == 'teacher' %}Docente{% elif user.role == 'admin' %}Administrador{% elif user.role == 'student' %}Estudiante{% else %}{{ user.role }}{% endif %}</span>
             </div>
 
         </div>

@@ -36,6 +36,8 @@
                         <p>Grado {{ course.name }}</p>
                     {% elif user.role == "teacher" %}
                         <p>Docente</p>
+                    {% elif user.role == "admin" %}
+                        <p>Administrador</p>
                     {% else %}
                         <p>{{ user.role }}</p>
                     {% endif %}

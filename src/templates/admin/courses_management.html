@@ -27,34 +27,48 @@
             </div>
             <div class="content-cursos">
                 {% if courses %}
-                <ul class="flex flex-column list-cursos">
-                    {% for course in courses %}
-                    <li>
-                        <span class="grado">
-                            {{ course.name }} <i class="fas fa-chevron-down"></i>
-                        </span>
-                        <div class="flex flex-column content-materias">
-                            <ul class="flex flex-column list-materias">
-                                {% for subject in course.subjects %}
-                                <li class="flex">
-                                    <span></span>
-                                    <span>
-                                        {{ subject.subject_name }}
-                                    </span>
-                                    <span class="flex actions">
-                                        <a href="#" class="open-edit-subject-modal" data-course-id="{{ course.id }}"
-                                            data-subject-id="{{ subject.subject_id }}"
-                                            data-subject-name="{{ subject.subject_name }}"
-                                            data-teacher-id="{{ subject.teacher_id }}"
-                                            data-teacher-name="{{ subject.teacher_name }}">
-                                            Editar
-                                        </a>
-                                        <a href="#" class="open-delete-subject-modal" data-course-id="{{ course.id }}"
-                                            data-subject-id="{{ subject.subject_id }}"
-                                            data-teacher-id="{{ subject.teacher_id }}"
-                                            data-subject-name="{{ subject.subject_name }}"
-                                            data-teacher-name="{{ subject.teacher_name }}">
-                                            <i class="fas fa-trash"></i>
+                    <ul class="flex flex-column list-cursos">
+                        {% for course in courses %}
+                            <li>
+                                <span class="grado">
+                                    {{ course.name }} <i class="fas fa-chevron-down"></i>
+                                </span>
+                                <div class="flex flex-column content-materias">
+                                    <ul class="flex flex-column list-materias">
+                                        {% for subject in course.subjects %}
+                                            <li class="flex">
+                                                <span></span>
+                                                <span>
+                                                    {{ subject.subject_name }}
+                                                </span>
+                                                <span class="flex actions">
+                                                    <a href="#"
+                                                       class="open-edit-subject-modal"
+                                                       data-course-id="{{ course.id }}"
+                                                       data-subject-id="{{ subject.subject_id }}"
+                                                       data-subject-name="{{ subject.subject_name }}"
+                                                       data-teacher-id="{{ subject.teacher_id }}"
+                                                       data-teacher-name="{{ subject.teacher_name }}">
+                                                        Editar
+                                                    </a>
+                                                    <a href="#"
+                                                       class="open-delete-subject-modal"
+                                                       data-course-id="{{ course.id }}"
+                                                       data-subject-id="{{ subject.subject_id }}"
+                                                       data-teacher-id="{{ subject.teacher_id }}"
+                                                       data-subject-name="{{ subject.subject_name }}"
+                                                       data-teacher-name="{{ subject.teacher_name }}">
+                                                        <i class="fas fa-trash"></i>
+                                                    </a>
+                                                </span>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                    <span class="flex add">
+                                        <a href="#"
+                                           class="btn btn-outline-danger add-subject-btn open-create-subject-modal"
+                                           data-course-id="{{ course.id }}">
+                                            AÑADIR
                                         </a>
                                     </span>
                                 </li>
