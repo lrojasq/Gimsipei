@@ -17,7 +17,7 @@
             <p>{{ user.full_name }}</p>
             <div class="data_grade_category flex flex-column">
                 <p>{{ user.document }}</p>
-                <p>{{ user.role }}</p>
+                <p>{% if user.role == 'teacher' %}Docente{% elif user.role == 'admin' %}Administrador{% elif user.role == 'student' %}Estudiante{% else %}{{ user.role }}{% endif %}</p>
             </div>
         </div>
 
