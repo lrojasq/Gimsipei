@@ -42,7 +42,7 @@ def get_available_course_names() -> List[str]:
         "Octavo",
         "Noveno",
         "Décimo",
-        "Once",
+        "Undecimo",
         "Extracurricular",
     ]
     return course_names
@@ -60,7 +60,7 @@ COURSE_NAME_ORDER = {
     "Octavo": 8,
     "Noveno": 9,
     "Décimo": 10,
-    "Once": 11,
+    "Undécimo": 11,
     "Extracurricular": 12,
 }
 
@@ -76,7 +76,7 @@ COURSE_NAME_TO_GRADE = {
     "Octavo": 8,
     "Noveno": 9,
     "Décimo": 10,
-    "Once": 11,
+    "Undécimo": 11,
     "Extracurricular": "E",
 }
 
@@ -132,12 +132,17 @@ def get_all_courses_for_dashboard() -> List[dict]:
                     "id": course.id,
                     "name": course.name,
                     "academic_year": course.academic_year,
-                    "grade_number": grade_number if grade_number else course.id,
+                    "grade_number": grade_number if grade_number else "?",
                 }
             )
 
-        # Ordenar cursos en orden descendente
-        courses_list.sort(key=lambda x: x["grade_number"], reverse=False)
+        # Ordenar cursos: números primero (1-11), luego strings (E, ?) al final
+        def sort_key(x):
+            gn = x["grade_number"]
+            # Si es número, ordenar por ese número; si es string, va al final
+            return gn if isinstance(gn, int) else 999
+        
+        courses_list.sort(key=sort_key, reverse=False)
         return courses_list
     finally:
         db.close()
