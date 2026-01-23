@@ -988,6 +988,10 @@ hr.libros_br {
   background: var(--evaluaciones);
   border-radius: 5px;
 }
+.clases_category .specialities_category.grades .classes-table-wrapper::-webkit-scrollbar-thumb {
+  background: var(--clases);
+  border-radius: 5px;
+}
 
 .specialities_category.grades
 .classes-table-wrapper::-webkit-scrollbar-thumb {
