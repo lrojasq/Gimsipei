@@ -154,7 +154,11 @@ h1 {
   background: var(--admin);
   border-radius: 5px;
 }
-
+.admin_category.teachers_category_create .specialities_category .container-fluid::-webkit-scrollbar-thumb,
+.admin_category.teachers_category_create .specialities_category::-webkit-scrollbar-thumb {
+  background: hsl(190, 65%, 55%);
+  border-radius: 5px;
+}
 
 /* Handle on hover */
 .specialities_category::-webkit-scrollbar-thumb:hover {
@@ -249,15 +253,15 @@ hr.clases_br {
 .evaluaciones_category .menu_aside {
   background-color: var(--evaluaciones);
 }
-
-.calificaciones_category .menu_aside {
-  background-color: var(--calificaciones);
-}
-
 .admin_category .menu_aside {
   background-color: var(--admin);
 }
-
+.create-student-container .menu_aside {
+  background-color: var(--clases);
+}
+.teachers_category_create .menu_aside {
+  background-color: hsl(190, 65%, 55%);
+}
 .menu_aside svg {
   fill: var(--light-color);
   max-width: 50px;
@@ -312,7 +316,10 @@ hr.clases_br {
 .admin_category .aside_list li a:hover {
   background-color: var(--admin-active);
 }
-
+.teachers_category_create .aside_list li a.active,
+.teachers_category_create .aside_list li a:hover{
+  background-color: hsl(190, 65%, 50%);
+}
 .aside_list li a.active svg,
 .aside_list li a:hover svg {
   fill: var(--light-color);
