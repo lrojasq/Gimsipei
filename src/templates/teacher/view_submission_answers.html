@@ -97,18 +97,37 @@
                                 </div>
                             {% else %}
                                 <!-- Respuesta abierta -->
+                                {% set student_letter = answer.answer_text if answer else None %}
+                                {% set correct_letter = question.correct_answer %}
+                                {% set student_option = question.options
+                                    | selectattr('option_letter', 'equalto', student_letter)
+                                    | first if student_letter and question.options else None %}
+                                {% set correct_option = question.options
+                                    | selectattr('option_letter', 'equalto', correct_letter)
+                                    | first if correct_letter and question.options else None %}
+                                
                                 <div class="open-answer-section">
                                     <div class="answer-block student-answer">
                                         <span class="answer-label">Respuesta del estudiante:</span>
                                         <div class="answer-content">
-                                            {{ answer.answer_text if answer and answer.answer_text else 'No respondió' }}
+                                            {% if student_option %}
+                                                <strong>{{ student_letter }})</strong> {{ student_option.option_text }}
+                                            {% elif answer and answer.answer_text %}
+                                                {{ answer.answer_text }}
+                                            {% else %}
+                                                No respondió
+                                            {% endif %}
                                         </div>
                                     </div>
                                     {% if question.correct_answer %}
                                         <div class="answer-block correct-answer">
                                             <span class="answer-label">Respuesta correcta/esperada:</span>
                                             <div class="answer-content">
-                                                {{ question.correct_answer }}
+                                                {% if correct_option %}
+                                                    <strong>{{ correct_letter }})</strong> {{ correct_option.option_text }}
+                                                {% else %}
+                                                    {{ question.correct_answer }}
+                                                {% endif %}
                                             </div>
                                         </div>
                                     {% endif %}

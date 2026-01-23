@@ -176,9 +176,9 @@ Calificaciones - {{ grades_data.student.full_name }}
     <script>
         window.gradesConfig = {
             courseId: {{ grades_data.course.id }},
-        studentId: { { grades_data.student.id } },
-        period: { { current_period } }
-            };
+            studentId: {{ grades_data.student.id }},
+            period: {{ current_period }}
+        };
     </script>
     <script src="{{ url_for('static', filename='js/grades_view.js') }}"></script>
     {% endif %}
