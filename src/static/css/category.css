@@ -139,7 +139,7 @@ h1 {
   background: var(--libros);
   border-radius: 5px;
 }
-
+.evaluaciones_category .specialities_category .container-fluid::-webkit-scrollbar-thumb,
 .evaluaciones_category .specialities_category::-webkit-scrollbar-thumb {
   background: var(--evaluaciones);
   border-radius: 5px;
@@ -981,6 +981,11 @@ hr.libros_br {
 
 .calificaciones_category .specialities_category.grades .classes-table-wrapper::-webkit-scrollbar-thumb {
   background: var(--calificaciones);
+  border-radius: 5px;
+}
+
+.evaluaciones_category .specialities_category.grades .classes-table-wrapper::-webkit-scrollbar-thumb {
+  background: var(--evaluaciones);
   border-radius: 5px;
 }
 
