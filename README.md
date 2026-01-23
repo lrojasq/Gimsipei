@@ -26,6 +26,7 @@
 * Ejecutar el entorno virtual:
     ```bash
     # Windows
+    source env/Scripts/activate
     env\Scripts\activate
 
     # Linux

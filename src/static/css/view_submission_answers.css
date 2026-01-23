@@ -394,4 +394,7 @@
   .open-answer-section {
     padding-left: 0;
   }
+  .submission-header .header-content {
+    flex-direction: column;
+  }
 }

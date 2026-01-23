@@ -333,10 +333,6 @@
     overflow-x: auto;
   }
 
-  .tasks-table {
-    min-width: 600px;
-  }
-
   .tasks-table thead th,
   .tasks-table tbody td {
     padding: 0.75rem 0.5rem;

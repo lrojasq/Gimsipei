@@ -60,13 +60,13 @@
                     <tr class="subject-content-row evaluation-row" data-subject-id="{{ subject.subject_id }}"
                         style="display: none;">
 
-                        <td class="eval-indent"></td>
+                        <td class="eval-indent d-none d-md-table-cell"></td>
 
                         <td class="eval-name-cell">
                             {{ eval_item.title }}
                         </td>
 
-                        <td class="eval-date-cell">
+                        <td class="eval-date-cell d-none d-md-table-cell">
                             {{ eval_item.submitted_at.strftime('%d-%m-%y') if eval_item.submitted_at else '-' }}
                         </td>
 

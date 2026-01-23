@@ -38,7 +38,7 @@ function initializeSubjectExpansion() {
         // Expand
         this.classList.add("expanded");
         contentRows.forEach((contentRow) => {
-          contentRow.style.display = "table-row";
+          contentRow.style.display = "flex";
         });
       }
     });

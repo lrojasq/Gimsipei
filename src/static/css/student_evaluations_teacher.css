@@ -769,4 +769,7 @@
     align-items: center;
     width: 100%;
   }
+  .student-evaluations-teacher .subject-row{
+    width: 95vw;
+  }
 }

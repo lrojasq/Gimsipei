@@ -571,4 +571,7 @@
     .teacher-sidebar-left {
         display: none;
     }
+    .section-header-teacher h3 {
+        font-size: 1rem;
+    }
 }
