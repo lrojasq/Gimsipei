@@ -270,8 +270,9 @@ a {
   flex-direction: column;
   gap: 10px;
   height: 100px;
-  bottom: 150px;
   background-color: #fff;
+  left: 0;
+  bottom: 0;
 }
 
 .barra_bg {

@@ -54,37 +54,64 @@
                     <div class="menu">
                         <a href="{{ url_for('classes.student_classes_view') }}">
                             <div class="box-menu clases-hover">
-                                <div class="clases"></div>
-                                <p>Clases</p>
-                                <div class="barra-clases"></div>
+                                <picture>
+                                    <source srcset="{{ url_for('static', filename='images/images-gray/clases.png') }}"
+                                        media="(max-width: 1080px)">
+                                    <img src="{{ url_for('static', filename='images/iconos/class.png') }}" alt="Clases"
+                                        style="width: 80px;">
+                                </picture>
+                                <p>Clases </p>
+                                <div class="barra barra-clases"></div>
                             </div>
                         </a>
                         <a href="{{ url_for('resources.student_resources_view') }}">
-                            <div class="box-menu recursos-hover">
-                                <div class="recursos"></div>
+                            <div class="box-menu clases-hover">
+                                <picture>
+                                    <source srcset="{{ url_for('static', filename='images/images-gray/recursos.png') }}"
+                                        media="(max-width: 1080px)">
+                                    <img src="{{ url_for('static', filename='images/iconos/resources.png') }}"
+                                        alt="Recursos" style="width: 80px;">
+                                </picture>
                                 <p>Recursos</p>
-                                <div class="barra-recursos"></div>
+                                <div class="barra barra-recursos"></div>
                             </div>
                         </a>
                         <a href="{{ url_for('evaluations.student_evaluations_view') }}">
                             <div class="box-menu evaluaciones-hover">
-                                <div class="evaluaciones"></div>
+                                <picture>
+                                    <source
+                                        srcset="{{ url_for('static', filename='images/images-gray/evaluaciones.png') }}"
+                                        media="(max-width: 1080px)">
+                                    <img src="{{ url_for('static', filename='images/iconos/library.png') }}"
+                                        alt="Evaluaciones" style="width: 60px;">
+                                </picture>
                                 <p>Evaluaciones</p>
-                                <div class="barra-evaluaciones"></div>
+                                <div class="barra barra-evaluaciones"></div>
                             </div>
                         </a>
                         <a href="{{ url_for('books.books_view') }}">
                             <div class="box-menu libros-hover">
-                                <div class="libros"></div>
+                                <picture>
+                                    <source srcset="{{ url_for('static', filename='images/images-gray/libros.png') }}"
+                                        media="(max-width: 1080px)">
+                                    <img src="{{ url_for('static', filename='images/iconos/text.png') }}" alt="Libros"
+                                        style="width: 80px;">
+                                </picture>
                                 <p>Libros</p>
-                                <div class="barra-libros"></div>
+                                <div class="barra barra-libros"></div>
                             </div>
                         </a>
                         <a href="{{ url_for('grades.grades_view') }}">
                             <div class="box-menu calificaciones-hover">
-                                <div class="calificaciones"></div>
+                                <picture>
+                                    <source
+                                        srcset="{{ url_for('static', filename='images/images-gray/calificaciones.png') }}"
+                                        media="(max-width: 1080px)">
+                                    <img src="{{ url_for('static', filename='images/iconos/evaluations.png') }}"
+                                        alt="Calificaciones" style="width: 80px;">
+                                </picture>
                                 <p>Calificaciones</p>
-                                <div class="barra-calificaciones"></div>
+                                <div class="barra barra-calificaciones"></div>
                             </div>
                         </a>
                     </div>

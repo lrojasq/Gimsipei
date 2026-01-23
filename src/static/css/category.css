@@ -1207,4 +1207,7 @@ hr.libros_br {
   .book {
     max-width: 100%;
   }
+  a.btn.btn-calificaciones {
+      font-size: 1rem;
+  }
 }

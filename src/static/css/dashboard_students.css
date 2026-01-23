@@ -343,7 +343,7 @@ body {
         height: 80px;
         background-size: contain;
     }
-    .clases {
+    /* .clases {
         background-image: url("../images/images-gray/clases.png")!important;
     }
     .recursos {
@@ -360,7 +360,7 @@ body {
     }
     .slider_dashboard_student .box-menu{
         height: 200px;
-    }
+    } */
     
 }
 
@@ -379,6 +379,9 @@ body {
 
     .bg-lateral {
         display: none;
+    }
+    .bg-vision .menu{
+        gap: 2rem 1rem;
     }
 
     /* .mision-tp,

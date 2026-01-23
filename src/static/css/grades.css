@@ -338,8 +338,7 @@
 
 /* Ajustes para el panel de datos lateral (solo en vistas con data_categoty) */
 .calificaciones_category .data_categoty {
-  min-width: 250px;
-  max-width: 300px;
+  width: 250px;
 }
 
 /* Header con icono y título */
@@ -384,7 +383,14 @@
   }
 
   .calificaciones_category .data_categoty {
-    max-width: 100%;
+    width: 90%;
     min-width: unset;
+    max-width: unset;
+    margin: auto;
+  }
+  .grade_list li span,
+  .grade_list li:first-child span{
+    font-size: x-small;
+    margin: auto;
   }
 }

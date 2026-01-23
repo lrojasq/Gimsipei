@@ -206,7 +206,7 @@ a {
 
 }
 
-@media (max-width: 1600px) and (min-height: 801px) {
+@media (max-width: 1600px) and (min-height: 801px) and (min-width: 1081px) {
     .bg-index {
         background-size: contain;
         background-position-x: -40px;
