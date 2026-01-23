@@ -38,7 +38,12 @@ function initializeSubjectExpansion() {
         // Expand
         this.classList.add("expanded");
         contentRows.forEach((contentRow) => {
-          contentRow.style.display = "flex";
+          console.log(window.screen.width);
+          if(window.screen.width > 768) {
+              contentRow.style.display = 'table-row';
+          } else {
+              contentRow.style.display = 'flex';
+          }
         });
       }
     });

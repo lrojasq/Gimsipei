@@ -12,7 +12,12 @@ document.addEventListener('DOMContentLoaded', function() {
             
             if (expandableRow) {
                 if (expandableRow.style.display === 'none') {
-                    expandableRow.style.display = 'flex';
+                    if(window.screen.width < 768) {
+                        expandableRow.style.display = 'table-row';
+                    } else {
+                        expandableRow.style.display = 'flex';
+                    }
+                   
                     icon.classList.remove('fa-chevron-down');
                     icon.classList.add('fa-chevron-up');
                     this.closest('.course-row').classList.add('expanded');
