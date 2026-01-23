@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             if (expandableRow) {
                 if (expandableRow.style.display === 'none') {
-                    if(window.screen.width < 768) {
+                    if(window.screen.width > 768) {
                         expandableRow.style.display = 'table-row';
                     } else {
                         expandableRow.style.display = 'flex';
