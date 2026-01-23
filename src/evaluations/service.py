@@ -10,6 +10,7 @@ from ..models.course import Course
 from ..models.subject import Subject
 from ..models.course_subject import CourseSubject
 from ..database.database import SessionLocal
+from src.courses.service import COURSE_NAME_ORDER
 
 
 def evaluation_to_dict(evaluation):
@@ -351,14 +352,7 @@ def get_all_courses_with_subjects_for_evaluations():
                 }
             )
 
-        # Ordenar por nombre del curso
-        COURSE_NAME_ORDER = {
-            "Sexto": 6,
-            "Séptimo": 7,
-            "Octavo": 8,
-            "Noveno": 9,
-            "Décimo": 10,
-        }
+        # Ordenar cursos
         courses_data.sort(key=lambda c: COURSE_NAME_ORDER.get(c["name"], 999))
 
         return courses_data, 200

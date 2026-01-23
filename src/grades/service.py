@@ -12,6 +12,7 @@ from ..models.evaluation_submission import EvaluationSubmission
 from ..models.grade import Grade
 from ..models.subject import Subject
 from ..models.user import User
+from src.courses.service import COURSE_NAME_ORDER
 
 
 def grade_to_dict(grade: Grade) -> dict:
@@ -38,11 +39,9 @@ def get_courses_with_students_service(
     """
     db = SessionLocal()
     try:
-        courses = db.query(Course).order_by(Course.name.desc()).all()
-
+        courses = db.query(Course).all()
         if not courses:
             return [], 200
-
         result = []
         for course in courses:
             # Obtener estudiantes del curso
@@ -74,7 +73,8 @@ def get_courses_with_students_service(
                     "students": students,
                 }
             )
-
+        # Ordenar los cursos
+        result.sort(key=lambda c: COURSE_NAME_ORDER.get(c["name"], 999))
         return result, 200
     except Exception as e:
         import traceback
