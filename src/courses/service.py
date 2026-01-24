@@ -42,7 +42,7 @@ def get_available_course_names() -> List[str]:
         "Octavo",
         "Noveno",
         "Décimo",
-        "Undecimo",
+        "Undécimo",
         "Extracurricular",
     ]
     return course_names
