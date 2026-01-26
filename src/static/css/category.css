@@ -521,6 +521,7 @@ hr.clases_br {
   height: 370px;
   cursor: pointer;
   transition: box-shadow 0.2s ease;
+  position: relative;
 }
 
 .book img {
@@ -1002,6 +1003,13 @@ hr.libros_br {
   background: var(--calificaciones);
   border-radius: 5px;
 }
+
+span.open-delete-book-modal {
+    position: absolute;
+    right: 6px;
+    bottom: 2px;
+}
+
 @media (max-width: 1600px) {
   .specialities_category.cursos.grades.flex.flex-column,
   .specialities_category {
