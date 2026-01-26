@@ -63,6 +63,9 @@ h1 {
   gap: 1rem;
   align-items: center;
 }
+.data_categoty > .title h1{
+  font-size: medium;
+}
 .data_categoty a,
 .data_categoty p {
   font-size: larger;
@@ -518,6 +521,7 @@ hr.clases_br {
   height: 370px;
   cursor: pointer;
   transition: box-shadow 0.2s ease;
+  position: relative;
 }
 
 .book img {
@@ -531,6 +535,7 @@ hr.clases_br {
   padding: 0px;
   gap: 2px;
   font-size: small;
+  margin: auto;
 }
 
 hr.libros_br {
@@ -998,6 +1003,13 @@ hr.libros_br {
   background: var(--calificaciones);
   border-radius: 5px;
 }
+
+span.open-delete-book-modal {
+    position: absolute;
+    right: 6px;
+    bottom: 2px;
+}
+
 @media (max-width: 1600px) {
   .specialities_category.cursos.grades.flex.flex-column,
   .specialities_category {
