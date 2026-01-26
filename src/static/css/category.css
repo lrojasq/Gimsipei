@@ -63,6 +63,9 @@ h1 {
   gap: 1rem;
   align-items: center;
 }
+.data_categoty > .title h1{
+  font-size: medium;
+}
 .data_categoty a,
 .data_categoty p {
   font-size: larger;
@@ -531,6 +534,7 @@ hr.clases_br {
   padding: 0px;
   gap: 2px;
   font-size: small;
+  margin: auto;
 }
 
 hr.libros_br {

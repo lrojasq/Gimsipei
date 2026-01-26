@@ -119,8 +119,8 @@ html {
 }
 
 .container_boxs_menu {
-  justify-content: space-between;
-  gap: 2rem;
+  justify-content: start;
+  gap: 1rem;
 }
 
 .box-menu {
@@ -270,7 +270,7 @@ a {
   flex-direction: column;
   gap: 10px;
   height: 100px;
-  background-color: #fff;
+  background-color:#f6f6f6;
   left: 0;
   bottom: 0;
 }
@@ -714,6 +714,9 @@ i.bi.bi-arrow-left-short {
     z-index: 999;
     width: 50%;
     height: 165%;
+  }
+  .bg_section_footer {
+    bottom: 80px;
   }
 }
 

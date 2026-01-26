@@ -306,6 +306,13 @@ body {
     object-fit: cover;
 }
 
+
+@media (min-width:1600px) {
+    .bg-vision{
+        padding: 4rem 6rem 0px;
+    }
+}
+
 @media (max-width:1080px){
     .swiper {
         overflow: auto!important;
