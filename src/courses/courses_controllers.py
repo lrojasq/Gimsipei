@@ -103,52 +103,6 @@ def create_course_controller(request: Request) -> Response:
 
 @jwt_required()
 @role_required([UserRole.ADMIN])
-def edit_course_controller(course_id: int, request: Request) -> Response:
-    """View to edit a course"""
-    if request.method == "GET":
-        try:
-            course, status_code = get_course_service(course_id, request)
-            if status_code == 404:
-                return redirect(url_for("courses.courses_management"))
-            return render_template(
-                "admin/edit_course.html", course=course, accion_logout=True
-            )
-        except Exception:
-            return redirect(url_for("courses.courses_management"))
-
-    try:
-        # Get course data first in case of validation errors
-        course_data, _ = get_course_service(course_id, request)
-
-        data = request.form.to_dict()
-        validated = CourseUpdateSchema(**data)
-        result, status_code = update_course_service(course_id, validated, request)
-
-        if status_code == 200:
-            return redirect(url_for("courses.courses_management"))
-        elif status_code == 404:
-            return redirect(url_for("courses.courses_management"))
-        elif status_code == 400:
-            return render_template(
-                "admin/edit_course.html", course=result, accion_logout=True
-            )
-        else:
-            return render_template(
-                "admin/edit_course.html", course=result, accion_logout=True
-            )
-
-    except ValidationError:
-        return render_template(
-            "admin/edit_course.html", course=course_data, accion_logout=True
-        )
-    except Exception:
-        return render_template(
-            "admin/edit_course.html", course=course_data, accion_logout=True
-        )
-
-
-@jwt_required()
-@role_required([UserRole.ADMIN])
 def delete_course_controller(course_id: int, request: Request) -> Response:
     """Delete a course"""
     try:

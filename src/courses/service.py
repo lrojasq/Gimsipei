@@ -141,7 +141,7 @@ def get_all_courses_for_dashboard() -> List[dict]:
             gn = x["grade_number"]
             # Si es número, ordenar por ese número; si es string, va al final
             return gn if isinstance(gn, int) else 999
-        
+
         courses_list.sort(key=sort_key, reverse=False)
         return courses_list
     finally:

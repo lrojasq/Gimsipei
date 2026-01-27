@@ -208,12 +208,27 @@ function initializeCreateSubjectModal() {
                 const redirectToInput = document.getElementById('redirectToInput');
                 if (redirectToInput) redirectToInput.value = 'courses_management';
                 
-                // Mostrar campo de selección de materia
+                // Restaurar la acción original del formulario
+                form.action = '/subjects/create';
+                
+                // Mostrar campo de selección de materia y ocultar input de edición
                 const subjectNameField = document.getElementById('subjectNameField');
                 if (subjectNameField) {
                     subjectNameField.style.display = 'block';
+                    
+                    // Mostrar el select
                     const subjectSelect = document.querySelector('#subject-name');
-                    if (subjectSelect) subjectSelect.setAttribute('required', 'required');
+                    if (subjectSelect) {
+                        subjectSelect.style.display = 'block';
+                        subjectSelect.setAttribute('required', 'required');
+                    }
+                    
+                    // Ocultar el input de edición si existe
+                    const subjectInput = document.getElementById('subject-name-edit');
+                    if (subjectInput) {
+                        subjectInput.style.display = 'none';
+                        subjectInput.removeAttribute('required');
+                    }
                 }
                 
                 // Resetear formulario
@@ -338,7 +353,7 @@ function initializeEditSubjectModal() {
                 e.preventDefault();
 
                 const courseId = this.getAttribute('data-course-id');
-                const subjectId = this.getAttribute('data-subject-id'); // subject actual (original)
+                const subjectId = this.getAttribute('data-subject-id');
                 const subjectName = this.getAttribute('data-subject-name');
                 const teacherId = this.getAttribute('data-teacher-id');
 
@@ -347,7 +362,7 @@ function initializeEditSubjectModal() {
                 form.classList.remove('was-validated');
 
                 // Configurar modo editar
-                document.getElementById('subjectModalTitle').textContent = 'Actualizar asignación';
+                document.getElementById('subjectModalTitle').textContent = 'Editar materia';
                 document.getElementById('teacherLabel').textContent = 'Profesor';
                 const submitBtn = form.querySelector('button[type="submit"]');
                 if (submitBtn) submitBtn.textContent = 'Actualizar';
@@ -355,26 +370,41 @@ function initializeEditSubjectModal() {
                 const redirectToInput = document.getElementById('redirectToInput');
                 if (redirectToInput) redirectToInput.value = 'courses_management';
 
+                // Ruta de edición de materia
+                form.action = `/subjects/${subjectId}/edit`;
+
                 // Set hidden inputs
                 const courseIdInput = document.getElementById('courseIdInput');
                 if (courseIdInput) courseIdInput.value = courseId || '';
 
-                // subject_id en el form representa el subject ORIGINAL para poder actualizar/mover la asignación
                 const subjectIdInput = document.getElementById('subjectIdInput');
                 if (subjectIdInput) subjectIdInput.value = subjectId || '';
 
-                // Preseleccionar materia
-                const subjectSelect = document.getElementById('subject-name');
-                if (subjectSelect && subjectName) {
-                    // Si la opción no existe, agregarla (por seguridad)
-                    const exists = Array.from(subjectSelect.options).some(o => o.value === subjectName);
-                    if (!exists) {
-                        const opt = document.createElement('option');
-                        opt.value = subjectName;
-                        opt.textContent = subjectName;
-                        subjectSelect.appendChild(opt);
+                // Convertir el select de materia en un input text para edición
+                const subjectNameField = document.getElementById('subjectNameField');
+                if (subjectNameField) {
+                    // Ocultar el select
+                    const subjectSelect = document.getElementById('subject-name');
+                    if (subjectSelect) {
+                        subjectSelect.style.display = 'none';
+                        subjectSelect.removeAttribute('required');
                     }
-                    subjectSelect.value = subjectName;
+                    
+                    // Verificar si ya existe un input de texto para edición
+                    let subjectInput = document.getElementById('subject-name-edit');
+                    if (!subjectInput) {
+                        // Crear input de texto si no existe
+                        subjectInput = document.createElement('input');
+                        subjectInput.type = 'text';
+                        subjectInput.className = 'form-control';
+                        subjectInput.id = 'subject-name-edit';
+                        subjectInput.name = 'name';
+                        subjectInput.required = true;
+                        subjectNameField.appendChild(subjectInput);
+                    }
+                    
+                    subjectInput.style.display = 'block';
+                    subjectInput.value = subjectName || '';
                 }
 
                 // Preseleccionar profesor

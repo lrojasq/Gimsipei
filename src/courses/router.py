@@ -2,7 +2,6 @@ from flask import Blueprint, request
 from .courses_controllers import (
     courses_management_controller,
     create_course_controller,
-    edit_course_controller,
     delete_course_controller,
     remove_student_from_course_controller,
     remove_subject_from_course_controller,
@@ -35,12 +34,6 @@ def courses_management():
 def create_course():
     """Crear nuevo curso"""
     return create_course_controller(request)
-
-
-@courses_bp.route("/<int:course_id>/edit", methods=["GET", "POST"])
-def edit_course(course_id):
-    """Editar curso existente"""
-    return edit_course_controller(course_id, request)
 
 
 @courses_bp.route("/<int:course_id>/delete", methods=["POST"])
