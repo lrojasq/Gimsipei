@@ -98,13 +98,13 @@
                     </div>
                     {% endif %}
                 <div class="title_speciality flex flex-column">
-                  <a href="{{ url_for('books.read_book', book_id=book.id) }}" style="color: #666; font-size: 0.8rem;">  {{ book.title }}</a>
+                  <a href="{{ url_for('books.read_book', book_id=book.id) }}" style="color: #666; font-size: 0.8rem;" title="Abrir">  {{ book.title }}</a>
                     {% if book.grade_level %}
                     <small style="color: #666; font-size: 0.8rem;">{{ book.grade_level }}° Grado</small>
                     {% endif %}
                     <hr class="libros_br" />
                     <a href="{{ url_for('books.download_book', book_id=book.id) }}"
-                        onclick="event.stopPropagation();"><i class="fas fa-download"></i></a>
+                        onclick="event.stopPropagation();" title="Descargar"><i class="fas fa-download"></i></a>
                     {% if user.role == "teacher" %}
                     <span class="open-delete-book-modal" data-book-id="{{ book.id }}" title="Eliminar"
                         style="margin-top: 0.5rem; color: #dc3545; cursor: pointer; align-self: flex-end;"
