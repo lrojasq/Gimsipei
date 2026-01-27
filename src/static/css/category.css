@@ -519,7 +519,6 @@ hr.clases_br {
   border-radius: 15px;
   padding: 7px;
   height: 370px;
-  cursor: pointer;
   transition: box-shadow 0.2s ease;
   position: relative;
 }
@@ -536,6 +535,9 @@ hr.clases_br {
   gap: 2px;
   font-size: small;
   margin: auto;
+}
+.book .fa-download{
+  color: var(--libros-active);
 }
 
 hr.libros_br {

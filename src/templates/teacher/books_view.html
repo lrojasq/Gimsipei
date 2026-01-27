@@ -3,131 +3,132 @@
 {% block title %}Libros{% endblock %}
 
 {% block extra_css %}
-    <link href="{{ url_for('static', filename='css/menu.css') }}" rel="stylesheet">
-    <link href="{{ url_for('static', filename='css/category.css') }}" rel="stylesheet">
-    <link href="{{ url_for('static', filename='css/admin.css') }}" rel="stylesheet">
-    <link href="{{ url_for('static', filename='css/subject_classes.css') }}" rel="stylesheet">
-    <link href="{{ url_for('static', filename='css/classes_resources.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link href="{{ url_for('static', filename='css/menu.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/category.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/admin.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/subject_classes.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/classes_resources.css') }}" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 {% endblock %}
 
 {% block content %}
-    {% block menu %}{% endblock %}
+{% block menu %}{% endblock %}
 
 
-    <div class="container_category flex libros_category">
-        <div class="data_categoty flex flex-column">
-            <div class="title flex">
-                <img src="{{ url_for('static', filename='images/svg/libros.svg') }}" alt="Libros" style="width: 40px; height: 40px;">
-                <h1>Libros</h1>
-            </div>
+<div class="container_category flex libros_category">
+    <div class="data_categoty flex flex-column">
+        <div class="title flex">
+            <img src="{{ url_for('static', filename='images/svg/libros.svg') }}" alt="Libros"
+                style="width: 40px; height: 40px;">
+            <h1>Libros</h1>
+        </div>
 
-            {% if user %}
-                <p>{{ user.full_name or user.username }}</p>
-                <div class="data_grade_category flex flex-column">
-                    <p>{{ user.document }}</p>
-                    <p>
-                        {% if user.role == "teacher" %}
-                            Docente
-                        {% elif user.role == "student" %}
-                            Estudiante
-                        {% else %}
-                            {{ user.role }}
-                        {% endif %}
-                    </p>
-                </div>
-            {% else %}
-                <p>Sin información de usuario</p>
+        {% if user %}
+        <p>{{ user.full_name or user.username }}</p>
+        <div class="data_grade_category flex flex-column">
+            <p>{{ user.document }}</p>
+            <p>
+                {% if user.role == "teacher" %}
+                Docente
+                {% elif user.role == "student" %}
+                Estudiante
+                {% else %}
+                {{ user.role }}
+                {% endif %}
+            </p>
+        </div>
+        {% else %}
+        <p>Sin información de usuario</p>
+        {% endif %}
+
+        <!-- Filter Section -->
+        <div class="filter flex flex-column">
+            <select name="alfabetico" id="filter_alfabetico">
+                <option value="">- Alfabético -</option>
+                <option value="asc">A-Z</option>
+                <option value="desc">Z-A</option>
+            </select>
+            {% if user.role == "teacher" %}
+            <select name="genero" id="filter_genero">
+                <option value="">- Audiencia -</option>
+                <option value="student">Estudiantes</option>
+                <option value="teacher">Docentes</option>
+            </select>
             {% endif %}
+            <select name="grado" id="filter_grado">
+                <option value="">- Grado -</option>
+                <option value="6">6° Grado</option>
+                <option value="7">7° Grado</option>
+                <option value="8">8° Grado</option>
+                <option value="9">9° Grado</option>
+                <option value="10">10° Grado</option>
+                <option value="11">11° Grado</option>
+            </select>
+            {% if user.role == "teacher" %}
+            <button class="btn btn-libros" id="addBookBtn">AÑADIR LIBRO</button>
+            {% endif %}
+            <button class="btn btn-libros" id="removeFiltersBtn">Remover filtro</button>
+        </div>
+    </div>
 
-            <!-- Filter Section -->
-            <div class="filter flex flex-column">
-                <select name="alfabetico" id="filter_alfabetico">
-                    <option value="">- Alfabético -</option>
-                    <option value="asc">A-Z</option>
-                    <option value="desc">Z-A</option>
-                </select>
-                {% if user.role == "teacher" %}
-                    <select name="genero" id="filter_genero">
-                        <option value="">- Audiencia -</option>
-                        <option value="student">Estudiantes</option>
-                        <option value="teacher">Docentes</option>
-                    </select>
-                {% endif %}
-                <select name="grado" id="filter_grado">
-                    <option value="">- Grado -</option>
-                    <option value="6">6° Grado</option>
-                    <option value="7">7° Grado</option>
-                    <option value="8">8° Grado</option>
-                    <option value="9">9° Grado</option>
-                    <option value="10">10° Grado</option>
-                    <option value="11">11° Grado</option>
-                </select>
-                {% if user.role == "teacher" %}
-                    <button class="btn btn-libros" id="addBookBtn">AÑADIR LIBRO</button>
-                {% endif %}
-                <button class="btn btn-libros" id="removeFiltersBtn">Remover filtro</button>
+    <!-- Inicio Libros Grid -->
+    <div class="specialities_category flex books books-grid">
+        <!-- Search Bar -->
+        <div class="search-bar libros-search">
+            <div class="libros-search-wrapper">
+                <input type="text" id="searchBooks" placeholder="Buscar" class="libros-search-input">
+                <i class="fas fa-search libros-search-icon"></i>
             </div>
         </div>
 
-        <!-- Inicio Libros Grid -->
-        <div class="specialities_category flex books books-grid">
-            <!-- Search Bar -->
-            <div class="search-bar libros-search">
-                <div class="libros-search-wrapper">
-                    <input type="text" id="searchBooks" placeholder="Buscar" class="libros-search-input">
-                    <i class="fas fa-search libros-search-icon"></i>
-                </div>
-            </div>
-
-            <!-- Books Grid -->
-            {% if books and books|length > 0 %}
-                {% for book in books %}
-                    <a href="{{ url_for('books.read_book', book_id=book.id) }}" class="book-link">
-                        <div class="book flex flex-column" 
-                             data-book-title="{{ book.title|lower }}"
-                             data-book-author="{{ book.author|lower }}" 
-                             data-book-audience="{{ book.target_audience }}"
-                             data-book-grade="{{ book.grade_level if book.grade_level else '' }}">
-                            {% if book.cover_image %}
-                                <img width="100%" height="100%" src="{{ book.cover_image }}" alt="{{ book.title }}">
-                            {% else %}
-                                <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #ea6ef4; min-height: 200px;">
-                                    <i class="fas fa-book" style="font-size: 3rem; color: rgba(255, 255, 255, 0.7);"></i>
-                                </div>
-                            {% endif %}
-                            <div class="title_speciality flex flex-column">
-                                {{ book.title }}
-                                {% if book.grade_level %}
-                                    <small style="color: #666; font-size: 0.8rem;">{{ book.grade_level }}° Grado</small>
-                                {% endif %}
-                                <hr class="libros_br" />
-                                <a href="{{ url_for('books.download_book', book_id=book.id) }}" 
-                                   onclick="event.stopPropagation();" 
-                                   >ePub</a>
-                                {% if user.role == "teacher" %}
-                                    <span class="open-delete-book-modal" data-book-id="{{ book.id }}" title="Eliminar"
-                                       style="margin-top: 0.5rem; color: #dc3545; cursor: pointer; align-self: flex-end;"
-                                       onclick="event.preventDefault(); event.stopPropagation();">
-                                        <i class="fas fa-trash"></i>
-                                    </span>
-                                {% endif %}
-                            </div>
-                        </div>
-                    </a>
-                {% endfor %}
-            {% else %}
-                <div class="empty-books" style="width: 100%; text-align: center; padding: 3rem;">
-                    <i class="fas fa-book-open" style="font-size: 4rem; color: #bdc3c7; margin-bottom: 1rem;"></i>
-                    <p style="color: #999; font-size: 1.1rem; margin-bottom: 1.5rem; text-align: center;">No hay libros disponibles</p>
+        <!-- Books Grid -->
+        {% if books and books|length > 0 %}
+        {% for book in books %}
+        <div class="book-link">
+            <div class="book flex flex-column" data-book-title="{{ book.title|lower }}"
+                data-book-author="{{ book.author|lower }}" data-book-audience="{{ book.target_audience }}"
+                data-book-grade="{{ book.grade_level if book.grade_level else '' }}">
+                {% if book.cover_image %}
+                
+                    <img width="100%" height="100%" src="{{ book.cover_image }}" alt="{{ book.title }}">
+                    {% else %}
+                    <div
+                        style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #ea6ef4; min-height: 200px;">
+                        <i class="fas fa-book" style="font-size: 3rem; color: rgba(255, 255, 255, 0.7);"></i>
+                    </div>
+                    {% endif %}
+                <div class="title_speciality flex flex-column">
+                  <a href="{{ url_for('books.read_book', book_id=book.id) }}" style="color: #666; font-size: 0.8rem;">  {{ book.title }}</a>
+                    {% if book.grade_level %}
+                    <small style="color: #666; font-size: 0.8rem;">{{ book.grade_level }}° Grado</small>
+                    {% endif %}
+                    <hr class="libros_br" />
+                    <a href="{{ url_for('books.download_book', book_id=book.id) }}"
+                        onclick="event.stopPropagation();"><i class="fas fa-download"></i></a>
                     {% if user.role == "teacher" %}
-                        <button class="btn btn-libros active btn-add-first-book">
-                            Crear primer libro
-                        </button>
+                    <span class="open-delete-book-modal" data-book-id="{{ book.id }}" title="Eliminar"
+                        style="margin-top: 0.5rem; color: #dc3545; cursor: pointer; align-self: flex-end;"
+                        onclick="event.preventDefault(); event.stopPropagation();">
+                        <i class="fas fa-trash"></i>
+                    </span>
                     {% endif %}
                 </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="empty-books" style="width: 100%; text-align: center; padding: 3rem;">
+            <i class="fas fa-book-open" style="font-size: 4rem; color: #bdc3c7; margin-bottom: 1rem;"></i>
+            <p style="color: #999; font-size: 1.1rem; margin-bottom: 1.5rem; text-align: center;">No hay libros
+                disponibles</p>
+            {% if user.role == "teacher" %}
+            <button class="btn btn-libros active btn-add-first-book">
+                Crear primer libro
+            </button>
             {% endif %}
         </div>
+        {% endif %}
+    </div>
 
     <div class="bg_section_footer mobile_btns">
         <span class="barra_bg barra_bg_left bg-libros"></span>
