@@ -60,7 +60,7 @@ def delete_book(book_id):
 
 @book_bp.route("/<int:book_id>/download", methods=["GET"])
 @jwt_required()
-@role_required([UserRole.TEACHER])
+@role_required([UserRole.TEACHER, UserRole.STUDENT])
 def download_book(book_id):
     """Descargar archivo del libro"""
     return download_book_controller(book_id, request)

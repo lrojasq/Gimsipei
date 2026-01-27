@@ -102,7 +102,9 @@
                                     <small style="color: #666; font-size: 0.8rem;">{{ book.grade_level }}° Grado</small>
                                 {% endif %}
                                 <hr class="libros_br" />
-                                ePub
+                                <a href="{{ url_for('books.download_book', book_id=book.id) }}" 
+                                   onclick="event.stopPropagation();" 
+                                   >ePub</a>
                                 {% if user.role == "teacher" %}
                                     <span class="open-delete-book-modal" data-book-id="{{ book.id }}" title="Eliminar"
                                        style="margin-top: 0.5rem; color: #dc3545; cursor: pointer; align-self: flex-end;"
