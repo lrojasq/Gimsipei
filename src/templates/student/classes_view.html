@@ -44,8 +44,11 @@
                             subject_id=subject_data.subject.id
                         ) }}" class="subject-card">
                             <div class="subject-card-image">
-                                <!-- Área de imagen turquesa -->
-                                <img src="https://dummyimage.com/290x180/000/fff" alt="dummyimage">
+                                {% if subject_data.subject.image_url %}
+                                    <img src="{{ url_for('static', filename=subject_data.subject.image_url) }}" alt="Portada de {{ subject_data.subject.name }}">
+                                {% else %}
+                                    <img src="https://dummyimage.com/290x180/000/fff" alt="dummyimage">
+                                {% endif %}
                             </div>
                             <div class="subject-card-content">
                                 <div class="subject-bar"></div>

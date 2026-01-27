@@ -19,6 +19,7 @@ class Subject(Base):
         default=datetime.now(timezone.utc),
         onupdate=datetime.now(timezone.utc),
     )
+    image_url = Column(String(255), nullable=True)
 
     # Relationships
     course_assignments = relationship(

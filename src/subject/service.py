@@ -1,6 +1,8 @@
+import os
 from typing import List, Optional, Tuple
 
 from flask import Request
+from werkzeug.utils import secure_filename
 
 from src.database.database import SessionLocal
 from src.models.course import Course
@@ -35,10 +37,10 @@ def get_subjects_service(
 
         return [
             SubjectResponseSchema(
-                id=subject.id,
-                name=subject.name,
-                created_at=subject.created_at,
-                updated_at=subject.updated_at,
+                id=getattr(subject, "id"),
+                name=getattr(subject, "name"),
+                created_at=getattr(subject, "created_at"),
+                updated_at=getattr(subject, "updated_at"),
             )
             for subject in subjects
         ], len(subjects)
@@ -57,10 +59,10 @@ def get_subject_service(
             return None, 404
 
         return SubjectResponseSchema(
-            id=subject.id,
-            name=subject.name,
-            created_at=subject.created_at,
-            updated_at=subject.updated_at,
+            id=getattr(subject, "id"),
+            name=getattr(subject, "name"),
+            created_at=getattr(subject, "created_at"),
+            updated_at=getattr(subject, "updated_at"),
         ), 200
     finally:
         db.close()
@@ -78,24 +80,36 @@ def create_subject_service(
         if existing_subject:
             # return the existing subject
             return SubjectResponseSchema(
-                id=existing_subject.id,
-                name=existing_subject.name,
-                created_at=existing_subject.created_at,
-                updated_at=existing_subject.updated_at,
+                id=getattr(existing_subject, "id"),
+                name=getattr(existing_subject, "name"),
+                created_at=getattr(existing_subject, "created_at"),
+                updated_at=getattr(existing_subject, "updated_at"),
             ), 200
 
-        # if not exists, create new subject
-        subject = Subject(name=data.name)
+        # Process cover image if uploaded
+        image_url = None
+        if request.files and "subject_image" in request.files:
+            image_file = request.files["subject_image"]
+            if image_file.filename:
+                static_folder = "src/static/uploads/cover_class"
+                os.makedirs(static_folder, exist_ok=True)
+                filename = secure_filename(image_file.filename)
+                save_path = os.path.join(static_folder, filename)
+                image_file.save(save_path)
+                image_url = f"uploads/cover_class/{filename}"
+
+        subject = Subject(name=data.name, image_url=image_url)
 
         db.add(subject)
         db.commit()
         db.refresh(subject)
 
         return SubjectResponseSchema(
-            id=subject.id,
-            name=subject.name,
-            created_at=subject.created_at,
-            updated_at=subject.updated_at,
+            id=getattr(subject, "id"),
+            name=getattr(subject, "name"),
+            image_url=getattr(subject, "image_url", None),
+            created_at=getattr(subject, "created_at"),
+            updated_at=getattr(subject, "updated_at"),
         ), 201
     except Exception:
         db.rollback()
@@ -115,25 +129,62 @@ def update_subject_service(
             return None, 404
 
         # Verificar si el nuevo nombre ya existe (si se está cambiando)
-        if data.name and data.name != subject.name:
-            existing_subject = (
-                db.query(Subject).filter(Subject.name == data.name).first()
-            )
-            if existing_subject:
-                return None, 400
+        if data.name is not None and data.name != subject.name:
+            if data.name != "":
+                existing_subject = (
+                    db.query(Subject).filter(Subject.name == data.name).first()
+                )
+                if existing_subject:
+                    return None, 400
+                subject.name = data.name
 
-        # Actualizar campos si se proporcionan
-        if data.name is not None:
-            subject.name = data.name
+        # Manejar actualización de imagen
+        if request.files and "subject_image" in request.files:
+            image_file = request.files["subject_image"]
+            
+            # Verificar si el archivo tiene un nombre (no está vacío)
+            if image_file and image_file.filename and image_file.filename.strip():
+                # Eliminar imagen anterior si existe
+                old_image_url = getattr(subject, "image_url", None)
+                if (
+                    old_image_url
+                    and isinstance(old_image_url, str)
+                    and old_image_url.strip()
+                ):
+                    old_path = os.path.join("src/static", old_image_url)
+                    if os.path.exists(old_path):
+                        try:
+                            os.remove(old_path)
+                        except Exception:
+                            pass
+                
+                # Guardar nueva imagen
+                static_folder = "src/static/uploads/cover_class"
+                os.makedirs(static_folder, exist_ok=True)
+                filename = secure_filename(image_file.filename)
+                
+                # Generar nombre único si ya existe
+                base_name, ext = os.path.splitext(filename)
+                counter = 1
+                while os.path.exists(os.path.join(static_folder, filename)):
+                    filename = f"{base_name}_{counter}{ext}"
+                    counter += 1
+                
+                save_path = os.path.join(static_folder, filename)
+                image_file.save(save_path)
+                
+                # Actualizar la URL en la base de datos
+                subject.image_url = f"uploads/cover_class/{filename}"
 
         db.commit()
         db.refresh(subject)
 
         return SubjectResponseSchema(
-            id=subject.id,
-            name=subject.name,
-            created_at=subject.created_at,
-            updated_at=subject.updated_at,
+            id=getattr(subject, "id"),
+            name=getattr(subject, "name"),
+            image_url=getattr(subject, "image_url", None),
+            created_at=getattr(subject, "created_at"),
+            updated_at=getattr(subject, "updated_at"),
         ), 200
     except Exception:
         db.rollback()

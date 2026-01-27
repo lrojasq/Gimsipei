@@ -1,16 +1,19 @@
-from flask import Request, Response, redirect, render_template, url_for
+from flask import Request, redirect, render_template, url_for
+from werkzeug.wrappers import Response as ResponseWrapper
 from flask_jwt_extended import jwt_required
 from pydantic import ValidationError
 
+from src.courses.service import add_subject_to_course_service
+from src.courses.validation import CourseSubjectSchema
 from src.models.user import UserRole
 from src.utils.decorator_role_required import role_required
 
 from .service import (
     create_subject_service,
     delete_subject_service,
+    get_available_subject_names,
     get_course_by_id_service,
     get_teachers_for_form_service,
-    get_available_subject_names,
     update_subject_service,
 )
 from .validation import SubjectCreateSchema, SubjectUpdateSchema
@@ -18,7 +21,7 @@ from .validation import SubjectCreateSchema, SubjectUpdateSchema
 
 @jwt_required()
 @role_required([UserRole.ADMIN])
-def create_subject_controller(request: Request) -> Response:
+def create_subject_controller(request: Request) -> ResponseWrapper:
     """View to create a new subject"""
     if request.method == "GET":
         # Get course_id from query parameter
@@ -48,12 +51,12 @@ def create_subject_controller(request: Request) -> Response:
         subject_id = int(data.get("subject_id", 0)) if data.get("subject_id") else None
         teacher_id = int(data.get("teacher_id", 0)) if data.get("teacher_id") else None
 
-        # 1) Resolver/crear la materia por nombre (siempre viene del modal)
+        # Crear la materia por nombre
         subject_name = data.get("name")
         if not subject_name:
             return redirect(url_for("courses.courses_management"))
 
-        validated_subject = SubjectCreateSchema(name=subject_name)
+        validated_subject = SubjectCreateSchema(name=subject_name, image_url=None)
         subject_result, subject_status = create_subject_service(
             validated_subject, request
         )
@@ -63,9 +66,6 @@ def create_subject_controller(request: Request) -> Response:
 
         # 2) Si viene course_id + teacher_id, asignar/actualizar en el curso
         if course_id and teacher_id:
-            from src.courses.service import add_subject_to_course_service
-            from src.courses.validation import CourseSubjectSchema
-
             assignment_data = CourseSubjectSchema(
                 subject_id=subject_result.id,  # subject destino
                 teacher_id=teacher_id,
@@ -107,15 +107,24 @@ def create_subject_controller(request: Request) -> Response:
 
 @jwt_required()
 @role_required([UserRole.ADMIN])
-def edit_subject_controller(subject_id: int, request: Request) -> Response:
+def edit_subject_controller(subject_id: int, request: Request) -> ResponseWrapper:
     """View to edit a subject"""
     if request.method == "GET":
         return redirect(url_for("courses.courses_management"))
 
     try:
         data = request.form.to_dict()
-        validated = SubjectUpdateSchema(**data)
-        result, status_code = update_subject_service(subject_id, validated, request)
+        
+        # Preparar datos para validación - solo incluir campos que no estén vacíos
+        validation_data = {}
+        if data.get("name") and data.get("name").strip():
+            validation_data["name"] = data.get("name").strip()
+        
+        # Siempre incluir image_url como None para el esquema
+        validation_data["image_url"] = None
+        
+        validated = SubjectUpdateSchema(**validation_data)
+        _, status_code = update_subject_service(subject_id, validated, request)
 
         if status_code == 200:
             pass
@@ -127,7 +136,6 @@ def edit_subject_controller(subject_id: int, request: Request) -> Response:
             pass
 
         return redirect(url_for("courses.courses_management"))
-
     except ValidationError:
         return redirect(url_for("courses.courses_management"))
     except Exception:
@@ -136,7 +144,7 @@ def edit_subject_controller(subject_id: int, request: Request) -> Response:
 
 @jwt_required()
 @role_required([UserRole.ADMIN])
-def delete_subject_controller(subject_id: int, request: Request) -> Response:
+def delete_subject_controller(subject_id: int, request: Request) -> ResponseWrapper:
     """Delete a subject"""
     try:
         _, status_code = delete_subject_service(subject_id, request)
