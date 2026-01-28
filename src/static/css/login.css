@@ -107,6 +107,7 @@ label {
 input:hover {
     background-color: var(--light-color);
     border: none;
+    color: #000;
 }
 
 input:-internal-autofill-selected::placeholder,

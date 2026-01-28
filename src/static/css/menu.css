@@ -890,4 +890,33 @@ i.bi.bi-arrow-left-short {
       width: 105px;
       height: 140px;
   }
+  .bg-vision .box-menu.clases-hover picture img {
+    content: url("/static/images//images-gray/clases.png");
+  }
+  .bg-vision .box-menu.evaluaciones-hover picture img {
+    content: url("/static/images/images-gray/evaluaciones.png");
+  }
+  .bg-vision .box-menu.libros-hover picture img {
+    content: url("/static/images/images-gray/libros.png");
+  }
+  .bg-vision .box-menu.calificaciones-hover picture img {
+    content: url("/static/images/images-gray/calificaciones.png");
+  }
+  .bg-vision .box-menu.recursos-hover picture img {
+    content: url("/static/images/images-gray/recursos.png");
+  }
+  .bg-vision  picture img {
+    max-width: 70px;
+  }
+  .bg-vision .box-menu{
+    background-color: transparent;
+    width: 105px;
+  }
+  .bg-vision .box-menu p{
+    color: var(--gris-claro);
+  }
+  .bg-vision .box-menu .barra{
+    bottom: 0px;
+  }
+  
 }

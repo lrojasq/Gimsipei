@@ -389,6 +389,7 @@ body {
     }
     .bg-vision .menu{
         gap: 2rem 1rem;
+        justify-content: start;
     }
 
     /* .mision-tp,
