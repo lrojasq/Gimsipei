@@ -50,7 +50,7 @@ def course_students_controller(course_id: int, request: Request) -> Response:
             total=len(students_list),
             accion_logout=True,
         )
-    except Exception as e:
+    except Exception:
         return redirect(url_for("users.dashboard"))
 
 
@@ -147,7 +147,7 @@ def create_student_controller(course_id: int, request: Request) -> Response:
                 courses=courses,
                 accion_logout=True,
             )
-        except Exception as e:
+        except Exception:
             return render_template(
                 "teacher/create_student.html",
                 user=current_user,
@@ -156,7 +156,7 @@ def create_student_controller(course_id: int, request: Request) -> Response:
                 accion_logout=True,
             )
 
-    except Exception as e:
+    except Exception:
         return redirect(url_for("users.dashboard"))
 
 
@@ -197,7 +197,7 @@ def edit_student_controller(
                     courses=courses,
                     accion_logout=True,
                 )
-            except Exception as e:
+            except Exception:
                 return redirect(url_for("users.course_students", course_id=course_id))
 
         try:
@@ -237,10 +237,10 @@ def edit_student_controller(
                 accion_logout=True,
             )
 
-        except Exception as e:
+        except Exception:
             return redirect(url_for("users.course_students", course_id=course_id))
 
-    except Exception as e:
+    except Exception:
         return redirect(url_for("users.dashboard"))
 
 
@@ -249,14 +249,11 @@ def edit_student_controller(
 def delete_student_controller(
     course_id: int, student_id: int, request: Request
 ) -> Response:
-    """Eliminar un estudiante de un curso (solo teachers)"""
+    """Eliminar un estudiante de un curso"""
     try:
         current_user_id = get_jwt_identity()
-        result, status_code = delete_user_service(student_id, request, current_user_id)
-
-        # Flash messages removidos por requerimiento del cliente.
-
-    except Exception as e:
+        delete_user_service(student_id, request, current_user_id)
+    except Exception:
         pass
 
     return redirect(url_for("users.course_students", course_id=course_id))
@@ -299,7 +296,7 @@ def student_tasks_controller(
             subjects=subjects_list,
             accion_logout=True,
         )
-    except Exception as e:
+    except Exception:
         return redirect(url_for("users.course_students", course_id=course_id))
 
 
@@ -334,5 +331,5 @@ def student_evaluations_controller(
             subjects=subjects_list,
             accion_logout=True,
         )
-    except Exception as e:
+    except Exception:
         return redirect(url_for("users.course_students", course_id=course_id))

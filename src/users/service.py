@@ -1,15 +1,21 @@
-from flask import Request
 from typing import List, Optional, Tuple
+
+from flask import Request
+from werkzeug.security import generate_password_hash
 
 # from sqlalchemy.orm import Session
 from src.database.database import SessionLocal
-from src.models.user import User, UserRole
-from werkzeug.security import generate_password_hash
-from .validation import UserCreateSchema, UserUpdateSchema, UserResponseSchema
-from src.models.course_subject import CourseSubject
+from src.models.assignment_submission import AssignmentSubmission
+from src.models.class_model import ClassModel
+from src.models.class_view import ClassView
 from src.models.course import Course
 from src.models.course_student import CourseStudent
-from src.models.class_model import ClassModel
+from src.models.course_subject import CourseSubject
+from src.models.evaluation_submission import EvaluationSubmission
+from src.models.grade import Grade
+from src.models.user import User, UserRole
+
+from .validation import UserCreateSchema, UserResponseSchema, UserUpdateSchema
 
 
 def get_users_service(
@@ -254,8 +260,25 @@ def delete_user_service(
         except Exception:
             pass
 
-        # Si es estudiante, eliminar inscripciones
+        # Si es estudiante, eliminar todos los datos relacionados en cascada
         if user.role == UserRole.STUDENT:
+            # Eliminar vistas de clases
+            db.query(ClassView).filter(ClassView.student_id == user_id).delete()
+
+            # Eliminar entregas de tareas
+            db.query(AssignmentSubmission).filter(
+                AssignmentSubmission.student_id == user_id
+            ).delete()
+
+            # Eliminar entregas de evaluaciones
+            db.query(EvaluationSubmission).filter(
+                EvaluationSubmission.student_id == user_id
+            ).delete()
+
+            # Eliminar calificaciones
+            db.query(Grade).filter(Grade.student_id == user_id).delete()
+
+            # Eliminar inscripciones en cursos
             db.query(CourseStudent).filter(CourseStudent.student_id == user_id).delete()
             db.flush()
         else:
