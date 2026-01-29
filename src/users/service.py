@@ -5,12 +5,16 @@ from werkzeug.security import generate_password_hash
 
 # from sqlalchemy.orm import Session
 from src.database.database import SessionLocal
+from src.models.assignment import Assignment
 from src.models.assignment_submission import AssignmentSubmission
+from src.models.book import Book
 from src.models.class_model import ClassModel
 from src.models.class_view import ClassView
 from src.models.course import Course
 from src.models.course_student import CourseStudent
 from src.models.course_subject import CourseSubject
+from src.models.document import Document
+from src.models.evaluation import Evaluation
 from src.models.evaluation_submission import EvaluationSubmission
 from src.models.grade import Grade
 from src.models.user import User, UserRole
@@ -219,82 +223,38 @@ def delete_user_service(
                     409,
                 )
 
+        # Eliminar datos específicos de docentes
         if user.role == UserRole.TEACHER:
-            # Verificar materias asignadas
-            assigned_subjects = (
-                db.query(CourseSubject)
-                .filter(CourseSubject.teacher_id == user_id)
-                .count()
-            )
+            db.query(CourseSubject).filter(CourseSubject.teacher_id == user_id).delete()
 
-            if assigned_subjects > 0:
-                return (
-                    {
-                        "message": f"No se puede eliminar el docente porque tiene {assigned_subjects} materia(s) asignada(s). Por favor, elimine primero las asignaciones de materias."
-                    },
-                    409,
-                )
-
-        # Verificar cursos creados
-        created_courses = db.query(Course).filter(Course.created_by == user_id).count()
-        if created_courses > 0:
-            return (
-                {
-                    "message": f"No se puede eliminar el usuario porque tiene {created_courses} curso(s) creado(s). Por favor, elimine primero los cursos."
-                },
-                409,
-            )
-
-        # Verificar clases creadas
+        # Eliminar contenido educativo creado por el usuario
+        db.query(Assignment).filter(Assignment.created_by == user_id).delete()
+        db.query(Evaluation).filter(Evaluation.created_by == user_id).delete()
+        db.query(Book).filter(Book.created_by == user_id).delete()
+        db.query(Document).filter(Document.author_id == user_id).delete()
         try:
-            created_classes = (
-                db.query(ClassModel).filter(ClassModel.created_by == user_id).count()
-            )
-            if created_classes > 0:
-                return (
-                    {
-                        "message": f"No se puede eliminar el usuario porque tiene {created_classes} clase(s) creada(s). Por favor, elimine primero las clases."
-                    },
-                    409,
-                )
+            db.query(ClassModel).filter(ClassModel.created_by == user_id).delete()
         except Exception:
             pass
+        db.query(Course).filter(Course.created_by == user_id).delete()
+        db.flush()
 
-        # Si es estudiante, eliminar todos los datos relacionados en cascada
+        # Eliminar datos específicos según el rol
         if user.role == UserRole.STUDENT:
-            # Eliminar vistas de clases
+            # Eliminar datos de actividad y progreso del estudiante
             db.query(ClassView).filter(ClassView.student_id == user_id).delete()
-
-            # Eliminar entregas de tareas
             db.query(AssignmentSubmission).filter(
                 AssignmentSubmission.student_id == user_id
             ).delete()
-
-            # Eliminar entregas de evaluaciones
             db.query(EvaluationSubmission).filter(
                 EvaluationSubmission.student_id == user_id
             ).delete()
-
-            # Eliminar calificaciones
             db.query(Grade).filter(Grade.student_id == user_id).delete()
-
-            # Eliminar inscripciones en cursos
             db.query(CourseStudent).filter(CourseStudent.student_id == user_id).delete()
-            db.flush()
         else:
-            # Para otros roles, verificar inscripciones
-            enrollments = (
-                db.query(CourseStudent)
-                .filter(CourseStudent.student_id == user_id)
-                .count()
-            )
-            if enrollments > 0:
-                return (
-                    {
-                        "message": f"No se puede eliminar el usuario porque está inscrito en {enrollments} curso(s). Por favor, elimine primero las inscripciones."
-                    },
-                    409,
-                )
+            # Para docentes/administradores, eliminar inscripciones si existen
+            db.query(CourseStudent).filter(CourseStudent.student_id == user_id).delete()
+        db.flush()
 
         # Eliminar usuario
         db.query(User).filter(User.id == user_id).delete()
