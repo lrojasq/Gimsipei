@@ -28,9 +28,10 @@ from src.utils.decorator_role_required import role_required
 from src.database.database import SessionLocal
 from src.models.user import User
 from src.models.class_model import ClassModel
+from src.models.resource import Resource
 
 
-def resources_view_controller(_: Request):
+def resources_view_controller(request: Request):
     """Vista principal de recursos para profesores"""
     try:
         current_user_id = get_jwt_identity()
@@ -40,8 +41,14 @@ def resources_view_controller(_: Request):
         if not user:
             return redirect(url_for("users.dashboard"))
 
+        # Obtener parámetros de la URL
+        course_id = request.args.get("course_id", type=int)
+        subject_id = request.args.get("subject_id", type=int)
+
         # Obtener recursos organizados por materia
-        resources_data, status_code = get_resources_by_teacher_service(current_user_id)
+        resources_data, status_code = get_resources_by_teacher_service(
+            current_user_id, course_id=course_id, subject_id=subject_id
+        )
 
         if status_code != 200:
             return redirect(url_for("users.dashboard"))
@@ -106,15 +113,52 @@ def create_resource_controller(request: Request):
             else:
                 pass
 
-            return redirect(url_for("resources.resources_view"))
+            # Redirigir con los parámetros de curso y materia para mantener el contexto
+            return redirect(
+                url_for(
+                    "resources.resources_view",
+                    course_id=course_id,
+                    subject_id=subject_id,
+                )
+            )
 
     except Exception:
+        # Intentar obtener los parámetros del formulario para mantener el contexto
+        course_id = request.form.get("course_id")
+        subject_id = request.form.get("subject_id")
+        if course_id and subject_id:
+            return redirect(
+                url_for(
+                    "resources.resources_view",
+                    course_id=course_id,
+                    subject_id=subject_id,
+                )
+            )
         return redirect(url_for("resources.resources_view"))
 
 
 def delete_resource_controller(resource_id: int, request: Request):
     """Eliminar un recurso"""
     try:
+        # Obtener información del recurso antes de eliminarlo para mantener el contexto
+        db = SessionLocal()
+        resource = db.query(Resource).filter(Resource.id == resource_id).first()
+
+        course_id = None
+        subject_id = None
+
+        if resource:
+            # Obtener course_id y subject_id desde la clase asociada al recurso
+            class_info = (
+                db.query(ClassModel).filter(ClassModel.id == resource.class_id).first()
+            )
+            if class_info:
+                course_id = class_info.course_id
+                subject_id = class_info.subject_id
+
+        db.close()
+
+        # Eliminar el recurso
         _, status_code = delete_resource_service(resource_id, request)
 
         if status_code == 200:
@@ -122,6 +166,15 @@ def delete_resource_controller(resource_id: int, request: Request):
         else:
             pass
 
+        # Redirigir con los parámetros de curso y materia para mantener el contexto
+        if course_id and subject_id:
+            return redirect(
+                url_for(
+                    "resources.resources_view",
+                    course_id=course_id,
+                    subject_id=subject_id,
+                )
+            )
         return redirect(url_for("resources.resources_view"))
     except Exception:
         return redirect(url_for("resources.resources_view"))

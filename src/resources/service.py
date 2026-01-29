@@ -177,35 +177,45 @@ def get_resources_by_class_service(class_id: int) -> Tuple[List[dict], int]:
         db.close()
 
 
-def get_resources_by_teacher_service(teacher_id: int) -> Tuple[Optional[dict], int]:
-    """Obtener todos los recursos organizados por materia para un profesor"""
+def get_resources_by_teacher_service(
+    teacher_id: int, course_id: Optional[int] = None, subject_id: Optional[int] = None
+) -> Tuple[Optional[dict], int]:
+    """Obtener recursos organizados por materia para un profesor
+
+    Args:
+        teacher_id: ID del profesor
+        course_id: (Opcional) ID del curso para filtrar recursos específicos
+        subject_id: (Opcional) ID de la materia para filtrar recursos específicos
+    """
     db = SessionLocal()
     try:
-        # Obtener las materias que enseña el profesor
-        course_subjects = (
-            db.query(CourseSubject, Subject)
+        # Construir query base para obtener las materias que enseña el profesor
+        query = (
+            db.query(CourseSubject, Subject, Course)
             .join(Subject, CourseSubject.subject_id == Subject.id)
+            .join(Course, CourseSubject.course_id == Course.id)
             .filter(CourseSubject.teacher_id == teacher_id)
-            .distinct(Subject.id)
-            .all()
         )
+
+        # Aplicar filtros
+        if course_id is not None:
+            query = query.filter(CourseSubject.course_id == course_id)
+        if subject_id is not None:
+            query = query.filter(CourseSubject.subject_id == subject_id)
+
+        course_subjects = query.all()
 
         if not course_subjects:
             return {"subjects": []}, 200
 
         subjects_data = []
-        for _, subject in course_subjects:
-            # Obtener todas las clases de esta materia donde el profesor enseña
+        for course_subject, subject, course in course_subjects:
+            # Obtener las clases de esta materia en este curso específico
             classes = (
                 db.query(ClassModel)
-                .join(
-                    CourseSubject,
-                    (CourseSubject.subject_id == ClassModel.subject_id)
-                    & (CourseSubject.course_id == ClassModel.course_id),
-                )
                 .filter(
                     ClassModel.subject_id == subject.id,
-                    CourseSubject.teacher_id == teacher_id,
+                    ClassModel.course_id == course_subject.course_id,
                 )
                 .all()
             )
@@ -237,16 +247,12 @@ def get_resources_by_teacher_service(teacher_id: int) -> Tuple[Optional[dict], i
                     }
                 )
 
-            # Obtener el course_id de la primera clase de esta materia (si existe)
-            course_id = None
-            if classes:
-                course_id = classes[0].course_id
-
             subjects_data.append(
                 {
                     "subject_id": subject.id,
                     "subject_name": subject.name,
-                    "course_id": course_id,  # Agregar course_id
+                    "course_id": course_subject.course_id,
+                    "course_name": course.name,
                     "periods": periods_data,
                     "total_resources": len(resources),
                 }
