@@ -71,7 +71,9 @@
   padding: 1rem 0rem;
   display: block;
 }
-
+.students_list {
+  flex-wrap: wrap;
+}
 .list-cursos li span.grado {
   cursor: pointer;
   display: flex;
@@ -547,7 +549,7 @@ form.form-admin.flex.flex-column h1 {
     width: 100%;
   }
 
-  ul.list-unstyled.d-flex.gap-2.mb-0.students_list {
+  .students_list {
     flex-wrap: wrap;
   }
 
@@ -1173,7 +1175,7 @@ form.form-admin.flex.flex-column {
   button.btn-admin {
     padding: 0.5rem;
   }
-  .content-admin.flex.flex-column{
+  .content-admin.flex.flex-column {
     /* padding: 0.2rem !important; */
   }
 }
