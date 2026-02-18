@@ -1,76 +1,76 @@
 {% extends "base.html" %}
 
 {% block title %}
-    {{ subject.name }} - Clases
+{{ subject.name }} - Clases
 {% endblock %}
 
 {% block extra_css %}
-    <link href="{{ url_for('static', filename='css/menu.css') }}" rel="stylesheet">
-    <link href="{{ url_for('static', filename='css/category.css') }}" rel="stylesheet">
-    <link href="{{ url_for('static', filename='css/admin.css') }}" rel="stylesheet">
-    <link href="{{ url_for('static', filename='css/classes_resources.css') }}" rel="stylesheet">
-    <link href="{{ url_for('static', filename='css/subject_classes_minimal.css') }}" rel="stylesheet">
-    <link href="{{ url_for('static', filename='css/student_subject_classes.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+<link href="{{ url_for('static', filename='css/menu.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/category.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/admin.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/classes_resources.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/subject_classes_minimal.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/student_subject_classes.css') }}" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 {% endblock %}
 
 {% block content %}
-    {% block menu %}{% endblock %}
+{% block menu %}{% endblock %}
 
-    <div class="container_category flex clases_category student-subject-view" data-course-id="{{ course.id }}"
-         data-subject-id="{{ subject.id }}">
-        <!-- Perfil de Usuario -->
-        <div class="data_categoty flex flex-column">
-            <div class="title flex">
-                <div class="classes-icon-wrapper">
-                    <img src="{{ url_for('static', filename='images/svg/clases.svg') }}" alt="Clases" class="classes-icon">
+<div class="container_category flex clases_category student-subject-view" data-course-id="{{ course.id }}"
+    data-subject-id="{{ subject.id }}">
+    <!-- Perfil de Usuario -->
+    <div class="data_categoty flex flex-column">
+        <div class="title flex">
+            <div class="classes-icon-wrapper">
+                <img src="{{ url_for('static', filename='images/svg/clases.svg') }}" alt="Clases" class="classes-icon">
+            </div>
+            <h1>Clases</h1>
+            <div class="mobile_btns">
+                <div class="flex gap-2" style="align-items: center;">
+                    <a href="{{ url_for('classes.student_classes_view') }}">
+                        <i class="bi bi-arrow-left-short"></i>
+                    </a>
+                    <h3 class="font-weight-bold" style="margin: 0;">
+                        {{ subject.name }}
+                    </h3>
                 </div>
-                <h1>Clases</h1>
-                <div class="mobile_btns">
-                    <div class="flex gap-2" style="align-items: center;">
-                        <a href="{{ url_for('classes.student_classes_view') }}">
-                            <i class="bi bi-arrow-left-short"></i>
-                        </a>
-                        <h3 class="font-weight-bold" style="margin: 0;">
-                            {{ subject.name }}
-                        </h3>
+                <div class="flex flex-column gap-5">
+                    <div class="btns flex flex-column">
+                        <button class="btn btn-clases period-btn active" data-period="1">
+                            PERIODO 1
+                        </button>
+                        <button class="btn btn-clases period-btn" data-period="2">
+                            PERIODO 2
+                        </button>
+                        <button class="btn btn-clases period-btn" data-period="3">
+                            PERIODO 3
+                        </button>
+                        <button class="btn btn-clases period-btn" data-period="4">
+                            PERIODO 4
+                        </button>
                     </div>
-                    <div class="flex flex-column gap-5">
-                        <div class="btns flex flex-column">
-                            <button class="btn btn-clases period-btn active" data-period="1">
-                                PERIODO 1
-                            </button>
-                            <button class="btn btn-clases period-btn" data-period="2">
-                                PERIODO 2
-                            </button>
-                            <button class="btn btn-clases period-btn" data-period="3">
-                                PERIODO 3
-                            </button>
-                            <button class="btn btn-clases period-btn" data-period="4">
-                                PERIODO 4
-                            </button>
-                        </div>
-                    </div>
-                    {% if total_classes > 0 %}
-                        <div class="progress-container">
-                            <p>Porcentaje de clases vistas</p>
-                            <div class="progress-bar-container">
-                                <div class="progress-bar-fill" style="width: {{ viewed_percentage }}%;"></div>
-                            </div>
-                            <p class="progress-text">{{ viewed_classes }} de {{ total_classes }} clases vistas</p>
-                        </div>
-                    {% endif %}
                 </div>
+                {% if total_classes > 0 %}
+                <div class="progress-container">
+                    <p>Porcentaje de clases vistas</p>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar-fill" style="width: {{ viewed_percentage }}%;"></div>
+                    </div>
+                    <p class="progress-text">{{ viewed_classes }} de {{ total_classes }} clases vistas</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="btns_desktop">
+            <p>{{ user.full_name }}</p>
+            <div class="data_grade_category flex flex-column">
+                <p>{{ user.document }}</p>
+                <p>Grado {{ course.name }}</p>
             </div>
 
-            <div class="btns_desktop">
-                <p>{{ user.full_name }}</p>
-                <div class="data_grade_category flex flex-column">
-                    <p>{{ user.document }}</p>
-                    <p>Grado {{ course.name }}</p>
-                </div>
-            </div>
 
             <div class="flex flex-column gap-5 btns_mobile">
                 <div class="btns flex flex-column">
@@ -81,96 +81,94 @@
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Clases -->
-        <div class="specialities_category exams flex flex-column clases_category gap-4">
-            <div class="d-flex gap-4 w-100 align-items-center justify-content-between">
-                <div class="flex gap-2 btns_desktop" style="align-items: center;">
-                    <a href="{{ url_for('classes.student_classes_view') }}">
-                        <i class="bi bi-arrow-left-short"></i>
-                    </a>
-                    <h3 class="font-weight-bold" style="margin: 0;">
-                        {{ subject.name }}
-                    </h3>
-                </div>
-
-                <!-- Porcentaje de clases vistas -->
-                {% if total_classes > 0 %}
-                    <div class="progress-container btns_desktop">
-                        <p>Porcentaje de clases vistas</p>
-                        <div class="progress-bar-container">
-                            <div class="progress-bar-fill" style="width: {{ viewed_percentage }}%;"></div>
-                        </div>
-                        <p class="progress-text">{{ viewed_classes }} de {{ total_classes }} clases vistas</p>
-                    </div>
-                {% endif %}
+    <!-- Clases -->
+    <div class="specialities_category exams flex flex-column clases_category gap-4">
+        <div class="d-flex gap-4 w-100 align-items-center justify-content-between">
+            <div class="flex gap-2 btns_desktop" style="align-items: center;">
+                <a href="{{ url_for('classes.student_classes_view') }}">
+                    <i class="bi bi-arrow-left-short"></i>
+                </a>
+                <h3 class="font-weight-bold" style="margin: 0;">
+                    {{ subject.name }}
+                </h3>
             </div>
 
-            <!-- Classes Grid for each period -->
-            {% for period in [1, 2, 3, 4] %}
-                <div class="period-classes-container gap-2 flex flex-column"
-                     data-period="{{ period }}"
-                     style="{% if period != 1 %}display: none;{% endif %}">
-
-                    {% if classes_by_period[period] %}
-                        {% for class_item in classes_by_period[period] %}
-                            <div class="exam flex class"
-                                 data-class-id="{{ class_item.id }}"
-                                 style="cursor: pointer;"
-                                 onclick="window.location.href='{{ url_for('classes.student_class_detail_view', class_id=class_item.id) }}'">
-                                <div class="exam_content flex">
-                                    <div class="img_evaluaciones evaluaciones_bg">
-                                        {% if class_item.cover_image %}
-                                            <img width="100%" height="100%" src="{{ class_item.cover_image }}" alt="{{ class_item.title }}">
-                                        {% else %}
-                                            <div class="class-cover-default">
-                                                <i class="fas fa-book-open"></i>
-                                            </div>
-                                        {% endif %}
-
-                                        <!-- Overlay con número de clase -->
-                                        <div class="class-overlay">
-                                            <span class="class-label">CLASE {{ class_item.class_number }}</span>
-                                        </div>
-                                    </div>
-
-                                    <div class="text-content flex flex-column">
-                                        <h2 class="class-title">{{ class_item.title }}</h2>
-                                        <p class="class-description">{{ class_item.description }}</p>
-                                    </div>
-                                </div>
-
-                                <!-- Botones de acción -->
-                                <div class="class-actions" onclick="event.stopPropagation()">
-                                    <button class="btn-mark-viewed {% if class_item.id in viewed_class_ids %}active{% endif %}"
-                                            data-class-id="{{ class_item.id }}" title="Marcar como vista">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button class="btn-mark-not-viewed {% if class_item.id not in viewed_class_ids %}active{% endif %}"
-                                            data-class-id="{{ class_item.id }}" title="Marcar como no vista">
-                                        <i class="fas fa-eye-slash"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        {% endfor %}
-                    {% else %}
-                        <div class="empty-period">
-                            <i class="fas fa-folder-open"></i>
-                            <p>No hay clases en este periodo</p>
-                        </div>
-                    {% endif %}
+            <!-- Porcentaje de clases vistas -->
+            {% if total_classes > 0 %}
+            <div class="progress-container btns_desktop">
+                <p>Porcentaje de clases vistas</p>
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" style="width: {{ viewed_percentage }}%;"></div>
                 </div>
-            {% endfor %}
-        </div>
-        <div class="bg_section_footer mobile_btns">
-            <span class="barra_bg barra_bg_left bg-blue"></span>
-            <span class="barra_bg barra_bg_right bg-gray"></span>
+                <p class="progress-text">{{ viewed_classes }} de {{ total_classes }} clases vistas</p>
+            </div>
+            {% endif %}
         </div>
 
-        {% include "sidebar_aside.html" %}
+        <!-- Classes Grid for each period -->
+        {% for period in [1, 2, 3, 4] %}
+        <div class="period-classes-container gap-2 flex flex-column" data-period="{{ period }}"
+            style="{% if period != 1 %}display: none;{% endif %}">
+
+            {% if classes_by_period[period] %}
+            {% for class_item in classes_by_period[period] %}
+            <div class="exam flex class" data-class-id="{{ class_item.id }}" style="cursor: pointer;"
+                onclick="window.location.href='{{ url_for('classes.student_class_detail_view', class_id=class_item.id) }}'">
+                <div class="exam_content flex">
+                    <div class="img_evaluaciones evaluaciones_bg">
+                        {% if class_item.cover_image %}
+                        <img width="100%" height="100%" src="{{ class_item.cover_image }}" alt="{{ class_item.title }}">
+                        {% else %}
+                        <div class="class-cover-default">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        {% endif %}
+
+                        <!-- Overlay con número de clase -->
+                        <div class="class-overlay">
+                            <span class="class-label">CLASE {{ class_item.class_number }}</span>
+                        </div>
+                    </div>
+
+                    <div class="text-content flex flex-column">
+                        <h2 class="class-title">{{ class_item.title }}</h2>
+                        <p class="class-description">{{ class_item.description }}</p>
+                    </div>
+                </div>
+
+                <!-- Botones de acción -->
+                <div class="class-actions" onclick="event.stopPropagation()">
+                    <button class="btn-mark-viewed {% if class_item.id in viewed_class_ids %}active{% endif %}"
+                        data-class-id="{{ class_item.id }}" title="Marcar como vista">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="btn-mark-not-viewed {% if class_item.id not in viewed_class_ids %}active{% endif %}"
+                        data-class-id="{{ class_item.id }}" title="Marcar como no vista">
+                        <i class="fas fa-eye-slash"></i>
+                    </button>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="empty-period">
+                <i class="fas fa-folder-open"></i>
+                <p>No hay clases en este periodo</p>
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
     </div>
+    <div class="bg_section_footer mobile_btns">
+        <span class="barra_bg barra_bg_left bg-blue"></span>
+        <span class="barra_bg barra_bg_right bg-gray"></span>
+    </div>
+
+    {% include "sidebar_aside.html" %}
+</div>
 {% endblock %}
 
 {% block extra_js %}
-    <script src="{{ url_for('static', filename='js/student_subject_classes.js') }}"></script>
+<script src="{{ url_for('static', filename='js/student_subject_classes.js') }}"></script>
 {% endblock %}
