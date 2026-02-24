@@ -61,10 +61,11 @@ body .mobile-header .hamburger-menu span {
 
 .text-column h3 {
     font-size: 1.2rem;
-    margin-bottom: 20px;
+    margin-bottom: 0;
     color: #000;
     font-weight: normal;
     letter-spacing: 1px;
+    margin-top: 2rem;
 }
 
 .text-column p {
@@ -314,6 +315,12 @@ input[type="file"] {
     text-align: center;
     color: #666;
     font-size: 0.9rem;
+}
+.section-text{
+    white-space: pre-line;
+    color: #333;
+    line-height: 1.8;
+    font-size: 1.1rem;
 }
 
 /* Responsive */
