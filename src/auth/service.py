@@ -1,28 +1,32 @@
+import os
+from functools import wraps
+
 from flask import (
-    redirect,
-    url_for,
+    Request,
+    Response,
     flash,
     make_response,
+    redirect,
     render_template,
+    url_for,
 )
-from src.models.user import User, UserRole
-from src.database.database import SessionLocal
 from flask_jwt_extended import (
     create_access_token,
     get_jwt_identity,
+    jwt_required,
     set_access_cookies,
     unset_jwt_cookies,
-    jwt_required,
 )
-from werkzeug.security import generate_password_hash, check_password_hash
-from flask import Request, Response
+from werkzeug.security import check_password_hash, generate_password_hash
+
+from src.database.database import SessionLocal
+from src.models.user import User, UserRole
+
 from .validation import (
-    LoginSchema,
     CreateFirstAdminSchema,
     ForgotPasswordSchema,
+    LoginSchema,
 )
-import os
-from functools import wraps
 
 
 def login_required(f):
@@ -81,7 +85,7 @@ def login_user_service(
             }, 200
 
         # Redirigir al dashboard
-        response = make_response(redirect(url_for("admin.dashboard")))
+        response = make_response(redirect(url_for("users.dashboard")))
 
         set_access_cookies(response, access_token)
         flash(f"Bienvenido, {user.username}!", "success")
@@ -185,12 +189,15 @@ def create_first_admin_service(
         if db.query(User).filter(User.role == UserRole.ADMIN).first():
             return {"error": "Ya existe un administrador en el sistema"}, 400
 
-        # Verificar si el username ya está en uso
         if db.query(User).filter_by(username=validated.username).first():
             return {"error": "El nombre de usuario ya está en uso"}, 400
 
+        if db.query(User).filter_by(document=validated.document).first():
+            return {"error": "El documento ya está en uso"}, 400
+
         user = User(
             username=validated.username,
+            document=validated.document,
             hashed_password=generate_password_hash(validated.password),
             full_name=validated.full_name,
             role=UserRole.ADMIN,
@@ -199,6 +206,8 @@ def create_first_admin_service(
         db.commit()
         db.refresh(user)
         return {"message": "Administrador creado exitosamente"}, 201
-    finally:
+    except Exception as e:
         db.rollback()
+        return {"error": f"Error al crear el administrador: {str(e)}"}, 500
+    finally:
         db.close()

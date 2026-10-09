@@ -1,70 +1,266 @@
-from flask import jsonify
-from .service import (
-    create_book_service,
-    get_books_service,
-    get_book_service,
-    update_book_service,
-    delete_book_service,
+from flask import (
+    Request,
+    Response,
+    flash,
+    redirect,
+    render_template,
+    url_for,
 )
-from .validation import BookCreateSchema, BookUpdateSchema
+from flask_jwt_extended import get_jwt_identity, jwt_required
+
 from src.database.database import SessionLocal
 from src.models.user import User, UserRole
+from src.utils.api_response import ApiResponse
+from src.utils.decorator_role_required import role_required
+
+from .service import (
+    create_book_service,
+    delete_book_service,
+    get_book_service,
+    get_books_service,
+    update_book_service,
+)
 
 
-def create_book_controller(data: BookCreateSchema, file, cover_image):
-    book = create_book_service(data, file, cover_image)
-    return jsonify(book), 201
-
-
-def get_books_controller(user_id):
-    # Obtenemos el usuario y su rol para filtrar los libros según corresponda
-    db = SessionLocal()
+# ========== HTML View Controllers ==========
+def books_view_controller(_: Request):
+    """Vista principal de libros"""
     try:
-        user = db.query(User).get(user_id)
-        if not user:
-            return jsonify({"error": "Usuario no encontrado"}), 404
+        current_user_id = get_jwt_identity()
+        db = SessionLocal()
+        user = db.query(User).filter(User.id == current_user_id).first()
 
-        # Si es estudiante, solo ve libros para estudiantes
-        if user.role == UserRole.STUDENT:
-            books = get_books_service(target_audience="STUDENT")
+        if not user:
+            flash("Usuario no encontrado", "error")
+            return redirect(url_for("users.dashboard"))
+
+        # Obtener todos los libros
+        books, status_code = get_books_service()
+
+        if status_code != 200:
+            flash("Error al cargar los libros", "error")
+            return redirect(url_for("users.dashboard"))
+
+        # Convert the User object to a dictionary with role as string
+        user_dict = {
+            "id": user.id,
+            "username": user.username,
+            "document": user.document,
+            "full_name": user.full_name,
+            "avatar": getattr(user, "avatar", None),
+            "role": user.role.value if hasattr(user.role, "value") else str(user.role),
+        }
+
+        return render_template(
+            "teacher/books_view.html",
+            user=user_dict,
+            books=books,
+            accion_logout=True,
+        )
+    except Exception:
+        flash("Error al cargar la vista de libros", "error")
+        return redirect(url_for("users.dashboard"))
+    finally:
+        db.close()
+
+
+def read_book_controller(book_id: int):
+    """Vista para leer/visualizar un libro ePub"""
+    try:
+        current_user_id = get_jwt_identity()
+        db = SessionLocal()
+        user = db.query(User).filter(User.id == current_user_id).first()
+
+        if not user:
+            flash("Usuario no encontrado", "error")
+            return redirect(url_for("books.books_view"))
+
+        # Obtener el libro
+        book, status_code = get_book_service(book_id)
+
+        if status_code != 200 or not book:
+            flash("Libro no encontrado", "error")
+            return redirect(url_for("books.books_view"))
+
+        # Preparar datos del usuario
+        user_dict = {
+            "id": user.id,
+            "username": user.username,
+            "full_name": user.full_name,
+            "role": user.role.value if hasattr(user.role, "value") else str(user.role),
+        }
+
+        return render_template(
+            "teacher/book_reader.html",
+            user=user_dict,
+            book=book,
+            accion_logout=True,
+        )
+    except Exception as e:
+        flash(f"Error al cargar el libro: {str(e)}", "error")
+        return redirect(url_for("books.books_view"))
+    finally:
+        db.close()
+
+
+def create_book_controller(request: Request):
+    """Crear un nuevo libro"""
+    try:
+        current_user_id = get_jwt_identity()
+
+        if request.method == "POST":
+            # Obtener datos del formulario
+            grade_level = request.form.get("grade_level")
+            data = {
+                "title": request.form.get("title"),
+                "author": request.form.get("author"),
+                "description": request.form.get("description", ""),
+                "target_audience": request.form.get("target_audience", "STUDENT"),
+                "grade_level": int(grade_level) if grade_level else None,
+            }
+
+            # Obtener archivos
+            book_file = request.files.get("book_file")
+            cover_image = request.files.get("cover_image")
+
+            # Crear libro
+            result, status_code = create_book_service(
+                data=data,
+                file=book_file,
+                cover_image=cover_image,
+                created_by_user_id=current_user_id,
+            )
+
+            if status_code == 201:
+                flash("Libro creado exitosamente", "success")
+            else:
+                flash(result.get("error", "Error al crear el libro"), "error")
+
+            return redirect(url_for("books.books_view"))
+
+    except Exception:
+        flash("Error al crear el libro", "error")
+        return redirect(url_for("books.books_view"))
+
+
+def update_book_controller(book_id: int, request: Request):
+    """Actualizar un libro"""
+    try:
+        if request.method == "POST":
+            # Obtener datos del formulario
+            data = {}
+            if request.form.get("title"):
+                data["title"] = request.form.get("title")
+            if request.form.get("author"):
+                data["author"] = request.form.get("author")
+            if request.form.get("description"):
+                data["description"] = request.form.get("description")
+            if request.form.get("target_audience"):
+                data["target_audience"] = request.form.get("target_audience")
+
+            # Obtener archivos
+            book_file = request.files.get("book_file")
+            cover_image = request.files.get("cover_image")
+
+            result, status_code = update_book_service(
+                book_id, data, book_file, cover_image
+            )
+
+            if status_code == 200:
+                flash("Libro actualizado exitosamente", "success")
+            else:
+                flash(result.get("error", "Error al actualizar el libro"), "error")
+
+            return redirect(url_for("books.books_view"))
         else:
-            # Administradores y docentes ven todos los libros
-            books = get_books_service()
-        return jsonify(books)
-    finally:
-        db.close()
+            # GET request - redirect to books view (editing is handled via modal)
+            return redirect(url_for("books.books_view"))
+    except Exception:
+        flash("Error al actualizar el libro", "error")
+        return redirect(url_for("books.books_view"))
 
 
-def get_book_controller(book_id: int, user_id):
-    # Verificamos el usuario y su rol
-    db = SessionLocal()
+def delete_book_controller(book_id: int, request: Request):
+    """Eliminar un libro"""
     try:
-        user = db.query(User).get(user_id)
-        if not user:
-            return jsonify({"error": "Usuario no encontrado"}), 404
+        _, status_code = delete_book_service(book_id)
 
-        book = get_book_service(book_id)
-        if not book:
-            return jsonify({"error": "Libro no encontrado"}), 404
+        if status_code == 200:
+            flash("Libro eliminado exitosamente", "success")
+        else:
+            flash("Error al eliminar el libro", "error")
 
-        # Si es estudiante, solo puede ver libros para estudiantes
-        if user.role == UserRole.STUDENT and book["target_audience"] != "STUDENT":
-            return jsonify({"error": "No autorizado"}), 403
-
-        return jsonify(book)
-    finally:
-        db.close()
+        return redirect(url_for("books.books_view"))
+    except Exception:
+        flash("Error al eliminar el libro", "error")
+        return redirect(url_for("books.books_view"))
 
 
-def update_book_controller(
-    book_id: int, data: BookUpdateSchema, file=None, cover_image=None
-):
-    book = update_book_service(book_id, data, file, cover_image)
-    if not book:
-        return jsonify({"error": "Libro no encontrado"}), 404
-    return jsonify(book)
+def download_book_controller(book_id: int, _: Request):
+    """Descargar el archivo de un libro.
+
+    The DB stores the book file as a URL/path (e.g.
+    /static/uploads/books/X.epub). nginx on the production
+    server exposes /static/uploads/* from
+    /opt/Gimsipei/uploads/, so redirecting the browser to that
+    URL works in both dev (Flask) and prod (nginx in front).
+    The previous implementation tried to read the file from
+    the container's local filesystem (os.path.exists + send_file)
+    and failed because the files live outside the container
+    on the host's /opt/Gimsipei/uploads/.
+    """
+    book_data, status_code = get_book_service(book_id)
+
+    if status_code == 404 or not book_data:
+        flash("Libro no encontrado", "error")
+        return redirect(url_for("books.books_view"))
+
+    file_url = book_data.get("file_path")
+    if not file_url:
+        flash("El archivo del libro no está disponible", "error")
+        return redirect(url_for("books.books_view"))
+
+    # If the stored value is already an absolute URL, use it as-is.
+    # Otherwise it's a path like /static/uploads/... and the browser
+    # will resolve it against the current origin (nginx serves it).
+    if file_url.startswith(("http://", "https://")):
+        return redirect(file_url)
+    return redirect(file_url)
 
 
-def delete_book_controller(book_id: int):
-    result = delete_book_service(book_id)
-    return jsonify(result)
+# ========== API Controllers ==========
+@jwt_required()
+@role_required([UserRole.TEACHER, UserRole.ADMIN])
+def get_books_api_controller(request: Request) -> Response | tuple[list, int]:
+    """API para obtener todos los libros"""
+    try:
+        books, status_code = get_books_service()
+
+        if status_code == 200:
+            return ApiResponse.list_response(items=books, total=len(books))
+        else:
+            return ApiResponse.error(
+                message="Error al obtener los libros", status_code=status_code
+            )
+    except Exception as e:
+        return ApiResponse.error(
+            message="Error interno del servidor", details=str(e), status_code=500
+        )
+
+
+@jwt_required()
+def get_book_api_controller(
+    book_id: int, request: Request
+) -> Response | tuple[dict | None, int]:
+    """API para obtener un libro específico"""
+    try:
+        result, status_code = get_book_service(book_id)
+
+        if status_code == 404:
+            return ApiResponse.error(message="Libro no encontrado", status_code=404)
+
+        return ApiResponse.success(data=result, message="Libro obtenido exitosamente")
+    except Exception as e:
+        return ApiResponse.error(
+            message="Error al obtener el libro", details=str(e), status_code=500
+        )

@@ -1,16 +1,20 @@
 from flask import Request
-from typing import List, Optional, Tuple
+from werkzeug.security import generate_password_hash
 
 # from sqlalchemy.orm import Session
 from src.database.database import SessionLocal
+from src.models.class_model import ClassModel
+from src.models.course import Course
+from src.models.course_student import CourseStudent
+from src.models.course_subject import CourseSubject
 from src.models.user import User, UserRole
-from werkzeug.security import generate_password_hash
-from .validation import UserCreateSchema, UserUpdateSchema, UserResponseSchema
+
+from .validation import UserCreateSchema, UserResponseSchema, UserUpdateSchema
 
 
 def get_users_service(
-    role: Optional[UserRole] = None,
-) -> Tuple[List[UserResponseSchema], int]:
+    role: UserRole | None = None,
+) -> tuple[list[UserResponseSchema], int]:
     db = SessionLocal()
     try:
         query = db.query(User)
@@ -29,6 +33,7 @@ def get_users_service(
                 username=user.username,
                 document=user.document,
                 full_name=user.full_name,
+                avatar=getattr(user, "avatar", None),
                 role=user.role.value,
                 is_active=bool(user.is_active),
             )
@@ -40,7 +45,7 @@ def get_users_service(
 
 def get_user_service(
     user_id: int, request: Request
-) -> Tuple[Optional[UserResponseSchema], int]:
+) -> tuple[UserResponseSchema | None, int]:
     db = SessionLocal()
     try:
         user = db.query(User).filter(User.id == user_id).first()
@@ -52,6 +57,7 @@ def get_user_service(
                 username=user.username,
                 document=user.document,
                 full_name=user.full_name,
+                avatar=getattr(user, "avatar", None),
                 role=user.role.value,
                 is_active=bool(user.is_active),
             ),
@@ -63,7 +69,7 @@ def get_user_service(
 
 def create_user_service(
     data: UserCreateSchema, request: Request
-) -> Tuple[Optional[UserResponseSchema], int]:
+) -> tuple[UserResponseSchema | None, int]:
     db = SessionLocal()
     try:
         # Check if username already exists
@@ -74,11 +80,14 @@ def create_user_service(
         if db.query(User).filter(User.document == data.document).first():
             return None, 400
 
+        avatar_filename = data.avatar or "buho.png"
+
         user = User(
             username=data.username,
             document=data.document,
             hashed_password=generate_password_hash(data.password),
             full_name=data.full_name,
+            avatar=avatar_filename,
             role=data.role,
         )
 
@@ -92,6 +101,7 @@ def create_user_service(
             username=user.username,
             document=user.document,
             full_name=user.full_name,
+            avatar=getattr(user, "avatar", None),
             role=user.role.value,
             is_active=bool(user.is_active),
         )
@@ -106,7 +116,7 @@ def create_user_service(
 
 def update_user_service(
     user_id: int, data: UserUpdateSchema, request: Request
-) -> Tuple[Optional[UserResponseSchema], int]:
+) -> tuple[UserResponseSchema | None, int]:
     db = SessionLocal()
     try:
         user = db.query(User).filter(User.id == user_id).first()
@@ -140,6 +150,9 @@ def update_user_service(
         if data.full_name is not None:
             user.full_name = data.full_name
 
+        if data.avatar is not None:
+            user.avatar = data.avatar
+
         if data.role is not None:
             user.role = data.role
 
@@ -155,6 +168,7 @@ def update_user_service(
                 username=user.username,
                 document=user.document,
                 full_name=user.full_name,
+                avatar=getattr(user, "avatar", None),
                 role=user.role.value,
                 is_active=bool(user.is_active),
             ),
@@ -167,20 +181,118 @@ def update_user_service(
         db.close()
 
 
-def delete_user_service(user_id: int, request: Request) -> Tuple[Optional[dict], int]:
+def delete_user_service(
+    user_id: int, _: Request, current_user_id: int | None = None
+) -> tuple[dict | None, int]:
     db = SessionLocal()
     try:
         user = db.query(User).filter(User.id == user_id).first()
         if not user:
             return None, 404
 
-        # Soft delete: mark as inactive to avoid FK constraint issues
-        user.is_active = 0
+        if current_user_id and user_id == current_user_id:
+            return (
+                {
+                    "message": "No se puede eliminar su propio usuario. Por favor, solicite a otro administrador que realice esta acción."
+                },
+                409,
+            )
+
+        if user.role == UserRole.ADMIN:
+            admin_count = (
+                db.query(User)
+                .filter(User.role == UserRole.ADMIN, User.is_active == 1)
+                .count()
+            )
+            if admin_count <= 1:
+                return (
+                    {
+                        "message": "No se puede eliminar el último administrador del sistema. Debe haber al menos un administrador activo."
+                    },
+                    409,
+                )
+
+        if user.role == UserRole.TEACHER:
+            assigned_subjects = (
+                db.query(CourseSubject)
+                .filter(CourseSubject.teacher_id == user_id)
+                .count()
+            )
+
+            if assigned_subjects > 0:
+                return (
+                    {
+                        "message": f"No se puede eliminar el docente porque tiene {assigned_subjects} materia(s) asignada(s). Por favor, elimine primero las asignaciones de materias."
+                    },
+                    409,
+                )
+
+        created_courses = db.query(Course).filter(Course.created_by == user_id).count()
+        if created_courses > 0:
+            return (
+                {
+                    "message": f"No se puede eliminar el usuario porque tiene {created_courses} curso(s) creado(s). Por favor, elimine primero los cursos."
+                },
+                409,
+            )
+
+        # If is a student, delete their enrollments
+        if user.role == UserRole.STUDENT:
+            enrollments = (
+                db.query(CourseStudent)
+                .filter(CourseStudent.student_id == user_id)
+                .all()
+            )
+            if enrollments:
+                for enrollment in enrollments:
+                    db.delete(enrollment)
+                db.flush()
+        else:
+            # For other roles, check if they have enrollments and do not allow deletion
+            enrollments = (
+                db.query(CourseStudent)
+                .filter(CourseStudent.student_id == user_id)
+                .count()
+            )
+            if enrollments > 0:
+                return (
+                    {
+                        "message": f"No se puede eliminar el usuario porque está inscrito en {enrollments} curso(s). Por favor, elimine primero las inscripciones."
+                    },
+                    409,
+                )
+
+        try:
+            created_classes = (
+                db.query(ClassModel).filter(ClassModel.created_by == user_id).count()
+            )
+            if created_classes > 0:
+                return (
+                    {
+                        "message": f"No se puede eliminar el usuario porque tiene {created_classes} clase(s) creada(s). Por favor, elimine primero las clases."
+                    },
+                    409,
+                )
+        except Exception:
+            pass
+
+        db.query(User).filter(User.id == user_id).delete()
         db.commit()
 
-        return {"message": "User deleted successfully"}, 200
-    except Exception:
+        return {"message": "Usuario eliminado exitosamente"}, 200
+    except Exception as e:
         db.rollback()
-        return None, 500
+        error_message = str(e)
+        if (
+            "foreign key constraint" in error_message.lower()
+            or "FOREIGN KEY" in error_message
+        ):
+            return (
+                {
+                    "message": "No se puede eliminar el usuario porque tiene datos relacionados. Por favor, elimine primero los datos relacionados."
+                },
+                409,
+            )
+        return {"message": f"Error al eliminar el usuario: {error_message}"}, 500
     finally:
         db.close()

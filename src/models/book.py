@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, String, Text
+
 from src.database.database import Base
 
 
@@ -11,3 +12,4 @@ class Book(Base):
     file_path = Column(String(512), nullable=False)
     cover_image = Column(String(512), nullable=True)
     target_audience = Column(String(20), nullable=False)
+    grade_level = Column(Integer, nullable=True)  # Grado: 6, 7, 8, 9, 10, 11

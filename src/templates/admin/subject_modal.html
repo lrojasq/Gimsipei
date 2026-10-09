@@ -1,0 +1,40 @@
+<!-- Modal de Crear/Editar Materia (el modo lo configura courses_management.js) -->
+<div class="modal modal_create" id="subjectModal" aria-hidden="true">
+    <div class="bg-back close-modal"></div>
+    <div class="container">
+        <i class="closed close-modal">X</i>
+        <h2 id="subjectModalTitle">Crear materia</h2>
+        <form method="POST" action="{{ url_for('subjects.create_subject') }}" id="subjectForm" class="needs-validation" novalidate>
+            <input type="hidden" name="course_id" id="courseIdInput" value="">
+            <input type="hidden" name="subject_id" id="subjectIdInput" value="">
+            <input type="hidden" name="redirect_to" id="redirectToInput" value="courses_management">
+            <div class="mb-3" id="subjectNameField">
+                <label for="subject-name" class="form-label">Nombre de la materia</label>
+                <select class="form-select" id="subject-name" name="name" required>
+                    <option value="" disabled selected>Selecciona una materia</option>
+                    {% if available_subjects %}
+                        {% for subject_name in available_subjects %}
+                        <option value="{{ subject_name }}">{{ subject_name }}</option>
+                        {% endfor %}
+                    {% endif %}
+                </select>
+                <div class="invalid-feedback">Por favor ingrese el nombre de la materia.</div>
+            </div>
+            <div class="mb-3">
+                <label for="teacher_id" class="form-label" id="teacherLabel">Profesor</label>
+                <select class="form-select" id="teacher_id" name="teacher_id" required>
+                    <option value="" disabled selected>Selecciona un profesor</option>
+                    {% if teachers %}
+                        {% for teacher in teachers %}
+                        <option value="{{ teacher.id }}">{{ teacher.name }}</option>
+                        {% endfor %}
+                    {% endif %}
+                </select>
+                <div class="invalid-feedback">Por favor seleccione un profesor.</div>
+            </div>
+            <div class="btns">
+                <button type="submit" class="btn btn-primary" id="submitSubjectBtn">Guardar</button>
+            </div>
+        </form>
+    </div>
+</div>

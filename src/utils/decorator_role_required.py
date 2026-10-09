@@ -1,37 +1,37 @@
-from flask_jwt_extended import verify_jwt_in_request, get_jwt_identity
 from functools import wraps
-from src.models.user import User
-from src.database.database import SessionLocal
+
+from flask_jwt_extended import get_jwt, verify_jwt_in_request
+
 from src.utils.api_response import ApiResponse
-from typing import Union, List
 
 
 # Decorator to validate roles
-def role_required(roles_param: Union[object, List[object]]):
+def role_required(roles_param: object | list[object]):
     """
-    Decorator to validate roles. It uses the verify_jwt_in_request function to validate the JWT token.
-    It uses the get_jwt_identity function to get the user id.
-    It uses the SessionLocal class to get the user from the database.
-    It uses the ApiResponse class to return the error response.
+    Decorator to validate roles against the role claim embedded in the
+    JWT at login time (additional_claims={"role": user.role.name}).
 
-    Args:
-        roles_param: A single role or a list of roles that are allowed to access the endpoint
+    We previously hit the DB to re-read the user and check their role.
+    That made role_required cost an extra query per request — measurable
+    in production where each query pays ~360ms of network latency.
+    Controllers that actually need the user object (most of them) still
+    fetch it via get_user_service after this decorator runs, so the
+    "user still exists" check is not lost. The trade-off is that a
+    role change takes effect at the next token refresh (max 2h) instead
+    of immediately, which is acceptable for a school-management app.
     """
-    # Convert single role to list for consistent handling
-    roles = [roles_param] if not isinstance(roles_param, list) else roles_param
+    # Convert single role to list, then to a set of role names
+    role_names = {
+        r.name if hasattr(r, "name") else str(r)
+        for r in ([roles_param] if not isinstance(roles_param, list) else roles_param)
+    }
 
     def decorator(fn):
         @wraps(fn)
         def wrapper(*args, **kwargs):
-            """
-            Wrapper to validate roles.
-            """
             verify_jwt_in_request()
-            user_id = get_jwt_identity()
-            db = SessionLocal()
-            user = db.query(User).get(user_id)
-            db.close()
-            if not user or user.role not in roles:
+            user_role = get_jwt().get("role")
+            if user_role not in role_names:
                 return ApiResponse.error(message="No autorizado", status_code=403)
             return fn(*args, **kwargs)
 

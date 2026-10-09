@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}{{ book.title }} - Lector{% endblock %}
+
+{% block extra_css %}
+<link href="{{ url_for('static', filename='css/menu.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/category.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/book_reader.css') }}" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+{% endblock %}
+
+{% block content %}
+{% block menu %}{% endblock %}
+
+<div class="book-reader-container libros_category">
+    <!-- Header del lector -->
+    <div class="reader-header">
+        <a href="{{ url_for('books.books_view') }}" class="back-btn">
+            <i class="fas fa-arrow-left"></i>
+            <span>Volver a Libros</span>
+        </a>
+        <div class="book-info">
+            <h1>{{ book.title }}</h1>
+            <p class="author">{{ book.author }}</p>
+        </div>
+        <div class="reader-controls">
+            <button id="prevPage" class="control-btn" title="Página anterior">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <span id="pageInfo" class="page-info">Cargando...</span>
+            <button id="nextPage" class="control-btn" title="Página siguiente">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+            <button id="fontSizeDecrease" class="control-btn" title="Reducir tamaño">
+                <i class="fas fa-minus"></i>
+            </button>
+            <button id="fontSizeIncrease" class="control-btn" title="Aumentar tamaño">
+                <i class="fas fa-plus"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Contenedor principal del libro -->
+    <div class="reader-content">
+        <div id="bookArea" class="book-area">
+            <div id="bookViewer" 
+                 class="book-viewer"
+                 data-file-url="{{ book.file_path }}"
+                 data-book-id="{{ book.id }}"
+                 data-book-title="{{ book.title }}"></div>
+        </div>
+    </div>
+
+    <!-- Footer con progreso -->
+    <div class="reader-footer">
+        <div class="progress-container">
+            <div id="progressBar" class="progress-bar"></div>
+        </div>
+        <span id="progressText" class="progress-text">0%</span>
+    </div>
+</div>
+
+<!-- Loading overlay -->
+<div id="loadingOverlay" class="loading-overlay">
+    <div class="loading-spinner">
+        <i class="fas fa-spinner fa-spin"></i>
+        <p>Cargando libro...</p>
+    </div>
+</div>
+
+<!-- Epub.js library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/epubjs/dist/epub.min.js"></script>
+<script src="{{ url_for('static', filename='js/book_reader.js') }}"></script>
+{% endblock %}

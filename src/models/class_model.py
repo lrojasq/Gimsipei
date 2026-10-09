@@ -1,7 +1,9 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
+from datetime import UTC, datetime
+
+from sqlalchemy import Column, DateTime, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
+
 from src.database.database import Base
-from datetime import datetime, timezone
 
 
 class ClassModel(Base):
@@ -15,13 +17,14 @@ class ClassModel(Base):
     title = Column(String(100), nullable=False)
     description = Column(String(255), nullable=True)
     class_number = Column(Integer, nullable=False)
-    date = Column(DateTime, nullable=False)
+    cover_image = Column(String(255), nullable=True)
     created_by = Column(Integer, ForeignKey("users.id"), nullable=False)
-    created_at = Column(DateTime, default=datetime.now(timezone.utc))
+    period = Column(Integer, nullable=False)
+    created_at = Column(DateTime, default=datetime.now(UTC))
     updated_at = Column(
         DateTime,
-        default=datetime.now(timezone.utc),
-        onupdate=datetime.now(timezone.utc),
+        default=datetime.now(UTC),
+        onupdate=datetime.now(UTC),
     )
 
     # Relationships
@@ -29,5 +32,6 @@ class ClassModel(Base):
     subject = relationship("Subject")
     creator = relationship("User", back_populates="created_classes")
     resources = relationship("Resource", back_populates="class_", lazy="dynamic")
-    assignments = relationship("Assignment", back_populates="class_", lazy="dynamic")
     views = relationship("ClassView", back_populates="class_", lazy="dynamic")
+    contents = relationship("ClassContent", back_populates="class_", lazy="dynamic")
+    assignments = relationship("Assignment", back_populates="class_", lazy="dynamic")

@@ -5,15 +5,27 @@ venv
 /venv
 .env
 
-# config
-*.json
-*.yaml
-*.yml
-*.toml
-*.ini
-*.env
+# uv
+.venv/
 
 # __pycache__
 __pycache__/
+.ruff_cache/
+.pytest_cache/
 
+# uploads
+uploads/
 
+# migrations
+migrations/
+migrations/env.py
+
+# sql_migrations
+sql_migrations/
+
+# alembic
+alembic.ini
+
+# scripts
+scripts/
+docs/

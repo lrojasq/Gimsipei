@@ -49,37 +49,44 @@ document.addEventListener('DOMContentLoaded', function () {
     setupPasswordToggle('#password', '#togglePassword');
     setupPasswordToggle('#confirm_password', '#toggleConfirmPassword');
 });
+// SLIDER ADMIN
 
+if(document.querySelector('.mySwiper') && screen.width>1080){
+    var swiper = new Swiper(".mySwiper", {
 
-// Función para manejar el dropdown
-document.querySelectorAll(".grado").forEach((grado) => {
-    grado.addEventListener("click", () => {
-        const materias = grado.nextElementSibling;
-        const icono = grado.querySelector("i");
-
-        materias.classList.toggle("active");
-        icono.classList.toggle("rotate");
-    });
+    direction: "vertical",   // 👈 scroll vertical
+    mousewheel: {
+        releaseOnEdges: true,  // permite salir al final si quieres
+    },
+    speed: 600,              // velocidad de transición
+    scrollbar: {
+        el: ".swiper-scrollbar",
+        draggable: true,
+    },
 });
+}
 
-if (document.getElementById('hamburger')) {
-    document.getElementById('hamburger').addEventListener('click', function () {
-        document.getElementById('mobileNav').classList.toggle('active');
 
+
+// Menú hamburguesa - solo si existe el elemento
+const hamburger = document.getElementById('hamburger');
+const mobileNav = document.getElementById('mobileNav');
+
+if (hamburger && mobileNav) {
+    hamburger.addEventListener('click', function () {
+        mobileNav.classList.toggle('active');
+        document.body.classList.toggle('overflow-hidden');
         // Animación para el menú hamburguesa (opcional)
         this.classList.toggle('open');
+        
     });
-}
 
-
-let menu = document.querySelectorAll('.mobile-nav li a')
-if (menu) {
+    let menu = document.querySelectorAll('.mobile-nav li a')
     menu.forEach(item => {
         item.addEventListener('click', () => {
-            document.getElementById('mobileNav').classList.remove('active');
-            document.getElementById('hamburger').classList.remove('open');
+            mobileNav.classList.remove('active');
+            hamburger.classList.remove('open');
+            document.body.classList.toggle('overflow-hidden');
         });
     });
-}
-
-
+}

@@ -1,0 +1,311 @@
+:root {
+    --blanco: #ffffff;
+    --primario: #3BBAE4;
+    --gris-claro: #606060;
+    --azul-oscuro: #12A3DD;
+    --barra-ginsipei: #1CC3EA;
+    --barra-clases: #23CCC3;
+    --barra-recursos: #F7CB52;
+    --barra-evaluaciones: #F48D53;
+    --barra-libros: #EA6EF4;
+    --barra-calificaciones: #A270F2;
+}
+
+.student-dashboard-container {
+    width: 100%;
+    min-height: 100vh;
+    background-color: var(--azul-oscuro);
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Sección de Misión */
+.mission-section {
+    width: 100%;
+    min-height: 40vh;
+    background-color: var(--primario);
+    background-image: url('../images/menu-principal/bg-pencil.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    padding: 80px 50px 50px 50px;
+    display: flex;
+    align-items: flex-start;
+}
+
+.mission-content {
+    max-width: 500px;
+    color: var(--blanco);
+}
+
+.mission-content h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    font-weight: bold;
+}
+
+.mission-content p {
+    font-size: 1rem;
+    line-height: 1.6;
+    text-align: justify;
+}
+
+/* Sección de Visión y Módulos */
+.vision-modules-section {
+    width: 100%;
+    min-height: 60vh;
+    background-color: #f6f6f6;
+    border-radius: 50px 50px 0 0;
+    margin-top: -30px;
+    position: relative;
+    z-index: 10;
+    padding: 50px;
+}
+
+.vision-content {
+    max-width: 500px;
+    color: var(--gris-claro);
+    margin-bottom: 80px;
+}
+
+.vision-content h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    font-weight: bold;
+}
+
+.vision-content p {
+    font-size: 1rem;
+    line-height: 1.6;
+    text-align: justify;
+}
+
+/* Grid de Módulos */
+.modules-grid {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 30px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.module-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 8px;
+    width: 130px;
+    height: 160px;
+    border-radius: 15px;
+    background-color: var(--azul-oscuro);
+    color: var(--blanco);
+    text-decoration: none;
+    position: relative;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+}
+
+a.module-box {
+    text-decoration: none;
+}
+
+.module-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.module-box p {
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin: 0;
+    text-align: center;
+}
+
+/* Iconos de módulos */
+.module-icon {
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+}
+
+.gimsipei-icon {
+    width: 68px;
+    height: 88px;
+    background-image: url('../images/menu-principal/gimsipei.png');
+}
+
+.clases-icon {
+    width: 77px;
+    height: 77px;
+    background-image: url('../images/menu-principal/clases.png');
+}
+
+.recursos-icon {
+    width: 88px;
+    height: 88px;
+    background-image: url('../images/menu-principal/recursos.png');
+}
+
+.evaluaciones-icon {
+    width: 68px;
+    height: 88px;
+    background-image: url('../images/menu-principal/Evaluaciones.png');
+}
+
+.libros-icon {
+    width: 88px;
+    height: 88px;
+    background-image: url('../images/menu-principal/libros.png');
+}
+
+.calificaciones-icon {
+    width: 68px;
+    height: 88px;
+    background-image: url('../images/menu-principal/calificaciones.png');
+}
+
+/* Barras de color en módulos */
+.module-bar {
+    position: absolute;
+    bottom: 10px;
+    width: 120px;
+    height: 10px;
+    border-radius: 5px;
+}
+
+.gimsipei-bar {
+    background-color: var(--barra-ginsipei);
+}
+
+.clases-bar {
+    background-color: var(--barra-clases);
+}
+
+.recursos-bar {
+    background-color: var(--barra-recursos);
+}
+
+.evaluaciones-bar {
+    background-color: var(--barra-evaluaciones);
+}
+
+.libros-bar {
+    background-color: var(--barra-libros);
+}
+
+.calificaciones-bar {
+    background-color: var(--barra-calificaciones);
+}
+
+/* Hover effects para módulos */
+.gimsipei-module:hover {
+    background-color: var(--barra-ginsipei);
+}
+
+.clases-module:hover {
+    background-color: var(--barra-clases);
+}
+
+.recursos-module:hover {
+    background-color: var(--barra-recursos);
+}
+
+.evaluaciones-module:hover {
+    background-color: var(--barra-evaluaciones);
+}
+
+.libros-module:hover {
+    background-color: var(--barra-libros);
+}
+
+.calificaciones-module:hover {
+    background-color: var(--barra-calificaciones);
+}
+
+/* Decoración lateral */
+.lateral-decoration {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 20%;
+    height: 70%;
+    background-image: url('../images/menu-principal/bg-rigth.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    z-index: 5;
+    pointer-events: none;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .mission-section {
+        padding: 60px 20px 30px 20px;
+        min-height: 35vh;
+    }
+
+    .mission-content,
+    .vision-content {
+        max-width: 100%;
+    }
+
+    .mission-content h2,
+    .vision-content h2 {
+        font-size: 1.5rem;
+    }
+
+    .mission-content p,
+    .vision-content p {
+        font-size: 0.9rem;
+    }
+
+    .vision-modules-section {
+        padding: 30px 20px;
+        margin-top: -20px;
+    }
+
+    .vision-content {
+        margin-bottom: 50px;
+    }
+
+    .modules-grid {
+        gap: 20px;
+        max-width: 100%;
+    }
+
+    .module-box {
+        width: 110px;
+        height: 140px;
+    }
+
+    .lateral-decoration {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .mission-section {
+        padding: 50px 15px 20px 15px;
+    }
+
+    .vision-modules-section {
+        padding: 20px 15px;
+    }
+
+    .modules-grid {
+        gap: 15px;
+    }
+
+    .module-box {
+        width: 100px;
+        height: 130px;
+    }
+
+    .module-box p {
+        font-size: 0.85rem;
+    }
+}
+

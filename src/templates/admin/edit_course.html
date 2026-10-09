@@ -20,18 +20,7 @@
     </div>
 
     <!-- Flash Messages -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-    {% for category, message in messages %}
-    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-        <i
-            class="fas fa-{% if category == 'success' %}check-circle{% elif category == 'danger' %}exclamation-triangle{% else %}info-circle{% endif %} me-2"></i>
-        {{ message }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-    {% endfor %}
-    {% endif %}
-    {% endwith %}
+    {% include "flash_messages.html" %}
 
     <!-- Edit Course Form -->
     <div class="row justify-content-center">
@@ -107,28 +96,6 @@
                                 <div class="form-text">Ej: Sexto A, Séptimo B, etc.</div>
                             </div>
 
-                            <!-- Status -->
-                            <div class="col-12 mb-4">
-                                <label class="form-label">ESTADO</label>
-                                <div class="status-selection">
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="is_active" id="status_active"
-                                            value="true" {% if course.is_active %}checked{% endif %}>
-                                        <label class="form-check-label" for="status_active">
-                                            ACTIVO
-                                        </label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="is_active"
-                                            id="status_inactive" value="false" {% if not course.is_active %}checked{%
-                                            endif %}>
-                                        <label class="form-check-label" for="status_inactive">
-                                            INACTIVO
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-
                             <!-- Submit Button -->
                             <div class="col-12 text-center">
                                 <button type="submit" class="btn btn-primary btn-lg px-5" id="submitBtn">
@@ -148,5 +115,6 @@
 <!-- Font Awesome -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
 <!-- Custom JS -->
+<script src="{{ url_for('static', filename='js/delete_modal.js') }}"></script>
 <script src="{{ url_for('static', filename='js/courses_management.js') }}"></script>
 {% endblock %}

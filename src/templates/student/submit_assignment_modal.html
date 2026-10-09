@@ -1,0 +1,44 @@
+<!-- Modal para adjuntar tarea -->
+<div class="modal-overlay" id="submitAssignmentModal" style="display: none;">
+    <div class="modal-container">
+        <div class="modal-header modal-header-task">
+            <h3>ADJUNTAR TAREA</h3>
+            <button class="modal-close" onclick="closeSubmitModal()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <form id="submitAssignmentForm" method="POST" action="{{ url_for('classes.submit_assignment') }}"
+            enctype="multipart/form-data">
+            <input type="hidden" name="assignment_id" id="assignment_id">
+            <input type="hidden" name="class_id" value="{{ class_data.id }}">
+
+            <div class="form-group">
+                <label id="assignment_title_label"></label>
+            </div>
+
+            <div class="form-group">
+                <label for="submission_text">DESCRIPCIÓN (OPCIONAL)</label>
+                <textarea name="submission_text" id="submission_text"
+                    placeholder="Escribe comentarios sobre tu entrega..." rows="4"></textarea>
+            </div>
+
+            <div class="form-group file-upload-group">
+                <label for="submission_file" class="file-upload-label">
+                    <i class="fas fa-upload"></i> SELECCIONAR ARCHIVO
+                </label>
+                <input type="file" name="submission_file" id="submission_file" required>
+                <span class="file-name" id="submission_file_name"></span>
+            </div>
+
+            <div class="modal-actions">
+                <button type="button" class="btn-cancel" onclick="closeSubmitModal()">
+                    CANCELAR
+                </button>
+                <button type="submit" class="btn-submit">
+                    <i class="fas fa-upload"></i> ENVIAR TAREA
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+

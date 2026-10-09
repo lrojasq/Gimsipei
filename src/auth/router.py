@@ -1,10 +1,11 @@
 from flask import Blueprint, request
+
 from .controllers import (
-    login_user_controller,
-    get_current_user_controller,
-    logout_user_controller,
     create_first_admin_controller,
     forgot_password_controller,
+    get_current_user_controller,
+    login_user_controller,
+    logout_user_controller,
 )
 
 auth_bp = Blueprint("auth", __name__, url_prefix="/auth")

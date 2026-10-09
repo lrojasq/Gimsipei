@@ -1,9 +1,10 @@
-from flask import request, jsonify
-from flask_jwt_extended import get_jwt_identity
+from flask import flash, jsonify, redirect, render_template, request, url_for
+from flask_jwt_extended import get_jwt, get_jwt_identity
 from pydantic import ValidationError
 
 from src.classes import service, validation
-from src.models.user import UserRole
+from src.classes.service import create_class_service, create_resource_service
+from src.users.service import get_user_service
 
 
 # Subject Controllers
@@ -69,314 +70,572 @@ def delete_subject_controller(subject_id: int):
         return jsonify({"error": f"Error inesperado: {str(e)}"}), 500
 
 
-# Period Controllers
-def create_period_controller():
+# HTML View Controllers
+def teacher_classes_view_controller():
+    """Vista HTML para que los teachers vean los cursos con sus materias"""
     try:
         current_user_id = get_jwt_identity()
-        request_data = dict(request.json) if request.json else {}
-        period_data = validation.PeriodCreate(**request_data)
-        period = service.create_period(period_data, current_user_id)
-        return jsonify(validation.PeriodInDB.from_orm(period).dict()), 201
-    except ValidationError as e:
-        return jsonify({"error": e.errors()}), 400
-    except PermissionError as e:
-        return jsonify({"error": str(e)}), 403
-    except Exception as e:
-        return jsonify({"error": f"Error inesperado: {str(e)}"}), 500
+        current_user, _ = get_user_service(current_user_id, request)
+        courses, status_code = service.get_all_courses_with_subjects()
 
+        if status_code != 200:
+            flash("Error al cargar los cursos", "danger")
+            courses = []
 
-def get_period_controller(period_id: int):
-    try:
-        period = service.get_period(period_id)
-        if not period:
-            return jsonify({"error": "Period not found"}), 404
-        return jsonify(validation.PeriodInDB.from_orm(period).dict())
-    except Exception as e:
-        return jsonify({"error": f"Error inesperado: {str(e)}"}), 500
-
-
-def get_all_periods_controller():
-    try:
-        periods = service.get_periods()
-        return jsonify(
-            [validation.PeriodInDB.from_orm(period).dict() for period in periods]
+        return render_template(
+            "teacher/teacher_classes.html",
+            courses=courses,
+            user=current_user,
+            accion_logout=True,
         )
     except Exception as e:
-        return jsonify({"error": f"Error inesperado: {str(e)}"}), 500
+        flash(f"Error al cargar los cursos: {str(e)}", "danger")
+        return render_template(
+            "teacher/teacher_classes.html",
+            courses=[],
+            user=current_user,
+            accion_logout=True,
+        )
 
 
-def update_period_controller(period_id: int):
+def create_class_controller():
+    """Controlador para crear una nueva clase"""
     try:
         current_user_id = get_jwt_identity()
-        request_data = dict(request.json) if request.json else {}
-        period_data = validation.PeriodUpdate(**request_data)
-        period = service.update_period(period_id, period_data, current_user_id)
-        if not period:
-            return jsonify({"error": "Period not found"}), 404
-        return jsonify(validation.PeriodInDB.from_orm(period).dict())
-    except ValidationError as e:
-        return jsonify({"error": e.errors()}), 400
-    except PermissionError as e:
-        return jsonify({"error": str(e)}), 403
-    except Exception as e:
-        return jsonify({"error": f"Error inesperado: {str(e)}"}), 500
+
+        # Obtener datos del formulario
+        course_id = request.form.get("course_id")
+        subject_id = request.form.get("subject_id")
+
+        data = {
+            "course_id": course_id,
+            "subject_id": subject_id,
+            "class_number": request.form.get("class_number"),
+            "title": request.form.get("title"),
+            "description": request.form.get("description", ""),
+            "period": request.form.get("period", 1),
+        }
+
+        # Obtener archivo de portada si existe
+        cover_file = request.files.get("cover_image")
+        result, status_code = create_class_service(data, cover_file, current_user_id)
+
+        if status_code == 201:
+            flash(result["message"], "success")
+        else:
+            flash(result.get("error", "Error al crear la clase"), "danger")
+
+        # Redirigir a la vista de clases de la materia si tenemos los IDs
+        if course_id and subject_id:
+            return redirect(
+                url_for(
+                    "classes.subject_classes_view",
+                    course_id=course_id,
+                    subject_id=subject_id,
+                )
+            )
+
+        # Fallback a la vista general
+        return redirect(url_for("classes.teacher_classes_view"))
+    except Exception:
+        flash("Error al crear la clase", "danger")
+        # Try to redirect with the IDs if they are available
+        course_id = request.form.get("course_id")
+        subject_id = request.form.get("subject_id")
+        if course_id and subject_id:
+            return redirect(
+                url_for(
+                    "classes.subject_classes_view",
+                    course_id=course_id,
+                    subject_id=subject_id,
+                )
+            )
+        return redirect(url_for("classes.teacher_classes_view"))
 
 
-def delete_period_controller(period_id: int):
+def create_resource_controller():
+    """Controlador para crear un nuevo recurso"""
+    try:
+        # Obtener datos del formulario
+        data = {
+            "class_id": request.form.get("class_id"),
+            "title": request.form.get("title"),
+            "description": request.form.get("description", ""),
+            "url": request.form.get("url", ""),
+        }
+
+        # Obtener archivo del recurso si existe
+        resource_file = request.files.get("resource_file")
+        result, status_code = create_resource_service(data, resource_file)
+
+        if status_code == 201:
+            flash(result["message"], "success")
+        else:
+            flash(result.get("error", "Error al crear el recurso"), "danger")
+
+        # Redirigir a la vista de clases
+        return redirect(url_for("classes.teacher_classes_view"))
+
+    except Exception:
+        flash("Error al crear el recurso", "danger")
+        return redirect(url_for("classes.teacher_classes_view"))
+
+
+def subject_classes_view_controller(course_id: int, subject_id: int):
+    """Vista HTML para mostrar las clases de una materia específica"""
     try:
         current_user_id = get_jwt_identity()
-        result = service.delete_period(period_id, current_user_id)
-        if not result:
-            return jsonify({"error": "Period not found"}), 404
-        return jsonify({"message": "Period deleted successfully"})
-    except PermissionError as e:
-        return jsonify({"error": str(e)}), 403
+        current_user, _ = get_user_service(current_user_id, request)
+
+        data, status_code = service.get_classes_by_subject_service(
+            course_id, subject_id
+        )
+
+        if status_code != 200:
+            flash(data.get("error", "Error al cargar las clases"), "danger")
+            return redirect(url_for("classes.teacher_classes_view"))
+
+        return render_template(
+            "teacher/subject_classes_view.html",
+            course=data["course"],
+            subject=data["subject"],
+            teacher=data["teacher"],
+            classes_by_period=data["classes_by_period"],
+            user=current_user,
+            accion_logout=True,
+        )
     except Exception as e:
-        return jsonify({"error": f"Error inesperado: {str(e)}"}), 500
+        flash(f"Error al cargar las clases: {str(e)}", "danger")
+        return redirect(url_for("classes.teacher_classes_view"))
 
 
-def lock_period_controller(period_id: int):
+def update_class_controller(class_id: int):
+    """Controlador para actualizar una clase existente"""
+    try:
+        data = {
+            "class_number": request.form.get("class_number"),
+            "title": request.form.get("title"),
+            "description": request.form.get("description", ""),
+            "period": request.form.get("period"),
+        }
+
+        # Obtener archivo de portada si existe
+        cover_file = request.files.get("cover_image")
+        result, status_code = service.update_class_service(class_id, data, cover_file)
+
+        flash(result["message"], "success") if status_code == 200 else flash(
+            result.get("error", "Error al actualizar la clase"), "danger"
+        )
+
+        # Redirigir a la vista de clases por período
+        course_id = request.form.get("course_id")
+        subject_id = request.form.get("subject_id")
+
+        if course_id and subject_id:
+            return redirect(
+                url_for(
+                    "classes.subject_classes_view",
+                    course_id=course_id,
+                    subject_id=subject_id,
+                )
+            )
+        return redirect(url_for("classes.teacher_classes_view"))
+
+    except Exception:
+        flash("Error al actualizar la clase", "danger")
+        return redirect(url_for("classes.teacher_classes_view"))
+
+
+def delete_class_controller(class_id: int):
+    """Controlador para eliminar una clase"""
+    try:
+        user_role = get_jwt().get("role")
+        result, status_code = service.delete_class_service(class_id, user_role)
+
+        if status_code == 200:
+            flash(result["message"], "success")
+        else:
+            flash(result.get("error", "Error al eliminar la clase"), "danger")
+
+        # Redirect to the previous view
+        return redirect(request.referrer or url_for("classes.teacher_classes_view"))
+    except Exception:
+        flash("Error al eliminar la clase", "danger")
+        return redirect(url_for("classes.teacher_classes_view"))
+
+
+def get_class_controller(class_id: int):
+    """Controlador para obtener datos de una clase específica"""
+    try:
+        result, status_code = service.get_class_by_id_service(class_id)
+        return jsonify(result), status_code
+
+    except Exception:
+        return jsonify({"error": "Error al obtener la clase"}), 500
+
+
+# Student Controllers
+def student_classes_view_controller():
+    """Vista HTML para que los estudiantes vean las materias de su curso"""
     try:
         current_user_id = get_jwt_identity()
-        period_data = validation.PeriodUpdate(is_locked=True)
-        period = service.update_period(period_id, period_data, current_user_id)
-        if not period:
-            return jsonify({"error": "Period not found"}), 404
-        return jsonify(validation.PeriodInDB.from_orm(period).dict())
-    except PermissionError as e:
-        return jsonify({"error": str(e)}), 403
+        current_user, _ = get_user_service(current_user_id, request)
+
+        # Obtener el curso y materias del estudiante
+        data, status_code = service.get_student_course_subjects_service(current_user_id)
+
+        if status_code != 200:
+            flash(data.get("error", "Error al cargar las materias"), "danger")
+            return redirect(url_for("users.dashboard"))
+
+        return render_template(
+            "student/classes_view.html",
+            course=data.get("course"),
+            subjects=data.get("subjects", []),
+            user=current_user,
+            accion_logout=True,
+        )
     except Exception as e:
-        return jsonify({"error": f"Error inesperado: {str(e)}"}), 500
+        flash(f"Error al cargar las materias: {str(e)}", "danger")
+        return redirect(url_for("users.dashboard"))
 
 
-def unlock_period_controller(period_id: int):
+def student_subject_classes_view_controller(course_id: int, subject_id: int):
+    """Vista HTML para que los estudiantes vean las clases de una materia"""
     try:
         current_user_id = get_jwt_identity()
-        period_data = validation.PeriodUpdate(is_locked=False)
-        period = service.update_period(period_id, period_data, current_user_id)
-        if not period:
-            return jsonify({"error": "Period not found"}), 404
-        return jsonify(validation.PeriodInDB.from_orm(period).dict())
-    except PermissionError as e:
-        return jsonify({"error": str(e)}), 403
+        current_user, _ = get_user_service(current_user_id, request)
+
+        # Obtener las clases de la materia y el progreso del estudiante
+        data, status_code = service.get_student_subject_classes_service(
+            current_user_id, course_id, subject_id
+        )
+
+        if status_code != 200:
+            flash(data.get("error", "Error al cargar las clases"), "danger")
+            return redirect(url_for("classes.student_classes_view"))
+
+        return render_template(
+            "student/subject_classes_view.html",
+            course=data["course"],
+            subject=data["subject"],
+            classes_by_period=data["classes_by_period"],
+            viewed_class_ids=data["viewed_class_ids"],
+            viewed_classes=data["viewed_classes"],
+            total_classes=data["total_classes"],
+            viewed_percentage=data["viewed_percentage"],
+            user=current_user,
+            accion_logout=True,
+        )
     except Exception as e:
-        return jsonify({"error": f"Error inesperado: {str(e)}"}), 500
+        flash(f"Error al cargar las clases: {str(e)}", "danger")
+        return redirect(url_for("classes.student_classes_view"))
 
 
-# # Class Controllers
-# def create_class_controller():
-#     try:
-#         current_user_id = get_jwt_identity()
-#         with get_db_session() as db:
-#             current_user = db.query(User).filter(User.id == current_user_id).first()
-#             if not current_user or current_user.role not in ["teacher", "admin"]:
-#                 return jsonify({"message": "Not authorized to create classes"}), 403
+def mark_class_as_viewed_controller():
+    """Controlador para marcar una clase como vista o no vista"""
+    try:
+        current_user_id = get_jwt_identity()
+        data = request.get_json()
 
-#             class_data = validation.ClassCreate(**request.json, created_by=current_user_id)
-#             db_class = service.create_class(db=db, class_=class_data)
-#             return jsonify(validation.ClassInDB.from_orm(db_class).dict()), 201
-#     except ValidationError as e:
-#         return jsonify({"message": "Invalid data", "details": e.errors()}), 400
-#     except Exception as e:
-#         return jsonify({"message": "An error occurred", "details": str(e)}), 500
+        class_id = data.get("class_id")
+        course_id = data.get("course_id")
+        subject_id = data.get("subject_id")
+        viewed = data.get("viewed", True)
 
-# def get_class_controller(class_id: int):
-#     with get_db_session() as db:
-#         db_class = service.get_class(db=db, class_id=class_id)
-#         if db_class is None:
-#             return jsonify({"message": "Class not found"}), 404
-#         return jsonify(validation.ClassInDB.from_orm(db_class).dict())
+        if not all([class_id, course_id, subject_id]):
+            return jsonify({"success": False, "error": "Datos incompletos"}), 400
 
-# def get_all_classes_controller():
-#     with get_db_session() as db:
-#         classes = service.get_classes(db=db)
-#         return jsonify([validation.ClassInDB.from_orm(class_).dict() for class_ in classes])
+        # Call the service to mark/unmark the class
+        result, status_code = service.mark_class_as_viewed_service(
+            current_user_id, class_id, course_id, subject_id, viewed
+        )
 
-# def update_class_controller(class_id: int):
-#     try:
-#         current_user_id = get_jwt_identity()
-#         with get_db_session() as db:
-#             current_user = db.query(User).filter(User.id == current_user_id).first()
-#             if not current_user or current_user.role not in ["teacher", "admin"]:
-#                 return jsonify({"message": "Not authorized to update classes"}), 403
+        return jsonify(result), status_code
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
 
-#             class_data = validation.ClassUpdate(**request.json)
-#             db_class = service.update_class(db=db, class_id=class_id, class_=class_data)
-#             if db_class is None:
-#                 return jsonify({"message": "Class not found"}), 404
-#             return jsonify(validation.ClassInDB.from_orm(db_class).dict())
-#     except ValidationError as e:
-#         return jsonify({"message": "Invalid data", "details": e.errors()}), 400
-#     except Exception as e:
-#         return jsonify({"message": "An error occurred", "details": str(e)}), 500
 
-# def delete_class_controller(class_id: int):
-#     current_user_id = get_jwt_identity()
-#     with get_db_session() as db:
-#         current_user = db.query(User).filter(User.id == current_user_id).first()
-#         if not current_user or current_user.role not in ["teacher", "admin"]:
-#             return jsonify({"message": "Not authorized to delete classes"}), 403
+def get_student_progress_controller(course_id: int, subject_id: int):
+    """Controlador para obtener el progreso de un estudiante en una materia"""
+    try:
+        current_user_id = get_jwt_identity()
 
-#         db_class = service.delete_class(db=db, class_id=class_id)
-#         if db_class is None:
-#             return jsonify({"message": "Class not found"}), 404
-#         return jsonify({"message": "Class deleted successfully"})
+        # Call the service to get the progress
+        result, status_code = service.get_student_progress_service(
+            current_user_id, course_id, subject_id
+        )
 
-# # Resource Controllers
-# def create_resource_controller():
-#     try:
-#         current_user_id = get_jwt_identity()
-#         with get_db_session() as db:
-#             current_user = db.query(User).filter(User.id == current_user_id).first()
-#             if not current_user or current_user.role not in ["teacher", "admin"]:
-#                 return jsonify({"message": "Not authorized to create resources"}), 403
+        return jsonify(result), status_code
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
 
-#             resource_data = validation.ResourceCreate(**request.json)
-#             db_resource = service.create_resource(db=db, resource=resource_data)
-#             return jsonify(validation.ResourceInDB.from_orm(db_resource).dict()), 201
-#     except ValidationError as e:
-#         return jsonify({"message": "Invalid data", "details": e.errors()}), 400
-#     except Exception as e:
-#         return jsonify({"message": "An error occurred", "details": str(e)}), 500
 
-# def get_resource_controller(resource_id: int):
-#     with get_db_session() as db:
-#         db_resource = service.get_resource(db=db, resource_id=resource_id)
-#         if db_resource is None:
-#             return jsonify({"message": "Resource not found"}), 404
-#         return jsonify(validation.ResourceInDB.from_orm(db_resource).dict())
+# Class Detail View Controllers
+def class_detail_view_controller(class_id: int):
+    """Redirige a la vista de detalle según el rol del usuario"""
+    try:
+        user_role = get_jwt().get("role")
 
-# def get_all_resources_controller():
-#     with get_db_session() as db:
-#         resources = service.get_resources(db=db)
-#         return jsonify([validation.ResourceInDB.from_orm(resource).dict() for resource in resources])
+        if user_role == "student":
+            return redirect(
+                url_for("classes.student_class_detail_view", class_id=class_id)
+            )
+        elif user_role == "teacher":
+            return redirect(
+                url_for("classes.teacher_class_detail_view", class_id=class_id)
+            )
+        else:
+            flash("No tienes permiso para ver esta clase", "danger")
+            return redirect(url_for("users.dashboard"))
+    except Exception as e:
+        flash(f"Error al cargar la clase: {str(e)}", "danger")
+        return redirect(url_for("users.dashboard"))
 
-# def update_resource_controller(resource_id: int):
-#     try:
-#         current_user_id = get_jwt_identity()
-#         with get_db_session() as db:
-#             current_user = db.query(User).filter(User.id == current_user_id).first()
-#             if not current_user or current_user.role not in ["teacher", "admin"]:
-#                 return jsonify({"message": "Not authorized to update resources"}), 403
 
-#             resource_data = validation.ResourceUpdate(**request.json)
-#             db_resource = service.update_resource(db=db, resource_id=resource_id, resource=resource_data)
-#             if db_resource is None:
-#                 return jsonify({"message": "Resource not found"}), 404
-#             return jsonify(validation.ResourceInDB.from_orm(db_resource).dict())
-#     except ValidationError as e:
-#         return jsonify({"message": "Invalid data", "details": e.errors()}), 400
-#     except Exception as e:
-#         return jsonify({"message": "An error occurred", "details": str(e)}), 500
+def student_class_detail_view_controller(class_id: int):
+    """Vista detallada de una clase para estudiantes"""
+    try:
+        current_user_id = get_jwt_identity()
+        current_user, _ = get_user_service(current_user_id, request)
 
-# def delete_resource_controller(resource_id: int):
-#     current_user_id = get_jwt_identity()
-#     with get_db_session() as db:
-#         current_user = db.query(User).filter(User.id == current_user_id).first()
-#         if not current_user or current_user.role not in ["teacher", "admin"]:
-#             return jsonify({"message": "Not authorized to delete resources"}), 403
+        # Obtener detalle de la clase
+        data, status_code = service.get_class_detail_service(
+            class_id, user_id=current_user_id, user_role="student"
+        )
 
-#         db_resource = service.delete_resource(db=db, resource_id=resource_id)
-#         if db_resource is None:
-#             return jsonify({"message": "Resource not found"}), 404
-#         return jsonify({"message": "Resource deleted successfully"})
+        if status_code != 200:
+            flash(data.get("error", "Error al cargar la clase"), "danger")
+            return redirect(url_for("classes.student_classes_view"))
 
-# # Assignment Controllers
-# def create_assignment_controller():
-#     try:
-#         current_user_id = get_jwt_identity()
-#         with get_db_session() as db:
-#             current_user = db.query(User).filter(User.id == current_user_id).first()
-#             if not current_user or current_user.role not in ["teacher", "admin"]:
-#                 return jsonify({"message": "Not authorized to create assignments"}), 403
+        return render_template(
+            "student/class_detail_view.html",
+            class_data=data["class"],
+            course=data["course"],
+            subject=data["subject"],
+            contents=data["contents"],
+            assignments=data["assignments"],
+            user=current_user,
+            accion_logout=True,
+        )
+    except Exception as e:
+        flash(f"Error al cargar la clase: {str(e)}", "danger")
+        return redirect(url_for("classes.student_classes_view"))
 
-#             assignment_data = validation.AssignmentCreate(**request.json)
-#             db_assignment = service.create_assignment(db=db, assignment=assignment_data)
-#             return jsonify(validation.AssignmentInDB.from_orm(db_assignment).dict()), 201
-#     except ValidationError as e:
-#         return jsonify({"message": "Invalid data", "details": e.errors()}), 400
-#     except Exception as e:
-#         return jsonify({"message": "An error occurred", "details": str(e)}), 500
 
-# def get_assignment_controller(assignment_id: int):
-#     with get_db_session() as db:
-#         db_assignment = service.get_assignment(db=db, assignment_id=assignment_id)
-#         if db_assignment is None:
-#             return jsonify({"message": "Assignment not found"}), 404
-#         return jsonify(validation.AssignmentInDB.from_orm(db_assignment).dict())
+def teacher_class_detail_view_controller(class_id: int):
+    """Vista detallada de una clase para profesores"""
+    try:
+        current_user_id = get_jwt_identity()
+        current_user, _ = get_user_service(current_user_id, request)
 
-# def get_all_assignments_controller():
-#     with get_db_session() as db:
-#         assignments = service.get_assignments(db=db)
-#         return jsonify([validation.AssignmentInDB.from_orm(assignment).dict() for assignment in assignments])
+        # Obtener detalle de la clase
+        data, status_code = service.get_class_detail_service(
+            class_id, user_id=current_user_id, user_role="teacher"
+        )
 
-# def update_assignment_controller(assignment_id: int):
-#     try:
-#         current_user_id = get_jwt_identity()
-#         with get_db_session() as db:
-#             current_user = db.query(User).filter(User.id == current_user_id).first()
-#             if not current_user or current_user.role not in ["teacher", "admin"]:
-#                 return jsonify({"message": "Not authorized to update assignments"}), 403
+        if status_code != 200:
+            flash(data.get("error", "Error al cargar la clase"), "danger")
+            return redirect(url_for("classes.teacher_classes_view"))
 
-#             assignment_data = validation.AssignmentUpdate(**request.json)
-#             db_assignment = service.update_assignment(db=db, assignment_id=assignment_id, assignment=assignment_data)
-#             if db_assignment is None:
-#                 return jsonify({"message": "Assignment not found"}), 404
-#             return jsonify(validation.AssignmentInDB.from_orm(db_assignment).dict())
-#     except ValidationError as e:
-#         return jsonify({"message": "Invalid data", "details": e.errors()}), 400
-#     except Exception as e:
-#         return jsonify({"message": "An error occurred", "details": str(e)}), 500
+        return render_template(
+            "teacher/class_detail_view.html",
+            class_data=data["class"],
+            course=data["course"],
+            subject=data["subject"],
+            contents=data["contents"],
+            assignments=data["assignments"],
+            user=current_user,
+            accion_logout=True,
+        )
+    except Exception as e:
+        flash(f"Error al cargar la clase: {str(e)}", "danger")
+        return redirect(url_for("classes.teacher_classes_view"))
 
-# def delete_assignment_controller(assignment_id: int):
-#     current_user_id = get_jwt_identity()
-#     with get_db_session() as db:
-#         current_user = db.query(User).filter(User.id == current_user_id).first()
-#         if not current_user or current_user.role not in ["teacher", "admin"]:
-#             return jsonify({"message": "Not authorized to delete assignments"}), 403
 
-#         db_assignment = service.delete_assignment(db=db, assignment_id=assignment_id)
-#         if db_assignment is None:
-#             return jsonify({"message": "Assignment not found"}), 404
-#         return jsonify({"message": "Assignment deleted successfully"})
+# Class Content Controllers
+def create_class_content_controller():
+    """Controlador para crear contenido de una clase"""
+    try:
+        data = {
+            "class_id": request.form.get("class_id"),
+            "content_order": request.form.get("content_order", 1),
+            "section_title": request.form.get("section_title"),
+            "content_text": request.form.get("content_text"),
+        }
 
-# # ClassView Controllers
-# def create_class_view_controller():
-#     try:
-#         current_user_id = get_jwt_identity()
-#         with get_db_session() as db:
-#             current_user = db.query(User).filter(User.id == current_user_id).first()
-#             if not current_user or current_user.role not in ["student", "teacher", "admin"]:
-#                 return jsonify({"message": "Not authorized to create class views"}), 403
+        image_file = request.files.get("content_image")
+        result, status_code = service.create_class_content_service(data, image_file)
 
-#             class_view_data = validation.ClassViewCreate(**request.json)
-#             db_class_view = service.create_class_view(db=db, class_view=class_view_data)
-#             return jsonify(validation.ClassViewInDB.from_orm(db_class_view).dict()), 201
-#     except ValidationError as e:
-#         return jsonify({"message": "Invalid data", "details": e.errors()}), 400
-#     except Exception as e:
-#         return jsonify({"message": "An error occurred", "details": str(e)}), 500
+        if status_code == 201:
+            flash(result["message"], "success")
+        else:
+            flash(result.get("error", "Error al crear contenido"), "danger")
 
-# def get_class_view_controller(class_view_id: int):
-#     with get_db_session() as db:
-#         db_class_view = service.get_class_view(db=db, class_view_id=class_view_id)
-#         if db_class_view is None:
-#             return jsonify({"message": "Class view not found"}), 404
-#         return jsonify(validation.ClassViewInDB.from_orm(db_class_view).dict())
+        # Redirigir a la vista de detalle de la clase
+        class_id = request.form.get("class_id")
+        return redirect(url_for("classes.teacher_class_detail_view", class_id=class_id))
 
-# def get_all_class_views_controller():
-#     with get_db_session() as db:
-#         class_views = service.get_class_views(db=db)
-#         return jsonify([validation.ClassViewInDB.from_orm(class_view).dict() for class_view in class_views])
+    except Exception as e:
+        flash(f"Error al crear contenido: {str(e)}", "danger")
+        return redirect(url_for("classes.teacher_classes_view"))
 
-# def delete_class_view_controller(class_view_id: int):
-#     current_user_id = get_jwt_identity()
-#     with get_db_session() as db:
-#         current_user = db.query(User).filter(User.id == current_user_id).first()
-#         if not current_user or current_user.role not in ["student", "teacher", "admin"]:
-#             return jsonify({"message": "Not authorized to delete class views"}), 403
 
-#         db_class_view = service.delete_class_view(db=db, class_view_id=class_view_id)
-#         if db_class_view is None:
-#             return jsonify({"message": "Class view not found"}), 404
-#         return jsonify({"message": "Class view deleted successfully"})
+def update_class_content_controller(content_id: int):
+    """Controlador para actualizar contenido de una clase"""
+    try:
+        data = {
+            "section_title": request.form.get("section_title"),
+            "content_text": request.form.get("content_text"),
+            "content_order": request.form.get("content_order"),
+        }
+
+        image_file = request.files.get("content_image")
+        result, status_code = service.update_class_content_service(
+            content_id, data, image_file
+        )
+
+        if status_code == 200:
+            flash(result["message"], "success")
+        else:
+            flash(result.get("error", "Error al actualizar contenido"), "danger")
+
+        # Redirigir a la vista de detalle de la clase
+        class_id = request.form.get("class_id")
+        return redirect(url_for("classes.teacher_class_detail_view", class_id=class_id))
+
+    except Exception as e:
+        flash(f"Error al actualizar contenido: {str(e)}", "danger")
+        return redirect(url_for("classes.teacher_classes_view"))
+
+
+def delete_class_content_controller(content_id: int):
+    """Controlador para eliminar contenido de una clase"""
+    try:
+        result, status_code = service.delete_class_content_service(content_id)
+
+        if status_code == 200:
+            flash(result["message"], "success")
+        else:
+            flash(result.get("error", "Error al eliminar contenido"), "danger")
+
+        return redirect(request.referrer or url_for("classes.teacher_classes_view"))
+
+    except Exception as e:
+        flash(f"Error al eliminar contenido: {str(e)}", "danger")
+        return redirect(url_for("classes.teacher_classes_view"))
+
+
+# Assignment Controllers
+def create_assignment_controller():
+    """Controlador para crear una tarea"""
+    try:
+        current_user_id = get_jwt_identity()
+
+        data = {
+            "class_id": request.form.get("class_id"),
+            "title": request.form.get("title"),
+            "description": request.form.get("description"),
+            "due_date": request.form.get("due_date"),
+            "max_score": request.form.get("max_score", 100),
+        }
+
+        result, status_code = service.create_assignment_service(data, current_user_id)
+
+        if status_code == 201:
+            flash(result["message"], "success")
+        else:
+            flash(result.get("error", "Error al crear tarea"), "danger")
+
+        # Redirigir a la vista de detalle de la clase
+        class_id = request.form.get("class_id")
+        return redirect(url_for("classes.teacher_class_detail_view", class_id=class_id))
+
+    except Exception as e:
+        flash(f"Error al crear tarea: {str(e)}", "danger")
+        return redirect(url_for("classes.teacher_classes_view"))
+
+
+def update_assignment_controller(assignment_id: int):
+    """Controlador para actualizar una tarea"""
+    try:
+        data = {
+            "title": request.form.get("title"),
+            "description": request.form.get("description"),
+            "due_date": request.form.get("due_date"),
+            "max_score": request.form.get("max_score", 100),
+        }
+
+        result, status_code = service.update_assignment_service(assignment_id, data)
+
+        if status_code == 200:
+            flash(result["message"], "success")
+            class_id = result.get("class_id")
+
+            if class_id:
+                return redirect(
+                    url_for("classes.teacher_class_detail_view", class_id=class_id)
+                )
+            else:
+                return redirect(url_for("classes.teacher_classes_view"))
+        else:
+            flash(result.get("error", "Error al actualizar tarea"), "danger")
+            return redirect(url_for("classes.teacher_classes_view"))
+
+    except Exception as e:
+        flash(f"Error al actualizar tarea: {str(e)}", "danger")
+        return redirect(url_for("classes.teacher_classes_view"))
+
+
+def delete_assignment_controller(assignment_id: int):
+    """Controlador para eliminar una tarea"""
+    try:
+        # Primero obtener el class_id antes de eliminar
+        result, status_code = service.delete_assignment_service(assignment_id)
+
+        if status_code == 200:
+            flash(result["message"], "success")
+            class_id = result.get("class_id")
+
+            if class_id:
+                return redirect(
+                    url_for("classes.teacher_class_detail_view", class_id=class_id)
+                )
+            else:
+                return redirect(url_for("classes.teacher_classes_view"))
+        else:
+            flash(result.get("error", "Error al eliminar tarea"), "danger")
+            return redirect(url_for("classes.teacher_classes_view"))
+
+    except Exception as e:
+        flash(f"Error al eliminar tarea: {str(e)}", "danger")
+        return redirect(url_for("classes.teacher_classes_view"))
+
+
+def submit_assignment_controller():
+    """Controlador para enviar una tarea como estudiante"""
+    try:
+        current_user_id = get_jwt_identity()
+
+        data = {
+            "assignment_id": request.form.get("assignment_id"),
+            "submission_text": request.form.get("submission_text"),
+        }
+
+        file = request.files.get("submission_file")
+        result, status_code = service.submit_assignment_service(
+            data, current_user_id, file
+        )
+
+        if status_code == 201:
+            flash(result["message"], "success")
+        else:
+            flash(result.get("error", "Error al enviar tarea"), "danger")
+
+        # Redirigir a la vista de detalle de la clase
+        class_id = request.form.get("class_id")
+        return redirect(url_for("classes.student_class_detail_view", class_id=class_id))
+
+    except Exception as e:
+        flash(f"Error al enviar tarea: {str(e)}", "danger")
+        return redirect(url_for("classes.student_classes_view"))

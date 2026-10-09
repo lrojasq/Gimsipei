@@ -1,6 +1,7 @@
 import os
-from werkzeug.utils import secure_filename
 import uuid
+
+from werkzeug.utils import secure_filename
 
 # Directories for file storage
 BOOKS_DIR = "src/static/books"
@@ -81,7 +82,7 @@ def save_file_locally(file, folder, allowed_exts):
     except Exception as e:
         if os.path.exists(file_path):
             os.remove(file_path)  # Clean up partial file if failed
-        raise ValueError(f"Error al guardar el archivo: {str(e)}")
+        raise ValueError(f"Error al guardar el archivo: {str(e)}") from e
 
 
 def delete_file(file_path):

@@ -27,7 +27,8 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             // Show loading state
             submitBtn.classList.add('loading');
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Actualizando...';
+            submitBtn.innerHTML = 'Actualizando...';
+            submitBtn.disabled = true;
         }
         form.classList.add('was-validated');
     });
@@ -100,4 +101,4 @@ document.addEventListener('DOMContentLoaded', function() {
         // Initial countdown update
         updateCountdown();
     }
-});
+});

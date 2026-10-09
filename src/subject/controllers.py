@@ -1,24 +1,25 @@
 from flask import Request, Response
 from flask_jwt_extended import jwt_required
-from typing import Tuple, Optional
-from .validation import SubjectCreateSchema, SubjectUpdateSchema, SubjectResponseSchema
-from .service import (
-    get_subjects_service,
-    get_subject_service,
-    create_subject_service,
-    update_subject_service,
-    delete_subject_service,
-)
 from pydantic import ValidationError
-from src.utils.api_response import ApiResponse
+
 from src.models.user import UserRole
+from src.utils.api_response import ApiResponse
 from src.utils.decorator_role_required import role_required
+
+from .service import (
+    create_subject_service,
+    delete_subject_service,
+    get_subject_service,
+    get_subjects_service,
+    update_subject_service,
+)
+from .validation import SubjectCreateSchema, SubjectResponseSchema, SubjectUpdateSchema
 
 
 # API Controllers
 @jwt_required()
 @role_required([UserRole.ADMIN])
-def get_subjects_api_controller(request: Request) -> Response | Tuple[list, int]:
+def get_subjects_api_controller(request: Request) -> Response | tuple[list, int]:
     """API para obtener lista de materias"""
     try:
         # Obtener parámetros de filtro
@@ -42,7 +43,7 @@ def get_subjects_api_controller(request: Request) -> Response | Tuple[list, int]
 @role_required([UserRole.ADMIN])
 def get_subject_api_controller(
     subject_id: int, request: Request
-) -> Response | Tuple[Optional[SubjectResponseSchema], int]:
+) -> Response | tuple[SubjectResponseSchema | None, int]:
     """API para obtener una materia específica"""
     try:
         result, status_code = get_subject_service(subject_id, request)
@@ -61,7 +62,7 @@ def get_subject_api_controller(
 @role_required([UserRole.ADMIN])
 def create_subject_api_controller(
     request: Request,
-) -> Response | Tuple[Optional[SubjectResponseSchema], int]:
+) -> Response | tuple[SubjectResponseSchema | None, int]:
     """API para crear una materia"""
     try:
         if request.is_json:
@@ -103,7 +104,7 @@ def create_subject_api_controller(
 @role_required([UserRole.ADMIN])
 def update_subject_api_controller(
     subject_id: int, request: Request
-) -> Response | Tuple[Optional[SubjectResponseSchema], int]:
+) -> Response | tuple[SubjectResponseSchema | None, int]:
     """API para actualizar una materia"""
     try:
         if request.is_json:
@@ -147,7 +148,7 @@ def update_subject_api_controller(
 @role_required([UserRole.ADMIN])
 def delete_subject_api_controller(
     subject_id: int, request: Request
-) -> Response | Tuple[Optional[dict], int]:
+) -> Response | tuple[dict | None, int]:
     """API para eliminar una materia"""
     try:
         result, status_code = delete_subject_service(subject_id, request)

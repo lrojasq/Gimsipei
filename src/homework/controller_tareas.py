@@ -1,11 +1,16 @@
 import datetime
-
-from app.mi_colegio.tareas.service_miColegio import MiColegioService
-from app.mi_colegio.tareas.model_miColegio import TareaModel, UrlRecursosModel, TareaRelacionUsuario, TareasComentarios, TareasEstudianteCurso
-from app.utils.responses import Response
-from app.mi_colegio.tareas.helper_miColegio import HelperSie
-
 from os import getenv
+
+from app.mi_colegio.tareas.helper_miColegio import HelperSie
+from app.mi_colegio.tareas.model_miColegio import (
+    TareaModel,
+    TareaRelacionUsuario,
+    TareasComentarios,
+    TareasEstudianteCurso,
+    UrlRecursosModel,
+)
+from app.mi_colegio.tareas.service_miColegio import MiColegioService
+from app.utils.responses import Response
 from dotenv import load_dotenv
 
 load_dotenv('../../config/.env.prod')
@@ -27,7 +32,7 @@ class MiColegioController:
                 id_asignatura = asignatura["id_asignatura"]
                 docentes = self.conector.docente_por_asignatura(id_asignatura)
 
-                # Un docente tambien puede no estar asignado a una asignatura 
+                # Un docente tambien puede no estar asignado a una asignatura
                 if docentes is None:
                     asignatura["info_docente"] = { "id_docente": None, "nombre_profesor": None, }
                     continue
@@ -39,9 +44,9 @@ class MiColegioController:
 
             return asignaturas
 
-        except Exception as e:
+        except Exception:
             return Response.new_error("Error al consultar las asignaturas del estudiante", 400)
-        
+
 
     def crear_tareas(self, docente: str, asignatura: str, curso: str, objet_tarea: dict):
         """Crear tareas"""
@@ -60,16 +65,16 @@ class MiColegioController:
             for key, value in response_data.items():
                 if int(value) == 0:
                     return Response.tuple_response(f"El valor de {key} no existe", 400)
-                
+
             # Crear la tarea
             crear_tarea = self.conector.crear_tareas_docente(validate_dicct_tarea)
             if crear_tarea != None:
                 return Response.tuple_response("No se pudo crear la tarea", 400)
-            
+
             return Response.success("Tarea creada exitosamente", 201)
-        except Exception as e:
+        except Exception:
             return Response.tuple_response("Error al crear la tarea", 400)
-        
+
     def asignar_tarea_estudiante(self, curso: str):
         """Cada vez que se crea una tarea se debe asignar a todos los estudiantes de ese curso"""
         try:
@@ -88,9 +93,9 @@ class MiColegioController:
                 save_relation = self.conector.tareas_estudiantes_curso(id_tarea, student["id_usuario"], student["id_curso"])
                 if save_relation[0] is not None:
                     return Response.tuple_response(f"Al estudiante {student['id']} no se le asigno la tarea", 400)
-                
+
             return Response.tuple_response("Tarea asignada exitosamente", 201)
-        except Exception as e:
+        except Exception:
             return Response.tuple_response("Error al asignar la tarea", 400)
 
     def consultar_tareas(self, docente: str, curso: str, asignatura: str):
@@ -102,14 +107,14 @@ class MiColegioController:
             # Formatear las fechas de las tareas
             for key, value in enumerate(tareas):
                 tareas[key]["fecha_finalizacion"] = value["fecha_finalizacion"].strftime("%Y-%m-%d %H:%M:%S")
-            
+
             if tareas is None:
                 return Response.tuple_response("No se obtuvieron tareas", 200)
 
             return tareas
-        except Exception as e:
+        except Exception:
             return Response.tuple_response("Error al consultar las tareas", 400)
-        
+
 
     def actualizar_tareas_existentes(self, id_tarea: str, objet_tarea: dict):
         """Actualizar tareas existentes"""
@@ -126,10 +131,10 @@ class MiColegioController:
 
             if actualizar_tarea:
                 return Response.tuple_response(actualizar_tarea[0], actualizar_tarea[1])
-        except Exception as e:
+        except Exception:
             return Response.tuple_response("Error al actualizar la tarea")
-        
-    
+
+
     def eliminar_tareas_existentes(self, id_tarea: str):
         """Eliminar tareas existentes"""
         try:
@@ -145,12 +150,12 @@ class MiColegioController:
             eliminar_tarea = self.conector.eliminar_tareas_existentes(validar_tarea)
             if eliminar_tarea is not None:
                 return Response.new_error("No se pudo eliminar la tarea", 400)
-            
+
             return Response.success("Tarea eliminada exitosamente", 200)
 
-        except Exception as e:
+        except Exception:
             return Response.new_error("Error al eliminar la tarea", 400)
-        
+
 
     def consultar_info_estudiante(self, estudiante_id: int, asignatura_id: int, curso_id: int):
         """Consultar la información del estudiante"""
@@ -158,12 +163,12 @@ class MiColegioController:
             info_estudiante = self.conector.consultar_info_estudiante(estudiante_id, asignatura_id, curso_id)
             if info_estudiante[1] != 200:
                 return Response.tuple_response("El estudiante no tiene tareas asignadas", 200)
-            
+
             # Recursos compartidos con un estudiante
             tareas = self.conector.carpetas_compartidas(estudiante_id, asignatura_id, curso_id)
             if tareas[1] != 200:
                 return Response.tuple_response(tareas[0], tareas[1])
-            
+
             # Poder adicionar la información de las carpetas compartidas a la información del estudiante
             for valor in info_estudiante[0]:
                 for tarea in tareas[0]:
@@ -171,18 +176,18 @@ class MiColegioController:
                         valor["carpeta_compartida"] = {"id_carpeta": tarea["id_carpeta"], "nombre_carpeta": tarea["nombre_carpeta"]}
 
             return Response.tuple_response(info_estudiante[0], info_estudiante[1])
-        except Exception as e:
+        except Exception:
             return Response.tuple_response("Error al consultar la información del estudiante", 400)
-        
+
     def consultar_tareas_estudiantes(self, estudiante_id: int) -> tuple:
         """Consultar todas las tareas asignadas a un estudiante"""
         try:
             tareas = self.conector.tareas_info_estudiantes(estudiante_id)
             if tareas[1] != 200:
                return Response.tuple_response(tareas[0], tareas[1])
-        
+
             return Response.tuple_response(tareas[0], tareas[1])
-        except Exception as e:
+        except Exception:
             return Response.tuple_response("Error al consultar las tareas", 400)
 
     def carga_recurso_estudiante(self, request)-> tuple:
@@ -200,12 +205,12 @@ class MiColegioController:
             resource_multi = HelperSie().upload_file(request)
             if resource_multi[1] != 201:
                 return Response.tuple_response(resource_multi[0], resource_multi[1])
-            
+
             # Para poder darle un content type al recurso que se va ha subir
             file_name = request.files['recurso'].content_type
             content_type = HelperSie().get_content_type(file_name)
 
-            # Cargar el archivo al blob 
+            # Cargar el archivo al blob
             upload_azure = HelperSie().upload_file_to_azure(folder_azure, content_type, request)
             if upload_azure[1] != 200:
                 return Response.tuple_response(upload_azure[0], upload_azure[1])
@@ -220,9 +225,9 @@ class MiColegioController:
                 return Response.tuple_response("Error al subir el archivo", 400)
 
             return Response.tuple_response("Archivo subido exitosamente", 201)
-        except Exception as e:
+        except Exception:
             return Response.tuple_response("Error al subir el archivo", 400)
-        
+
     def respondiendo_una_tarea(self, id_tarea: int, id_usuario: int) -> tuple:
         """Guardar la respuesta de una tarea por parte del usuario estudiante"""
         try:
@@ -245,16 +250,16 @@ class MiColegioController:
                 if response_relacion[1] != 201:
                     return Response.tuple_response(response_relacion[0], response_relacion[1])
                 return Response.tuple_response("Tarea actualizada correctamente", 201)
-            
+
             "Si no existe una respuesta, se crea una nueva respuesta"
             response_relacion = self.guardar_relacion_tarea_usuario(id_tarea, id_usuario)
             if response_relacion[1] != 201:
                 return Response.tuple_response(response_relacion[0], response_relacion[1])
-            
+
             return Response.tuple_response(response_relacion[0], response_relacion[1])
-        except Exception as e:
+        except Exception:
             return Response.tuple_response("Error al guardar la respuesta", 400)
-        
+
     def eliminar_recursos_azure(self, id_recurso: int) -> tuple:
         """Eliminar el recurso subido a Azure"""
         try:
@@ -267,13 +272,13 @@ class MiColegioController:
             delete_azure = HelperSie().delete_resource_azure(nombre_carpeta, nombre_recurso)
             if delete_azure[1] != 200:
                 return Response.tuple_response(delete_azure[0], delete_azure[1])
-            
+
             delete_local = self.conector.eliminar_recurso(id_recurso)
             if delete_local[1] != 200:
                 return Response.tuple_response(delete_local[0], delete_local[1])
-            
+
             return Response.tuple_response("Recurso eliminado exitosamente", 201)
-        except Exception as e:
+        except Exception:
             return Response.tuple_response("Error al eliminar el recurso", 400)
 
     def guardar_relacion_tarea_usuario(self, id_tarea: int, id_usuario: int) -> tuple:
@@ -295,9 +300,9 @@ class MiColegioController:
             save_relation = self.conector.actualizar_estado_tarea(document_dict)
             if save_relation[0] is not None:
                 return Response.tuple_response("No se pudo guardar la relación", 400)
-            
+
             return Response.tuple_response("Archivo subido exitosamente", 201)
-        except Exception as e:
+        except Exception:
             return Response.tuple_response("Error al guardar la relación", 400)
 
     def hilo_comentarios_tareas(self,id_respuesta:int|None, id_usuario:int, comentario:str) -> tuple:
@@ -306,7 +311,7 @@ class MiColegioController:
             # Validar los parámetros de entrada
             validar_comentario = TareasComentarios(id_respuesta=id_respuesta, id_usuario=id_usuario, comentario=comentario)
             document_dict = validar_comentario.model_dump() # Transformar el modelo a diccionario
-            
+
             if len(document_dict) == 0:
                 return Response.tuple_response("Tienes errores en los valores ingresados", 200)
 
@@ -321,42 +326,42 @@ class MiColegioController:
             enviar_comentario = self.conector.generar_comentario(document_dict)
             if enviar_comentario[0] is not None:
                 return Response.tuple_response(enviar_comentario[0], enviar_comentario[1])
-            
+
             return Response.tuple_response("Comentario enviado exitosamente", enviar_comentario[1])
-        except Exception as e:
+        except Exception:
             return Response.tuple_response("Error al guardar el comentario", 400)
-        
+
     def tarea_entregada_estudiante(self, id_tarea: int, id_estudiante: int) -> tuple:
         """Consultar entrega de una tarea por un estudiante"""
         try:
             tarea_entregada = self.conector.tarea_entregada(id_tarea, id_estudiante)
             if tarea_entregada[1] != 200:
                 return Response.tuple_response(tarea_entregada[0], tarea_entregada[1])
-            
+
             return Response.tuple_response(tarea_entregada[0], tarea_entregada[1])
-        except Exception as e:
+        except Exception:
             return Response.tuple_response("Error al consultar la tarea", 400)
-        
+
     def consultar_comentarios_tareas(self, id_entrega:int) -> tuple:
         """Consultar todos los comentarios de una tarea por el id del trabajo realizado del estudiante"""
         try:
             comentarios = self.conector.consultar_comentarios(id_entrega)
             if comentarios[0] != 200:
                 return Response.tuple_response(comentarios[0], comentarios[1])
-            
+
             return Response.tuple_response(comentarios[0], comentarios[1])
-        except Exception as e:
+        except Exception:
             return Response.tuple_response("Error al consultar los comentarios", 400)
-            
+
     def consultar_tareas_enviadas(self, id_tarea:int) -> tuple:
         """Consultar las tareas enviadas por los estudiantes"""
         try:
             tareas = self.conector.consultar_tareas_enviadas(id_tarea)
             if tareas is None:
                 return Response.tuple_response("Ningun estudiante ha enviado la tarea", 404)
-            
+
             return Response.tuple_response(tareas[0], tareas[1])
-        except Exception as e:
+        except Exception:
             return Response.tuple_response("Error al consultar la tarea", 400)
 
 
@@ -378,7 +383,7 @@ class MiColegioController:
            calificar_tarea = self.conector.calificando_tareas(dict_qualification)
            if calificar_tarea[0] is not None:
              return Response.tuple_response("Error al calificar la tarea", 400)
-            
+
            return Response.tuple_response("Tarea calificada exitosamente", 201)
-        except Exception as e:
+        except Exception:
             return Response.tuple_response("Error al calificar la tarea", 400)

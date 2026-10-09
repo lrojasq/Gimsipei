@@ -1,0 +1,23 @@
+<!-- Delete Confirmation Modal -->
+<div class="modal modal_delete" id="deleteConfirmationModal" aria-hidden="true">
+    <div class="bg-back close-modal"></div>
+    <div class="container">
+        <div class="delete-icon">
+            <!-- <i class="fas fa-exclamation-triangle"></i> -->
+            <i class="fa-solid fa-exclamation" style="color: #d30909;"></i>
+        </div>
+        <h2 class="delete-title">¿Está seguro que desea eliminar el registro?</h2>
+        <p class="delete-warning">Esta operación es irreversible</p>
+        <form method="POST" action="" id="deleteConfirmationForm">
+            <div class="delete-buttons">
+                <button type="button" class="btn btn-cancel close-modal">CANCELAR</button>
+                <button type="submit" class="btn btn-delete">
+                    <span class="btn-text">ELIMINAR</span>
+                    <span class="btn-spinner" style="display: none;">
+                        <i class="fas fa-spinner fa-spin"></i> ELIMINANDO...
+                    </span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,53 @@
+<!-- Modal: Editar Evaluación -->
+<div class="modal-overlay" id="editEvaluationModal" style="display: none;">
+    <div class="modal-container">
+        <div class="modal-header">
+            <h3>EDITAR EVALUACIÓN</h3>
+            <button class="modal-close" onclick="closeEditEvaluationModal()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <form id="editEvaluationForm" method="POST" action="" enctype="multipart/form-data">
+            <input type="hidden" name="course_id" id="edit_evaluation_course_id">
+            <input type="hidden" name="subject_id" id="edit_evaluation_subject_id">
+            <input type="hidden" name="evaluation_id" id="edit_evaluation_id">
+
+            <div class="form-group">
+                <input type="text" name="title" id="edit_evaluation_title" placeholder="TÍTULO" required
+                    maxlength="255">
+            </div>
+
+            <div class="form-group">
+                <textarea name="description" id="edit_evaluation_description" placeholder="DESCRIPCIÓN" rows="4"
+                    maxlength="1000"></textarea>
+            </div>
+
+            <div class="form-group">
+                <select name="period" id="edit_evaluation_period" class="period-select" required>
+                    <option value="">SELECCIONA PERIODO</option>
+                    <option value="1">PERIODO 1</option>
+                    <option value="2">PERIODO 2</option>
+                    <option value="3">PERIODO 3</option>
+                    <option value="4">PERIODO 4</option>
+                </select>
+            </div>
+
+            <div class="form-group file-upload-group">
+                <label for="edit_evaluation_cover" class="file-upload-label">
+                    <i class="fas fa-upload"></i> CAMBIAR PORTADA
+                </label>
+                <input type="file" name="cover_image" id="edit_evaluation_cover" accept="image/*">
+                <span class="file-name" id="edit_evaluation_cover_name"></span>
+                <div id="current_evaluation_cover_preview" style="margin-top: 10px; display: none;">
+                    <p style="font-size: 0.875rem; color: #666;">Portada actual:</p>
+                    <img id="current_evaluation_cover_image" src="" alt="Portada actual"
+                        style="max-width: 150px; border-radius: 8px;">
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button type="submit" class="btn-submit">ACTUALIZAR</button>
+            </div>
+        </form>
+    </div>
+</div>

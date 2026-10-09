@@ -1,27 +1,36 @@
-from datetime import datetime
-from typing import Optional
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Text
+from datetime import UTC, datetime
+
+from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import relationship
+
 from src.database.database import Base
 
 
 class Assignment(Base):
-    """Assignment model for the application"""
+    """Assignment model for tasks assigned to students within a class"""
 
     __tablename__ = "assignments"
 
     id = Column(Integer, primary_key=True, index=True)
-    class_id = Column(Integer, ForeignKey("classes.id"), nullable=False)
-    author_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-    title = Column(String(100), nullable=False)
-    description = Column(String(255), nullable=True)
-    due_date = Column(DateTime, nullable=False)
-    created_at = Column(DateTime, default=datetime.utcnow)
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    class_id = Column(
+        Integer, ForeignKey("classes.id", ondelete="CASCADE"), nullable=False
+    )
+    title = Column(String(200), nullable=False)
+    description = Column(Text, nullable=True)
+    due_date = Column(DateTime, nullable=True)
+    max_score = Column(Integer, nullable=True, default=100)
+    is_active = Column(Boolean, default=True)
+    created_by = Column(Integer, ForeignKey("users.id"), nullable=False)
+    created_at = Column(DateTime, default=datetime.now(UTC))
+    updated_at = Column(
+        DateTime,
+        default=datetime.now(UTC),
+        onupdate=datetime.now(UTC),
+    )
 
     # Relationships
     class_ = relationship("ClassModel", back_populates="assignments")
-    author = relationship("User", back_populates="assignments")
+    creator = relationship("User", foreign_keys=[created_by])
     submissions = relationship(
-        "Submission", back_populates="assignment", lazy="dynamic"
+        "AssignmentSubmission", back_populates="assignment", lazy="dynamic"
     )

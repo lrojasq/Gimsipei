@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block title %}{{ student.full_name }} - Tareas{% endblock %}
+
+{% block extra_css %}
+<link href="{{ url_for('static', filename='css/menu.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/category.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/admin.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/student_tasks.css') }}" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+{% endblock %}
+
+{% block content %}
+{% block menu %}{% endblock %}
+
+{% include "flash_messages.html" %}
+
+<div class="container_category flex">
+    <!-- Inicio Tareas del Estudiante -->
+    <div class="specialities_category cursos grades flex flex-column">
+        <!-- Header con número de grado y título -->
+        <div class="flex header-students w-100">
+            <div class="course-grade-indicator">
+                <span class="grade-number">{{ course.grade_number }}</span>
+            </div>
+            <div class="course-title">
+                <h2>{{ student.full_name }} - Tareas</h2>
+            </div>
+        </div>
+
+        <!-- Tabla de tareas agrupadas por asignatura -->
+        <div class="tasks-table-wrapper">
+            <table class="tasks-table">
+                <thead>
+                    <tr>
+                        <th>Asignatura</th>
+                        <th>Nombre</th>
+                        <th>Fecha</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if subjects %}
+                    {% for subject in subjects %}
+                    <!-- Fila de asignatura (expandible) -->
+                    <tr class="subject-row" data-subject-id="{{ subject.subject_id }}">
+                        <td colspan="4" class="subject-header">
+                            <div class="flex subject-header-content">
+                                <span class="subject-name">{{ subject.subject_name }}</span>
+                                <i class="fas fa-chevron-down toggle-subject"></i>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- Filas de clases (ocultas por defecto) -->
+                    {% if subject.classes %}
+                    {% for class_item in subject.classes %}
+                    <tr class="subject-content-row class-row" data-subject-id="{{ subject.subject_id }}"
+                        style="display: none;">
+                        <td class="class-indent"></td>
+                        <td class="class-name-cell">{{ class_item.title if class_item.title else 'Clase ' ~
+                            class_item.class_number }}</td>
+                        <td class="class-date-cell">{{ class_item.date }}</td>
+                        <td class="class-actions-cell btns_actions ">
+                            <a href="{{ url_for('courses.download_assignment_submission', course_id=course.id, student_id=student.id, assignment_id=class_item.id) }}"
+                                class="download-link btn-edit" title="Descargar" target="_blank">
+                                <i class="fas fa-download"></i>
+                            </a>
+                            <button class="action-btn delete-assignment btn_delete" data-assignment-id="{{ class_item.id }}"
+                                data-assignment-title="{{ class_item.title if class_item.title else 'Clase ' ~ class_item.class_number }}"
+                                title="Eliminar">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    {% else %}
+                    <tr class="subject-content-row" data-subject-id="{{ subject.subject_id }}" style="display: none;">
+                        <td colspan="4" class="empty-classes-cell">
+                            <p>No hay entregas registradas para esta asignatura.</p>
+                        </td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                    {% else %}
+                    <tr class="empty-state-row">
+                        <td colspan="4" class="empty-state-cell">
+                            <p>Este curso no tiene materias asignadas. Por favor, asigne materias al curso primero.</p>
+                        </td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Sidebar Menu Component -->
+    {% include "sidebar_aside.html" %}
+</div>
+
+<!-- Modal de Confirmación de Eliminación -->
+{% include "delete_confirmation_modal.html" %}
+
+<!-- Custom JS -->
+<script src="{{ url_for('static', filename='js/delete_modal.js') }}"></script>
+<script src="{{ url_for('static', filename='js/student_tasks.js') }}"></script>
+{% endblock %}

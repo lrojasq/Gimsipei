@@ -1,8 +1,9 @@
 from logging import getLogger
-from flask import Blueprint, request
 
 from app.mi_colegio.tareas.controller_miColegio import MiColegioController
 from app.utils.responses import Response
+from flask import Blueprint, request
+
 # from app.mi_colegio.helper_miColegio import HelperSie
 
 # from app.mi_colegio.schemas import AsignaturasEstudianteSchema
@@ -29,7 +30,7 @@ def consultar_asignaturas_estudiante():
         # asignaturas_schema = AsignaturasEstudianteSchema(many=True)
         # asignaturas = asignaturas_schema.dump(data)
         return Response.success(dataResponse)
-    except Exception as e:
+    except Exception:
         return Response.new_error("Error al consultar las asignaturas del estudiante")
 
 
@@ -50,17 +51,17 @@ def creacion_tareas(docente: str):
         crear_tarea = controller.crear_tareas(docente, asignatura, curso, objet_tarea)
         if crear_tarea[1] != 201 | crear_tarea[1] != 200:
             return Response.new_error(crear_tarea[0], crear_tarea[1])
-        
+
         # Asignar la tarea a los estudiantes
         assign_task = controller.asignar_tarea_estudiante(curso)
         if assign_task[1] != 201:
             return Response.new_error(assign_task[0], assign_task[1])
 
         return Response.success("Tarea creada exitosamente", 201)
-    except Exception as e:
+    except Exception:
         return Response.new_error("Error en el servidor durante la creación de la tarea")
-    
-    
+
+
 @miColegio_bp.route("/mi_colegio/tareas/<docente>", methods=["GET"])
 def consultar_tareas(docente: str):
     """Listar las tareas creadas por un docente en una asignatura"""
@@ -79,9 +80,9 @@ def consultar_tareas(docente: str):
             return Response.new_error("No se encontraron tareas para el estudiante con ese docente y asignatura", 200)
 
         return Response.success(dataResponse)
-    except Exception as e:
-        return Response.new_error(f"Error en el servidor durante la consulta de tareas", 500)
-    
+    except Exception:
+        return Response.new_error("Error en el servidor durante la consulta de tareas", 500)
+
 
 @miColegio_bp.route("/mi_colegio/tarea/<id_tarea>", methods=["PUT"])
 def actualizar_tareas(id_tarea: str):
@@ -99,7 +100,7 @@ def actualizar_tareas(id_tarea: str):
             return Response.success("Tarea actualizada exitosamente", 201)
 
         return Response.new_error("No se pudo actualizar la tarea", 400)
-    except Exception as e:
+    except Exception:
         return Response.new_error("Error en el servidor durante la creación de la tarea", 500)
 
 
@@ -119,7 +120,7 @@ def eliminar_tareas():
             return Response.new_error("No se pudo eliminar la tarea", 400)
 
         return Response.success("Tarea eliminada exitosamente", 200)
-    except Exception as e:
+    except Exception:
         return Response.new_error("Error en el servidor durante la creación de la tarea", 500)
 
 
@@ -130,9 +131,9 @@ def consultar_estudiantes(estudiante_id: int, asignatura_id: int, curso_id: int)
         dataResponse = controller.consultar_info_estudiante(estudiante_id, asignatura_id, curso_id)
         if dataResponse[0] != 200:
             return Response.success(dataResponse[0], dataResponse[1])
-        
+
         return Response.new_success(dataResponse[0], dataResponse[1])
-    except Exception as e:
+    except Exception:
         return Response.new_error("Error en el servidor durante la consulta de estudiantes", 500)
 
 @miColegio_bp.route("/mi_colegio/consultar_tareas/<estudiante_id>", methods=["GET"])
@@ -143,9 +144,9 @@ def consultar_todas_tareas(estudiante_id: int) -> tuple:
         dataResponse = controller.consultar_tareas_estudiantes(estudiante_id)
         if dataResponse[1] != 200:
             return Response.success(dataResponse[0], dataResponse[1])
-        
+
         return Response.new_success(dataResponse[0], dataResponse[1])
-    except Exception as e:
+    except Exception:
         return Response.new_error("Error en el servidor durante la consulta de las asignaturas", 500)
 
 @miColegio_bp.route("/mi_colegio/carga_recurso/<id_tarea>/usuario/<id_usuario>", methods=["POST"])
@@ -171,11 +172,11 @@ def carga_recurso(id_tarea: int, id_usuario: int) -> tuple:
                 return Response.new_error(comentarios[0], comentarios[1])
 
             return Response.success("Recurso cargado exitosamente", 201)
-        except Exception as e:
+        except Exception:
             return Response.new_error("Error en el servidor durante la creación de la tarea", 500)
     else:
         return Response.new_error("Metodo no permitido", 405)
-    
+
 @miColegio_bp.route("/mi_colegio/comentar_tarea/<id_respuesta>/usuario/<id_usuario>", methods=["POST"])
 def comentar_tarea(id_respuesta:int, id_usuario:int) -> tuple:
     """Realizar un comentario a una tarea pasando le como parámetro el id de la respuesta a la tarea"""
@@ -184,13 +185,13 @@ def comentar_tarea(id_respuesta:int, id_usuario:int) -> tuple:
         comentario = request.get_json()["comentario"]
         if not comentario:
             return Response.new_error("Debes enviar el comentario", 200)
-        
+
         comentarios = controller.hilo_comentarios_tareas(id_respuesta, id_usuario, comentario)
         if comentarios[1] != 201:
             return Response.new_error(comentarios[0], comentarios[1])
-        
+
         return Response.success(comentarios[0], comentarios[1])
-    except Exception as e:
+    except Exception:
         return Response.new_error("Error en el servidor al almacenar el comentario", 500)
 
 @miColegio_bp.route("/mi_colegio/trabajos_entregados/<id_tarea>", methods=["GET"])
@@ -200,11 +201,11 @@ def trabajos_entregados(id_tarea: str):
         task_delivered = controller.consultar_tareas_enviadas(id_tarea)
         if task_delivered[1] != 200:
             return Response.new_error(task_delivered[0], task_delivered[1])
-        
+
         return Response.success(task_delivered[0], task_delivered[1])
-    except Exception as exc:
+    except Exception:
         return Response.new_error("Error en el servidor durante la consulta de tareas", 500)
-    
+
 @miColegio_bp.route("/mi_colegio/tarea_entregada/<id_tarea>/estudiante/<id_estudiante>", methods=["GET"])
 def tarea_entregada(id_tarea: int, id_estudiante:int) -> tuple:
     """Obtener información de la ultima tarea entregada por un estudiante"""
@@ -212,9 +213,9 @@ def tarea_entregada(id_tarea: int, id_estudiante:int) -> tuple:
         info_estudiante = controller.tarea_entregada_estudiante(id_tarea, id_estudiante)
         if info_estudiante[1] != 200:
             return Response.new_error(info_estudiante[0], info_estudiante[1])
-        
+
         return Response.success(info_estudiante[0], info_estudiante[1])
-    except Exception as exc:
+    except Exception:
         return Response.new_error("Error en el servidor durante la consulta de la tarea", 500)
 
 @miColegio_bp.route("/mi_colegio/calificar_trabajos/<id_respuesta>", methods=["PUT"])
@@ -225,23 +226,23 @@ def calificar_trabajos(id_respuesta: int):
         dicc_calificacion = request.get_json()
         if not dicc_calificacion:
             return Response.new_error("Debes enviar la calificación", 400)
-        
+
         calificar_tareas = controller.calificar_tareas_enviadas(id_respuesta, dicc_calificacion)
         if calificar_tareas[1] != 201:
             return Response.new_error(calificar_tareas[0], calificar_tareas[1])
-        
+
         return Response.success(calificar_tareas[0], calificar_tareas[1])
-    except Exception as e:
+    except Exception:
         return Response.new_error("Error en el servidor durante la calificación de tareas", 500)
 
 @miColegio_bp.route("/mi_colegio/historial_comentarios/<id_entrega>", methods=["GET"])
 def historial_comentarios(id_entrega: int) -> tuple:
     """Obtener el hilo de comentarios que se han realizado a una tarea"""
     try:
-        comentario = controller.consultar_comentarios_tareas(id_entrega) 
+        comentario = controller.consultar_comentarios_tareas(id_entrega)
         if comentario[1] != 200:
             return Response.new_error(comentario[0], comentario[1])
-        
+
         return Response.success(comentario[0], comentario[1])
-    except Exception as exc:
+    except Exception:
         return Response.new_error("Error en el servidor durante la consulta de los comentarios", 500)

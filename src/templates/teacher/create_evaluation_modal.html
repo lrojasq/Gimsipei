@@ -1,0 +1,73 @@
+<!-- Modal: Crear Evaluación -->
+<div class="modal-overlay" id="createEvaluationModal" style="display: none;">
+    <div class="modal-container">
+        <div class="modal-header">
+            <h3>CREAR EVALUACIÓN</h3>
+            <button class="modal-close" type="button" onclick="closeCreateEvaluationModal()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <form id="createEvaluationForm" method="POST" action="{{ url_for('evaluations.create_evaluation') }}"
+            enctype="multipart/form-data">
+            <input type="hidden" name="course_id" id="evaluation_course_id">
+            <input type="hidden" name="subject_id" id="evaluation_subject_id">
+            <!-- Contendrá el JSON con las preguntas -->
+            <input type="hidden" name="questions_json" id="evaluation_questions_json">
+
+            <!-- Información general -->
+            <div class="form-group">
+                <input type="text" name="title" id="evaluation_title" placeholder="TÍTULO" required maxlength="255">
+            </div>
+
+            <div class="form-group">
+                <textarea name="description" id="evaluation_description" placeholder="DESCRIPCIÓN" rows="4"
+                    maxlength="1000"></textarea>
+            </div>
+
+            <div class="form-group file-upload-group">
+                <label for="evaluation_cover" class="file-upload-label">
+                    <i class="fas fa-upload"></i> AGREGAR PORTADA
+                </label>
+                <input type="file" name="cover_image" id="evaluation_cover" accept="image/*">
+                <span class="file-name" id="evaluation_cover_name"></span>
+            </div>
+
+            <div class="form-group">
+                <select name="period" id="evaluation_period" class="period-select" required>
+                    <option value="">SELECCIONA PERIODO</option>
+                    <option value="1">PERIODO 1</option>
+                    <option value="2">PERIODO 2</option>
+                    <option value="3">PERIODO 3</option>
+                    <option value="4">PERIODO 4</option>
+                </select>
+            </div>
+
+            <!-- Constructor de preguntas -->
+            <div class="form-group">
+                <h4 style="font-size: 0.95rem; font-weight: 600; margin-bottom: 0.25rem;">Preguntas</h4>
+                <p style="font-size: 0.8rem; color: #777; margin-bottom: 0.75rem;">
+                    Añade las preguntas de la evaluación. Puedes combinar preguntas de respuesta abierta y de opción
+                    múltiple (mínimo 4 preguntas por evaluación).
+                </p>
+
+                <div id="questionsContainer" class="questions-container"></div>
+
+                <button type="button" class="btn-submit"
+                    style="background-color: transparent; color: var(--evaluaciones); border: 1px dashed var(--evaluaciones); padding: 0.4rem 1rem; border-radius: 999px; margin-top: 0.5rem;"
+                    id="addQuestionBtn">
+                    + Añadir pregunta
+                </button>
+
+                <div class="questions-navigation" id="questionsNavigation">
+                    <button type="button" class="btn-step" id="prevQuestionBtn">← Anterior</button>
+                    <span class="questions-step-label" id="questionsStepLabel">Pregunta 1 de 1</span>
+                    <button type="button" class="btn-step" id="nextQuestionBtn">Siguiente →</button>
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button type="submit" class="btn-submit">GUARDAR</button>
+            </div>
+        </form>
+    </div>
+</div>

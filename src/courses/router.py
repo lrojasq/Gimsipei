@@ -1,22 +1,26 @@
 from flask import Blueprint, request
+
+from .controllers import (
+    add_subject_to_course_api_controller,
+    create_course_api_controller,
+    delete_assignment_submission_controller,
+    delete_course_api_controller,
+    download_assignment_submission_controller,
+    get_course_api_controller,
+    get_course_subjects_api_controller,
+    get_courses_api_controller,
+    remove_subject_from_course_api_controller,
+    update_course_api_controller,
+)
 from .courses_controllers import (
+    course_detail_controller,
     courses_management_controller,
     create_course_controller,
-    edit_course_controller,
     delete_course_controller,
-    course_detail_controller,
+    edit_course_controller,
     remove_student_from_course_controller,
     remove_subject_from_course_controller,
-)
-from .controllers import (
-    get_courses_api_controller,
-    get_course_api_controller,
-    create_course_api_controller,
-    update_course_api_controller,
-    delete_course_api_controller,
-    get_course_subjects_api_controller,
-    add_subject_to_course_api_controller,
-    remove_subject_from_course_api_controller,
+    # teacher_classes_controller,
 )
 
 courses_bp = Blueprint("courses", __name__, url_prefix="/courses")
@@ -38,8 +42,6 @@ def create_course():
 def edit_course(course_id):
     """Editar curso existente"""
     return edit_course_controller(course_id, request)
-
-
 
 
 @courses_bp.route("/<int:course_id>/delete", methods=["POST"])
@@ -118,4 +120,27 @@ def add_subject_to_course_api(course_id):
 def remove_subject_from_course_api(course_id, subject_id, teacher_id):
     return remove_subject_from_course_api_controller(
         course_id, subject_id, teacher_id, request
+    )
+
+
+# API para descargar y eliminar asignaciones
+@courses_bp.route(
+    "/api/<int:course_id>/students/<int:student_id>/assignments/<int:assignment_id>/download",
+    methods=["GET"],
+)
+def download_assignment_submission(course_id, student_id, assignment_id):
+    """API para descargar la entrega de una asignación"""
+    return download_assignment_submission_controller(
+        course_id, student_id, assignment_id, request
+    )
+
+
+@courses_bp.route(
+    "/api/<int:course_id>/students/<int:student_id>/assignments/<int:assignment_id>/delete",
+    methods=["POST"],
+)
+def delete_assignment_submission(course_id, student_id, assignment_id):
+    """API para eliminar una entrega de asignación"""
+    return delete_assignment_submission_controller(
+        course_id, student_id, assignment_id, request
     )

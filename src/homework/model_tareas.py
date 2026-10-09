@@ -1,35 +1,37 @@
-from pydantic import BaseModel, ValidationError, validator
-from typing import Optional, Any, List, Union
 from datetime import datetime
+from typing import Any
+
+from pydantic import BaseModel, ValidationError
 from werkzeug.datastructures import FileStorage
 
+
 class TareaModel(BaseModel):
-    id_tarea: Optional[str] = None
-    asignatura: Optional[str] = None
-    curso: Optional[str] = None
-    docente: Optional[str] = None
-    nombre: Optional[str] = None
-    descripcion: Optional[str] = None
-    fecha_finalizacion: Optional[datetime] = None
-    ultima_modificacion: Optional[datetime] = None
+    id_tarea: str | None = None
+    asignatura: str | None = None
+    curso: str | None = None
+    docente: str | None = None
+    nombre: str | None = None
+    descripcion: str | None = None
+    fecha_finalizacion: datetime | None = None
+    ultima_modificacion: datetime | None = None
 
 
     def __init__(self, **data: Any):
         try:
             __tracebackhide__ = True
             self.__pydantic_validator__.validate_python(data, self_instance=self)
-        except Exception as exc:
+        except Exception:
             return None
 
 
 class DocumentoModel(BaseModel):
-    id_documento: Optional[int] = None
-    nombre: Optional[str] = None
-    descripcion: Optional[str] = None
-    id_asignatura: Optional[int] = None
-    id_docente: Optional[int] = None
-    id_curso: Optional[int] = None
-    ultima_modificacion: Optional[str] = None
+    id_documento: int | None = None
+    nombre: str | None = None
+    descripcion: str | None = None
+    id_asignatura: int | None = None
+    id_docente: int | None = None
+    id_curso: int | None = None
+    ultima_modificacion: str | None = None
 
     """ Defini este metodo para poder manejar los errores generados sobre el modelo
         y encapsularlos en un bloque try except, si falla me retorna None de lo contrario
@@ -40,15 +42,15 @@ class DocumentoModel(BaseModel):
         try:
             __tracebackhide__ = True
             self.__pydantic_validator__.validate_python(data, self_instance=self)
-        except Exception as exc:
+        except Exception:
             return None
 
 """ Se utiliza cuando un estudiante o docente sube un recurso a la tabla de tarea"""
 class UrlRecursosModel(BaseModel):
-    direccion_url : Optional[str] = None
-    url_nombre: Optional[str] = None
-    url_estudiante: Optional[str] = None
-    url_docente: Optional[str] = None
+    direccion_url : str | None = None
+    url_nombre: str | None = None
+    url_estudiante: str | None = None
+    url_docente: str | None = None
 
     """ Defini este metodo para poder manejar los errores generados sobre el modelo
         y encapsularlos en un bloque try except, si falla me retorna None de lo contrario
@@ -59,14 +61,14 @@ class UrlRecursosModel(BaseModel):
         try:
             __tracebackhide__ = True
             self.__pydantic_validator__.validate_python(data, self_instance=self)
-        except Exception as exc:
+        except Exception:
             return None
-        
+
 class TareaRelacionUsuario(BaseModel):
-    id_tarea: Optional[int] = None
-    id_usuario: Optional[int] = None
-    id_url_recurso: Optional[int] = None
-    estado : Optional[str] = None
+    id_tarea: int | None = None
+    id_usuario: int | None = None
+    id_url_recurso: int | None = None
+    estado : str | None = None
 
     """ Defini este metodo para poder manejar los errores generados sobre el modelo
         y encapsularlos en un bloque try except, si falla me retorna None de lo contrario
@@ -77,13 +79,13 @@ class TareaRelacionUsuario(BaseModel):
         try:
             __tracebackhide__ = True
             self.__pydantic_validator__.validate_python(data, self_instance=self)
-        except Exception as exc:
+        except Exception:
             return None
-        
+
 """ Se utiliza para asignar una tarea a un estudiante"""
 class TareasEstudianteCurso(BaseModel):
-    id_respuesta: Optional[int] = None
-    nota_tarea: Optional[Union[int, float]] = None
+    id_respuesta: int | None = None
+    nota_tarea: int | float | None = None
 
     """ Defini este metodo para poder manejar los errores generados sobre el modelo
         y encapsularlos en un bloque try except, si falla me retorna None de lo contrario
@@ -94,18 +96,18 @@ class TareasEstudianteCurso(BaseModel):
         try:
             __tracebackhide__ = True
             self.__pydantic_validator__.validate_python(data, self_instance=self)
-        except Exception as exc:
+        except Exception:
             return None
-        
+
 class UrlDocumentosRecursos(BaseModel):
-    id_docente: Optional[int] = None
-    id_asignatura: Optional[int] = None
-    id_documento: Optional[int] = None
-    direccion_url: Optional[str] = None
-    nombre_recurso: Optional[str] = None
-    url_recurso: Optional[str] = None
-    descripcion: Optional[str] = None
-    compartido: Optional[int] = None
+    id_docente: int | None = None
+    id_asignatura: int | None = None
+    id_documento: int | None = None
+    direccion_url: str | None = None
+    nombre_recurso: str | None = None
+    url_recurso: str | None = None
+    descripcion: str | None = None
+    compartido: int | None = None
 
     """ Defini este metodo para poder manejar los errores generados sobre el modelo
         y encapsularlos en un bloque try except, si falla me retorna None de lo contrario
@@ -116,16 +118,16 @@ class UrlDocumentosRecursos(BaseModel):
         try:
             __tracebackhide__ = True
             self.__pydantic_validator__.validate_python(data, self_instance=self)
-        except Exception as exc:
+        except Exception:
             return None
-        
+
 class DocumentosCursoEstudiante(BaseModel):
     """Este modelo se implemento con el fin de que hiciera referecia a la tabla de
     documentos_curso_estudiantes la cual es para asociar documentos con los estudiantes de un curso"""
-    id_recurso: Optional[int] = None
-    id_curso: Optional[int] = None
-    id_estudiante: Optional[int] = None
-    fecha_entrega: Optional[str] = None
+    id_recurso: int | None = None
+    id_curso: int | None = None
+    id_estudiante: int | None = None
+    fecha_entrega: str | None = None
 
     """ Defini este metodo para poder manejar los errores generados sobre el modelo
         y encapsularlos en un bloque try except, si falla me retorna None de lo contrario
@@ -135,59 +137,59 @@ class DocumentosCursoEstudiante(BaseModel):
         try:
             __tracebackhide__ = True
             self.__pydantic_validator__.validate_python(data, self_instance=self)
-        except Exception as exc:
+        except Exception:
             return None
-        
+
 class TareasComentarios(BaseModel):
-    id_respuesta: Optional[int] = None
-    id_usuario: Optional[int] = None
-    comentario: Optional[str] = None
+    id_respuesta: int | None = None
+    id_usuario: int | None = None
+    comentario: str | None = None
 
     def __init__(self, **data: Any):
         try:
             __tracebackhide__ = True
             self.__pydantic_validator__.validate_python(data, self_instance=self)
-        except Exception as exc:
+        except Exception:
             return None
-        
+
 class crearAejerciciosModel(BaseModel):
     """Creacion del modelo para crear ejercicios"""
-    id_asignatura: Optional[int] = None
-    nombre: Optional[str] = None
-    descripcion: Optional[str] = None
-    vista_retro_alimentacion: Optional[int] = None
-    seleccion_pregunta: Optional[int] = None
-    barajar_pregunta: Optional[int] = None
-    num_intentos: Optional[int] = None
-    fecha_publicacion: Optional[str] = None
-    fecha_finalizacion: Optional[str] = None
-    control_tiempo: Optional[str] = None
-    porcentaje_exito: Optional[int] = None
-    texto_final: Optional[str] = None
+    id_asignatura: int | None = None
+    nombre: str | None = None
+    descripcion: str | None = None
+    vista_retro_alimentacion: int | None = None
+    seleccion_pregunta: int | None = None
+    barajar_pregunta: int | None = None
+    num_intentos: int | None = None
+    fecha_publicacion: str | None = None
+    fecha_finalizacion: str | None = None
+    control_tiempo: str | None = None
+    porcentaje_exito: int | None = None
+    texto_final: str | None = None
 
     def __init__(self, **data: Any):
         try:
             __tracebackhide__ = True
             self.__pydantic_validator__.validate_python(data, self_instance=self)
-        except Exception as exc:
+        except Exception:
             return None
-        
+
 class crearPruebaModel(BaseModel):
     """Creacion del modelo para crear preguntas"""
-    pregunta: Optional[str] = None
-    id_formato: Optional[int] = None
-    id_ejercicio: Optional[int] = None
-    seleccionada: Optional[int] = None
-    puntuacion: Optional[str] = None
-    texto_completar: Optional[str] = None
-    contenido: Optional[List[str]] = None
-    correcta: Optional[List[Union[int, str, bool]]] = None
-    puntuacion_respt: Optional[list[Union[int,float]]] = None
-    id_pregunta: Optional[int] = None
-    id_respuesta: Optional[list[Union[int, str]]] = None
-    respuesta: Optional[str] = None
-    recursos: Optional[list] = None
-    init_position: Optional[List[int]] = [0]*4
+    pregunta: str | None = None
+    id_formato: int | None = None
+    id_ejercicio: int | None = None
+    seleccionada: int | None = None
+    puntuacion: str | None = None
+    texto_completar: str | None = None
+    contenido: list[str] | None = None
+    correcta: list[int | str | bool] | None = None
+    puntuacion_respt: list[int | float] | None = None
+    id_pregunta: int | None = None
+    id_respuesta: list[int | str] | None = None
+    respuesta: str | None = None
+    recursos: list | None = None
+    init_position: list[int] | None = [0]*4
 
     """ Defini este metodo para poder manejar los errores generados sobre el modelo"""
     def __init__(self, **data: Any):
@@ -201,21 +203,19 @@ class crearPruebaModel(BaseModel):
     def is_valid(self) -> bool:
         """Check if the models have one or more questions"""
         if self.id_formato in [1,2] and type(self.id_respuesta) == list:
-            return len(self.id_respuesta) >=1  
+            return len(self.id_respuesta) >=1
         return True
 
     def is_correct(self) -> bool:
         """Check if in list of correct answers is the correct answer (The correct have the value 1)"""
         if self.id_formato in [1,2,4,5,6,7,8]:
             for correct in self.correcta:
-                if correct == 1:
-                    return True
-                elif correct in [1, 2, 3, 4]:
+                if correct == 1 or correct in [1, 2, 3, 4]:
                     return True
             return False
         else:
             return len(self.correcta) == 0 and type(self.correcta) == list
-    
+
     def validate_question_score(self) -> bool | None:
         """Check if the score of the question is valid"""
         if self.id_formato in [1,2,4,5,6,7,8]:
@@ -225,21 +225,21 @@ class crearPruebaModel(BaseModel):
                 return True
         else:
             return len(self.puntuacion_respt) == 0 and type(self.puntuacion_respt) == list
-    
+
     # def length_response(self) -> bool:
     #     """Check if the length of the response not empty"""
     #     if self.id_respuesta is None or len(self.id_respuesta) == 0:
     #         return False
     #     return True
-    
+
     def transform_questions(self) -> None|bool:
-        """Check format of answer""" 
+        """Check format of answer"""
         if self.id_formato in [3]:
             for value in self.id_respuesta:
                 if type(value) != int and value != 0:
                     return False
                 return True
-            
+
             if len(self.id_respuesta) == 0:
                 return True
 
@@ -260,7 +260,7 @@ class crearPruebaModel(BaseModel):
             return False
         return True
 
-    def validar_cantidad_imagenes(self, img: List[FileStorage] | None) -> bool | list[str]:
+    def validar_cantidad_imagenes(self, img: list[FileStorage] | None) -> bool | list[str]:
         """Validar que se suban al menos 4 imágenes y agregar un identificador único a cada una"""
         if self.id_formato in [6]:
             if img is None or len(img) < 4:

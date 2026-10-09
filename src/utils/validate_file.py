@@ -1,5 +1,7 @@
-from src.utils.file_utils import ALLOWED_EXTENSIONS
 import os
+
+from src.utils.file_utils import ALLOWED_EXTENSIONS
+
 
 def validate_file(file, file_type):
     """

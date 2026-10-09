@@ -1,0 +1,12 @@
+/* Override colors for resources */
+.subject-card-image {
+  background: var(--recursos, #e8b923) !important;
+}
+
+.subject-bar {
+  background-color: var(--recursos, #e8b923) !important;
+}
+
+.recursos_category .menu_aside {
+  background-color: var(--recursos, #e8b923) !important;
+}

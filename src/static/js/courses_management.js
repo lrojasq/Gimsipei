@@ -1,57 +1,12 @@
 // Courses Management JavaScript
 document.addEventListener('DOMContentLoaded', function() {
-    initializeFormValidation();
     initializeAutoCloseAlerts();
-    initializeLoadingStates();
     initializeAccordion();
     initializeDeleteSubjectModal();
+    initializeCreateCourseModal();
+    initializeCreateSubjectModal();
+    initializeEditSubjectModal();
 });
-
-// Form Validation
-function initializeFormValidation() {
-    const forms = document.querySelectorAll('.needs-validation');
-    
-    forms.forEach(form => {
-        form.addEventListener('submit', function(event) {
-            if (!form.checkValidity()) {
-                event.preventDefault();
-                event.stopPropagation();
-            } else {
-                // Show loading state
-                const submitBtn = form.querySelector('#submitBtn');
-                if (submitBtn) {
-                    showLoadingState(submitBtn);
-                }
-            }
-            form.classList.add('was-validated');
-        });
-        
-        // Real-time validation
-        const inputs = form.querySelectorAll('input[required], select[required]');
-        inputs.forEach(input => {
-            input.addEventListener('input', function() {
-                validateField(this);
-            });
-            
-            input.addEventListener('blur', function() {
-                validateField(this);
-            });
-        });
-    });
-}
-
-// Field Validation
-function validateField(field) {
-    if (field.checkValidity()) {
-        field.classList.remove('is-invalid');
-        field.classList.add('is-valid');
-    } else {
-        field.classList.remove('is-valid');
-        field.classList.add('is-invalid');
-    }
-}
-
-// (Removed) Delete modal setup: server actions are handled via HTML forms
 
 // Auto Close Alerts
 function initializeAutoCloseAlerts() {
@@ -59,228 +14,411 @@ function initializeAutoCloseAlerts() {
     
     alerts.forEach(alert => {
         setTimeout(() => {
+            // Verificar si Bootstrap está disponible
+            if (typeof bootstrap !== 'undefined' && bootstrap.Alert) {
             const bsAlert = new bootstrap.Alert(alert);
             bsAlert.close();
-        }, 5000);
-    });
-}
-
-// Loading States
-function initializeLoadingStates() {
-    const forms = document.querySelectorAll('form');
-    
-    forms.forEach(form => {
-        form.addEventListener('submit', function() {
-            const submitBtn = form.querySelector('#submitBtn');
-            if (submitBtn) {
-                showLoadingState(submitBtn);
+            } else {
+                // Fallback: simplemente ocultar el alert
+                const closeBtn = alert.querySelector('.btn-close');
+                if (closeBtn) {
+                    closeBtn.click();
+                } else {
+                    alert.style.display = 'none';
+                }
             }
-        });
+        }, 5000);
     });
 }
 
 // Show Loading State
 function showLoadingState(button) {
+    // Prevent double-application
+    if (button.classList.contains('loading')) return;
+
     button.classList.add('loading');
     button.disabled = true;
-    
-    const originalText = button.innerHTML;
-    button.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Procesando...';
-    
-    // Store original text for potential restoration
-    button.setAttribute('data-original-text', originalText);
-}
 
-// Hide Loading State
-function hideLoadingState(button) {
-    button.classList.remove('loading');
-    button.disabled = false;
-    
-    const originalText = button.getAttribute('data-original-text');
-    if (originalText) {
-        button.innerHTML = originalText;
+    // Store original text only once
+    if (!button.getAttribute('data-original-text')) {
+        button.setAttribute('data-original-text', button.innerHTML);
     }
+
+    // Don't inject an inline spinner icon here,
+    // The CSS `.btn.loading::after` already renders a spinner.
+    button.innerHTML = 'Procesando...';
 }
 
 // Accordion Functionality
 function initializeAccordion() {
-    const table = document.getElementById('accordionSubjects');
-    if (!table) return;
+    // New accordion for the current courses list layout
+    const courseItems = document.querySelectorAll('.list-cursos > li');
+    if (!courseItems.length) return;
 
-    table.querySelectorAll('.toggle-arrow').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            const row = this.closest('tr');
-            const courseId = row.getAttribute('data-course-id');
-            const list = document.getElementById(`subjects-${courseId}`);
-            const arrow = this.querySelector('.arrow');
+    courseItems.forEach((item, index) => {
+        const header = item.querySelector('.grado');
+        const content = item.querySelector('.content-materias');
+        const icon = header ? header.querySelector('i.fas') : null;
 
-            // toggle arrow
-            setTimeout(() => {
-                const expanded = list.classList.contains('show');
-                arrow.style.transform = expanded ? 'rotate(0deg)' : 'rotate(180deg)';
-            }, 250);
-        });
-    });
-}
+        if (!header || !content) return;
 
-// (Removed) Client-side rendering of subjects
+        // Initial state: all collapsed by default
+        content.style.display = 'none';
+        if (icon) { icon.classList.remove('fa-chevron-up'); icon.classList.add('fa-chevron-down'); }
 
-// Tabs Functionality
-function initializeTabs() {
-    const tabTriggers = document.querySelectorAll('[data-bs-toggle="tab"]');
-    
-    tabTriggers.forEach(trigger => {
-        trigger.addEventListener('shown.bs.tab', function(event) {
-            const target = event.target.getAttribute('data-bs-target');
-            const tabPane = document.querySelector(target);
-            
-            if (tabPane) {
-                // Add animation to tab content
-                tabPane.style.opacity = '0';
-                tabPane.style.transform = 'translateY(20px)';
-                
-                setTimeout(() => {
-                    tabPane.style.transition = 'all 0.3s ease';
-                    tabPane.style.opacity = '1';
-                    tabPane.style.transform = 'translateY(0)';
-                }, 50);
+        header.addEventListener('click', function() {
+            const isVisible = content.style.display !== 'none';
+            if (isVisible) {
+                content.style.display = 'none';
+                if (icon) { icon.classList.remove('fa-chevron-up'); icon.classList.add('fa-chevron-down'); }
+                        } else {
+                content.style.display = 'flex';
+                if (icon) { icon.classList.remove('fa-chevron-down'); icon.classList.add('fa-chevron-up'); }
             }
         });
     });
 }
 
-// Toast Notifications
-function showToast(message, type = 'info') {
-    // Create toast element
-    const toastHtml = `
-        <div class="toast align-items-center text-white bg-${type} border-0" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="d-flex">
-                <div class="toast-body">
-                    <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'danger' ? 'exclamation-triangle' : 'info-circle'} me-2"></i>
-                    ${message}
-                </div>
-                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
-            </div>
-        </div>
-    `;
-    
-    // Add to toast container
-    let toastContainer = document.querySelector('.toast-container');
-    if (!toastContainer) {
-        toastContainer = document.createElement('div');
-        toastContainer.className = 'toast-container position-fixed top-0 end-0 p-3';
-        document.body.appendChild(toastContainer);
-    }
-    
-    toastContainer.insertAdjacentHTML('beforeend', toastHtml);
-    
-    // Show toast
-    const toastElement = toastContainer.lastElementChild;
-    const toast = new bootstrap.Toast(toastElement);
-    toast.show();
-    
-    // Remove toast after it's hidden
-    toastElement.addEventListener('hidden.bs.toast', function() {
-        this.remove();
+
+// Delete Subject Modal 
+function initializeDeleteSubjectModal() {
+    initializeDeleteButtons('.open-delete-subject-modal', function(button) {
+        const courseId = button.getAttribute('data-course-id');
+        const subjectId = button.getAttribute('data-subject-id');
+        const teacherId = button.getAttribute('data-teacher-id');
+        return `/courses/${courseId}/subjects/${subjectId}/${teacherId}/remove`;
     });
 }
 
-// Form Enhancement
-function enhanceForm(form) {
-    // Add real-time validation
-    const inputs = form.querySelectorAll('input, select, textarea');
+// Initialize Create Course Modal
+function initializeCreateCourseModal() {
+    const modal = document.getElementById('createCourseModal');
+    const openModalBtn = document.getElementById('openCreateCourseModal');
+    const closeModalBtns = document.querySelectorAll('.close-modal');
+    const form = document.getElementById('createCourseForm');
     
-    inputs.forEach(input => {
-        input.addEventListener('input', function() {
-            validateField(this);
+    if (!modal || !form) return;
+        
+        // Abrir modal
+        if (openModalBtn) {
+            openModalBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                modal.classList.add('show');
+                modal.style.display = 'flex';
+                modal.removeAttribute('aria-hidden'); // Quitar aria-hidden para accesibilidad
+                modal.setAttribute('aria-modal', 'true');
+                modal.setAttribute('role', 'dialog');
+                
+                if (form) {
+                    form.reset();
+                    form.classList.remove('was-validated');
+                    const inputs = form.querySelectorAll('.is-invalid, .is-valid');
+                    inputs.forEach(input => {
+                        input.classList.remove('is-invalid', 'is-valid');
+                    });
+                }
+                
+                const submitBtn = form.querySelector('button[type="submit"]');
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.removeAttribute('disabled');
+                }
+            });
+        }
+        
+        // Función para cerrar el modal
+        function closeModal() {
+            modal.classList.remove('show');
+            modal.style.display = 'none';
+            modal.setAttribute('aria-hidden', 'true');
+            modal.removeAttribute('aria-modal');
+            modal.removeAttribute('role');
+            
+            if (form) {
+                form.reset();
+                form.classList.remove('was-validated');
+                const inputs = form.querySelectorAll('.is-invalid, .is-valid');
+                inputs.forEach(input => {
+                    input.classList.remove('is-invalid', 'is-valid');
+                });
+            }
+        }
+        
+        // Cerrar modal
+        closeModalBtns.forEach(btn => {
+            btn.addEventListener('click', closeModal);
         });
         
-        input.addEventListener('blur', function() {
-            validateField(this);
-        });
-    });
-    
-    // Add submit enhancement
-    form.addEventListener('submit', function(event) {
-        const submitBtn = form.querySelector('#submitBtn');
-        if (submitBtn && form.checkValidity()) {
-            showLoadingState(submitBtn);
+        // Cerrar modal al hacer clic en bg-back
+        const bgBack = modal.querySelector('.bg-back');
+        if (bgBack) {
+            bgBack.addEventListener('click', closeModal);
         }
-    });
-}
+        
+        // Manejar el submit del formulario
+        form.addEventListener('submit', function(e) {
+            // prevent double submit
+            if (form.dataset.submitting === '1') {
+                e.preventDefault();
+                return false;
+            }
 
-// Initialize all forms
-function initializeAllForms() {
-    const forms = document.querySelectorAll('form');
-    forms.forEach(form => {
-        enhanceForm(form);
-    });
-}
-
-// Keep only UI helpers available if needed globally
-// Delete Subject Modal Functionality
-function initializeDeleteSubjectModal() {
-    const deleteModal = document.getElementById('deleteSubjectModal');
-    const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
-    const subjectNameElement = document.getElementById('subjectName');
-    const teacherNameElement = document.getElementById('teacherName');
-    
-    if (!deleteModal || !confirmDeleteBtn || !subjectNameElement || !teacherNameElement) {
-        return; // Exit if elements don't exist
-    }
-    
-    let currentSubjectId = null;
-    let currentCourseId = null;
-    
-    // Handle click on delete buttons
-    document.querySelectorAll('[data-bs-target="#deleteSubjectModal"]').forEach(button => {
-        button.addEventListener('click', function() {
-            currentSubjectId = this.getAttribute('data-subject-id');
-            currentCourseId = this.getAttribute('data-course-id');
-            const subjectName = this.getAttribute('data-subject-name');
-            const teacherName = this.getAttribute('data-teacher-name');
-            
-            // Update information in the modal
-            subjectNameElement.textContent = subjectName;
-            teacherNameElement.textContent = teacherName;
-        });
-    });
-    
-    // Handle confirmation of deletion
-    confirmDeleteBtn.addEventListener('click', function() {
-        if (currentSubjectId && currentCourseId) {
-            // Create temporary form to submit the deletion
-            const form = document.createElement('form');
-            form.method = 'POST';
-            form.action = `/subjects/${currentSubjectId}/delete?course_id=${currentCourseId}`;
-            
-            // Add CSRF token if exists
-            const csrfToken = document.querySelector('meta[name="csrf-token"]');
-            if (csrfToken) {
-                const csrfInput = document.createElement('input');
-                csrfInput.type = 'hidden';
-                csrfInput.name = 'csrf_token';
-                csrfInput.value = csrfToken.getAttribute('content');
-                form.appendChild(csrfInput);
+            if (!form.checkValidity()) {
+                e.preventDefault();
+                e.stopPropagation();
+                form.classList.add('was-validated');
+                return false;
             }
             
-            document.body.appendChild(form);
-            form.submit();
-        }
-    });
-    
-    // Clear data when modal is closed
-    deleteModal.addEventListener('hidden.bs.modal', function() {
-        currentSubjectId = null;
-        currentCourseId = null;
-        subjectNameElement.textContent = '';
-        teacherNameElement.textContent = '';
-    });
+            // Mostrar loading
+            const submitBtn = form.querySelector('button[type="submit"]');
+            if (submitBtn) {
+                showLoadingState(submitBtn);
+            }
+            form.dataset.submitting = '1';
+
+            // Force paint: submit on next tick so the spinner is visible
+            e.preventDefault();
+            setTimeout(() => form.submit(), 0);
+        }, false);
 }
 
-window.coursesManagement = {
-    showToast,
-    showLoadingState,
-    hideLoadingState,
-    initializeDeleteSubjectModal
-};
+// Initialize Create Subject Modal
+function initializeCreateSubjectModal() {
+    const modal = document.getElementById('subjectModal');
+    const openModalBtns = document.querySelectorAll('.open-create-subject-modal, .add-subject-btn');
+    const closeModalBtns = modal ? modal.querySelectorAll('.close-modal') : [];
+    const form = document.getElementById('subjectForm');
+    
+    if (!modal || !form) {
+        return;
+    }
+        
+        // Abrir modal desde los botones "AÑADIR" de materias
+        openModalBtns.forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const courseId = this.getAttribute('data-course-id');
+                
+                // Configurar modo crear
+                document.getElementById('subjectModalTitle').textContent = 'Crear materia';
+                document.getElementById('teacherLabel').textContent = 'Profesor';
+                const submitBtn = form.querySelector('button[type="submit"]');
+                if (submitBtn) submitBtn.textContent = 'Guardar';
+                const redirectToInput = document.getElementById('redirectToInput');
+                if (redirectToInput) redirectToInput.value = 'courses_management';
+                
+                // Restaurar la acción original del formulario
+                form.action = '/subjects/create';
+                
+                // Mostrar campo de selección de materia y ocultar input de edición
+                const subjectNameField = document.getElementById('subjectNameField');
+                if (subjectNameField) {
+                    subjectNameField.style.display = 'block';
+                    
+                    // Mostrar el select
+                    const subjectSelect = document.querySelector('#subject-name');
+                    if (subjectSelect) {
+                        subjectSelect.style.display = 'block';
+                        subjectSelect.setAttribute('required', 'required');
+                    }
+                    
+                    // Ocultar el input de edición si existe
+                    const subjectInput = document.getElementById('subject-name-edit');
+                    if (subjectInput) {
+                        subjectInput.style.display = 'none';
+                        subjectInput.removeAttribute('required');
+                    }
+                }
+                
+                // Resetear formulario
+                form.reset();
+                form.classList.remove('was-validated');
+                
+                // Actualizar el course_id en el formulario
+                const courseIdInput = document.getElementById('courseIdInput');
+                if (courseIdInput && courseId) {
+                    courseIdInput.value = courseId;
+                }
+                
+                // Limpiar subject_id para modo crear
+                const subjectIdInput = document.getElementById('subjectIdInput');
+                if (subjectIdInput) {
+                    subjectIdInput.value = '';
+                }
+                
+                // Resetear select de profesores
+                const teacherSelect = document.getElementById('teacher_id');
+                if (teacherSelect) {
+                    teacherSelect.name = 'teacher_id';
+                    teacherSelect.value = '';
+                    teacherSelect.removeAttribute('disabled');
+                    teacherSelect.parentElement.style.display = 'block';
+                    
+                    Array.from(teacherSelect.options).forEach(opt => {
+                        opt.disabled = false;
+                        opt.textContent = opt.textContent.replace(' (Actual)', '');
+                    });
+                }
+                
+                modal.classList.add('show');
+                modal.style.display = 'flex';
+                modal.removeAttribute('aria-hidden');
+                modal.setAttribute('aria-modal', 'true');
+                modal.setAttribute('role', 'dialog');
+            });
+        });
+        
+        // Función para cerrar el modal
+        function closeModal() {
+            modal.classList.remove('show');
+            modal.style.display = 'none';
+            modal.setAttribute('aria-hidden', 'true');
+            modal.removeAttribute('aria-modal');
+            modal.removeAttribute('role');
+            
+            if (form) {
+                form.reset();
+                form.classList.remove('was-validated');
+                const inputs = form.querySelectorAll('.is-invalid, .is-valid');
+                inputs.forEach(input => {
+                    input.classList.remove('is-invalid', 'is-valid');
+                });
+            }
+        }
+        
+        // Cerrar modal
+        closeModalBtns.forEach(btn => {
+            btn.addEventListener('click', closeModal);
+        });
+        
+        // Cerrar modal al hacer clic en bg-back
+        const bgBack = modal.querySelector('.bg-back');
+        if (bgBack) {
+            bgBack.addEventListener('click', closeModal);
+        }
+        
+        // Manejar el submit del formulario
+        form.addEventListener('submit', function(e) {
+            // prevent double submit
+            if (form.dataset.submitting === '1') {
+                e.preventDefault();
+                return false;
+            }
+
+            // Validar formulario
+            if (!form.checkValidity()) {
+                e.preventDefault();
+                e.stopPropagation();
+                form.classList.add('was-validated');
+                return false;
+            }
+            
+            // Verificar que el course_id exista antes de enviar (usando el ID correcto)
+            const courseIdInput = document.getElementById('courseIdInput');
+            
+            if (!courseIdInput || !courseIdInput.value) {
+                // Si no hay course_id, no permitir el envío
+                e.preventDefault();
+                alert('Error: No se pudo identificar el curso. Por favor, intente nuevamente.');
+                return false;
+            }
+            
+            // Mostrar loading
+            const submitBtn = form.querySelector('button[type="submit"]');
+            if (submitBtn) {
+                showLoadingState(submitBtn);
+            }
+            form.dataset.submitting = '1';
+
+            // Force paint: submit on next tick so the spinner is visible
+            e.preventDefault();
+            setTimeout(() => form.submit(), 0);
+            return false;
+        }, false);
+}
+
+// Initialize Edit Subject Modal
+function initializeEditSubjectModal() {
+    const modal = document.getElementById('subjectModal');
+    const form = document.getElementById('subjectForm');
+    const editButtons = document.querySelectorAll('.open-edit-subject-modal');
+
+    if (!modal || !form) {
+        return;
+    }
+
+        editButtons.forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                const courseId = this.getAttribute('data-course-id');
+                const subjectId = this.getAttribute('data-subject-id');
+                const subjectName = this.getAttribute('data-subject-name');
+                const teacherId = this.getAttribute('data-teacher-id');
+
+                // Resetear primero
+                form.reset();
+                form.classList.remove('was-validated');
+
+                // Configurar modo editar
+                document.getElementById('subjectModalTitle').textContent = 'Editar materia';
+                document.getElementById('teacherLabel').textContent = 'Profesor';
+                const submitBtn = form.querySelector('button[type="submit"]');
+                if (submitBtn) submitBtn.textContent = 'Actualizar';
+
+                const redirectToInput = document.getElementById('redirectToInput');
+                if (redirectToInput) redirectToInput.value = 'courses_management';
+
+                // Ruta de edición de materia
+                form.action = `/subjects/${subjectId}/edit`;
+
+                // Set hidden inputs
+                const courseIdInput = document.getElementById('courseIdInput');
+                if (courseIdInput) courseIdInput.value = courseId || '';
+
+                const subjectIdInput = document.getElementById('subjectIdInput');
+                if (subjectIdInput) subjectIdInput.value = subjectId || '';
+
+                // Convertir el select de materia en un input text para edición
+                const subjectNameField = document.getElementById('subjectNameField');
+                if (subjectNameField) {
+                    // Ocultar el select
+                    const subjectSelect = document.getElementById('subject-name');
+                    if (subjectSelect) {
+                        subjectSelect.style.display = 'none';
+                        subjectSelect.removeAttribute('required');
+                    }
+                    
+                    // Verificar si ya existe un input de texto para edición
+                    let subjectInput = document.getElementById('subject-name-edit');
+                    if (!subjectInput) {
+                        // Crear input de texto si no existe
+                        subjectInput = document.createElement('input');
+                        subjectInput.type = 'text';
+                        subjectInput.className = 'form-control';
+                        subjectInput.id = 'subject-name-edit';
+                        subjectInput.name = 'name';
+                        subjectInput.required = true;
+                        subjectNameField.appendChild(subjectInput);
+                    }
+                    
+                    subjectInput.style.display = 'block';
+                    subjectInput.value = subjectName || '';
+                }
+
+                // Preseleccionar profesor
+                const teacherSelect = document.getElementById('teacher_id');
+                if (teacherSelect && teacherId) {
+                    teacherSelect.value = teacherId;
+                }
+
+                // Mostrar modal
+                modal.classList.add('show');
+                modal.style.display = 'flex';
+                modal.removeAttribute('aria-hidden');
+                modal.setAttribute('aria-modal', 'true');
+                modal.setAttribute('role', 'dialog');
+            });
+        });
+}

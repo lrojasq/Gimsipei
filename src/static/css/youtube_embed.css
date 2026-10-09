@@ -1,0 +1,83 @@
+/* ===== Reproductor de YouTube embebido ===== */
+
+.yt-embed {
+    position: relative;
+    width: 100%;
+    max-width: 560px;
+    aspect-ratio: 16 / 9;
+    margin: 0.75rem 0;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Dentro de un contenedor flex (ej: .content_homework) el reproductor no tiene
+   ancho intrínseco porque sus hijos son absolutos: el item tiene que crecer */
+[data-youtube-embed]:has(.yt-embed) {
+    flex: 1 1 0;
+    min-width: 0;
+    width: 100%;
+}
+
+.yt-embed iframe,
+.yt-facade {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+.yt-facade {
+    display: block;
+    padding: 0;
+    background: #000;
+    cursor: pointer;
+}
+
+.yt-facade img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: opacity 0.2s ease;
+}
+
+.yt-play {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 68px;
+    height: 48px;
+    border-radius: 12px;
+    background: rgba(33, 33, 33, 0.8);
+    color: #fff;
+    font-size: 2rem;
+    transform: translate(-50%, -50%);
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.yt-facade:hover .yt-play,
+.yt-facade:focus-visible .yt-play {
+    background: #ff0000;
+    transform: translate(-50%, -50%) scale(1.08);
+}
+
+.yt-facade:hover img {
+    opacity: 0.9;
+}
+
+.yt-facade:focus-visible {
+    outline: 3px solid #007bff;
+    outline-offset: -3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .yt-facade img,
+    .yt-play {
+        transition: none;
+    }
+}

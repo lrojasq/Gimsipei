@@ -3,7 +3,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize all functionality
     initializePasswordToggle();
     initializeFormValidation();
-    initializeDeleteModal();
+    // initializeDeleteModalListeners() ya se llama automáticamente en delete_modal.js
+    initializeDeleteModal(); // Inicializar botones de eliminar
     initializeAutoCloseAlerts();
     initializeLoadingStates();
 });
@@ -76,27 +77,13 @@ function validateField(field) {
     }
 }
 
-// Delete Modal Functionality
+
+// Delete Teacher Modal
 function initializeDeleteModal() {
-    const deleteModal = document.getElementById('deleteModal');
-    const deleteForm = document.getElementById('deleteForm');
-    
-    if (deleteModal && deleteForm) {
-        deleteModal.addEventListener('show.bs.modal', function(event) {
-            const button = event.relatedTarget;
-            const teacherId = button.getAttribute('data-teacher-id');
-            const teacherName = button.getAttribute('data-teacher-name');
-            
-            // Update modal content
-            const modalTitle = deleteModal.querySelector('#deleteModalLabel');
-            if (modalTitle) {
-                modalTitle.textContent = `¿Está seguro que desea eliminar a ${teacherName}?`;
-            }
-            
-            // Update form action
-            deleteForm.action = `/users/teachers/${teacherId}/delete`;
-        });
-    }
+    initializeDeleteButtons('.open-delete-teacher-modal', function(button) {
+        const teacherId = button.getAttribute('data-teacher-id');
+        return `/users/teachers/${teacherId}/delete`;
+    });
 }
 
 // Auto Close Alerts
@@ -105,8 +92,22 @@ function initializeAutoCloseAlerts() {
     
     alerts.forEach(alert => {
         setTimeout(() => {
-            const bsAlert = new bootstrap.Alert(alert);
-            bsAlert.close();
+            // Verificar que el elemento aún existe en el DOM
+            if (alert && document.body.contains(alert)) {
+                // Verificar que Bootstrap está disponible
+                if (typeof bootstrap !== 'undefined' && bootstrap.Alert) {
+                    const bsAlert = new bootstrap.Alert(alert);
+                    bsAlert.close();
+                } else {
+                    // Fallback: eliminar manualmente
+                    alert.style.opacity = '0';
+                    setTimeout(() => {
+                        if (alert && alert.parentNode) {
+                            alert.remove();
+                        }
+                    }, 300);
+                }
+            }
         }, 5000);
     });
 }
@@ -127,14 +128,18 @@ function initializeLoadingStates() {
 
 // Show Loading State
 function showLoadingState(button) {
+    if (button.classList.contains('loading')) return;
+
     button.classList.add('loading');
     button.disabled = true;
     
-    const originalText = button.innerHTML;
-    button.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Procesando...';
-    
-    // Store original text for potential restoration
-    button.setAttribute('data-original-text', originalText);
+    // Store original text for potential restoration (only once)
+    if (!button.getAttribute('data-original-text')) {
+        button.setAttribute('data-original-text', button.innerHTML);
+    }
+
+    // IMPORTANT: teachers_management.css already uses `.btn.loading::after` as spinner.
+    button.innerHTML = 'Procesando...';
 }
 
 // Hide Loading State

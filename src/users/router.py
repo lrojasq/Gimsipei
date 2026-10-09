@@ -1,19 +1,40 @@
 from flask import Blueprint, request
+
 from .controllers import (
-    get_users_controller,
-    get_user_controller,
     create_user_controller,
-    update_user_controller,
+    dashboard_controller,
     delete_user_controller,
+    get_user_controller,
+    get_users_controller,
+    profile_view_controller,
+    update_user_controller,
+)
+from .students_controllers import (
+    course_students_controller,
+    create_student_controller,
+    delete_student_controller,
+    edit_student_controller,
+    student_evaluations_controller,
+    student_tasks_controller,
 )
 from .teachers_controllers import (
-    teachers_management_controller,
     create_teacher_controller,
-    edit_teacher_controller,
     delete_teacher_controller,
+    edit_teacher_controller,
+    teachers_management_controller,
 )
 
 users_bp = Blueprint("users", __name__, url_prefix="/users")
+
+
+@users_bp.route("/dashboard", methods=["GET"])
+def dashboard():
+    return dashboard_controller(request)
+
+
+@users_bp.route("/profile", methods=["GET", "POST"])
+def profile():
+    return profile_view_controller(request)
 
 
 @users_bp.route("", methods=["GET"])
@@ -57,6 +78,45 @@ def edit_teacher(teacher_id):
     return edit_teacher_controller(teacher_id, request)
 
 
-@users_bp.route("/teachers/<int:teacher_id>/delete", methods=["GET","POST"])
+@users_bp.route("/teachers/<int:teacher_id>/delete", methods=["POST"])
 def delete_teacher(teacher_id):
     return delete_teacher_controller(teacher_id, request)
+
+
+# Routes for students management by course
+@users_bp.route("/courses/<int:course_id>/students", methods=["GET"])
+def course_students(course_id):
+    return course_students_controller(course_id, request)
+
+
+@users_bp.route("/courses/<int:course_id>/students/create", methods=["GET", "POST"])
+def create_student(course_id):
+    return create_student_controller(course_id, request)
+
+
+@users_bp.route(
+    "/courses/<int:course_id>/students/<int:student_id>/edit", methods=["GET", "POST"]
+)
+def edit_student(course_id, student_id):
+    return edit_student_controller(course_id, student_id, request)
+
+
+@users_bp.route(
+    "/courses/<int:course_id>/students/<int:student_id>/delete", methods=["POST"]
+)
+def delete_student(course_id, student_id):
+    return delete_student_controller(course_id, student_id, request)
+
+
+@users_bp.route(
+    "/courses/<int:course_id>/students/<int:student_id>/tasks", methods=["GET"]
+)
+def student_tasks(course_id, student_id):
+    return student_tasks_controller(course_id, student_id, request)
+
+
+@users_bp.route(
+    "/courses/<int:course_id>/students/<int:student_id>/evaluations", methods=["GET"]
+)
+def student_evaluations(course_id, student_id):
+    return student_evaluations_controller(course_id, student_id, request)

@@ -1,0 +1,89 @@
+[project]
+name = "gimsipei"
+version = "0.1.0"
+description = "Sistema de gestion de pruebas enfocado a la educacion"
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [
+    { name = "Gimsipei contributors" },
+]
+dependencies = [
+    "blinker==1.9.0",
+    "certifi==2025.4.26",
+    "charset-normalizer==3.4.2",
+    "click==8.2.0",
+    "Flask==3.1.1",
+    "Flask-SQLAlchemy==3.1.1",
+    "Flask-Migrate==4.0.5",
+    "Flask-CORS==4.0.0",
+    "Flask-JWT-Extended==4.5.3",
+    "greenlet==3.2.2",
+    "idna==3.10",
+    "itsdangerous==2.2.0",
+    "Jinja2==3.1.6",
+    "MarkupSafe==3.0.2",
+    "passlib==1.7.4",
+    "python-jose==3.3.0",
+    "PyMySQL==1.1.1",
+    "python-dotenv==1.0.0",
+    "requests==2.32.3",
+    "SQLAlchemy==2.0.41",
+    "typing_extensions==4.13.2",
+    "urllib3==2.4.0",
+    "Werkzeug==3.1.3",
+    "email-validator==2.1.0.post1",
+    "PyJWT==2.8.0",
+    "alembic==1.12.1",
+    "pydantic==1.10.13",
+    "gunicorn==21.2.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+    "pytest-flask>=1.3",
+]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 88
+extend-exclude = [
+    "migrations",
+    "__pycache__",
+    ".venv",
+    "env",
+    "build",
+    "dist",
+    "src/homework",
+]
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes (unused imports, undefined names)
+    "I",   # isort (import sorting)
+    "UP",  # pyupgrade (modern Python syntax)
+    "B",   # flake8-bugbear (common bugs)
+    "SIM", # flake8-simplify
+    "C4",  # flake8-comprehensions
+]
+ignore = [
+    "E501",   # line length handled by formatter
+    "B008",   # function-call-in-default-argument (common in Flask)
+    "UP031",  # % string formatting (allowed in i18n/legacy code)
+    "UP042",  # str+Enum (UserRole, ResourceType) — standard Enum pattern
+    "SIM108", # use ternary instead of if/else (sometimes clearer not to)
+]
+
+[tool.ruff.lint.per-file-ignores]
+"main.py" = ["F403"]  # 'from src.models import *' is required for SQLAlchemy Base metadata registration
+
+[tool.ruff.lint.isort]
+known-first-party = ["src"]
+combine-as-imports = true
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "lf"

@@ -1,15 +1,16 @@
 from flask import Blueprint, request
+
+from .controllers import (
+    create_subject_api_controller,
+    delete_subject_api_controller,
+    get_subject_api_controller,
+    get_subjects_api_controller,
+    update_subject_api_controller,
+)
 from .subjects_controllers import (
     create_subject_controller,
-    edit_subject_controller,
     delete_subject_controller,
-)
-from .controllers import (
-    get_subjects_api_controller,
-    get_subject_api_controller,
-    create_subject_api_controller,
-    update_subject_api_controller,
-    delete_subject_api_controller,
+    edit_subject_controller,
 )
 
 subjects_bp = Blueprint("subjects", __name__, url_prefix="/subjects")

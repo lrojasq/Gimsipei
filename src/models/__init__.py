@@ -1,33 +1,44 @@
 # Import all models to ensure SQLAlchemy can resolve relationships
-from .user import User, UserRole
-from .document import Document
-from .exercise import Exercise
 from .assignment import Assignment
-from .submission import Submission
-from .subject import Subject
-from .period import Period
+from .assignment_submission import AssignmentSubmission
+from .book import Book
+from .class_content import ClassContent
 from .class_model import ClassModel
 from .class_view import ClassView
-from .resource import Resource
-from .book import Book
 from .course import Course
 from .course_student import CourseStudent
 from .course_subject import CourseSubject
+from .document import Document
+from .evaluation import Evaluation
+from .evaluation_question import EvaluationQuestion, QuestionType
+from .evaluation_question_option import EvaluationQuestionOption
+from .evaluation_submission import EvaluationSubmission
+from .evaluation_submission_answer import EvaluationSubmissionAnswer
+from .grade import Grade
+from .resource import Resource
+from .subject import Subject
+from .user import User, UserRole
 
 __all__ = [
     "User",
     "UserRole",
     "Document",
-    "Exercise",
-    "Assignment",
-    "Submission",
     "Subject",
-    "Period",
     "ClassModel",
     "ClassView",
+    "ClassContent",
+    "Assignment",
+    "AssignmentSubmission",
     "Resource",
     "Book",
     "Course",
     "CourseStudent",
     "CourseSubject",
+    "Evaluation",
+    "EvaluationQuestion",
+    "QuestionType",
+    "EvaluationQuestionOption",
+    "EvaluationSubmission",
+    "EvaluationSubmissionAnswer",
+    "Grade",
 ]

@@ -1,4 +1,5 @@
-from typing import Any, Dict, Optional, TypeVar, Generic
+from typing import Any, Generic, TypeVar
+
 from flask import jsonify
 from pydantic import BaseModel
 
@@ -8,7 +9,7 @@ T = TypeVar("T", bound=BaseModel)
 class ApiResponse(Generic[T]):
     @staticmethod
     def success(
-        data: Optional[T] = None,
+        data: T | None = None,
         message: str = "Operación exitosa",
         status_code: int = 200,
     ) -> tuple:
@@ -22,7 +23,7 @@ class ApiResponse(Generic[T]):
     @staticmethod
     def error(
         message: str = "Error en la operación",
-        details: Optional[Any] = None,
+        details: Any | None = None,
         status_code: int = 400,
     ) -> tuple:
         response = {"success": False, "message": message, "details": details}
